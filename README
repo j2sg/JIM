@@ -1,0 +1,10 @@
+QInvoicer - Invoicing Software for small and medium business.
+
+To compile open a terminal and write the lines below:
+
+   mkdir build
+   cd build
+   qmake ..
+   make
+
+You are ready to execute QInvoicer :-)
