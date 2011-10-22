@@ -1,11 +1,11 @@
 - Requirements Specification.
 
-  We want develop a software application that allow us to make all tasks related with invoicing activity
+  We want to develop a software application that allow us to make those tasks related with invoicing activity
   and business management on scope of SMBs (Small and Medium Business). Therefore, the application must
-  be able to create, load and store invoices both sale and buy for customers and providers, show invoicing
-  volume both total and divided by buys or sales, make reports of current stocks, etc.
+  be able to:
 
+    - Create, load and store invoices both sale and buy that involve either customers or clients.
+    - Management of products, customers and providers so will be able to add, modify and remove each one of these.
+    - Show reports for invoicing volume, current stocks and unpaid invoices.
 
-
-
-
+    * Note: Likely these requirements will be extended and/or improved on each future version.
