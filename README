@@ -1,5 +1,7 @@
 QInvoicer - Invoicing Software for small and medium business.
 
+To get more details about application could read doc/specification.txt
+
 To compile open a terminal and write the lines below:
 
    mkdir build
