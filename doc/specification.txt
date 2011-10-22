@@ -4,8 +4,33 @@
   and business management on scope of SMBs (Small and Medium Business). Therefore, the application must
   be able to:
 
-    - Create, load and store invoices both sale and buy that involve either customers or clients.
+    - Create, load and store invoices both sale and buy that involve customers or clients.
+
+      Any invoice is composed by next fields:
+
+        - ID unique.
+        - Type that may be sale or buy.
+        - Place of invoice emission.
+        - Date of invoice emission.
+        - Name and Identifier of seller.
+        - Name and Identifier of buyer.
+        - Operations list where each one is composed by:
+
+          - Unique code of good or service involved.
+          - Name that describe the good or service.
+          - Quantity of packages or unitary elements that composes the operation.
+          - Weight of packages.
+          - Price that can be two types, by units or by weight.
+          - Total Price according the quantity, weight and kind.
+
+        - VAT (Value Added Tax).
+        - Invoice total price.
+        - Paid or not.
+
+
     - Management of products, customers and providers so will be able to add, modify and remove each one of these.
     - Show reports for invoicing volume, current stocks and unpaid invoices.
 
     * Note: Likely these requirements will be extended and/or improved on each future version.
+
+-
