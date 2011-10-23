@@ -26,23 +26,25 @@ namespace View
         void createSaleInvoice();
         void createBuyInvoice();
         void loadInvoice();
-        void newProduct();
+        void createProduct();
         void loadProduct();
         void volumeSaleInvoice();
         void volumeBuyInvoice();
         void volumeInvoice();
         void unpaidInvoices();
+        void about();
     private:
         QMdiArea *mdiArea;
         QAction *createSaleInvoiceAction;
         QAction *createBuyInvoiceAction;
         QAction *loadInvoiceAction;
-        QAction *newProductAction;
+        QAction *createProductAction;
         QAction *loadProductAction;
         QAction *volumeSaleInvoiceAction;
         QAction *volumeBuyInvoiceAction;
         QAction *volumeInvoiceAction;
         QAction *unpaidInvoicesAction;
+        QAction *aboutAction;
         QMenu *invoicingMenu;
         QMenu *managementMenu;
         QMenu *reportMenu;
