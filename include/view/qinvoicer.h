@@ -20,6 +20,8 @@ namespace View
         void createCentralWidget();
         void createActions();
         void createMenus();
+        void createToolBar();
+        void createStatusBar();
     protected:
         void closeEvent(QCloseEvent *event);
     private slots:

@@ -6,6 +6,8 @@ View::QInvoicer::QInvoicer()
     createCentralWidget();
     createActions();
     createMenus();
+    createToolBar();
+    createStatusBar();
     setWindowTitle(tr("%1 %2").arg("QInvoicer").arg("0.1 Pre-Alpha"));
 }
 
@@ -83,6 +85,29 @@ void View::QInvoicer::createMenus()
     helpMenu -> addAction(aboutAction);
 }
 
+void View::QInvoicer::createToolBar()
+{
+    invoicingToolBar = addToolBar(tr("Invoicing"));
+    invoicingToolBar -> addAction(createSaleInvoiceAction);
+    invoicingToolBar -> addAction(createBuyInvoiceAction);
+    invoicingToolBar -> addAction(loadInvoiceAction);
+
+    managementToolBar = addToolBar(tr("Management"));
+    managementToolBar -> addAction(createProductAction);
+    managementToolBar -> addAction(loadProductAction);
+
+    reportToolBar = addToolBar(tr("Report"));
+    reportToolBar -> addAction(volumeSaleInvoiceAction);
+    reportToolBar -> addAction(volumeBuyInvoiceAction);
+    reportToolBar -> addAction(volumeInvoiceAction);
+    reportToolBar -> addAction(unpaidInvoicesAction);
+}
+
+void View::QInvoicer::createStatusBar()
+{
+    statusBar()->showMessage(tr("Running"));
+}
+
 void View::QInvoicer::closeEvent(QCloseEvent *event)
 {
     event->accept();
@@ -135,5 +160,10 @@ void View::QInvoicer::unpaidInvoices()
 
 void View::QInvoicer::about()
 {
-
+    QMessageBox::about(this, tr("About QInvoicer"),
+                       tr("<h2>QInvoicer</h2>"
+                          "<h3>Version 0.1 Pre-Alpha</h3>"
+                          "<p>Invoicing and Management for Small and Medium Business</p>"
+                          "<p>Using Qt4 Framework Development</p>"
+                          "<p>Author: Juan Jose Salazar Garcia A.K.A j2sg - jjslzgc@gmail.com</p>"));
 }
