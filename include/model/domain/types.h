@@ -18,13 +18,25 @@
  *
  **/
 
-#include <QApplication>
-#include "qinvoicer.h"
+#ifndef TYPES_H
+#define TYPES_H
 
-int main(int argc, char *argv[])
+namespace Model
 {
-    QApplication app(argc, argv);
-    View::QInvoicer *invoicer = new View::QInvoicer;
-    invoicer->show();
-    return app.exec();
+    namespace Domain
+    {
+        typedef enum
+        {
+            Buy,
+            Sale
+        } InvoiceType;
+
+        typedef enum
+        {
+            Units,
+            Weight
+        } PriceType;
+    }
 }
+
+#endif // TYPES_H
