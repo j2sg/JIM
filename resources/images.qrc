@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/appicon.png</file>
+        <file>images/loadinvoice.png</file>
+        <file>images/buyinvoice.png</file>
+        <file>images/saleinvoice.png</file>
+        <file>images/loadproduct.png</file>
+        <file>images/product.png</file>
+        <file>images/unpaid.png</file>
+        <file>images/volume.png</file>
+        <file>images/volumebuy.png</file>
+        <file>images/volumesale.png</file>
+        <file>images/exit.png</file>
+    </qresource>
+</RCC>

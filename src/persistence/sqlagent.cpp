@@ -19,6 +19,13 @@
  **/
 
 #include "sqlagent.h"
+#include "persistencemanager.h"
+#include <QtSql/QSqlQuery>
+
+Persistence::SQLAgent::SQLAgent()
+{
+    setUp();
+}
 
 Persistence::SQLAgent *Persistence::SQLAgent::instance()
 {
@@ -27,34 +34,86 @@ Persistence::SQLAgent *Persistence::SQLAgent::instance()
     return _instance;
 }
 
-bool Persistence::SQLAgent::insert(const QString &sql) const
+Persistence::SQLAgent::~SQLAgent()
 {
-    return true;
+    disconnect();
+    if(_instance)
+        delete _instance;
 }
 
-bool Persistence::SQLAgent::update(const QString &sql) const
+bool Persistence::SQLAgent::insert(const QString &sql)
 {
-    return true;
+    return manipulation(sql);
 }
 
-QVector<void *> *Persistence::SQLAgent::select(const QString &sql) const
+bool Persistence::SQLAgent::update(const QString &sql)
 {
-    return new QVector<void *>();
+    return manipulation(sql);
 }
 
-bool Persistence::SQLAgent::_delete(const QString &sql) const
+QVector<QVector<QVariant> > *Persistence::SQLAgent::select(const QString &sql)
 {
+    return query(sql);
+}
+
+bool Persistence::SQLAgent::_delete(const QString &sql)
+{
+    return manipulation(sql);
+}
+
+bool Persistence::SQLAgent::setUp()
+{
+    QStringList parameters = Manager::config();
+    if(parameters.size() != 5)
+        return false;
+    _database = QSqlDatabase::addDatabase("QMYSQL");
+    _database.setDatabaseName(parameters.at(0));
+    _database.setPort(parameters.at(1).toInt());
+    _database.setHostName(parameters.at(2));
+    _database.setUserName(parameters.at(3));
+    _database.setPassword(parameters.at(4));
     return true;
 }
 
 bool Persistence::SQLAgent::connect()
 {
-    return true;
+    return _database.open();
 }
 
-bool Persistence::SQLAgent::disconnect()
+void Persistence::SQLAgent::disconnect()
 {
-    return true;
+    if(_database.isOpen())
+        _database.close();
+}
+
+bool Persistence::SQLAgent::manipulation(const QString &sql)
+{
+    if(!connect())
+        return false;
+    QSqlQuery query;
+    bool result = query.exec(sql);
+    disconnect();
+    return result;
+}
+
+QVector<QVector<QVariant> > *Persistence::SQLAgent::query(const QString &sql)
+{
+     if(!connect())
+         return 0;
+     QSqlQuery query;
+     query.setForwardOnly(true);
+     if(!query.exec(sql))
+         return 0;
+     QVector<QVector<QVariant> > *result = new QVector<QVector<QVariant> >;
+     int rows = query.numRowsAffected();
+     while(query.next()) {
+         result -> push_back(QVector<QVariant>());
+         for(int row = 0 ; row < rows ; ++row) {
+             (result -> back()).push_back(query.value(row));
+         }
+     }
+     disconnect();
+     return result;
 }
 
 Persistence::SQLAgent *Persistence::SQLAgent::_instance = 0;

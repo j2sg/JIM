@@ -57,6 +57,7 @@ namespace View
         void about();
     private:
         QMdiArea *mdiArea;
+        QAction *exitAction;
         QAction *createSaleInvoiceAction;
         QAction *createBuyInvoiceAction;
         QAction *loadInvoiceAction;
@@ -67,6 +68,7 @@ namespace View
         QAction *volumeInvoiceAction;
         QAction *unpaidInvoicesAction;
         QAction *aboutAction;
+        QMenu *applicationMenu;
         QMenu *invoicingMenu;
         QMenu *managementMenu;
         QMenu *reportMenu;

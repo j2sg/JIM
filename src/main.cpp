@@ -20,11 +20,27 @@
 
 #include <QApplication>
 #include "qinvoicer.h"
+#include "global.h"
+
+bool setUpApplication(QApplication *app);
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    setUpApplication(&app);
     View::QInvoicer *invoicer = new View::QInvoicer;
-    invoicer->show();
+    invoicer -> show();
     return app.exec();
+}
+
+
+bool setUpApplication(QApplication *app)
+{
+    if(!app)
+        return false;
+    app -> setOrganizationName(ORGANIZATION_NAME);
+    app -> setOrganizationDomain(ORGANIZATION_DOMAIN);
+    app -> setApplicationName(APPLICATION_NAME);
+    app -> setApplicationVersion(APPLICATION_VERSION);
+    return true;
 }

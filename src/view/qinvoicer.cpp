@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include "qinvoicer.h"
+#include "global.h"
 
 View::QInvoicer::QInvoicer()
 {
@@ -28,7 +29,8 @@ View::QInvoicer::QInvoicer()
     createMenus();
     createToolBar();
     createStatusBar();
-    setWindowTitle(tr("%1 %2").arg("QInvoicer").arg("0.1 Pre-Alpha"));
+    setWindowTitle(tr("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
+    setWindowIcon(QIcon(":/images/appicon.png"));
 }
 
 void View::QInvoicer::createCentralWidget()
@@ -39,39 +41,53 @@ void View::QInvoicer::createCentralWidget()
 
 void View::QInvoicer::createActions()
 {
+    exitAction = new QAction(tr("&Exit"), this);
+    exitAction -> setIcon(QIcon(":/images/exit.png"));
+    exitAction -> setStatusTip(tr("Exit the application"));
+    connect(exitAction, SIGNAL(triggered()), this, SLOT(close()));
+
     createSaleInvoiceAction = new QAction(tr("Create &Sale Invoice"), this);
+    createSaleInvoiceAction -> setIcon(QIcon(":/images/saleinvoice.png"));
     createSaleInvoiceAction -> setStatusTip(tr("Create a new Sale Invoice with a customer"));
     connect(createSaleInvoiceAction, SIGNAL(triggered()), this, SLOT(createSaleInvoice()));
 
     createBuyInvoiceAction = new QAction(tr("Create &Buy Invoice"), this);
+    createBuyInvoiceAction -> setIcon(QIcon(":/images/buyinvoice.png"));
     createBuyInvoiceAction -> setStatusTip(tr("Create a new Buy Invoice with a provider"));
     connect(createBuyInvoiceAction, SIGNAL(triggered()), this, SLOT(createBuyInvoice()));
 
     loadInvoiceAction = new QAction(tr("&Load Invoice"), this);
+    loadInvoiceAction ->setIcon(QIcon(":/images/loadinvoice.png"));
     loadInvoiceAction -> setStatusTip(tr("Load a specific Invoice"));
     connect(loadInvoiceAction, SIGNAL(triggered()), this, SLOT(loadInvoice()));
 
     createProductAction = new QAction(tr("Create &Product"), this);
+    createProductAction -> setIcon(QIcon(":/images/product.png"));
     createProductAction -> setStatusTip(tr("Create a new Product"));
     connect(createProductAction, SIGNAL(triggered()), this, SLOT(createProduct()));
 
     loadProductAction = new QAction(tr("Load Product"), this);
+    loadProductAction -> setIcon(QIcon(":/images/loadproduct.png"));
     loadProductAction -> setStatusTip(tr("Load a specific Product"));
     connect(loadProductAction, SIGNAL(triggered()), this, SLOT(loadProduct()));
 
     volumeSaleInvoiceAction = new QAction(tr("Volume Sale Invoice"), this);
+    volumeSaleInvoiceAction -> setIcon(QIcon(":/images/volumesale.png"));
     volumeSaleInvoiceAction -> setStatusTip(tr("Make a report about Volume Sale Invoice"));
     connect(volumeSaleInvoiceAction, SIGNAL(triggered()), this, SLOT(volumeSaleInvoice()));
 
     volumeBuyInvoiceAction = new QAction(tr("Volume Buy Invoice"), this);
+    volumeBuyInvoiceAction -> setIcon(QIcon(":/images/volumebuy.png"));
     volumeBuyInvoiceAction -> setStatusTip(tr("Make a report about Volume Buy Invoice"));
     connect(volumeBuyInvoiceAction, SIGNAL(triggered()), this, SLOT(volumeBuyInvoice()));
 
     volumeInvoiceAction = new QAction(tr("&Volume Invoice"), this);
+    volumeInvoiceAction -> setIcon(QIcon(":/images/volume.png"));
     volumeInvoiceAction -> setStatusTip(tr("Make a report about Volume Invoice"));
     connect(volumeInvoiceAction, SIGNAL(triggered()), this, SLOT(volumeInvoice()));
 
     unpaidInvoicesAction = new QAction(tr("&Unpaid Invoice"), this);
+    unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
     unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
     connect(unpaidInvoicesAction, SIGNAL(triggered()), this, SLOT(unpaidInvoices()));
 
@@ -82,6 +98,9 @@ void View::QInvoicer::createActions()
 
 void View::QInvoicer::createMenus()
 {
+    applicationMenu = menuBar() -> addMenu(tr("&Application"));
+    applicationMenu -> addAction(exitAction);
+
     invoicingMenu = menuBar() -> addMenu(tr("&Invoicing"));
     invoicingMenu -> addAction(createSaleInvoiceAction);
     invoicingMenu -> addAction(createBuyInvoiceAction);
@@ -181,9 +200,12 @@ void View::QInvoicer::unpaidInvoices()
 void View::QInvoicer::about()
 {
     QMessageBox::about(this, tr("About QInvoicer"),
-                       tr("<h2>QInvoicer</h2>"
-                          "<h3>Version 0.1 Pre-Alpha</h3>"
-                          "<p>Invoicing and Management for Small and Medium Business</p>"
-                          "<p>Using Qt4 Framework Development</p>"
-                          "<p>Author: Juan Jose Salazar Garcia A.K.A j2sg - jjslzgc@gmail.com</p>"));
+                       tr("<h2>%1 %2</h2>"
+                          "<h3>Invoicing and Management for SMBs</h3>"
+                          "<p>Licensed under GNU General Public License version 3</p>"
+                          "<p>Developed by %3 - <a href= \"mailto:%4\" >%4</a></p>")
+                       .arg(APPLICATION_NAME)
+                       .arg(APPLICATION_VERSION)
+                       .arg(AUTHOR_NAME)
+                       .arg(AUTHOR_EMAIL));
 }

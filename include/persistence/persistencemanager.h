@@ -18,37 +18,18 @@
  *
  **/
 
-#ifndef SQLAGENT_H
-#define SQLAGENT_H
+#ifndef PERSISTENCEMANAGER_H
+#define PERSISTENCEMANAGER_H
 
-#include <QtSql/QSqlDatabase>
-#include <QString>
-#include <QVector>
-#include <QVariant>
+#include <QStringList>
 
 namespace Persistence
 {
-    class SQLAgent
+    class Manager
     {
     public:
-        static SQLAgent *instance();
-        ~SQLAgent();
-        bool insert(const QString &sql);
-        bool update(const QString &sql);
-        QVector<QVector<QVariant> > *select(const QString &sql);
-        bool _delete(const QString &sql);
-    private:
-        SQLAgent();
-    protected:
-        bool setUp();
-        bool connect();
-        void disconnect();
-        bool manipulation(const QString &sql);
-        QVector<QVector<QVariant> > *query(const QString &sql);
-
-        static SQLAgent *_instance;
-        QSqlDatabase _database;
+        static QStringList config();
     };
 }
 
-#endif // SQLAGENT_H
+#endif // PERSISTENCEMANAGER_H
