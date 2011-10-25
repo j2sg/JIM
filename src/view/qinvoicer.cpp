@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include "qinvoicer.h"
+#include "invoiceeditor.h"
 #include "global.h"
 
 View::QInvoicer::QInvoicer()
@@ -154,12 +155,14 @@ void View::QInvoicer::closeEvent(QCloseEvent *event)
 
 void View::QInvoicer::createSaleInvoice()
 {
-
+    InvoiceEditor *editor = createInvoiceEditor(Model::Domain::Sale);
+    editor -> show();
 }
 
 void View::QInvoicer::createBuyInvoice()
 {
-
+    InvoiceEditor *editor = createInvoiceEditor(Model::Domain::Buy);
+    editor -> show();
 }
 
 void View::QInvoicer::loadInvoice()
@@ -208,4 +211,11 @@ void View::QInvoicer::about()
                        .arg(APPLICATION_VERSION)
                        .arg(AUTHOR_NAME)
                        .arg(AUTHOR_EMAIL));
+}
+
+View::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Domain::InvoiceType type)
+{
+    InvoiceEditor *editor = new InvoiceEditor(type);
+    mdiArea -> addSubWindow(editor);
+    return editor;
 }

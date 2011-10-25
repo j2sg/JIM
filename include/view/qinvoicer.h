@@ -22,6 +22,7 @@
 #define QINVOICER_H
 
 #include <QMainWindow>
+#include "types.h"
 
 QT_BEGIN_NAMESPACE
 class QMdiArea;
@@ -32,6 +33,8 @@ QT_END_NAMESPACE
 
 namespace View
 {
+    class InvoiceEditor;
+
     class QInvoicer : public QMainWindow
     {
         Q_OBJECT
@@ -56,6 +59,8 @@ namespace View
         void unpaidInvoices();
         void about();
     private:
+        InvoiceEditor *createInvoiceEditor(Model::Domain::InvoiceType type);
+
         QMdiArea *mdiArea;
         QAction *exitAction;
         QAction *createSaleInvoiceAction;
