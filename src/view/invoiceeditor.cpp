@@ -151,7 +151,7 @@ void View::InvoiceEditor::stateChangedOnAutoIdCheckBox()
 void View::InvoiceEditor::stateChangedOnRegisteredCheckBox()
 {
     QCheckBox *checkBox = qobject_cast<QCheckBox *>(sender());
-    bool isChecked = sellerRegisteredCheckBox -> isChecked();
+    bool isChecked = checkBox -> isChecked();
     if(checkBox == sellerRegisteredCheckBox) {
         sellerIdLineEdit -> setEnabled(isChecked);
         sellerNameLineEdit -> setEnabled(!isChecked);
