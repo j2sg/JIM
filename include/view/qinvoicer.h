@@ -40,11 +40,6 @@ namespace View
         Q_OBJECT
     public:
         QInvoicer();
-        void createCentralWidget();
-        void createActions();
-        void createMenus();
-        void createToolBar();
-        void createStatusBar();
     protected:
         void closeEvent(QCloseEvent *event);
     private slots:
@@ -59,7 +54,13 @@ namespace View
         void unpaidInvoices();
         void about();
     private:
+        void createCentralWidget();
+        void createActions();
+        void createMenus();
+        void createToolBar();
+        void createStatusBar();
         InvoiceEditor *createInvoiceEditor(Model::Domain::InvoiceType type);
+        bool verifyExit();
 
         QMdiArea *mdiArea;
         QAction *exitAction;

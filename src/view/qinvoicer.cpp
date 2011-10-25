@@ -34,6 +34,14 @@ View::QInvoicer::QInvoicer()
     setWindowIcon(QIcon(":/images/appicon.png"));
 }
 
+void View::QInvoicer::closeEvent(QCloseEvent *event)
+{
+    if(verifyExit())
+        event -> accept();
+    else
+        event -> ignore();
+}
+
 void View::QInvoicer::createCentralWidget()
 {
     mdiArea = new QMdiArea;
@@ -93,6 +101,7 @@ void View::QInvoicer::createActions()
     connect(unpaidInvoicesAction, SIGNAL(triggered()), this, SLOT(unpaidInvoices()));
 
     aboutAction = new QAction(tr("About"), this);
+    aboutAction -> setIcon(QIcon(":/images/about.png"));
     aboutAction -> setStatusTip(tr("Show information about QInvoicer"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 }
@@ -148,11 +157,6 @@ void View::QInvoicer::createStatusBar()
     statusBar()->showMessage(tr("Running"));
 }
 
-void View::QInvoicer::closeEvent(QCloseEvent *event)
-{
-    event->accept();
-}
-
 void View::QInvoicer::createSaleInvoice()
 {
     InvoiceEditor *editor = createInvoiceEditor(Model::Domain::Sale);
@@ -167,7 +171,6 @@ void View::QInvoicer::createBuyInvoice()
 
 void View::QInvoicer::loadInvoice()
 {
-
 }
 
 void View::QInvoicer::createProduct()
@@ -218,4 +221,12 @@ View::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Domain::Invoice
     InvoiceEditor *editor = new InvoiceEditor(type);
     mdiArea -> addSubWindow(editor);
     return editor;
+}
+
+bool View::QInvoicer::verifyExit()
+{
+    return QMessageBox::question(this, tr("Verify Exit"),
+                                 tr("are you sure you wish to exit the program?"),
+                                 QMessageBox::Yes | QMessageBox::Default |
+                                 QMessageBox::No) == QMessageBox::Yes;
 }

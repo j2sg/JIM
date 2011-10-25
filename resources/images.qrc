@@ -11,5 +11,6 @@
         <file>images/volumebuy.png</file>
         <file>images/volumesale.png</file>
         <file>images/exit.png</file>
+        <file>images/about.png</file>
     </qresource>
 </RCC>
