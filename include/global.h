@@ -18,37 +18,14 @@
  *
  **/
 
-#ifndef SQLAGENT_H
-#define SQLAGENT_H
+#ifndef GLOBAL_H
+#define GLOBAL_H
 
-#include <QtSql/QSqlDatabase>
-#include <QString>
-#include <QVector>
-#include <QVariant>
+#define ORGANIZATION_NAME   "j2sg Software"
+#define ORGANIZATION_DOMAIN "http://j2sg.wordpress.com"
+#define AUTHOR_NAME         "Juan Jose Salazar Garcia"
+#define AUTHOR_EMAIL        "jjslzgc@gmail.com"
+#define APPLICATION_NAME    "QInvoicer"
+#define APPLICATION_VERSION "0.1 Alpha"
 
-namespace Persistence
-{
-    class SQLAgent
-    {
-    public:
-        static SQLAgent *instance();
-        ~SQLAgent();
-        bool insert(const QString &sql);
-        bool update(const QString &sql);
-        QVector<QVector<QVariant> > *select(const QString &sql);
-        bool _delete(const QString &sql);
-    private:
-        SQLAgent();
-    protected:
-        bool setUp();
-        bool connect();
-        void disconnect();
-        bool manipulation(const QString &sql);
-        QVector<QVector<QVariant> > *query(const QString &sql);
-
-        static SQLAgent *_instance;
-        QSqlDatabase _database;
-    };
-}
-
-#endif // SQLAGENT_H
+#endif // GLOBAL_H

@@ -1,5 +1,5 @@
 /**
- *  This file is part of QInvoice.
+ *  This file is part of QInvoicer.
  *
  *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
