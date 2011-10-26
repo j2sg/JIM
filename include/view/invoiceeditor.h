@@ -31,6 +31,7 @@ class QCheckBox;
 class QDateEdit;
 class QTextEdit;
 class QTableView;
+class QPushButton;
 QT_END_NAMESPACE
 
 namespace View
@@ -40,10 +41,10 @@ namespace View
         Q_OBJECT
     public:
         InvoiceEditor(Model::Domain::InvoiceType type = Model::Domain::Buy, QWidget *parent = 0);
-
     protected:
         void closeEvent(QCloseEvent *event);
     private slots:
+        void save();
         void stateChangedOnAutoIdCheckBox();
         void stateChangedOnRegisteredCheckBox();
         void stateChangedOnVatCheckBox();
@@ -74,6 +75,8 @@ namespace View
         QLineEdit *vatLineEdit;
         QLabel *totalLabel;
         QCheckBox *paidCheckBox;
+        QPushButton *saveButton;
+        QPushButton *closeButton;
     };
 }
 

@@ -133,14 +133,30 @@ void View::InvoiceEditor::createWidgets()
     QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
     paymentGroupBox -> setLayout(paymentLayout);
 
+    saveButton = new QPushButton(tr("&Save"));
+    closeButton = new QPushButton(tr("&Close"));
+    connect(saveButton, SIGNAL(clicked()), this, SLOT(save()));
+    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+
+    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    bottomLayout -> addStretch();
+    bottomLayout -> addWidget(saveButton);
+    bottomLayout -> addWidget(closeButton);
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(idGroupBox);
     mainLayout -> addWidget(sellerGroupBox);
     mainLayout -> addWidget(buyerGroupBox);
     mainLayout -> addWidget(operationsTableView);
     mainLayout -> addWidget(paymentGroupBox);
+    mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
+}
+
+void View::InvoiceEditor::save()
+{
+
 }
 
 void View::InvoiceEditor::stateChangedOnAutoIdCheckBox()
