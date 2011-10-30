@@ -19,13 +19,18 @@
  **/
 
 #include "operation.h"
-#include "product.h"
 
-Model::Domain::Operation::Operation(int id) : _id(id)
+Model::Domain::Operation::Operation(int id, Product *product, int quantity, double weight, double price)
+    : _id(id), _product(product), _quantity(quantity), _weight(weight), _price(price)
 {
-    _product = 0;
-    _quantity = 0;
-    _weight = 0.0;
+    if(_quantity < 0)
+        _quantity = 0;
+    if(_weight < 0)
+        _weight = 0.0;
+    if(_product)
+        _price = _product -> price();
+    if(_price < 0)
+        _price = 0.0;
 }
 
 Model::Domain::Operation::Operation(const Operation &operation)
@@ -35,15 +40,17 @@ Model::Domain::Operation::Operation(const Operation &operation)
 
 Model::Domain::Operation::~Operation()
 {
-    delete _product;
+    if(_product)
+        delete _product;
 }
 
 Model::Domain::Operation &Model::Domain::Operation::operator=(const Operation &operation)
 {
     _id = operation._id;
-    *_product = *operation._product;
+    _product = (operation._product != 0) ? new Product(*operation._product) : 0;
     _quantity = operation._quantity;
     _weight = operation._weight;
+    _price = operation._price;
     return *this;
 }
 
@@ -63,6 +70,7 @@ void Model::Domain::Operation::setProduct(Product *product)
     if(_product)
         delete _product;
     _product = product;
+    setPrice(_product -> price());
 }
 
 Model::Domain::Product *Model::Domain::Operation::product() const
@@ -90,19 +98,28 @@ double Model::Domain::Operation::weight() const
     return _weight;
 }
 
+void Model::Domain::Operation::setPrice(double price)
+{
+    _price = price;
+}
+
+double Model::Domain::Operation::price() const
+{
+    return _price;
+}
+
 double Model::Domain::Operation::total() const
 {
-    if(!_product || (_quantity == 0 && _weight == 0.0))
+    if(!_product || _price <= 0 || (_quantity <= 0 && _weight <= 0.0))
         return 0.0;
-    return ((_product -> priceType() == Units) ? _quantity : _weight) * _product -> price();
+    return ((_product -> priceType() == Units) ? _quantity : _weight) * _price;
 }
 
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Operation &operation)
 {
-    return os << operation._id       << std::endl
-                                     << std::endl
-              << *operation._product << std::endl
-                                     << std::endl
-              << operation._quantity << std::endl
-              << operation._weight   << std::endl;
+    return os << operation._id                                                 << std::endl
+              << ((operation._product != 0) ? operation._product->name() : "") << std::endl
+              << operation._quantity                                           << std::endl
+              << operation._weight                                             << std::endl
+              << operation._price                                              << std::endl;
 }

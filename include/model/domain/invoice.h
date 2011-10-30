@@ -23,28 +23,25 @@
 
 #include <QString>
 #include <QDate>
-#include <QVector>
+#include <QList>
 #include <iostream>
+#include "operation.h"
 #include "types.h"
 
 namespace Model
 {
     namespace Domain
     {
-
-        class Operation;
-
         class Invoice
         {
             friend std::ostream &operator<<(std::ostream &os, const Invoice &invoice);
         public:
-            Invoice(const QString &id, InvoiceType type = Buy);
+            Invoice(const QString &id = QString(), InvoiceType type = Sale);
+            ~Invoice();
             void setId(const QString &id);
             const QString &id() const;
             void setType(InvoiceType type);
             InvoiceType type() const;
-            void setPlace(const QString &place);
-            const QString &place() const;
             void setDate(const QDate &date);
             const QDate &date() const;
             void setBuyerId(const QString &buyerId);
@@ -55,10 +52,7 @@ namespace Model
             const QString &sellerId() const;
             void setSellerName(const QString &sellerName);
             const QString &sellerName() const;
-            void addOperation(Operation *operation);
-            Operation *operation(int n) const;
-            bool delOperation(int n);
-            int countOperations() const;
+            QList<Operation *> *operations();
             void setVat(double vat);
             double vat() const;
             void setPaid(bool paid);
@@ -70,13 +64,12 @@ namespace Model
         private:
             QString _id;
             InvoiceType _type;
-            QString _place;
             QDate _date;
             QString _buyerId;
             QString _buyerName;
             QString _sellerId;
             QString _sellerName;
-            QVector<Operation *> operations;
+            QList<Operation *> *_operations;
             double _vat;
             bool _paid;
             QString _notes;

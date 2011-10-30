@@ -22,7 +22,6 @@
 #define QINVOICER_H
 
 #include <QMainWindow>
-#include "types.h"
 
 QT_BEGIN_NAMESPACE
 class QMdiArea;
@@ -30,6 +29,14 @@ class QAction;
 class QMenu;
 class QToolBar;
 QT_END_NAMESPACE
+
+namespace Model
+{
+    namespace Domain
+    {
+        class Invoice;
+    }
+}
 
 namespace View
 {
@@ -48,9 +55,9 @@ namespace View
         void loadInvoice();
         void createProduct();
         void loadProduct();
-        void volumeSaleInvoice();
-        void volumeBuyInvoice();
-        void volumeInvoice();
+        void volumeSale();
+        void volumeBuy();
+        void volume();
         void unpaidInvoices();
         void about();
     private:
@@ -59,31 +66,31 @@ namespace View
         void createMenus();
         void createToolBar();
         void createStatusBar();
-        InvoiceEditor *createInvoiceEditor(Model::Domain::InvoiceType type);
+        InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
         bool verifyExit();
 
-        QMdiArea *mdiArea;
-        QAction *exitAction;
-        QAction *createSaleInvoiceAction;
-        QAction *createBuyInvoiceAction;
-        QAction *loadInvoiceAction;
-        QAction *createProductAction;
-        QAction *loadProductAction;
-        QAction *volumeSaleInvoiceAction;
-        QAction *volumeBuyInvoiceAction;
-        QAction *volumeInvoiceAction;
-        QAction *unpaidInvoicesAction;
-        QAction *aboutAction;
-        QMenu *applicationMenu;
-        QMenu *invoicingMenu;
-        QMenu *managementMenu;
-        QMenu *reportMenu;
-        QMenu *toolsMenu;
-        QMenu *windowMenu;
-        QMenu *helpMenu;
-        QToolBar *invoicingToolBar;
-        QToolBar *managementToolBar;
-        QToolBar *reportToolBar;
+        QMdiArea *_mdiArea;
+        QAction *_exitAction;
+        QAction *_createSaleInvoiceAction;
+        QAction *_createBuyInvoiceAction;
+        QAction *_loadInvoiceAction;
+        QAction *_createProductAction;
+        QAction *_loadProductAction;
+        QAction *_volumeSaleInvoiceAction;
+        QAction *_volumeBuyInvoiceAction;
+        QAction *_volumeInvoiceAction;
+        QAction *_unpaidInvoicesAction;
+        QAction *_aboutAction;
+        QMenu *_applicationMenu;
+        QMenu *_invoicingMenu;
+        QMenu *_managementMenu;
+        QMenu *_reportMenu;
+        QMenu *_toolsMenu;
+        QMenu *_windowMenu;
+        QMenu *_helpMenu;
+        QToolBar *_invoicingToolBar;
+        QToolBar *_managementToolBar;
+        QToolBar *_reportToolBar;
     };
 }
 

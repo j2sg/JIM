@@ -22,19 +22,18 @@
 #define OPERATION_H
 
 #include <iostream>
+#include "product.h"
 
 namespace Model
 {
     namespace Domain
     {
-
-        class Product;
-
         class Operation
         {
             friend std::ostream &operator<<(std::ostream &os, const Operation &operation);
         public:
-            Operation(int id = 0);
+            Operation(int id = 0, Product *product = 0, int quantity = 0,
+                      double weight = 0.0, double price = 0.0);
             Operation(const Operation &operation);
             ~Operation();
             Operation &operator=(const Operation &operation);
@@ -46,12 +45,15 @@ namespace Model
             int quantity() const;
             void setWeight(double weight);
             double weight() const;
+            void setPrice(double price);
+            double price() const;
             double total() const;
         private:
             int _id;
             Product *_product;
             int _quantity;
             double _weight;
+            double _price;
         };
         std::ostream &operator<<(std::ostream &os, const Operation &operation);
     }

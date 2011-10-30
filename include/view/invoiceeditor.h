@@ -29,54 +29,68 @@ class QLabel;
 class QLineEdit;
 class QCheckBox;
 class QDateEdit;
-class QTextEdit;
-class QTableView;
 class QPushButton;
 QT_END_NAMESPACE
 
+namespace Model
+{
+    namespace Domain
+    {
+        class Invoice;
+    }
+}
+
 namespace View
 {
+    class OperationEditor;
+
     class InvoiceEditor : public QWidget
     {
         Q_OBJECT
     public:
-        InvoiceEditor(Model::Domain::InvoiceType type = Model::Domain::Buy, QWidget *parent = 0);
+        InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *parent = 0);
+        ~InvoiceEditor();
     protected:
         void closeEvent(QCloseEvent *event);
+    signals:
+        void saveInvoice(const Model::Domain::Invoice &invoice);
+        void closeInvoice();
     private slots:
-        void save();
         void stateChangedOnAutoIdCheckBox();
         void stateChangedOnRegisteredCheckBox();
         void stateChangedOnVatCheckBox();
+        void invoiceModified();
+        void save();
+        void finish();
     private:
         void createWidgets();
+        void createIdWidgets();
+        void createEntityWidgets();
+        void createOperationsWidgets();
+        void createPaymentWidgets();
+        void createButtonsWidgets();
+        void loadInvoice();
+        bool saveInvoice();
+        bool verifySave();
 
-        Model::Domain::InvoiceType _type;
-        QLabel *idLabel;
-        QLineEdit *idLineEdit;
-        QCheckBox *autoIdCheckBox;
-        QLabel *dateLabel;
-        QDateEdit *dateDateEdit;
-        QLabel *placeLabel;
-        QLineEdit *placeLineEdit;
-        QLabel *sellerIdLabel;
-        QLineEdit *sellerIdLineEdit;
-        QCheckBox *sellerRegisteredCheckBox;
-        QLabel *sellerNameLabel;
-        QLineEdit *sellerNameLineEdit;
-        QLabel *buyerIdLabel;
-        QLineEdit *buyerIdLineEdit;
-        QCheckBox *buyerRegisteredCheckBox;
-        QLabel *buyerNameLabel;
-        QLineEdit *buyerNameLineEdit;
-        QTextEdit *notesTextEdit;
-        QTableView *operationsTableView;
-        QCheckBox *vatCheckBox;
-        QLineEdit *vatLineEdit;
-        QLabel *totalLabel;
-        QCheckBox *paidCheckBox;
-        QPushButton *saveButton;
-        QPushButton *closeButton;
+        QLabel *_idLabel;
+        QLineEdit *_idLineEdit;
+        QCheckBox *_autoIdCheckBox;
+        QLabel *_dateLabel;
+        QDateEdit *_dateDateEdit;
+        QLabel *_entityIdLabel;
+        QLineEdit *_entityIdLineEdit;
+        QCheckBox *_entityRegisteredCheckBox;
+        QLabel *_entityNameLabel;
+        QLineEdit *_entityNameLineEdit;
+        OperationEditor *_operationEditor;
+        QCheckBox *_vatCheckBox;
+        QLineEdit *_vatLineEdit;
+        QLabel *_totalLabel;
+        QCheckBox *_paidCheckBox;
+        QPushButton *_saveButton;
+        QPushButton *_closeButton;
+        Model::Domain::Invoice *_invoice;
     };
 }
 

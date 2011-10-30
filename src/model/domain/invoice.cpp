@@ -19,21 +19,29 @@
  **/
 
 #include "invoice.h"
-#include "operation.h"
 
-Model::Domain::Invoice::Invoice(const QString &id, InvoiceType type)
+Model::Domain::Invoice::Invoice(const QString &id, Model::Domain::InvoiceType type)
     : _id(id), _type(type)
 {
-    _place = QString();
     _date = QDate::currentDate();
     _buyerId = QString();
     _buyerName = QString();
     _sellerId = QString();
     _sellerName = QString();
+    _operations = new QList<Operation *>();
     _vat = 0.0;
     _paid = false;
     _notes = QString();
 
+}
+
+Model::Domain::Invoice::~Invoice()
+{
+    if(_operations) {
+        foreach(Operation *operation, *_operations)
+            delete operation;
+        delete _operations;
+    }
 }
 
 void Model::Domain::Invoice::setId(const QString &id)
@@ -54,16 +62,6 @@ void Model::Domain::Invoice::setType(Model::Domain::InvoiceType type)
 Model::Domain::InvoiceType Model::Domain::Invoice::type() const
 {
     return _type;
-}
-
-void Model::Domain::Invoice::setPlace(const QString &place)
-{
-    _place = place;
-}
-
-const QString &Model::Domain::Invoice::place() const
-{
-    return _place;
 }
 
 void Model::Domain::Invoice::setDate(const QDate &date)
@@ -116,30 +114,9 @@ const QString &Model::Domain::Invoice::sellerName() const
     return _sellerName;
 }
 
-void Model::Domain::Invoice::addOperation(Operation *operation)
+QList<Model::Domain::Operation *> *Model::Domain::Invoice::operations()
 {
-    operations.push_back(operation);
-}
-
-Model::Domain::Operation *Model::Domain::Invoice::operation(int n) const
-{
-    if(n < 0 || n > countOperations())
-        return 0;
-    return operations.at(n);
-}
-
-bool Model::Domain::Invoice::delOperation(int n)
-{
-    if(n < 0 || n > countOperations())
-        return false;
-    delete operation(n);
-    operations.remove(n);
-    return true;
-}
-
-int Model::Domain::Invoice::countOperations() const
-{
-    return operations.size();
+    return _operations;
 }
 
 void Model::Domain::Invoice::setVat(double vat)
@@ -175,8 +152,8 @@ const QString &Model::Domain::Invoice::notes() const
 double Model::Domain::Invoice::total() const
 {
     double total = 0.0;
-    for(int k = 0;k < countOperations(); ++k)
-        total += operation(k) -> total();
+    for(int k = 0;k < _operations -> size(); ++k)
+        total += _operations -> at(k) -> total();
     return total;
 }
 
@@ -184,7 +161,6 @@ std::ostream &Model::Domain::operator<<(std::ostream &os, const Invoice &invoice
 {
     return os << invoice._id.toStdString()              << std::endl
               << invoice._type                          << std::endl
-              << invoice._place.toStdString()           << std::endl
               << invoice._date.toString().toStdString() << std::endl
               << invoice._buyerId.toStdString()         << std::endl
               << invoice._buyerName.toStdString()       << std::endl

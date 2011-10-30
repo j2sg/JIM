@@ -1,13 +1,25 @@
 QInvoicer - Invoicing Software for SMBs (Small and Medium Business).
 
-To get more details in depth you should read doc/specification.txt
+To get more details in depth about the domain logic for this application , you should read doc/specification.txt
 
-To compile:
+From a command prompt, type the commands below to:
 
-   qmake
-   make
+- Generate a platform-specific makefile:
+   
+	qmake
 
-To execute:
-   ./qinvoicer
+- Build the application:
+
+	make
+
+- Execute the application:
+
+	- On Unix:
+
+		./qinvoicer
+
+	- On Windows:
+
+		qinvoicer
 
 Enjoy the application. :-)

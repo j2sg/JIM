@@ -20,11 +20,12 @@
 
 #include "product.h"
 
-Model::Domain::Product::Product(const QString &id, const QString &name)
-    : _id(id), _name(name)
+Model::Domain::Product::Product(const QString &id, const QString &name,
+                                double price, PriceType priceType)
+    : _id(id), _name(name), _price(price), _priceType(priceType)
 {
-    _price = 0.0;
-    _priceType = Units;
+    if(_price < 0)
+        _price = 0.0;
 }
 
 void Model::Domain::Product::setId(const QString &id)

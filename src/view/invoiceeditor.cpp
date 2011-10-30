@@ -19,168 +19,228 @@
  **/
 
 #include "invoiceeditor.h"
+#include "operationeditor.h"
+#include "invoice.h"
+#include "types.h"
 #include <QtGui>
-#include <iostream>
 
-View::InvoiceEditor::InvoiceEditor(Model::Domain::InvoiceType type, QWidget *parent)
-    : QWidget(parent), _type(type)
+View::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *parent)
+    : QWidget(parent), _invoice(invoice)
 {
     createWidgets();
-    setWindowTitle(tr("%1 Invoice").arg((type == Model::Domain::Sale) ? "Sale" : "Buy"));
+    setWindowTitle(tr("%1 Invoice").arg((_invoice -> type()) ? "Sale" : "Buy")+"[*]");
+    setMinimumWidth(600);
     setAttribute(Qt::WA_DeleteOnClose);
+    loadInvoice();
+}
+
+View::InvoiceEditor::~InvoiceEditor()
+{
+    if(_invoice)
+        delete _invoice;
 }
 
 void View::InvoiceEditor::closeEvent(QCloseEvent *event)
 {
-    event -> accept();
+    if(verifySave())
+        event -> accept();
+    else
+        event -> ignore();
+}
+
+void View::InvoiceEditor::stateChangedOnAutoIdCheckBox()
+{
+    _idLineEdit->setEnabled(!_autoIdCheckBox->isChecked());
+}
+
+void View::InvoiceEditor::stateChangedOnRegisteredCheckBox()
+{
+    bool isChecked = _entityRegisteredCheckBox -> isChecked();
+    _entityIdLineEdit -> setEnabled(isChecked);
+    _entityNameLineEdit -> setEnabled(!isChecked);
+}
+
+void View::InvoiceEditor::stateChangedOnVatCheckBox()
+{
+    _vatLineEdit -> setEnabled(_vatCheckBox -> isChecked());
+}
+
+void View::InvoiceEditor::invoiceModified()
+{
+    setWindowModified(true);
+    _saveButton -> setEnabled(true);
+}
+
+void View::InvoiceEditor::save()
+{
+    setWindowModified(false);
+    _saveButton -> setEnabled(false);
+}
+
+void View::InvoiceEditor::finish()
+{
+    //emit closeInvoice();
+    //close();
 }
 
 void View::InvoiceEditor::createWidgets()
 {
-    idLabel = new QLabel(tr("&Id: "));
-    idLineEdit = new QLineEdit;
-    idLabel -> setBuddy(idLineEdit);
-    autoIdCheckBox = new QCheckBox(tr("Auto"));
-    connect(autoIdCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(stateChangedOnAutoIdCheckBox()));
-    autoIdCheckBox -> setChecked(true);
+    createIdWidgets();
 
-    dateLabel = new QLabel(tr("&Date: "));
-    dateDateEdit = new QDateEdit(QDate::currentDate());
-    dateLabel -> setBuddy(dateDateEdit);
-
-    placeLabel = new QLabel(tr("&Place"));
-    placeLineEdit = new QLineEdit;
-    placeLabel -> setBuddy(placeLineEdit);
-
-    QHBoxLayout *idLayout = new QHBoxLayout;
-    idLayout -> addWidget(idLabel);
-    idLayout -> addWidget(idLineEdit);
-    idLayout -> addWidget(autoIdCheckBox);
-    idLayout -> addWidget(dateLabel);
-    idLayout -> addWidget(dateDateEdit);
-    idLayout -> addWidget(placeLabel);
-    idLayout -> addWidget(placeLineEdit);
+    QGridLayout *idLayout = new QGridLayout;
+    idLayout -> addWidget(_idLabel, 0, 0, 1, 1);
+    idLayout -> addWidget(_idLineEdit, 0, 1, 1, 1);
+    idLayout -> addWidget(_dateLabel, 0, 2, 1, 1);
+    idLayout -> addWidget(_dateDateEdit, 0, 3, 1, 1);
+    idLayout -> addWidget(_autoIdCheckBox, 1, 0, 1, 2);
 
     QGroupBox *idGroupBox = new QGroupBox(tr("&Details"));
     idGroupBox -> setLayout(idLayout);
 
-    sellerIdLabel = new QLabel(tr("Id: "));
-    sellerIdLineEdit = new QLineEdit;
-    sellerIdLabel -> setBuddy(sellerIdLineEdit);
-    sellerRegisteredCheckBox = new QCheckBox(tr("Registered"));
+    createEntityWidgets();
 
-    sellerNameLabel = new QLabel(tr("Name: "));
-    sellerNameLineEdit = new QLineEdit;
-    sellerNameLabel -> setBuddy(sellerNameLineEdit);
+    QGridLayout *entityLayout = new QGridLayout;
+    entityLayout -> addWidget(_entityIdLabel, 0, 0);
+    entityLayout -> addWidget(_entityIdLineEdit, 0, 1);
+    entityLayout -> addWidget(_entityRegisteredCheckBox, 0, 2);
+    entityLayout -> addWidget(_entityNameLabel, 1, 0, 1, 1);
+    entityLayout -> addWidget(_entityNameLineEdit, 1, 1, 1, 2);
 
-    connect(sellerRegisteredCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(stateChangedOnRegisteredCheckBox()));
-    sellerRegisteredCheckBox -> setChecked(true);
+    QGroupBox *entityGroupBox = new QGroupBox(tr("%1").
+                                              arg((_invoice -> type() == Model::Domain::Sale)
+                                                  ? "Customer" : "Provider"));
+    entityGroupBox -> setLayout(entityLayout);
 
-    QGridLayout *sellerLayout = new QGridLayout;
-    sellerLayout -> addWidget(sellerIdLabel, 0, 0);
-    sellerLayout -> addWidget(sellerIdLineEdit, 0, 1);
-    sellerLayout -> addWidget(sellerRegisteredCheckBox, 0, 2);
-    sellerLayout -> addWidget(sellerNameLabel, 1, 0, 1, 1);
-    sellerLayout -> addWidget(sellerNameLineEdit, 1, 1, 1, 2);
+    createOperationsWidgets();
 
-    QGroupBox *sellerGroupBox = new QGroupBox(tr("&Seller"));
-    sellerGroupBox -> setLayout(sellerLayout);
+    QGroupBox *operationsGroupBox = new QGroupBox(tr("Operations"));
+    operationsGroupBox->setLayout(_operationEditor->layout());
 
-    buyerIdLabel = new QLabel(tr("Id: "));
-    buyerIdLineEdit = new QLineEdit;
-    buyerIdLabel -> setBuddy(buyerIdLineEdit);
-    buyerRegisteredCheckBox = new QCheckBox(tr("Registered"));
-
-    buyerNameLabel = new QLabel(tr("Name: "));
-    buyerNameLineEdit = new QLineEdit;
-    buyerNameLabel -> setBuddy(buyerNameLineEdit);
-
-    connect(buyerRegisteredCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(stateChangedOnRegisteredCheckBox()));
-    buyerRegisteredCheckBox -> setChecked(true);
-
-    QGridLayout *buyerLayout = new QGridLayout;
-    buyerLayout -> addWidget(buyerIdLabel, 0, 0);
-    buyerLayout -> addWidget(buyerIdLineEdit, 0, 1);
-    buyerLayout -> addWidget(buyerRegisteredCheckBox, 0, 2);
-    buyerLayout -> addWidget(buyerNameLabel, 1, 0, 1, 1);
-    buyerLayout -> addWidget(buyerNameLineEdit, 1, 1, 1, 2);
-
-    QGroupBox *buyerGroupBox = new QGroupBox(tr("&Buyer"));
-    buyerGroupBox -> setLayout(buyerLayout);
-
-    notesTextEdit = new QTextEdit;
-
-    operationsTableView = new QTableView;
-
-    vatCheckBox = new QCheckBox(tr("&VAT"));
-    vatLineEdit = new QLineEdit;
-    totalLabel = new QLabel(tr("Total: "));
-    paidCheckBox = new QCheckBox(tr("Paid"));
-    paidCheckBox -> setChecked(false);
-
-    connect(vatCheckBox, SIGNAL(stateChanged(int)), this, SLOT(stateChangedOnVatCheckBox()));
-    vatCheckBox -> setChecked(false);
+    createPaymentWidgets();
 
     QHBoxLayout *paymentLayout = new QHBoxLayout;
-    paymentLayout -> addWidget(vatCheckBox);
-    paymentLayout -> addWidget(vatLineEdit);
-    paymentLayout -> addWidget(totalLabel);
-    paymentLayout -> addWidget(paidCheckBox);
+    paymentLayout -> addWidget(_vatCheckBox);
+    paymentLayout -> addWidget(_vatLineEdit);
+    paymentLayout -> addWidget(_totalLabel);
+    paymentLayout -> addWidget(_paidCheckBox);
 
     QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
     paymentGroupBox -> setLayout(paymentLayout);
 
-    saveButton = new QPushButton(tr("&Save"));
-    closeButton = new QPushButton(tr("&Close"));
-    connect(saveButton, SIGNAL(clicked()), this, SLOT(save()));
-    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    createButtonsWidgets();
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout -> addStretch();
-    bottomLayout -> addWidget(saveButton);
-    bottomLayout -> addWidget(closeButton);
+    bottomLayout -> addWidget(_saveButton);
+    bottomLayout -> addWidget(_closeButton);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(idGroupBox);
-    mainLayout -> addWidget(sellerGroupBox);
-    mainLayout -> addWidget(buyerGroupBox);
-    mainLayout -> addWidget(operationsTableView);
+    mainLayout -> addWidget(entityGroupBox);
+    mainLayout -> addWidget(operationsGroupBox);
     mainLayout -> addWidget(paymentGroupBox);
     mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
 }
 
-void View::InvoiceEditor::save()
+void View::InvoiceEditor::createIdWidgets()
 {
+    _idLabel = new QLabel(tr("&Id: "));
+    _idLineEdit = new QLineEdit;
+    _idLabel -> setBuddy(_idLineEdit);
+    _autoIdCheckBox = new QCheckBox(tr("Auto &Generate"));
+    connect(_idLineEdit, SIGNAL(textChanged(QString)), this, SLOT(invoiceModified()));
+    connect(_autoIdCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(stateChangedOnAutoIdCheckBox()));
+    _autoIdCheckBox -> setChecked(true);
 
+    _dateLabel = new QLabel(tr("&Date: "));
+    _dateDateEdit = new QDateEdit(QDate::currentDate());
+    _dateLabel -> setBuddy(_dateDateEdit);
+    connect(_dateDateEdit, SIGNAL(dateChanged(QDate)), this, SLOT(invoiceModified()));
 }
 
-void View::InvoiceEditor::stateChangedOnAutoIdCheckBox()
+void View::InvoiceEditor::createEntityWidgets()
 {
-    idLineEdit->setEnabled(!autoIdCheckBox->isChecked());
+    _entityIdLabel = new QLabel(tr("Id: "));
+    _entityIdLineEdit = new QLineEdit;
+    _entityIdLabel -> setBuddy(_entityIdLineEdit);
+    _entityRegisteredCheckBox = new QCheckBox(tr("Registered"));
+    _entityRegisteredCheckBox -> setChecked(true);
+    connect(_entityIdLineEdit, SIGNAL(textChanged(QString)), this, SLOT(invoiceModified()));
+
+    _entityNameLabel = new QLabel(tr("Name: "));
+    _entityNameLineEdit = new QLineEdit;
+    _entityNameLabel -> setBuddy(_entityNameLineEdit);
+    _entityNameLineEdit->setEnabled(false);
+    connect(_entityNameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(invoiceModified()));
+    connect(_entityRegisteredCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(stateChangedOnRegisteredCheckBox()));
 }
 
-void View::InvoiceEditor::stateChangedOnRegisteredCheckBox()
+void View::InvoiceEditor::createOperationsWidgets()
 {
-    QCheckBox *checkBox = qobject_cast<QCheckBox *>(sender());
-    bool isChecked = checkBox -> isChecked();
-    if(checkBox == sellerRegisteredCheckBox) {
-        sellerIdLineEdit -> setEnabled(isChecked);
-        sellerNameLineEdit -> setEnabled(!isChecked);
-    } else if(checkBox == buyerRegisteredCheckBox) {
-        buyerIdLineEdit -> setEnabled(isChecked);
-        buyerNameLineEdit -> setEnabled(!isChecked);
-    }
+    _operationEditor = new OperationEditor(_invoice -> operations());
+    connect(_operationEditor, SIGNAL(dataChanged()), this, SLOT(invoiceModified()));
 }
 
-void View::InvoiceEditor::stateChangedOnVatCheckBox()
+
+void View::InvoiceEditor::createPaymentWidgets()
 {
-    bool isChecked = vatCheckBox -> isChecked();
-    vatLineEdit -> setEnabled(isChecked);
-    if(!isChecked)
-        vatLineEdit -> setText(QString::number(0.0));
+    _vatCheckBox = new QCheckBox(tr("&VAT"));
+    _vatCheckBox -> setChecked(false);
+    _vatLineEdit = new QLineEdit;
+    _vatLineEdit -> setEnabled(false);
+    _totalLabel = new QLabel(tr("Total: "));
+    _paidCheckBox = new QCheckBox(tr("Paid"));
+    _paidCheckBox -> setChecked(false);
+
+    connect(_vatCheckBox, SIGNAL(stateChanged(int)), this, SLOT(stateChangedOnVatCheckBox()));
+    connect(_vatLineEdit, SIGNAL(textChanged(QString)), this, SLOT(invoiceModified()));
+    connect(_paidCheckBox, SIGNAL(stateChanged(int)), this, SLOT(invoiceModified()));
+}
+
+void View::InvoiceEditor::createButtonsWidgets()
+{
+    _saveButton = new QPushButton(tr("Save"));
+    _saveButton -> setEnabled(false);
+    _closeButton = new QPushButton(tr("&Finish"));
+    _closeButton -> setDefault(true);
+    connect(_saveButton, SIGNAL(clicked()), this, SLOT(save()));
+    connect(_closeButton, SIGNAL(clicked()), this, SLOT(finish()));
+}
+
+void View::InvoiceEditor::loadInvoice()
+{
+    _idLineEdit -> setText(_invoice -> id());
+    _dateDateEdit -> setDate(_invoice -> date());
+    _entityIdLineEdit -> setText(((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerId() : _invoice -> sellerId()));
+    _entityNameLineEdit -> setText(((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerName() : _invoice -> sellerName()));
+    _vatLineEdit -> setText(QString::number(_invoice -> vat(), 'f', PRECISION_VAT));
+    _paidCheckBox -> setChecked(_invoice -> paid());
+    setWindowModified(false);
+}
+
+bool View::InvoiceEditor::saveInvoice()
+{
+    return true;
+}
+
+bool View::InvoiceEditor::verifySave()
+{
+    if(isWindowModified()) {
+        int response = QMessageBox::warning(this, tr("Verify Save"),
+                                                  tr("This invoice has been modified\n"
+                                                     "do you want to save the changes?"),
+                                                  QMessageBox::Yes | QMessageBox::Default |
+                                                  QMessageBox::No | QMessageBox::Cancel |
+                                                  QMessageBox::Escape);
+        if(response == QMessageBox::Cancel)
+            return false;
+        else if(response == QMessageBox::Yes)
+            saveInvoice();
+        return true;
+     } else
+        return true;
 }
