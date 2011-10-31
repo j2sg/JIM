@@ -32,6 +32,7 @@ namespace Model
         class ProductManager
         {
         public:
+            static bool create(const Model::Domain::Product &product);
             static Model::Domain::Product *get(const QString &id);
             static QList<Model::Domain::Product *> *getAll();
         };

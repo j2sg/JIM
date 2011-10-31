@@ -21,6 +21,7 @@
 #include "invoiceeditor.h"
 #include "operationeditor.h"
 #include "invoice.h"
+#include "invoicemanager.h"
 #include "types.h"
 #include <QtGui>
 
@@ -224,7 +225,7 @@ void View::InvoiceEditor::loadInvoice()
 
 bool View::InvoiceEditor::saveInvoice()
 {
-    return true;
+    return Model::Management::InvoiceManager::create(*_invoice);
 }
 
 bool View::InvoiceEditor::verifySave()

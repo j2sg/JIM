@@ -20,6 +20,11 @@
 
 #include "productmanager.h"
 
+bool Model::Management::ProductManager::create(const Model::Domain::Product &product)
+{
+    return true;
+}
+
 Model::Domain::Product *Model::Management::ProductManager::get(const QString &id)
 {
     Q_UNUSED(id);
