@@ -18,10 +18,14 @@
  *
  **/
 
+// QInvoicer class declaration
+
 #ifndef QINVOICER_H
 #define QINVOICER_H
 
 #include <QMainWindow>
+
+// Forward declarations
 
 QT_BEGIN_NAMESPACE
 class QMdiArea;
@@ -41,25 +45,30 @@ namespace Model
 namespace View
 {
     class InvoiceEditor;
+    class ProductEditor;
 
     class QInvoicer : public QMainWindow
     {
         Q_OBJECT
     public:
         QInvoicer();
+        ~QInvoicer();
     protected:
         void closeEvent(QCloseEvent *event);
     private slots:
         void createSaleInvoice();
         void createBuyInvoice();
         void loadInvoice();
-        void createProduct();
-        void loadProduct();
+        void manageProduct();
         void volumeSale();
         void volumeBuy();
         void volume();
         void unpaidInvoices();
         void about();
+        void restore(QObject *object);
+        void invoiceSaved(Model::Domain::Invoice *invoice);
+        void currentSubWindowFinished();
+
     private:
         void createCentralWidget();
         void createActions();
@@ -74,8 +83,7 @@ namespace View
         QAction *_createSaleInvoiceAction;
         QAction *_createBuyInvoiceAction;
         QAction *_loadInvoiceAction;
-        QAction *_createProductAction;
-        QAction *_loadProductAction;
+        QAction *_manageProductAction;
         QAction *_volumeSaleInvoiceAction;
         QAction *_volumeBuyInvoiceAction;
         QAction *_volumeInvoiceAction;
@@ -91,6 +99,7 @@ namespace View
         QToolBar *_invoicingToolBar;
         QToolBar *_managementToolBar;
         QToolBar *_reportToolBar;
+        ProductEditor *_productEditor;
     };
 }
 

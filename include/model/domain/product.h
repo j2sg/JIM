@@ -39,6 +39,8 @@ namespace Model
             const QString &id() const;
             void setName(const QString &name);
             const QString &name() const;
+            void setDescription(const QString &description);
+            const QString &description() const;
             void setPrice(double price);
             double price() const;
             void setPriceType(PriceType priceType);
@@ -46,6 +48,7 @@ namespace Model
         private:
             QString _id;
             QString _name;
+            QString _description;
             double _price;
             PriceType _priceType;
         };

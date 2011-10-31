@@ -23,6 +23,7 @@
 #include "invoiceeditor.h"
 #include "invoice.h"
 #include "invoicemanager.h"
+#include "producteditor.h"
 #include "global.h"
 
 View::QInvoicer::QInvoicer()
@@ -32,31 +33,42 @@ View::QInvoicer::QInvoicer()
     createMenus();
     createToolBar();
     createStatusBar();
+
+    _productEditor = 0;
+
     setWindowTitle(tr("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION));
     setWindowIcon(QIcon(":/images/appicon.png"));
 }
 
+View::QInvoicer::~QInvoicer()
+{
+    if(_productEditor)
+        delete _productEditor;
+}
+
 void View::QInvoicer::closeEvent(QCloseEvent *event)
 {
-    if(verifyExit())
-        event -> accept();
-    else
+    if(verifyExit()) {
+        _mdiArea->closeAllSubWindows();
+        if(!_mdiArea->currentSubWindow())
+            event -> accept();
+        else
+            event -> ignore();
+    } else
         event -> ignore();
 }
 
 void View::QInvoicer::createSaleInvoice()
 {
     QString id = Model::Management::InvoiceManager::getId();
-    Model::Domain::Invoice *invoice = new Model::Domain::Invoice(id, Model::Domain::Sale);
-    InvoiceEditor *editor = createInvoiceEditor(invoice);
+    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(id, Model::Domain::Sale));
     editor -> show();
 }
 
 void View::QInvoicer::createBuyInvoice()
 {
     QString id = Model::Management::InvoiceManager::getId();
-    Model::Domain::Invoice *invoice = new Model::Domain::Invoice(id, Model::Domain::Buy);
-    InvoiceEditor *editor = createInvoiceEditor(invoice);
+    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(id, Model::Domain::Buy));
     editor -> show();
 }
 
@@ -67,18 +79,19 @@ void View::QInvoicer::loadInvoice()
     if(ok) {
         Model::Domain::Invoice *invoice = Model::Management::InvoiceManager::get(id);
         InvoiceEditor *editor = createInvoiceEditor(invoice);
-        editor -> show();
+        editor->show();
     }
 }
 
-void View::QInvoicer::createProduct()
+void View::QInvoicer::manageProduct()
 {
-    QMessageBox::information(this, tr("Create Product"), tr("Functionality not implemented yet"),QMessageBox::Ok);
-}
-
-void View::QInvoicer::loadProduct()
-{
-    QMessageBox::information(this, tr("Load Product"), tr("Functionality not implemented yet"),QMessageBox::Ok);
+    if(!_productEditor) {
+        _productEditor = new ProductEditor;
+        connect(_productEditor, SIGNAL(finished()), this, SLOT(currentSubWindowFinished()));
+        _mdiArea->addSubWindow(_productEditor);
+        connect(_productEditor, SIGNAL(destroyed(QObject*)), this, SLOT(restore(QObject *)));
+        _productEditor->show();
+    }
 }
 
 void View::QInvoicer::volumeSale()
@@ -114,6 +127,22 @@ void View::QInvoicer::about()
                        .arg(AUTHOR_EMAIL));
 }
 
+void View::QInvoicer::restore(QObject *object)
+{
+    if(object == _productEditor)
+        _productEditor = 0;
+}
+
+void View::QInvoicer::invoiceSaved(Model::Domain::Invoice *invoice)
+{
+    statusBar()->showMessage(tr("Invoice number %1 saved").arg(invoice->id()), 2000);
+}
+
+void View::QInvoicer::currentSubWindowFinished()
+{
+    _mdiArea->closeActiveSubWindow();
+}
+
 void View::QInvoicer::createCentralWidget()
 {
     _mdiArea = new QMdiArea;
@@ -144,15 +173,10 @@ void View::QInvoicer::createActions()
     _loadInvoiceAction -> setStatusTip(tr("Load a specific Invoice"));
     connect(_loadInvoiceAction, SIGNAL(triggered()), this, SLOT(loadInvoice()));
 
-    _createProductAction = new QAction(tr("Create &Product"), this);
-    _createProductAction -> setIcon(QIcon(":/images/product.png"));
-    _createProductAction -> setStatusTip(tr("Create a new Product"));
-    connect(_createProductAction, SIGNAL(triggered()), this, SLOT(createProduct()));
-
-    _loadProductAction = new QAction(tr("Load Product"), this);
-    _loadProductAction -> setIcon(QIcon(":/images/loadproduct.png"));
-    _loadProductAction -> setStatusTip(tr("Load a specific Product"));
-    connect(_loadProductAction, SIGNAL(triggered()), this, SLOT(loadProduct()));
+    _manageProductAction = new QAction(tr("Manage &Product"), this);
+    _manageProductAction -> setIcon(QIcon(":/images/manageproduct.png"));
+    _manageProductAction -> setStatusTip(tr("Product Management"));
+    connect(_manageProductAction, SIGNAL(triggered()), this, SLOT(manageProduct()));
 
     _volumeSaleInvoiceAction = new QAction(tr("Volume Sale Invoice"), this);
     _volumeSaleInvoiceAction -> setIcon(QIcon(":/images/volumesale.png"));
@@ -191,8 +215,7 @@ void View::QInvoicer::createMenus()
     _invoicingMenu -> addAction(_loadInvoiceAction);
 
     _managementMenu = menuBar() -> addMenu(tr("&Management"));
-    _managementMenu -> addAction(_createProductAction);
-    _managementMenu -> addAction(_loadProductAction);
+    _managementMenu -> addAction(_manageProductAction);
 
     _reportMenu = menuBar() -> addMenu(tr("&Report"));
     _reportMenu -> addAction(_volumeSaleInvoiceAction);
@@ -216,8 +239,7 @@ void View::QInvoicer::createToolBar()
     _invoicingToolBar -> addAction(_loadInvoiceAction);
 
     _managementToolBar = addToolBar(tr("Management"));
-    _managementToolBar -> addAction(_createProductAction);
-    _managementToolBar -> addAction(_loadProductAction);
+    _managementToolBar -> addAction(_manageProductAction);
 
     _reportToolBar = addToolBar(tr("Report"));
     _reportToolBar -> addAction(_volumeSaleInvoiceAction);
@@ -234,6 +256,8 @@ void View::QInvoicer::createStatusBar()
 View::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Domain::Invoice *invoice)
 {
     InvoiceEditor *editor = new InvoiceEditor(invoice);
+    connect(editor, SIGNAL(saved(Model::Domain::Invoice*)), this, SLOT(invoiceSaved(Model::Domain::Invoice*)));
+    connect(editor, SIGNAL(finished()), this, SLOT(currentSubWindowFinished()));
     _mdiArea -> addSubWindow(editor);
     return editor;
 }

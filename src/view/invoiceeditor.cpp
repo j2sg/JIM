@@ -74,14 +74,17 @@ void View::InvoiceEditor::invoiceModified()
 
 void View::InvoiceEditor::save()
 {
-    setWindowModified(false);
-    _saveButton -> setEnabled(false);
+    if(saveInvoice()) {
+        setWindowModified(false);
+        _saveButton -> setEnabled(false);
+        emit saved(_invoice);
+    } else
+        QMessageBox::critical(this, tr("Critical error"), tr("Has been occurred an error when save"), QMessageBox::Ok);
 }
 
 void View::InvoiceEditor::finish()
 {
-    //emit closeInvoice();
-    //close();
+    emit finished();
 }
 
 void View::InvoiceEditor::createWidgets()
@@ -240,7 +243,7 @@ bool View::InvoiceEditor::verifySave()
         if(response == QMessageBox::Cancel)
             return false;
         else if(response == QMessageBox::Yes)
-            saveInvoice();
+            save();
         return true;
      } else
         return true;

@@ -53,8 +53,8 @@ namespace View
     protected:
         void closeEvent(QCloseEvent *event);
     signals:
-        void saveInvoice(const Model::Domain::Invoice &invoice);
-        void closeInvoice();
+        void saved(Model::Domain::Invoice *invoice);
+        void finished();
     private slots:
         void stateChangedOnAutoIdCheckBox();
         void stateChangedOnRegisteredCheckBox();

@@ -22,6 +22,7 @@
 
 bool Model::Management::ProductManager::create(const Model::Domain::Product &product)
 {
+    Q_UNUSED(product);
     return true;
 }
 
@@ -34,4 +35,9 @@ Model::Domain::Product *Model::Management::ProductManager::get(const QString &id
 QList<Model::Domain::Product *> *Model::Management::ProductManager::getAll()
 {
     return new QList<Model::Domain::Product *>();
+}
+
+QString Model::Management::ProductManager::getId()
+{
+    return QString();
 }

@@ -49,6 +49,16 @@ const QString &Model::Domain::Product::name() const
     return _name;
 }
 
+void Model::Domain::Product::setDescription(const QString &description)
+{
+    _description = description;
+}
+
+const QString &Model::Domain::Product::description() const
+{
+    return _description;
+}
+
 void Model::Domain::Product::setPrice(double price)
 {
     _price = price;

@@ -47,13 +47,13 @@ namespace View
     public:
         OperationEditor(QList<Model::Domain::Operation *> *operations, QWidget *parent = 0);
         QList<Model::Domain::Operation *> *operations();
+    signals:
+        void dataChanged();
     private slots:
         void rowSelectionChanged();
         void addOperation();
         void modOperation();
         void delOperation();
-    signals:
-        void dataChanged();
     private:
         QTableView *_operationsTableView;
         OperationModel *_operationModel;
