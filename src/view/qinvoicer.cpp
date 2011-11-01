@@ -49,8 +49,8 @@ View::QInvoicer::~QInvoicer()
 void View::QInvoicer::closeEvent(QCloseEvent *event)
 {
     if(verifyExit()) {
-        _mdiArea->closeAllSubWindows();
-        if(!_mdiArea->currentSubWindow())
+        _mdiArea -> closeAllSubWindows();
+        if(!_mdiArea -> currentSubWindow())
             event -> accept();
         else
             event -> ignore();

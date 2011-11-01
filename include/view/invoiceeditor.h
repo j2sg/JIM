@@ -89,7 +89,7 @@ namespace View
         QLabel *_totalLabel;
         QCheckBox *_paidCheckBox;
         QPushButton *_saveButton;
-        QPushButton *_closeButton;
+        QPushButton *_finishButton;
         Model::Domain::Invoice *_invoice;
     };
 }

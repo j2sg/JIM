@@ -18,8 +18,8 @@
  *
  **/
 
-#ifndef OPERATIONMODEL_H
-#define OPERATIONMODEL_H
+#ifndef PRODUCTMODEL_H
+#define PRODUCTMODEL_H
 
 #include <QAbstractTableModel>
 #include <QList>
@@ -28,36 +28,31 @@ namespace Model
 {
     namespace Domain
     {
-        class Operation;
+        class Product;
     }
 }
 
 namespace View
 {
-    class OperationModel : public QAbstractTableModel
+    class ProductModel : public QAbstractTableModel
     {
     public:
-        //OperationModel(QObject *parent = 0)
-        //    : QAbstractTableModel(parent) {}
-        OperationModel(QList<Model::Domain::Operation *> *operations, QObject *parent = 0)
+        ProductModel(QList<Model::Domain::Product *> *products, QObject *parent = 0)
             : QAbstractTableModel(parent)
         {
-            _operations = operations;
+            _products = products;
         }
-
-        QList<Model::Domain::Operation *> *operations();
-        void setOperations(QList<Model::Domain::Operation *> *operations);
+        QList<Model::Domain::Product *> *products();
+        void setProducts(QList<Model::Domain::Product *> *products);
         int rowCount(const QModelIndex &parent) const;
         int columnCount(const QModelIndex &parent) const;
         QVariant data(const QModelIndex &index, int role) const;
-        bool setData(const QModelIndex &index, const QVariant &value, int role);
         bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
         bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-        Qt::ItemFlags flags(const QModelIndex &index) const;
     private:
-        QList<Model::Domain::Operation *> *_operations;
+        QList<Model::Domain::Product *> *_products;
     };
 }
 
-#endif // OPERATIONMODEL_H
+#endif // PRODUCTMODEL_H

@@ -44,7 +44,7 @@ int View::OperationModel::rowCount(const QModelIndex &parent) const
 int View::OperationModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return Count;
+    return ColumnOperationCount;
 }
 
 QVariant View::OperationModel::data(const QModelIndex &index, int role) const
@@ -52,9 +52,9 @@ QVariant View::OperationModel::data(const QModelIndex &index, int role) const
     if(index.isValid()) {
         if(role == Qt::TextAlignmentRole) {
             switch(index.column()) {
-            case Id:
+            case ColumnOperationId:
                 return int(Qt::AlignCenter);
-            case Name:
+            case ColumnOperationName:
                 return int(Qt::AlignLeft | Qt::AlignVCenter);
             default:
                 return int(Qt::AlignRight | Qt::AlignVCenter);
@@ -63,17 +63,17 @@ QVariant View::OperationModel::data(const QModelIndex &index, int role) const
             Model::Domain::Operation *operation = _operations -> at(index.row());
             Model::Domain::Product *product = operation -> product();
             switch(index.column()) {
-            case Id:
+            case ColumnOperationId:
                 return (product != 0) ? product -> id() : "";
-            case Name:
+            case ColumnOperationName:
                 return (product != 0) ? product -> name() : "";
-            case Quantity:
+            case ColumnOperationQuantity:
                 return QString::number(operation -> quantity());
-            case Weight:
+            case ColumnOperationWeight:
                 return QString::number(operation -> weight(), 'f', PRECISION_WEIGHT);
-            case Price:
+            case ColumnOperationPrice:
                 return QString::number(operation -> price(), 'f', PRECISION_MONEY);
-            case Total:
+            case ColumnOperationTotal:
                 return QString::number(operation -> total(), 'f', PRECISION_MONEY);
             }
         }
@@ -87,10 +87,10 @@ bool View::OperationModel::setData(const QModelIndex &index, const QVariant &val
     if(index.isValid() && role == Qt::EditRole) {
         Model::Domain::Operation *operation = _operations -> at(index.row());
         switch(index.column()) {
-        case Total:
-        case Name:
+        case ColumnOperationTotal:
+        case ColumnOperationName:
             return false;
-        case Id:
+        case ColumnOperationId:
         {
             QString id = value.toString();
             Model::Domain::Product *product = Model::Management::ProductManager::get(id);
@@ -100,19 +100,21 @@ bool View::OperationModel::setData(const QModelIndex &index, const QVariant &val
                 return false;
         }
             break;
-        case Quantity:
+        case ColumnOperationQuantity:
             operation -> setQuantity(value.toInt());
             break;
-        case Weight:
+        case ColumnOperationWeight:
             operation -> setWeight(value.toDouble());
             break;
-        case Price:
+        case ColumnOperationPrice:
             operation -> setPrice(value.toDouble());
             break;
         }
         emit dataChanged(index, index);
-        if(index.column() == Quantity || index.column() == Weight || index.column() == Price) {
-            QModelIndex totalIndex = createIndex(index.row(), Total);
+        if(index.column() == ColumnOperationQuantity ||
+           index.column() == ColumnOperationWeight ||
+           index.column() == ColumnOperationPrice) {
+            QModelIndex totalIndex = createIndex(index.row(), ColumnOperationTotal);
             emit dataChanged(totalIndex, totalIndex);
         }
         return true;
@@ -149,17 +151,17 @@ QVariant View::OperationModel::headerData(int section, Qt::Orientation orientati
             return QString::number(section + 1);
         else {
             switch(section) {
-            case Id:
+            case ColumnOperationId:
                 return QString(tr("ID  "));
-            case Name:
+            case ColumnOperationName:
                 return QString(tr("Name"));
-            case Quantity:
+            case ColumnOperationQuantity:
                 return QString(tr("Quantity"));
-            case Weight:
+            case ColumnOperationWeight:
                 return QString(tr("Weight"));
-            case Price:
+            case ColumnOperationPrice:
                 return QString(tr("Price"));
-            case Total:
+            case ColumnOperationTotal:
                 return QString(tr("Total"));
             }
         }
@@ -171,10 +173,9 @@ Qt::ItemFlags View::OperationModel::flags(const QModelIndex &index) const
 {
    Qt::ItemFlags flags = QAbstractItemModel::flags(index);
    switch(index.column()) {
-   case Id: case Quantity:
-   case Weight:case Price:
+   case ColumnOperationId: case ColumnOperationQuantity:
+   case ColumnOperationWeight:case ColumnOperationPrice:
        flags |= Qt::ItemIsEditable;
    }
    return flags;
 }
-

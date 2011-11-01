@@ -34,17 +34,17 @@ View::OperationEditor::OperationEditor(QList<Model::Domain::Operation *> *operat
     _operationsTableView -> setAlternatingRowColors(true);
     _operationsTableView -> setShowGrid(false);
     _operationsTableView -> setGridStyle(Qt::NoPen);
-    _operationsTableView -> setColumnWidth(Id, 50);
-    _operationsTableView -> setColumnWidth(Name, 150);
-    _operationsTableView -> setColumnWidth(Quantity, 75);
-    _operationsTableView -> setColumnWidth(Weight, 75);
-    _operationsTableView -> setColumnWidth(Price, 75);
-    _operationsTableView -> setColumnWidth(Total, 75);
+    _operationsTableView -> setColumnWidth(ColumnOperationId, 50);
+    _operationsTableView -> setColumnWidth(ColumnOperationName, 150);
+    _operationsTableView -> setColumnWidth(ColumnOperationQuantity, 75);
+    _operationsTableView -> setColumnWidth(ColumnOperationWeight, 75);
+    _operationsTableView -> setColumnWidth(ColumnOperationPrice, 75);
+    _operationsTableView -> setColumnWidth(ColumnOperationTotal, 75);
     _operationsTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
     _operationsTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _operationsTableView -> setEditTriggers(QAbstractItemView::AnyKeyPressed | QAbstractItemView::DoubleClicked);
     connect(_operationsTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(rowSelectionChanged()));
-    connect(_operationsTableView->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(dataChanged()));
+    connect(_operationModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(dataChanged()));
 
     _addOperationButton = new QPushButton(tr("Add"));
     _modOperationButton = new QPushButton(tr("Modify"));
@@ -78,8 +78,8 @@ void View::OperationEditor::rowSelectionChanged()
 void View::OperationEditor::addOperation()
 {
     int row = _operationsTableView -> currentIndex().row();
-    _operationsTableView -> model() -> insertRows(row + 1, 1);
-    QModelIndex index = _operationsTableView -> model() -> index(row + 1, Id);
+    _operationModel -> insertRows(row + 1, 1);
+    QModelIndex index = _operationModel -> index(row + 1, ColumnOperationId);
     _operationsTableView -> setCurrentIndex(index);
     _operationsTableView -> edit(index);
     emit dataChanged();
@@ -88,8 +88,8 @@ void View::OperationEditor::addOperation()
 void View::OperationEditor::modOperation()
 {
     int row = _operationsTableView -> currentIndex().row();
-    QModelIndex index = _operationsTableView -> model() -> index(row, Id);
-    _operationsTableView->setCurrentIndex(index);
+    QModelIndex index = _operationModel -> index(row, ColumnOperationId);
+    _operationsTableView -> setCurrentIndex(index);
     _operationsTableView -> edit(index);
 }
 
@@ -97,6 +97,6 @@ void View::OperationEditor::delOperation()
 {
     int row = _operationsTableView->currentIndex().row();
     _operationsTableView->selectRow(row);
-    _operationsTableView -> model() -> removeRows(row, 1);
+    _operationModel -> removeRows(row, 1);
     emit dataChanged();
 }

@@ -1,4 +1,28 @@
+/**
+ *  This file is part of QInvoicer.
+ *
+ *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *
+ *  QInvoicer is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  QInvoicer is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with QInvoicer.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
 #include "producteditor.h"
+#include "productmodel.h"
+#include "productmanager.h"
+#include "productdialog.h"
+#include "product.h"
 #include <QtGui>
 
 View::ProductEditor::ProductEditor(QWidget *parent)
@@ -6,6 +30,7 @@ View::ProductEditor::ProductEditor(QWidget *parent)
 {
     createWidgets();
     setWindowTitle(tr("Product Manager"));
+    setMinimumWidth(375);
 }
 
 View::ProductEditor::~ProductEditor()
@@ -19,28 +44,60 @@ void View::ProductEditor::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
+void View::ProductEditor::rowSelectionChanged()
+{
+    int row = _productsTableView -> currentIndex().row();
+    _modProductButton->setEnabled(row != -1);
+    _delProductButton->setEnabled(row != -1);
+}
+
 void View::ProductEditor::addProduct()
 {
-
+    int row = _productsTableView -> currentIndex().row();
+    _productModel -> insertRows(row + 1, 1);
+    QModelIndex index = _productModel -> index(row + 1, ColumnProductId);
+    _productsTableView -> setCurrentIndex(index);
+    Model::Domain::Product *product = _productModel -> products() -> at(index.row());
+    ProductDialog dialog(product);
+    if(!dialog.exec())
+        _productModel->removeRows(index.row(), 1);
 }
 
 void View::ProductEditor::modProduct()
 {
-
+    int row = _productsTableView -> currentIndex().row();
+    Model::Domain::Product *product = _productModel->products() -> at(row);
+    ProductDialog dialog(product);
+    dialog.exec();
 }
 
 void View::ProductEditor::delProduct()
 {
-
+    int row = _productsTableView -> currentIndex().row();
+    _productsTableView -> selectRow(row);
+    _productModel -> removeRows(row, 1);
 }
 
 void View::ProductEditor::createWidgets()
 {
     _productsTableView = new QTableView;
+    _productModel = new ProductModel(Model::Management::ProductManager::getAll());
+    _productsTableView -> setModel(_productModel);
+    _productsTableView -> setAlternatingRowColors(true);
+    _productsTableView -> setShowGrid(false);
+    _productsTableView -> setColumnWidth(ColumnProductId, 50);
+    _productsTableView -> setColumnWidth(ColumnProductName, 150);
+    _productsTableView -> setColumnWidth(ColumnProductPrice, 75);
+    _productsTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
+    _productsTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
+    _productsTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
+    connect(_productsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(rowSelectionChanged()));
 
     _addProductButton = new QPushButton(tr("&Add"));
     _modProductButton = new QPushButton(tr("&Modify"));
+    _modProductButton -> setEnabled(false);
     _delProductButton = new QPushButton(tr("&Delete"));
+    _delProductButton -> setEnabled(false);
     connect(_addProductButton, SIGNAL(clicked()), this, SLOT(addProduct()));
     connect(_modProductButton, SIGNAL(clicked()), this, SLOT(modProduct()));
     connect(_delProductButton, SIGNAL(clicked()), this, SLOT(delProduct()));

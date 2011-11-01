@@ -29,14 +29,22 @@ namespace View
 {
     typedef enum
     {
-        Id = 0,
-        Name,
-        Quantity,
-        Weight,
-        Price,
-        Total,
-        Count
-    } OperationColumn;
+        ColumnOperationId = 0,
+        ColumnOperationName,
+        ColumnOperationQuantity,
+        ColumnOperationWeight,
+        ColumnOperationPrice,
+        ColumnOperationTotal,
+        ColumnOperationCount
+    } ColumnOperation;
+
+    typedef enum
+    {
+        ColumnProductId = 0,
+        ColumnProductName,
+        ColumnProductPrice,
+        ColumnProductCount
+    } ColumnProduct;
 }
 
 namespace Model

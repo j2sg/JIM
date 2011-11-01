@@ -136,7 +136,7 @@ void View::InvoiceEditor::createWidgets()
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout -> addStretch();
     bottomLayout -> addWidget(_saveButton);
-    bottomLayout -> addWidget(_closeButton);
+    bottomLayout -> addWidget(_finishButton);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(idGroupBox);
@@ -209,10 +209,10 @@ void View::InvoiceEditor::createButtonsWidgets()
 {
     _saveButton = new QPushButton(tr("Save"));
     _saveButton -> setEnabled(false);
-    _closeButton = new QPushButton(tr("&Finish"));
-    _closeButton -> setDefault(true);
+    _finishButton = new QPushButton(tr("&Finish"));
+    _finishButton -> setDefault(true);
     connect(_saveButton, SIGNAL(clicked()), this, SLOT(save()));
-    connect(_closeButton, SIGNAL(clicked()), this, SLOT(finish()));
+    connect(_finishButton, SIGNAL(clicked()), this, SLOT(finish()));
 }
 
 void View::InvoiceEditor::loadInvoice()
@@ -228,6 +228,17 @@ void View::InvoiceEditor::loadInvoice()
 
 bool View::InvoiceEditor::saveInvoice()
 {
+    _invoice -> setId(_idLineEdit -> text());
+    _invoice -> setDate(_dateDateEdit -> date());
+    if(_invoice->type() == Model::Domain::Sale) {
+        _invoice -> setBuyerId(_entityIdLineEdit -> text());
+        _invoice -> setBuyerName(_entityNameLineEdit -> text());
+    } else {
+        _invoice -> setSellerId(_entityIdLineEdit -> text());
+        _invoice -> setSellerName(_entityNameLineEdit -> text());
+    }
+    _invoice -> setVat(_vatLineEdit -> text().toDouble());
+    _invoice -> setPaid(_paidCheckBox -> isChecked());
     return Model::Management::InvoiceManager::create(*_invoice);
 }
 
