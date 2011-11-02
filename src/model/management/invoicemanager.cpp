@@ -26,6 +26,18 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
     return true;
 }
 
+bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &invoice)
+{
+    Q_UNUSED(invoice);
+    return true;
+}
+
+bool Model::Management::InvoiceManager::remove(const QString &id)
+{
+    Q_UNUSED(id);
+    return true;
+}
+
 Model::Domain::Invoice *Model::Management::InvoiceManager::get(const QString &id)
 {
     return new Model::Domain::Invoice(id);

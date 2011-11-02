@@ -26,6 +26,18 @@ bool Model::Management::ProductManager::create(const Model::Domain::Product &pro
     return true;
 }
 
+bool Model::Management::ProductManager::modify(const Model::Domain::Product &product)
+{
+    Q_UNUSED(product);
+    return true;
+}
+
+bool Model::Management::ProductManager::remove(const QString &id)
+{
+    Q_UNUSED(id);
+    return true;
+}
+
 Model::Domain::Product *Model::Management::ProductManager::get(const QString &id)
 {
     Q_UNUSED(id);

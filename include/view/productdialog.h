@@ -51,7 +51,7 @@ namespace View
         void saved();
     private slots:
         void stateChangedOnAutoIdCheckBox();
-        void productModified();
+        void productModified(bool modified = true);
         void save();
     private:
         void createWidgets();
@@ -70,7 +70,7 @@ namespace View
         QLabel *_priceTypeLabel;
         QComboBox *_priceTypeComboBox;
         QPushButton *_saveButton;
-        QPushButton *_finishButton;
+        QPushButton *_cancelButton;
         Model::Domain::Product *_product;
     };
 }

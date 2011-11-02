@@ -59,7 +59,7 @@ namespace View
         void stateChangedOnAutoIdCheckBox();
         void stateChangedOnRegisteredCheckBox();
         void stateChangedOnVatCheckBox();
-        void invoiceModified();
+        void invoiceModified(bool modified = true);
         void save();
         void finish();
     private:

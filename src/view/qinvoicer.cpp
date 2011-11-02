@@ -60,15 +60,13 @@ void View::QInvoicer::closeEvent(QCloseEvent *event)
 
 void View::QInvoicer::createSaleInvoice()
 {
-    QString id = Model::Management::InvoiceManager::getId();
-    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(id, Model::Domain::Sale));
+    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(QString(), Model::Domain::Sale));
     editor -> show();
 }
 
 void View::QInvoicer::createBuyInvoice()
 {
-    QString id = Model::Management::InvoiceManager::getId();
-    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(id, Model::Domain::Buy));
+    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(QString(), Model::Domain::Buy));
     editor -> show();
 }
 

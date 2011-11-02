@@ -37,16 +37,16 @@ void View::ProductDialog::stateChangedOnAutoIdCheckBox()
     _idLineEdit->setEnabled(!_autoIdCheckBox->isChecked());
 }
 
-void View::ProductDialog::productModified()
+void View::ProductDialog::productModified(bool modified)
 {
-    setWindowModified(true);
-    _saveButton -> setEnabled(true);
+    setWindowModified(modified);
+    _saveButton -> setEnabled(modified);
 }
 
 void View::ProductDialog::save()
 {
     if(saveProduct()) {
-        setWindowModified(false);
+        productModified(false);
         _saveButton->setEnabled(false);
         emit accept();
     } else
@@ -101,17 +101,17 @@ void View::ProductDialog::createWidgets()
     topLayout -> addWidget(_priceTypeComboBox, 4, 3, 1, 1);
 
     _saveButton = new QPushButton(tr("&Save"));
+    _saveButton -> setDefault(true);
     _saveButton -> setEnabled(false);
-    _finishButton = new QPushButton(tr("&Finish"));
-    _finishButton -> setDefault(true);
+    _cancelButton = new QPushButton(tr("&Cancel"));
     connect(_saveButton, SIGNAL(clicked()), this, SLOT(save()));
-    connect(_finishButton, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(_cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
 
     bottomLayout -> addStretch();
     bottomLayout -> addWidget(_saveButton);
-    bottomLayout -> addWidget(_finishButton);
+    bottomLayout -> addWidget(_cancelButton);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -128,6 +128,7 @@ void View::ProductDialog::loadProduct()
     _descriptionTextEdit->setPlainText(_product->description());
     _priceLineEdit->setText(QString::number(_product->price(),'f', PRECISION_MONEY));
     _priceTypeComboBox->setCurrentIndex(static_cast<int>(_product->priceType()));
+    productModified(false);
 }
 
 bool View::ProductDialog::saveProduct()

@@ -24,6 +24,7 @@
 #include "productdialog.h"
 #include "product.h"
 #include <QtGui>
+#include <QDebug>
 
 View::ProductEditor::ProductEditor(QWidget *parent)
     : QWidget(parent)
@@ -59,8 +60,11 @@ void View::ProductEditor::addProduct()
     _productsTableView -> setCurrentIndex(index);
     Model::Domain::Product *product = _productModel -> products() -> at(index.row());
     ProductDialog dialog(product);
-    if(!dialog.exec())
+    if(dialog.exec() == QDialog::Accepted)
+        Model::Management::ProductManager::create(*product);
+    else
         _productModel->removeRows(index.row(), 1);
+
 }
 
 void View::ProductEditor::modProduct()
@@ -68,12 +72,14 @@ void View::ProductEditor::modProduct()
     int row = _productsTableView -> currentIndex().row();
     Model::Domain::Product *product = _productModel->products() -> at(row);
     ProductDialog dialog(product);
-    dialog.exec();
+    if(dialog.exec() == QDialog::Accepted)
+        Model::Management::ProductManager::modify(*product);
 }
 
 void View::ProductEditor::delProduct()
 {
     int row = _productsTableView -> currentIndex().row();
+    Model::Management::ProductManager::remove(_productModel -> products() -> at(row) -> id());
     _productsTableView -> selectRow(row);
     _productModel -> removeRows(row, 1);
 }
@@ -112,7 +118,7 @@ void View::ProductEditor::createWidgets()
     productsGroupBox->setLayout(topLayout);
 
     _closeButton = new QPushButton(tr("&Finish"));
-    _closeButton->setFixedSize(_closeButton->sizeHint());
+    _closeButton -> setFixedSize(_closeButton -> sizeHint());
     connect(_closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;

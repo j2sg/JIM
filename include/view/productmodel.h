@@ -49,6 +49,7 @@ namespace View
         QVariant data(const QModelIndex &index, int role) const;
         bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
         bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+        Model::Domain::Product *product(int row);
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     private:
         QList<Model::Domain::Product *> *_products;

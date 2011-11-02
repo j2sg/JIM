@@ -66,16 +66,16 @@ void View::InvoiceEditor::stateChangedOnVatCheckBox()
     _vatLineEdit -> setEnabled(_vatCheckBox -> isChecked());
 }
 
-void View::InvoiceEditor::invoiceModified()
+void View::InvoiceEditor::invoiceModified(bool modified)
 {
-    setWindowModified(true);
-    _saveButton -> setEnabled(true);
+    setWindowModified(modified);
+    _saveButton -> setEnabled(modified);
 }
 
 void View::InvoiceEditor::save()
 {
     if(saveInvoice()) {
-        setWindowModified(false);
+        invoiceModified(false);
         _saveButton -> setEnabled(false);
         emit saved(_invoice);
     } else
@@ -223,7 +223,7 @@ void View::InvoiceEditor::loadInvoice()
     _entityNameLineEdit -> setText(((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerName() : _invoice -> sellerName()));
     _vatLineEdit -> setText(QString::number(_invoice -> vat(), 'f', PRECISION_VAT));
     _paidCheckBox -> setChecked(_invoice -> paid());
-    setWindowModified(false);
+    invoiceModified(false);
 }
 
 bool View::InvoiceEditor::saveInvoice()
