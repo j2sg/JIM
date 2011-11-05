@@ -37,19 +37,16 @@ namespace View
     class ProductModel : public QAbstractTableModel
     {
     public:
-        ProductModel(QList<Model::Domain::Product *> *products, QObject *parent = 0)
-            : QAbstractTableModel(parent)
-        {
-            _products = products;
-        }
+        ProductModel(QList<Model::Domain::Product *> *products, QObject *parent = 0);
         QList<Model::Domain::Product *> *products();
+        bool insertProduct(int k, Model::Domain::Product *product);
+        bool removeProduct(int k);
         void setProducts(QList<Model::Domain::Product *> *products);
         int rowCount(const QModelIndex &parent) const;
         int columnCount(const QModelIndex &parent) const;
         QVariant data(const QModelIndex &index, int role) const;
         bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
         bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-        Model::Domain::Product *product(int row);
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     private:
         QList<Model::Domain::Product *> *_products;

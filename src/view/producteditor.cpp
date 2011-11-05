@@ -36,7 +36,9 @@ View::ProductEditor::ProductEditor(QWidget *parent)
 
 View::ProductEditor::~ProductEditor()
 {
-
+    foreach(Model::Domain::Product *product, *(_productModel -> products()))
+        delete product;
+    delete _productModel -> products();
 }
 
 void View::ProductEditor::closeEvent(QCloseEvent *event)
@@ -54,16 +56,14 @@ void View::ProductEditor::rowSelectionChanged()
 
 void View::ProductEditor::addProduct()
 {
-    int row = _productsTableView -> currentIndex().row();
-    _productModel -> insertRows(row + 1, 1);
-    QModelIndex index = _productModel -> index(row + 1, ColumnProductId);
-    _productsTableView -> setCurrentIndex(index);
-    Model::Domain::Product *product = _productModel -> products() -> at(index.row());
+    Model::Domain::Product *product = new Model::Domain::Product;
     ProductDialog dialog(product);
-    if(dialog.exec() == QDialog::Accepted)
+    if(dialog.exec() == QDialog::Accepted) {
+        int row = _productsTableView -> currentIndex().row();
+        _productModel->insertProduct(row + 1, product);
         Model::Management::ProductManager::create(*product);
-    else
-        _productModel->removeRows(index.row(), 1);
+    } else
+        delete product;
 
 }
 

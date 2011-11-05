@@ -37,14 +37,7 @@ namespace View
     class OperationModel : public QAbstractTableModel
     {
     public:
-        //OperationModel(QObject *parent = 0)
-        //    : QAbstractTableModel(parent) {}
-        OperationModel(QList<Model::Domain::Operation *> *operations, QObject *parent = 0)
-            : QAbstractTableModel(parent)
-        {
-            _operations = operations;
-        }
-
+        OperationModel(QList<Model::Domain::Operation *> *operations, QObject *parent = 0);
         QList<Model::Domain::Operation *> *operations();
         void setOperations(QList<Model::Domain::Operation *> *operations);
         int rowCount(const QModelIndex &parent) const;

@@ -24,6 +24,12 @@
 #include "productmanager.h"
 #include "types.h"
 
+View::OperationModel::OperationModel(QList<Model::Domain::Operation *> *operations, QObject *parent)
+    : QAbstractTableModel(parent)
+{
+    _operations = operations;
+}
+
 QList<Model::Domain::Operation *> *View::OperationModel::operations()
 {
     return _operations;
@@ -80,7 +86,6 @@ QVariant View::OperationModel::data(const QModelIndex &index, int role) const
     }
     return QVariant();
 }
-
 
 bool View::OperationModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -152,7 +157,7 @@ QVariant View::OperationModel::headerData(int section, Qt::Orientation orientati
         else {
             switch(section) {
             case ColumnOperationId:
-                return QString(tr("ID  "));
+                return QString(tr("ID"));
             case ColumnOperationName:
                 return QString(tr("Name"));
             case ColumnOperationQuantity:

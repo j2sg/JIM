@@ -22,9 +22,34 @@
 #include "product.h"
 #include "types.h"
 
+View::ProductModel::ProductModel(QList<Model::Domain::Product *> *products, QObject *parent)
+    : QAbstractTableModel(parent)
+{
+    _products = products;
+}
+
 QList<Model::Domain::Product *> *View::ProductModel::products()
 {
     return _products;
+}
+
+bool View::ProductModel::insertProduct(int k, Model::Domain::Product *product)
+{
+    if(k < 0  || k > _products -> size())
+        return false;
+    _products -> insert(k, product);
+    reset();
+    return true;
+}
+
+bool View::ProductModel::removeProduct(int k)
+{
+    if(k < 0  || k > _products -> size())
+        return false;
+    delete _products -> at(k);
+    _products -> removeAt(k);
+    reset();
+    return true;
 }
 
 void View::ProductModel::setProducts(QList<Model::Domain::Product *> *products)

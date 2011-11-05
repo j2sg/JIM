@@ -29,7 +29,7 @@ View::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *par
     : QWidget(parent), _invoice(invoice)
 {
     createWidgets();
-    setWindowTitle(tr("%1 Invoice").arg((_invoice -> type()) ? "Sale" : "Buy")+"[*]");
+    setWindowTitle(tr("%1 Invoice %2").arg((_invoice -> type()) ? "Sale" : "Buy").arg(invoice->id())+"[*]");
     setMinimumWidth(600);
     setAttribute(Qt::WA_DeleteOnClose);
     loadInvoice();

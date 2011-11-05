@@ -65,6 +65,7 @@ namespace View
         void volume();
         void unpaidInvoices();
         void about();
+        void updateWindowMenu();
         void restore(QObject *object);
         void invoiceSaved(Model::Domain::Invoice *invoice);
         void currentSubWindowFinished();
@@ -88,6 +89,12 @@ namespace View
         QAction *_volumeBuyInvoiceAction;
         QAction *_volumeInvoiceAction;
         QAction *_unpaidInvoicesAction;
+        QAction *_closeAction;
+        QAction *_closeAllAction;
+        QAction *_tileAction;
+        QAction *_cascadeAction;
+        QAction *_nextAction;
+        QAction *_previousAction;
         QAction *_aboutAction;
         QMenu *_applicationMenu;
         QMenu *_invoicingMenu;

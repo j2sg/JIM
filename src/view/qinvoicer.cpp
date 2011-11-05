@@ -76,8 +76,12 @@ void View::QInvoicer::loadInvoice()
     QString id = QInputDialog::getText(this, tr("Load Invoice"), tr("Enter the valid ID assigned to invoice:"), QLineEdit::Normal, tr(""), &ok);
     if(ok) {
         Model::Domain::Invoice *invoice = Model::Management::InvoiceManager::get(id);
-        InvoiceEditor *editor = createInvoiceEditor(invoice);
-        editor->show();
+        if(!invoice)
+            QMessageBox::critical(this, tr("Critical error"), tr("Not exists any invoice with that Id"), QMessageBox::Ok);
+        else {
+            InvoiceEditor *editor = createInvoiceEditor(invoice);
+            editor->show();
+        }
     }
 }
 
@@ -125,6 +129,17 @@ void View::QInvoicer::about()
                        .arg(AUTHOR_EMAIL));
 }
 
+void View::QInvoicer::updateWindowMenu()
+{
+    bool hasWindowActive = _mdiArea->activeSubWindow() != 0;
+    _closeAction->setEnabled(hasWindowActive);
+    _closeAllAction->setEnabled(hasWindowActive);
+    _tileAction->setEnabled(hasWindowActive);
+    _cascadeAction->setEnabled(hasWindowActive);
+    _nextAction->setEnabled(hasWindowActive);
+    _previousAction->setEnabled(hasWindowActive);
+}
+
 void View::QInvoicer::restore(QObject *object)
 {
     if(object == _productEditor)
@@ -146,6 +161,7 @@ void View::QInvoicer::createCentralWidget()
     _mdiArea = new QMdiArea;
     _mdiArea -> setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     _mdiArea -> setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateWindowMenu()));
     setCentralWidget(_mdiArea);
 }
 
@@ -167,7 +183,7 @@ void View::QInvoicer::createActions()
     connect(_createBuyInvoiceAction, SIGNAL(triggered()), this, SLOT(createBuyInvoice()));
 
     _loadInvoiceAction = new QAction(tr("&Load Invoice"), this);
-    _loadInvoiceAction ->setIcon(QIcon(":/images/loadinvoice.png"));
+    _loadInvoiceAction -> setIcon(QIcon(":/images/loadinvoice.png"));
     _loadInvoiceAction -> setStatusTip(tr("Load a specific Invoice"));
     connect(_loadInvoiceAction, SIGNAL(triggered()), this, SLOT(loadInvoice()));
 
@@ -195,6 +211,32 @@ void View::QInvoicer::createActions()
     _unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
     _unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
     connect(_unpaidInvoicesAction, SIGNAL(triggered()), this, SLOT(unpaidInvoices()));
+
+    _closeAction = new QAction(tr("Close"), this);
+    _closeAction -> setStatusTip(tr("Close active window"));
+    connect(_closeAction, SIGNAL(triggered()), _mdiArea, SLOT(closeActiveSubWindow()));
+
+    _closeAllAction = new QAction(tr("Close All"), this);
+    _closeAllAction -> setStatusTip(tr("Close all windows"));
+    connect(_closeAllAction, SIGNAL(triggered()), _mdiArea, SLOT(closeAllSubWindows()));
+
+    _tileAction = new QAction(tr("Tile"), this);
+    _tileAction -> setStatusTip(tr("Tile windows"));
+    connect(_tileAction, SIGNAL(triggered()), _mdiArea, SLOT(tileSubWindows()));
+
+    _cascadeAction = new QAction(tr("Cascade"), this);
+    _cascadeAction -> setStatusTip(tr("Cascade windows"));
+    connect(_cascadeAction, SIGNAL(triggered()), _mdiArea, SLOT(cascadeSubWindows()));
+
+    _nextAction = new QAction(tr("Next"), this);
+    _nextAction -> setShortcuts(QKeySequence::NextChild);
+    _nextAction -> setStatusTip(tr("Go to next window"));
+    connect(_nextAction, SIGNAL(triggered()), _mdiArea, SLOT(activateNextSubWindow()));
+
+    _previousAction = new QAction(tr("Previous"), this);
+    _previousAction -> setShortcuts(QKeySequence::PreviousChild);
+    _previousAction -> setStatusTip(tr("Go to previous window"));
+    connect(_previousAction, SIGNAL(triggered()), _mdiArea, SLOT(activatePreviousSubWindow()));
 
     _aboutAction = new QAction(tr("About"), this);
     _aboutAction -> setIcon(QIcon(":/images/about.png"));
@@ -224,9 +266,19 @@ void View::QInvoicer::createMenus()
     _toolsMenu = menuBar() -> addMenu(tr("&Tools"));
 
     _windowMenu = menuBar() -> addMenu(tr("&Window"));
+    _windowMenu -> addAction(_closeAction);
+    _windowMenu -> addAction(_closeAllAction);
+    _windowMenu -> addSeparator();
+    _windowMenu -> addAction(_tileAction);
+    _windowMenu -> addAction(_cascadeAction);
+    _windowMenu -> addSeparator();
+    _windowMenu -> addAction(_nextAction);
+    _windowMenu -> addAction(_previousAction);
 
     _helpMenu = menuBar() -> addMenu(tr("&Help"));
     _helpMenu -> addAction(_aboutAction);
+
+    updateWindowMenu();
 }
 
 void View::QInvoicer::createToolBar()
@@ -254,7 +306,7 @@ void View::QInvoicer::createStatusBar()
 View::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Domain::Invoice *invoice)
 {
     InvoiceEditor *editor = new InvoiceEditor(invoice);
-    connect(editor, SIGNAL(saved(Model::Domain::Invoice*)), this, SLOT(invoiceSaved(Model::Domain::Invoice*)));
+    connect(editor, SIGNAL(saved(Model::Domain::Invoice *)), this, SLOT(invoiceSaved(Model::Domain::Invoice *)));
     connect(editor, SIGNAL(finished()), this, SLOT(currentSubWindowFinished()));
     _mdiArea -> addSubWindow(editor);
     return editor;
