@@ -21,9 +21,13 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define NO_ID -1
+
 #define PRECISION_WEIGHT 3
 #define PRECISION_MONEY 2
 #define PRECISION_VAT 1
+
+#define DATE_FORMAT "yyyy-M-d"
 
 namespace View
 {

@@ -18,17 +18,12 @@
  *
  **/
 
-// Main Function
-
 #include <QApplication>
 #include "qinvoicer.h"
+#include "persistencemanager.h"
 #include "global.h"
 
-// Declarations
-
-bool setUpApplication(QApplication *app);
-
-// Main Function definition
+void setUpApplication(QApplication *app);
 
 int main(int argc, char *argv[])
 {
@@ -39,15 +34,11 @@ int main(int argc, char *argv[])
     return app.exec();
 }
 
-// Description: Set up all application properties
-//
-bool setUpApplication(QApplication *app)
+void setUpApplication(QApplication *app)
 {
-    if(!app)
-        return false;
     app -> setOrganizationName(ORGANIZATION_NAME);
     app -> setOrganizationDomain(ORGANIZATION_DOMAIN);
     app -> setApplicationName(APPLICATION_NAME);
     app -> setApplicationVersion(APPLICATION_VERSION);
-    return true;
+    Persistence::Manager::setDefaultConfig();
 }

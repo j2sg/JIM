@@ -36,20 +36,22 @@ namespace Model
         {
             friend std::ostream &operator<<(std::ostream &os, const Invoice &invoice);
         public:
-            Invoice(const QString &id = QString(), InvoiceType type = Sale);
+            Invoice(int id = NO_ID, InvoiceType type = Sale);
+            Invoice(const Invoice &invoice);
             ~Invoice();
-            void setId(const QString &id);
-            const QString &id() const;
+            Invoice &operator=(const Invoice &invoice);
+            void setId(int id);
+            int id() const;
             void setType(InvoiceType type);
             InvoiceType type() const;
             void setDate(const QDate &date);
             const QDate &date() const;
-            void setBuyerId(const QString &buyerId);
-            const QString &buyerId() const;
+            void setBuyerId(int buyerId);
+            int buyerId() const;
             void setBuyerName(const QString &buyerName);
             const QString &buyerName() const;
-            void setSellerId(const QString &sellerId);
-            const QString &sellerId() const;
+            void setSellerId(int sellerId);
+            int sellerId() const;
             void setSellerName(const QString &sellerName);
             const QString &sellerName() const;
             QList<Operation *> *operations();
@@ -62,12 +64,12 @@ namespace Model
             double total() const;
 
         private:
-            QString _id;
+            int _id;
             InvoiceType _type;
             QDate _date;
-            QString _buyerId;
+            int _buyerId;
             QString _buyerName;
-            QString _sellerId;
+            int _sellerId;
             QString _sellerName;
             QList<Operation *> *_operations;
             double _vat;

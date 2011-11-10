@@ -117,9 +117,9 @@ double Model::Domain::Operation::total() const
 
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Operation &operation)
 {
-    return os << operation._id                                                 << std::endl
-              << ((operation._product != 0) ? operation._product->name() : "") << std::endl
-              << operation._quantity                                           << std::endl
-              << operation._weight                                             << std::endl
-              << operation._price                                              << std::endl;
+    return os << operation._id                                                                   << std::endl
+              << ((operation._product != 0) ? (operation._product -> name()).toStdString() : "") << std::endl
+              << operation._quantity                                                             << std::endl
+              << operation._weight                                                               << std::endl
+              << operation._price                                                                << std::endl;
 }

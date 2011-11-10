@@ -20,19 +20,23 @@
 
 #include "invoice.h"
 
-Model::Domain::Invoice::Invoice(const QString &id, Model::Domain::InvoiceType type)
+Model::Domain::Invoice::Invoice(int id, Model::Domain::InvoiceType type)
     : _id(id), _type(type)
 {
     _date = QDate::currentDate();
-    _buyerId = QString();
+    _buyerId = NO_ID;
     _buyerName = QString();
-    _sellerId = QString();
+    _sellerId = NO_ID;
     _sellerName = QString();
     _operations = new QList<Operation *>();
     _vat = 0.0;
     _paid = false;
     _notes = QString();
+}
 
+Model::Domain::Invoice::Invoice(const Invoice &invoice)
+{
+    *this = invoice;
 }
 
 Model::Domain::Invoice::~Invoice()
@@ -44,12 +48,29 @@ Model::Domain::Invoice::~Invoice()
     }
 }
 
-void Model::Domain::Invoice::setId(const QString &id)
+Model::Domain::Invoice &Model::Domain::Invoice::operator=(const Invoice &invoice)
+{
+    _id         = invoice._id;
+    _type       = invoice._type;
+    _date       = invoice._date;
+    _buyerId    = invoice._buyerId;
+    _buyerName  = invoice._buyerName;
+    _sellerId   = invoice._sellerId;
+    _sellerName = invoice._sellerName;
+    _vat        = invoice._vat;
+    _paid       = invoice._paid;
+    _notes      = invoice._notes;
+    foreach(Model::Domain::Operation *operation, *invoice._operations)
+        _operations -> push_back(new Model::Domain::Operation(*operation));
+    return *this;
+}
+
+void Model::Domain::Invoice::setId(int id)
 {
     _id = id;
 }
 
-const QString &Model::Domain::Invoice::id() const
+int Model::Domain::Invoice::id() const
 {
     return _id;
 }
@@ -74,12 +95,12 @@ const QDate &Model::Domain::Invoice::date() const
     return _date;
 }
 
-void Model::Domain::Invoice::setBuyerId(const QString &buyerId)
+void Model::Domain::Invoice::setBuyerId(int buyerId)
 {
     _buyerId = buyerId;
 }
 
-const QString &Model::Domain::Invoice::buyerId() const
+int Model::Domain::Invoice::buyerId() const
 {
     return _buyerId;
 }
@@ -94,12 +115,12 @@ const QString &Model::Domain::Invoice::buyerName() const
     return _buyerName;
 }
 
-void Model::Domain::Invoice::setSellerId(const QString &sellerId)
+void Model::Domain::Invoice::setSellerId(int sellerId)
 {
     _sellerId = sellerId;
 }
 
-const QString &Model::Domain::Invoice::sellerId() const
+int Model::Domain::Invoice::sellerId() const
 {
     return _sellerId;
 }
@@ -159,12 +180,12 @@ double Model::Domain::Invoice::total() const
 
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Invoice &invoice)
 {
-    return os << invoice._id.toStdString()              << std::endl
+    return os << invoice._id                            << std::endl
               << invoice._type                          << std::endl
               << invoice._date.toString().toStdString() << std::endl
-              << invoice._buyerId.toStdString()         << std::endl
+              << invoice._buyerId                       << std::endl
               << invoice._buyerName.toStdString()       << std::endl
-              << invoice._sellerId.toStdString()        << std::endl
+              << invoice._sellerId                      << std::endl
               << invoice._sellerName.toStdString()      << std::endl
               << invoice._vat                           << std::endl
               << invoice._paid                          << std::endl

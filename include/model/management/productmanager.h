@@ -34,10 +34,10 @@ namespace Model
         public:
             static bool create(const Model::Domain::Product &product);
             static bool modify(const Model::Domain::Product &product);
-            static bool remove(const QString &id);
-            static Model::Domain::Product *get(const QString &id);
+            static bool remove(int id);
+            static Model::Domain::Product *get(int id);
             static QList<Model::Domain::Product *> *getAll();
-            static QString getId();
+            static int getId();
         };
     }
 }

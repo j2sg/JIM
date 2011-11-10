@@ -57,6 +57,7 @@ namespace View
         void createWidgets();
         void loadProduct();
         bool saveProduct();
+        bool isSaveable();
 
         QLabel *_idLabel;
         QLineEdit *_idLineEdit;

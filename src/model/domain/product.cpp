@@ -20,7 +20,7 @@
 
 #include "product.h"
 
-Model::Domain::Product::Product(const QString &id, const QString &name,
+Model::Domain::Product::Product(int id, const QString &name,
                                 double price, PriceType priceType)
     : _id(id), _name(name), _price(price), _priceType(priceType)
 {
@@ -28,13 +28,13 @@ Model::Domain::Product::Product(const QString &id, const QString &name,
         _price = 0.0;
 }
 
-void Model::Domain::Product::setId(const QString &id)
+void Model::Domain::Product::setId(int id)
 {
     _id = id;
 }
 
 
-const QString &Model::Domain::Product::id() const
+int Model::Domain::Product::id() const
 {
     return _id;
 }
@@ -81,7 +81,7 @@ Model::Domain::PriceType Model::Domain::Product::priceType() const
 
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Product &product)
 {
-    return os << product._id.toStdString()   << std::endl
+    return os << product._id                 << std::endl
               << product._name.toStdString() << std::endl
               << product._price              << std::endl
               << product._priceType          << std::endl;

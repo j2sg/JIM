@@ -19,15 +19,49 @@
  **/
 
 #include "operationmanager.h"
+#include "productmanager.h"
+#include "sqlagent.h"
 
-QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllByInvoice(const QString &id)
+QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllByInvoice(int id)
 {
-    Q_UNUSED(id);
-    return new QList<Model::Domain::Operation *>();
+    Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+    QString sql = QString("SELECT * FROM operation WHERE invoice=%1").arg(id);
+    QVector<QVector<QVariant> > *result = agent -> select(sql);
+    QList<Model::Domain::Operation *> *operations = new QList<Model::Domain::Operation *>();
+
+    foreach(QVector<QVariant> row, *result) {
+        int id                          = row.at(0).toInt();
+        int productId                   = row.at(2).toInt();
+        Model::Domain::Product *product = Model::Management::ProductManager::get(productId);
+        int quantity                    = row.at(3).toInt();
+        double weight                   = row.at(4).toDouble();
+        double price                    = row.at(5).toDouble();
+
+        operations -> push_back(new Model::Domain::Operation(id, product, quantity, weight, price));
+    }
+
+    delete result;
+
+    return operations;
 }
 
 QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllByProduct(const Model::Domain::Product &product)
 {
-    Q_UNUSED(product);
-    return new QList<Model::Domain::Operation *>();
+    Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+    QString sql = QString("SELECT * FROM operation WHERE product=%1").arg(product.id());
+    QVector<QVector<QVariant> > *result = agent -> select(sql);
+    QList<Model::Domain::Operation *> *operations = new QList<Model::Domain::Operation *>();
+
+    foreach(QVector<QVariant> row, *result) {
+        int id                          = row.at(0).toInt();
+        int quantity                    = row.at(3).toInt();
+        double weight                   = row.at(4).toDouble();
+        double price                    = row.at(5).toDouble();
+
+        operations -> push_back(new Model::Domain::Operation(id, new Model::Domain::Product(product), quantity, weight, price));
+    }
+
+    delete result;
+
+    return operations;
 }

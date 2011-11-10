@@ -59,9 +59,13 @@ void View::ProductEditor::addProduct()
     Model::Domain::Product *product = new Model::Domain::Product;
     ProductDialog dialog(product);
     if(dialog.exec() == QDialog::Accepted) {
-        int row = _productsTableView -> currentIndex().row();
-        _productModel->insertProduct(row + 1, product);
-        Model::Management::ProductManager::create(*product);
+        if(!Model::Management::ProductManager::create(*product))
+            QMessageBox::critical(this, tr("Critical Error"), tr("Error during the product addition"),QMessageBox::Ok);
+        else {
+            int row = _productsTableView -> currentIndex().row();
+            _productModel->insertProduct(row + 1, product);
+        }
+
     } else
         delete product;
 
@@ -73,7 +77,8 @@ void View::ProductEditor::modProduct()
     Model::Domain::Product *product = _productModel->products() -> at(row);
     ProductDialog dialog(product);
     if(dialog.exec() == QDialog::Accepted)
-        Model::Management::ProductManager::modify(*product);
+        if(!Model::Management::ProductManager::modify(*product))
+            QMessageBox::critical(this, tr("Critical Error"), tr("Error during the product modification"),QMessageBox::Ok);
 }
 
 void View::ProductEditor::delProduct()

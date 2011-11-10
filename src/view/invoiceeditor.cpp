@@ -29,8 +29,9 @@ View::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *par
     : QWidget(parent), _invoice(invoice)
 {
     createWidgets();
-    setWindowTitle(tr("%1 Invoice %2").arg((_invoice -> type()) ? "Sale" : "Buy").arg(invoice->id())+"[*]");
-    setMinimumWidth(600);
+    setWindowTitle(tr("%1 Invoice %2").arg((_invoice -> type()) ? "Sale" : "Buy")
+                   .arg(((invoice->id() != NO_ID) ? QString::number(invoice->id()) : "")+"[*]"));
+    //setMinimumWidth(600);
     setAttribute(Qt::WA_DeleteOnClose);
     loadInvoice();
 }
@@ -69,7 +70,7 @@ void View::InvoiceEditor::stateChangedOnVatCheckBox()
 void View::InvoiceEditor::invoiceModified(bool modified)
 {
     setWindowModified(modified);
-    _saveButton -> setEnabled(modified);
+    _saveButton -> setEnabled(isSaveable() && modified);
 }
 
 void View::InvoiceEditor::save()
@@ -217,9 +218,9 @@ void View::InvoiceEditor::createButtonsWidgets()
 
 void View::InvoiceEditor::loadInvoice()
 {
-    _idLineEdit -> setText(_invoice -> id());
+    _idLineEdit -> setText(QString::number(_invoice -> id()));
     _dateDateEdit -> setDate(_invoice -> date());
-    _entityIdLineEdit -> setText(((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerId() : _invoice -> sellerId()));
+    _entityIdLineEdit -> setText(QString::number((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerId() : _invoice -> sellerId()));
     _entityNameLineEdit -> setText(((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerName() : _invoice -> sellerName()));
     _vatLineEdit -> setText(QString::number(_invoice -> vat(), 'f', PRECISION_VAT));
     _paidCheckBox -> setChecked(_invoice -> paid());
@@ -228,13 +229,13 @@ void View::InvoiceEditor::loadInvoice()
 
 bool View::InvoiceEditor::saveInvoice()
 {
-    _invoice -> setId(_idLineEdit -> text());
+    _invoice -> setId(_idLineEdit -> text().toInt());
     _invoice -> setDate(_dateDateEdit -> date());
     if(_invoice->type() == Model::Domain::Sale) {
-        _invoice -> setBuyerId(_entityIdLineEdit -> text());
+        _invoice -> setBuyerId(_entityIdLineEdit -> text().toInt());
         _invoice -> setBuyerName(_entityNameLineEdit -> text());
     } else {
-        _invoice -> setSellerId(_entityIdLineEdit -> text());
+        _invoice -> setSellerId(_entityIdLineEdit -> text().toInt());
         _invoice -> setSellerName(_entityNameLineEdit -> text());
     }
     _invoice -> setVat(_vatLineEdit -> text().toDouble());
@@ -242,9 +243,18 @@ bool View::InvoiceEditor::saveInvoice()
     return Model::Management::InvoiceManager::create(*_invoice);
 }
 
+bool View::InvoiceEditor::isSaveable()
+{
+    return !(_idLineEdit -> text().isEmpty()) &&
+           !(_entityIdLineEdit -> text().isEmpty()) &&
+           !(_entityNameLineEdit->text().isEmpty()) &&
+           !(_operationEditor -> operations() -> isEmpty()) &&
+           !(_vatLineEdit -> text().isEmpty());
+}
+
 bool View::InvoiceEditor::verifySave()
 {
-    if(isWindowModified()) {
+    if(isWindowModified() && isSaveable()) {
         int response = QMessageBox::warning(this, tr("Verify Save"),
                                                   tr("This invoice has been modified\n"
                                                      "do you want to save the changes?"),

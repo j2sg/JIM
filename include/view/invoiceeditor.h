@@ -71,6 +71,7 @@ namespace View
         void createButtonsWidgets();
         void loadInvoice();
         bool saveInvoice();
+        bool isSaveable();
         bool verifySave();
 
         QLabel *_idLabel;

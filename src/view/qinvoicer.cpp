@@ -60,20 +60,21 @@ void View::QInvoicer::closeEvent(QCloseEvent *event)
 
 void View::QInvoicer::createSaleInvoice()
 {
-    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(QString(), Model::Domain::Sale));
+    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(NO_ID, Model::Domain::Sale));
     editor -> show();
 }
 
 void View::QInvoicer::createBuyInvoice()
 {
-    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(QString(), Model::Domain::Buy));
+    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(NO_ID, Model::Domain::Buy));
     editor -> show();
 }
 
 void View::QInvoicer::loadInvoice()
 {
     bool ok;
-    QString id = QInputDialog::getText(this, tr("Load Invoice"), tr("Enter the valid ID assigned to invoice:"), QLineEdit::Normal, tr(""), &ok);
+    QString input = QInputDialog::getText(this, tr("Load Invoice"), tr("Enter the valid ID assigned to invoice:"), QLineEdit::Normal, tr(""));
+    int id = input.toInt(&ok);
     if(ok) {
         Model::Domain::Invoice *invoice = Model::Management::InvoiceManager::get(id);
         if(!invoice)
@@ -131,13 +132,13 @@ void View::QInvoicer::about()
 
 void View::QInvoicer::updateWindowMenu()
 {
-    bool hasWindowActive = _mdiArea->activeSubWindow() != 0;
-    _closeAction->setEnabled(hasWindowActive);
-    _closeAllAction->setEnabled(hasWindowActive);
-    _tileAction->setEnabled(hasWindowActive);
-    _cascadeAction->setEnabled(hasWindowActive);
-    _nextAction->setEnabled(hasWindowActive);
-    _previousAction->setEnabled(hasWindowActive);
+    bool hasWindowActive = _mdiArea -> activeSubWindow() != 0;
+    _closeAction -> setEnabled(hasWindowActive);
+    _closeAllAction -> setEnabled(hasWindowActive);
+    _tileAction -> setEnabled(hasWindowActive);
+    _cascadeAction -> setEnabled(hasWindowActive);
+    _nextAction -> setEnabled(hasWindowActive);
+    _previousAction -> setEnabled(hasWindowActive);
 }
 
 void View::QInvoicer::restore(QObject *object)

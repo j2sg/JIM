@@ -31,12 +31,13 @@ namespace Persistence
     class SQLAgent
     {
     public:
-        static SQLAgent *instance();
         ~SQLAgent();
+        static SQLAgent *instance();
         bool insert(const QString &sql);
         bool update(const QString &sql);
         QVector<QVector<QVariant> > *select(const QString &sql);
         bool _delete(const QString &sql);
+        int getId(const QString& table);
     private:
         SQLAgent();
     protected:
@@ -46,7 +47,6 @@ namespace Persistence
         bool manipulation(const QString &sql);
         QVector<QVector<QVariant> > *query(const QString &sql);
 
-        static SQLAgent *_instance;
         QSqlDatabase _database;
     };
 }

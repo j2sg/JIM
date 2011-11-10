@@ -33,10 +33,10 @@ namespace Model
         {
             friend std::ostream &operator<<(std::ostream &os, const Product &product);
         public:
-            Product(const QString &id = QString(), const QString &name = QString(),
+            Product(int id = NO_ID, const QString &name = QString(),
                     double price = 0.0, PriceType priceType = Units);
-            void setId(const QString &id);
-            const QString &id() const;
+            void setId(int id);
+            int id() const;
             void setName(const QString &name);
             const QString &name() const;
             void setDescription(const QString &description);
@@ -46,7 +46,7 @@ namespace Model
             void setPriceType(PriceType priceType);
             PriceType priceType() const;
         private:
-            QString _id;
+            int _id;
             QString _name;
             QString _description;
             double _price;

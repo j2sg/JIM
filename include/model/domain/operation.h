@@ -32,7 +32,7 @@ namespace Model
         {
             friend std::ostream &operator<<(std::ostream &os, const Operation &operation);
         public:
-            Operation(int id = 0, Product *product = 0, int quantity = 0,
+            Operation(int id = NO_ID, Product *product = 0, int quantity = 0,
                       double weight = 0.0, double price = 0.0);
             Operation(const Operation &operation);
             ~Operation();

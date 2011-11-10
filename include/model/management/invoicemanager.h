@@ -34,12 +34,11 @@ namespace Model
         public:
             static bool create(const Model::Domain::Invoice &invoice);
             static bool modify(const Model::Domain::Invoice &invoice);
-            static bool remove(const QString &id);
-            static Model::Domain::Invoice *get(const QString &id);
+            static bool remove(int id);
+            static Model::Domain::Invoice *get(int id);
             static QList<Model::Domain::Invoice *> *getAllByType(Model::Domain::InvoiceType type);
             static QList<Model::Domain::Invoice *> *getAll();
-            static QString getId();
-            static int counter;
+            static int getId();
         };
     }
 }

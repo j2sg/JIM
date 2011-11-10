@@ -20,25 +20,24 @@
 
 #include "sqlagent.h"
 #include "persistencemanager.h"
+#include "types.h"
 #include <QtSql/QSqlQuery>
+#include <QtSql/QSqlRecord>
 
 Persistence::SQLAgent::SQLAgent()
 {
     setUp();
 }
 
-Persistence::SQLAgent *Persistence::SQLAgent::instance()
-{
-    if(!_instance)
-        _instance = new SQLAgent;
-    return _instance;
-}
-
 Persistence::SQLAgent::~SQLAgent()
 {
     disconnect();
-    if(_instance)
-        delete _instance;
+}
+
+Persistence::SQLAgent *Persistence::SQLAgent::instance()
+{
+    static SQLAgent instance;
+    return &instance;
 }
 
 bool Persistence::SQLAgent::insert(const QString &sql)
@@ -61,18 +60,38 @@ bool Persistence::SQLAgent::_delete(const QString &sql)
     return manipulation(sql);
 }
 
+int Persistence::SQLAgent::getId(const QString& table)
+{
+    QSqlQuery query;
+    query.exec(QString("SELECT count(*) FROM %1").arg(table));
+    if(query.next()) {
+        int count = query.value(0).toInt();
+        if(count == 0)
+            return 1;
+        else {
+            query.exec(QString("SELECT max(id) FROM %1").arg(table));
+            if(query.next())
+                return query.value(0).toInt() + 1;
+        }
+    }
+    return NO_ID;
+}
+
 bool Persistence::SQLAgent::setUp()
 {
-    QStringList parameters = Manager::config();
-    if(parameters.size() != 5)
+    QMap<QString, QString> parameters = Manager::readConfig("Storage");
+
+    if(parameters.isEmpty())
         return false;
-    _database = QSqlDatabase::addDatabase("QMYSQL");
-    _database.setDatabaseName(parameters.at(0));
-    _database.setPort(parameters.at(1).toInt());
-    _database.setHostName(parameters.at(2));
-    _database.setUserName(parameters.at(3));
-    _database.setPassword(parameters.at(4));
-    return true;
+
+    _database = QSqlDatabase::addDatabase(parameters.value("Driver"));
+    _database.setDatabaseName(parameters.value("DatabaseName"));
+    _database.setPort(parameters.value("Port").toInt());
+    _database.setHostName(parameters.value("HostName"));
+    _database.setUserName(parameters.value("UserName"));
+    _database.setPassword(parameters.value("Password"));
+
+    return connect();
 }
 
 bool Persistence::SQLAgent::connect()
@@ -84,36 +103,29 @@ void Persistence::SQLAgent::disconnect()
 {
     if(_database.isOpen())
         _database.close();
+    QSqlDatabase::removeDatabase(_database.databaseName());
 }
 
 bool Persistence::SQLAgent::manipulation(const QString &sql)
 {
-    if(!connect())
-        return false;
     QSqlQuery query;
-    bool result = query.exec(sql);
-    disconnect();
-    return result;
+    return query.exec(sql);
 }
 
 QVector<QVector<QVariant> > *Persistence::SQLAgent::query(const QString &sql)
 {
-     if(!connect())
-         return 0;
      QSqlQuery query;
      query.setForwardOnly(true);
      if(!query.exec(sql))
          return 0;
+
      QVector<QVector<QVariant> > *result = new QVector<QVector<QVariant> >;
-     int rows = query.numRowsAffected();
+     int cols = query.record().count();
      while(query.next()) {
          result -> push_back(QVector<QVariant>());
-         for(int row = 0 ; row < rows ; ++row) {
-             (result -> back()).push_back(query.value(row));
-         }
+         for(int col = 0 ; col < cols; ++col)
+             (result -> back()).push_back(query.value(col));
      }
-     disconnect();
+
      return result;
 }
-
-Persistence::SQLAgent *Persistence::SQLAgent::_instance = 0;

@@ -32,7 +32,7 @@ namespace Model
         class OperationManager
         {
         public:
-            static QList<Model::Domain::Operation *> *getAllByInvoice(const QString &id);
+            static QList<Model::Domain::Operation *> *getAllByInvoice(int id);
             static QList<Model::Domain::Operation *> *getAllByProduct(const Model::Domain::Product &product);
         };
     }

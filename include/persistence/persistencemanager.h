@@ -21,14 +21,17 @@
 #ifndef PERSISTENCEMANAGER_H
 #define PERSISTENCEMANAGER_H
 
-#include <QStringList>
+#include <QMap>
+#include <QString>
 
 namespace Persistence
 {
     class Manager
     {
     public:
-        static QStringList config();
+        static void setDefaultConfig();
+        static QMap<QString, QString> readConfig(const QString &group);
+        static bool writeConfig(const QString &group,const QMap<QString, QString> &config);
     };
 }
 

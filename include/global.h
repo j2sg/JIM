@@ -28,4 +28,11 @@
 #define APPLICATION_NAME    "QInvoicer"
 #define APPLICATION_VERSION "0.1 Alpha"
 
+#define DEFAULT_STORAGE_DRIVER       "QSQLITE"
+#define DEFAULT_STORAGE_DATABASENAME "qinvoicer.db"
+#define DEFAULT_STORAGE_PORT         0
+#define DEFAULT_STORAGE_HOSTNAME     ""
+#define DEFAULT_STORAGE_USERNAME     ""
+#define DEFAULT_STORAGE_PASSWORD     ""
+
 #endif // GLOBAL_H

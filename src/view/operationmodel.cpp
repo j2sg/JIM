@@ -70,7 +70,7 @@ QVariant View::OperationModel::data(const QModelIndex &index, int role) const
             Model::Domain::Product *product = operation -> product();
             switch(index.column()) {
             case ColumnOperationId:
-                return (product != 0) ? product -> id() : "";
+                return (product != 0) ? QString::number(product -> id()) : "";
             case ColumnOperationName:
                 return (product != 0) ? product -> name() : "";
             case ColumnOperationQuantity:
@@ -97,7 +97,7 @@ bool View::OperationModel::setData(const QModelIndex &index, const QVariant &val
             return false;
         case ColumnOperationId:
         {
-            QString id = value.toString();
+            int id = value.toInt();
             Model::Domain::Product *product = Model::Management::ProductManager::get(id);
             if(product)
                 operation -> setProduct(product);

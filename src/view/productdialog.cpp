@@ -20,6 +20,7 @@
 
 #include "productdialog.h"
 #include "product.h"
+#include "productmanager.h"
 #include "types.h"
 #include <QtGui>
 
@@ -28,19 +29,20 @@ View::ProductDialog::ProductDialog(Model::Domain::Product *product, QWidget *par
 {
     createWidgets();
     setWindowTitle(tr("Product")+"[*]");
-    loadProduct();
     setFixedSize(sizeHint());
+
+    loadProduct();
 }
 
 void View::ProductDialog::stateChangedOnAutoIdCheckBox()
 {
-    _idLineEdit->setEnabled(!_autoIdCheckBox->isChecked());
+    _idLineEdit -> setEnabled(!_autoIdCheckBox->isChecked());
 }
 
 void View::ProductDialog::productModified(bool modified)
 {
     setWindowModified(modified);
-    _saveButton -> setEnabled(modified);
+    _saveButton -> setEnabled(isSaveable() && modified);
 }
 
 void View::ProductDialog::save()
@@ -123,20 +125,28 @@ void View::ProductDialog::createWidgets()
 
 void View::ProductDialog::loadProduct()
 {
-    _idLineEdit ->setText(_product->id());
-    _nameLineEdit->setText(_product->name());
-    _descriptionTextEdit->setPlainText(_product->description());
-    _priceLineEdit->setText(QString::number(_product->price(),'f', PRECISION_MONEY));
-    _priceTypeComboBox->setCurrentIndex(static_cast<int>(_product->priceType()));
+    _idLineEdit -> setText(QString::number(((_product -> id() == NO_ID)? Model::Management::ProductManager::getId() : _product->id())));
+    _autoIdCheckBox -> setEnabled((_product->id() == NO_ID));
+    _nameLineEdit -> setText(_product->name());
+    _descriptionTextEdit -> setPlainText(_product->description());
+    _priceLineEdit -> setText(QString::number(_product->price(),'f', PRECISION_MONEY));
+    _priceTypeComboBox -> setCurrentIndex(static_cast<int>(_product->priceType()));
     productModified(false);
 }
 
 bool View::ProductDialog::saveProduct()
 {
-    _product -> setId(_idLineEdit -> text());
+    _product -> setId(_idLineEdit -> text().toInt());
     _product -> setName(_nameLineEdit -> text());
     _product -> setDescription(_descriptionTextEdit -> toPlainText());
     _product -> setPrice(_priceLineEdit -> text().toDouble());
     _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> currentIndex()));
     return true;
+}
+
+bool View::ProductDialog::isSaveable()
+{
+    return !(_idLineEdit -> text().isEmpty()) &&
+           !(_nameLineEdit -> text().isEmpty()) &&
+           !(_priceLineEdit -> text().isEmpty());
 }

@@ -21,17 +21,41 @@
 #include "persistencemanager.h"
 #include "global.h"
 #include <QSettings>
+#include <QStringList>
 
-QStringList Persistence::Manager::config()
+void Persistence::Manager::setDefaultConfig()
 {
-    QStringList result;
     QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
-    setting.beginGroup("persistence");
-    result.append(setting.value("DatabaseName").toString());
-    result.append(setting.value("Port").toString());
-    result.append(setting.value("HostName").toString());
-    result.append(setting.value("UserName").toString());
-    result.append(setting.value("Password").toString());
+    setting.beginGroup("Storage");
+    setting.setValue("Driver",       DEFAULT_STORAGE_DRIVER);
+    setting.setValue("DatabaseName", DEFAULT_STORAGE_DATABASENAME);
+    setting.setValue("Port",         DEFAULT_STORAGE_PORT);
+    setting.setValue("HostName",     DEFAULT_STORAGE_HOSTNAME);
+    setting.setValue("UserName",     DEFAULT_STORAGE_HOSTNAME);
+    setting.setValue("Password",     DEFAULT_STORAGE_PASSWORD);
     setting.endGroup();
+}
+
+QMap<QString, QString> Persistence::Manager::readConfig(const QString &group)
+{
+    QMap<QString, QString> result;
+    QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
+
+    setting.beginGroup(group);
+    foreach(QString key, setting.childKeys())
+        result.insert(key, setting.value(key).toString());
+    setting.endGroup();
+
     return result;
 }
+
+bool Persistence::Manager::writeConfig(const QString &group,const QMap<QString, QString> &config)
+{
+    QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
+    setting.beginGroup(group);
+    foreach(QString key, config)
+        setting.setValue(key, config.value(key));
+    setting.endGroup();
+    return true;
+}
+
