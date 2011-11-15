@@ -23,25 +23,18 @@
 
 #include <QAbstractTableModel>
 #include <QList>
-
-namespace Model
-{
-    namespace Domain
-    {
-        class Product;
-    }
-}
+#include "product.h"
 
 namespace View
 {
     class ProductModel : public QAbstractTableModel
     {
     public:
-        ProductModel(QList<Model::Domain::Product *> *products, QObject *parent = 0);
-        QList<Model::Domain::Product *> *products();
-        bool insertProduct(int k, Model::Domain::Product *product);
+        ProductModel(QList<Model::Domain::Product> *products, QObject *parent = 0);
+        QList<Model::Domain::Product> *products();
+        void setProducts(QList<Model::Domain::Product> *products);
+        bool insertProduct(int k, const Model::Domain::Product &product);
         bool removeProduct(int k);
-        void setProducts(QList<Model::Domain::Product *> *products);
         int rowCount(const QModelIndex &parent) const;
         int columnCount(const QModelIndex &parent) const;
         QVariant data(const QModelIndex &index, int role) const;
@@ -49,7 +42,7 @@ namespace View
         bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     private:
-        QList<Model::Domain::Product *> *_products;
+        QList<Model::Domain::Product> *_products;
     };
 }
 

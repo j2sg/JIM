@@ -23,23 +23,16 @@
 
 #include <QAbstractTableModel>
 #include <QList>
-
-namespace Model
-{
-    namespace Domain
-    {
-        class Operation;
-    }
-}
+#include "operation.h"
 
 namespace View
 {
     class OperationModel : public QAbstractTableModel
     {
     public:
-        OperationModel(QList<Model::Domain::Operation *> *operations, QObject *parent = 0);
-        QList<Model::Domain::Operation *> *operations();
-        void setOperations(QList<Model::Domain::Operation *> *operations);
+        OperationModel(QList<Model::Domain::Operation> *operations, QObject *parent = 0);
+        QList<Model::Domain::Operation> *operations();
+        void setOperations(QList<Model::Domain::Operation> *operations);
         int rowCount(const QModelIndex &parent) const;
         int columnCount(const QModelIndex &parent) const;
         QVariant data(const QModelIndex &index, int role) const;
@@ -49,7 +42,7 @@ namespace View
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         Qt::ItemFlags flags(const QModelIndex &index) const;
     private:
-        QList<Model::Domain::Operation *> *_operations;
+        QList<Model::Domain::Operation> *_operations;
     };
 }
 

@@ -49,6 +49,7 @@ namespace View
         void delProduct();
     private:
         void createWidgets();
+        void createConnections();
 
         QTableView *_productsTableView;
         ProductModel *_productModel;

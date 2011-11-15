@@ -21,7 +21,7 @@
 #ifndef PERSISTENCEMANAGER_H
 #define PERSISTENCEMANAGER_H
 
-#include <QMap>
+#include <QVariant>
 #include <QString>
 
 namespace Persistence
@@ -29,9 +29,16 @@ namespace Persistence
     class Manager
     {
     public:
-        static void setDefaultConfig();
-        static QMap<QString, QString> readConfig(const QString &group);
-        static bool writeConfig(const QString &group,const QMap<QString, QString> &config);
+        static bool existsConfig();
+        static bool createConfig(bool overwrite = false);
+        static bool deleteConfig();
+        static QVariant readConfig(const QString &key, const QString &group = QString());
+        static bool writeConfig(const QVariant &value, const QString &key, const QString &group = QString());
+        static bool existsStorage();
+        static bool createStorage(bool overwrite = false);
+        static bool deleteStorage();
+    private:
+        static bool createSQLiteSchema();
     };
 }
 

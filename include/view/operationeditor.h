@@ -23,19 +23,12 @@
 
 #include <QWidget>
 #include <QList>
+#include "operation.h"
 
 QT_BEGIN_NAMESPACE
 class QTableView;
 class QPushButton;
 QT_END_NAMESPACE
-
-namespace Model
-{
-    namespace Domain
-    {
-        class Operation;
-    }
-}
 
 namespace View
 {
@@ -45,8 +38,8 @@ namespace View
     {
         Q_OBJECT
     public:
-        OperationEditor(QList<Model::Domain::Operation *> *operations, QWidget *parent = 0);
-        QList<Model::Domain::Operation *> *operations();
+        OperationEditor(QList<Model::Domain::Operation> *operations, QWidget *parent = 0);
+        QList<Model::Domain::Operation> *operations();
     signals:
         void dataChanged();
     private slots:

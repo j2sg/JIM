@@ -19,8 +19,10 @@
  **/
 
 #include "invoicemanager.h"
+#include "operationmanager.h"
 #include "sqlagent.h"
 #include "types.h"
+#include <QListIterator>
 
 bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &invoice)
 {
@@ -37,7 +39,22 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
                       .arg(invoice.paid())
                       .arg(invoice.notes());
 
-    return agent -> insert(sql);
+    bool res = agent -> insert(sql);
+
+    QListIterator<Model::Domain::Operation> iterator(*invoice.operations());
+    while(iterator.hasNext() && res) {
+        Model::Domain::Operation operation = iterator.next();
+        sql = QString("INSERT INTO operation VALUES(%1, %2, %3, %4, %5, %6)")
+                           .arg(operation.id())
+                           .arg(invoice.id())
+                           .arg(operation.product() -> id())
+                           .arg(operation.quantity())
+                           .arg(operation.weight())
+                           .arg(operation.price());
+        res = agent -> insert(sql);
+    }
+
+    return res;
 }
 
 bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &invoice)
@@ -55,7 +72,33 @@ bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &inv
                       .arg(invoice.paid())
                       .arg(invoice.notes());
 
-    return agent -> update(sql);
+    bool res = agent -> update(sql);
+
+    QListIterator<Model::Domain::Operation> iterator(*Model::Management::OperationManager::getAllByInvoice(invoice.id()));
+    while(iterator.hasNext() && res) {
+        if(!((invoice.operations()) -> contains(iterator.next()))) {
+            Model::Domain::Operation operation = iterator.next();
+            sql = QString("DELETE FROM operation WHERE id=%1 AND invoice=%2")
+                    .arg(operation.id())
+                    .arg(invoice.id());
+            res = agent -> _delete(sql);
+        }
+    }
+
+    iterator = QListIterator<Model::Domain::Operation>(*invoice.operations());
+    while(iterator.hasNext() && res) {
+        Model::Domain::Operation operation = iterator.next();
+        sql = QString("UPDATE operation SET product=%3, quantity=%4, weight=%5, price=%6 WHERE id=%1 AND invoice=%2")
+                .arg(operation.id())
+                .arg(invoice.id())
+                .arg(operation.product()->id())
+                .arg(operation.quantity())
+                .arg(operation.weight())
+                .arg(operation.price());
+        res = agent -> update(sql);
+    }
+
+    return res;
 }
 
 bool Model::Management::InvoiceManager::remove(int id)
@@ -90,6 +133,7 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id)
         invoice -> setBuyerName(buyerName);
         invoice -> setSellerId(sellerId);
         invoice -> setSellerName(sellerName);
+        invoice -> setOperations(Model::Management::OperationManager::getAllByInvoice(id));
         invoice -> setVat(vat);
         invoice -> setPaid(paid);
         invoice -> setNotes(notes);
@@ -100,12 +144,12 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id)
     return invoice;
 }
 
-QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType(Model::Domain::InvoiceType type)
+QList<Model::Domain::Invoice> *Model::Management::InvoiceManager::getAllByType(Model::Domain::InvoiceType type)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("SELECT * FROM invoice WHERE type=%1").arg(static_cast<int>(type));
     QVector<QVector<QVariant> > *result = agent -> select(sql);
-    QList<Model::Domain::Invoice *> *invoices = new QList<Model::Domain::Invoice *>;
+    QList<Model::Domain::Invoice> *invoices = new QList<Model::Domain::Invoice>;
 
     foreach(QVector<QVariant> row, *result) {
         int id                          = row.at(0).toInt();
@@ -118,15 +162,16 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
         double vat                      = row.at(7).toDouble();
         bool paid                       = row.at(8).toBool();
         QString notes                   = row.at(9).toString();
-        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(id, type);
-        invoice -> setDate(date);
-        invoice -> setBuyerId(buyerId);
-        invoice -> setBuyerName(buyerName);
-        invoice -> setSellerId(sellerId);
-        invoice -> setSellerName(sellerName);
-        invoice -> setVat(vat);
-        invoice -> setPaid(paid);
-        invoice -> setNotes(notes);
+        Model::Domain::Invoice invoice(id, type);
+        invoice.setDate(date);
+        invoice.setBuyerId(buyerId);
+        invoice.setBuyerName(buyerName);
+        invoice.setSellerId(sellerId);
+        invoice.setSellerName(sellerName);
+        invoice.setOperations(Model::Management::OperationManager::getAllByInvoice(id));
+        invoice.setVat(vat);
+        invoice.setPaid(paid);
+        invoice.setNotes(notes);
 
         invoices -> push_back(invoice);
     }
@@ -136,9 +181,9 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
     return invoices;
 }
 
-QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAll()
+QList<Model::Domain::Invoice> *Model::Management::InvoiceManager::getAll()
 {
-    QList<Model::Domain::Invoice *> *invoices = getAllByType(Model::Domain::Buy);
+    QList<Model::Domain::Invoice> *invoices = getAllByType(Model::Domain::Buy);
     invoices -> append(*getAllByType(Model::Domain::Sale));
     return invoices;
 }

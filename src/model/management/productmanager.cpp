@@ -77,12 +77,12 @@ Model::Domain::Product *Model::Management::ProductManager::get(int id)
     return product;
 }
 
-QList<Model::Domain::Product *> *Model::Management::ProductManager::getAll()
+QList<Model::Domain::Product> *Model::Management::ProductManager::getAll()
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("SELECT * FROM product");
     QVector<QVector<QVariant> > *result = agent -> select(sql);
-    QList<Model::Domain::Product *> *products = new QList<Model::Domain::Product *>;
+    QList<Model::Domain::Product> *products = new QList<Model::Domain::Product>;
 
     foreach(QVector<QVariant> row, *result) {
         int id                             = row.at(0).toInt();
@@ -90,8 +90,8 @@ QList<Model::Domain::Product *> *Model::Management::ProductManager::getAll()
         QString description                = row.at(2).toString();
         double price                       = row.at(3).toDouble();
         Model::Domain::PriceType priceType = static_cast<Model::Domain::PriceType>(row.at(4).toInt());
-        Model::Domain::Product *product = new Model::Domain::Product(id, name, price, priceType);
-        product -> setDescription(description);
+        Model::Domain::Product product(id, name, price, priceType);
+        product.setDescription(description);
 
         products -> push_back(product);
     }

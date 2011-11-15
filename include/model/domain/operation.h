@@ -48,6 +48,8 @@ namespace Model
             void setPrice(double price);
             double price() const;
             double total() const;
+            bool operator==(const Operation &operation) const;
+            bool operator!=(const Operation &operation) const;
         private:
             int _id;
             Product *_product;

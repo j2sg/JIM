@@ -40,6 +40,11 @@ Persistence::SQLAgent *Persistence::SQLAgent::instance()
     return &instance;
 }
 
+bool Persistence::SQLAgent::create(const QString &sql)
+{
+    return manipulation(sql);
+}
+
 bool Persistence::SQLAgent::insert(const QString &sql)
 {
     return manipulation(sql);
@@ -79,17 +84,15 @@ int Persistence::SQLAgent::getId(const QString& table)
 
 bool Persistence::SQLAgent::setUp()
 {
-    QMap<QString, QString> parameters = Manager::readConfig("Storage");
-
-    if(parameters.isEmpty())
+    if(!Persistence::Manager::existsConfig())
         return false;
 
-    _database = QSqlDatabase::addDatabase(parameters.value("Driver"));
-    _database.setDatabaseName(parameters.value("DatabaseName"));
-    _database.setPort(parameters.value("Port").toInt());
-    _database.setHostName(parameters.value("HostName"));
-    _database.setUserName(parameters.value("UserName"));
-    _database.setPassword(parameters.value("Password"));
+    _database = QSqlDatabase::addDatabase(Persistence::Manager::readConfig("Driver", "Storage/DBMS").toString());
+    _database.setDatabaseName(Persistence::Manager::readConfig("Name", "Storage/DBMS").toString());
+    _database.setHostName(Persistence::Manager::readConfig("Host", "Storage/DBMS").toString());
+    _database.setPort(Persistence::Manager::readConfig("Port", "Storage/DBMS").toInt());
+    _database.setUserName(Persistence::Manager::readConfig("User", "Storage/DBMS").toString());
+    _database.setPassword(Persistence::Manager::readConfig("Pass", "Storage/DBMS").toString());
 
     return connect();
 }

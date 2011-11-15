@@ -24,20 +24,18 @@
 #include "productdialog.h"
 #include "product.h"
 #include <QtGui>
-#include <QDebug>
 
 View::ProductEditor::ProductEditor(QWidget *parent)
     : QWidget(parent)
 {
     createWidgets();
+    createConnections();
     setWindowTitle(tr("Product Manager"));
     setMinimumWidth(375);
 }
 
 View::ProductEditor::~ProductEditor()
 {
-    foreach(Model::Domain::Product *product, *(_productModel -> products()))
-        delete product;
     delete _productModel -> products();
 }
 
@@ -56,35 +54,32 @@ void View::ProductEditor::rowSelectionChanged()
 
 void View::ProductEditor::addProduct()
 {
-    Model::Domain::Product *product = new Model::Domain::Product;
-    ProductDialog dialog(product);
+    Model::Domain::Product product;
+    ProductDialog dialog(&product);
     if(dialog.exec() == QDialog::Accepted) {
-        if(!Model::Management::ProductManager::create(*product))
+        if(!Model::Management::ProductManager::create(product))
             QMessageBox::critical(this, tr("Critical Error"), tr("Error during the product addition"),QMessageBox::Ok);
         else {
             int row = _productsTableView -> currentIndex().row();
             _productModel->insertProduct(row + 1, product);
         }
-
-    } else
-        delete product;
-
+    }
 }
 
 void View::ProductEditor::modProduct()
 {
     int row = _productsTableView -> currentIndex().row();
-    Model::Domain::Product *product = _productModel->products() -> at(row);
-    ProductDialog dialog(product);
+    Model::Domain::Product product = _productModel -> products() -> at(row);
+    ProductDialog dialog(&product);
     if(dialog.exec() == QDialog::Accepted)
-        if(!Model::Management::ProductManager::modify(*product))
+        if(!Model::Management::ProductManager::modify(product))
             QMessageBox::critical(this, tr("Critical Error"), tr("Error during the product modification"),QMessageBox::Ok);
 }
 
 void View::ProductEditor::delProduct()
 {
     int row = _productsTableView -> currentIndex().row();
-    Model::Management::ProductManager::remove(_productModel -> products() -> at(row) -> id());
+    Model::Management::ProductManager::remove((_productModel -> products() -> at(row)).id());
     _productsTableView -> selectRow(row);
     _productModel -> removeRows(row, 1);
 }
@@ -102,16 +97,12 @@ void View::ProductEditor::createWidgets()
     _productsTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
     _productsTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _productsTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
-    connect(_productsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(rowSelectionChanged()));
 
     _addProductButton = new QPushButton(tr("&Add"));
     _modProductButton = new QPushButton(tr("&Modify"));
     _modProductButton -> setEnabled(false);
     _delProductButton = new QPushButton(tr("&Delete"));
     _delProductButton -> setEnabled(false);
-    connect(_addProductButton, SIGNAL(clicked()), this, SLOT(addProduct()));
-    connect(_modProductButton, SIGNAL(clicked()), this, SLOT(modProduct()));
-    connect(_delProductButton, SIGNAL(clicked()), this, SLOT(delProduct()));
 
     QGridLayout *topLayout = new QGridLayout;
     topLayout -> addWidget(_productsTableView, 0, 0, 1, 6);
@@ -124,7 +115,6 @@ void View::ProductEditor::createWidgets()
 
     _closeButton = new QPushButton(tr("&Finish"));
     _closeButton -> setFixedSize(_closeButton -> sizeHint());
-    connect(_closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout -> addStretch();
@@ -135,4 +125,18 @@ void View::ProductEditor::createWidgets()
     mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
+}
+
+void View::ProductEditor::createConnections()
+{
+    connect(_productsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(rowSelectionChanged()));
+    connect(_addProductButton, SIGNAL(clicked()),
+            this, SLOT(addProduct()));
+    connect(_modProductButton, SIGNAL(clicked()),
+            this, SLOT(modProduct()));
+    connect(_delProductButton, SIGNAL(clicked()),
+            this, SLOT(delProduct()));
+    connect(_closeButton, SIGNAL(clicked()),
+            this, SLOT(close()));
 }

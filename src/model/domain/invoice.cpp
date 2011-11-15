@@ -28,7 +28,7 @@ Model::Domain::Invoice::Invoice(int id, Model::Domain::InvoiceType type)
     _buyerName = QString();
     _sellerId = NO_ID;
     _sellerName = QString();
-    _operations = new QList<Operation *>();
+    _operations = new QList<Model::Domain::Operation>;
     _vat = 0.0;
     _paid = false;
     _notes = QString();
@@ -41,11 +41,7 @@ Model::Domain::Invoice::Invoice(const Invoice &invoice)
 
 Model::Domain::Invoice::~Invoice()
 {
-    if(_operations) {
-        foreach(Operation *operation, *_operations)
-            delete operation;
-        delete _operations;
-    }
+    delete _operations;
 }
 
 Model::Domain::Invoice &Model::Domain::Invoice::operator=(const Invoice &invoice)
@@ -60,8 +56,8 @@ Model::Domain::Invoice &Model::Domain::Invoice::operator=(const Invoice &invoice
     _vat        = invoice._vat;
     _paid       = invoice._paid;
     _notes      = invoice._notes;
-    foreach(Model::Domain::Operation *operation, *invoice._operations)
-        _operations -> push_back(new Model::Domain::Operation(*operation));
+    foreach(Model::Domain::Operation operation, *invoice._operations)
+        _operations -> push_back(Model::Domain::Operation(operation));
     return *this;
 }
 
@@ -135,7 +131,15 @@ const QString &Model::Domain::Invoice::sellerName() const
     return _sellerName;
 }
 
-QList<Model::Domain::Operation *> *Model::Domain::Invoice::operations()
+void Model::Domain::Invoice::setOperations(QList<Operation> *operations)
+{
+    if(operations) {
+        delete _operations;
+        _operations = operations;
+    }
+}
+
+QList<Model::Domain::Operation> *Model::Domain::Invoice::operations() const
 {
     return _operations;
 }
@@ -174,7 +178,7 @@ double Model::Domain::Invoice::total() const
 {
     double total = 0.0;
     for(int k = 0;k < _operations -> size(); ++k)
-        total += _operations -> at(k) -> total();
+        total += (_operations -> at(k)).total();
     return total;
 }
 

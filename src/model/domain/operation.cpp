@@ -115,6 +115,16 @@ double Model::Domain::Operation::total() const
     return ((_product -> priceType() == Units) ? _quantity : _weight) * _price;
 }
 
+bool Model::Domain::Operation::operator==(const Operation &operation) const
+{
+    return _id == operation._id;
+}
+
+bool Model::Domain::Operation::operator!=(const Operation &operation) const
+{
+    return !(*this == operation);
+}
+
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Operation &operation)
 {
     return os << operation._id                                                                   << std::endl

@@ -76,6 +76,7 @@ namespace View
         void createMenus();
         void createToolBar();
         void createStatusBar();
+        void createConnections();
         InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
         bool verifyExit();
 

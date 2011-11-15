@@ -25,7 +25,7 @@
 #include "operationmodel.h"
 #include "types.h"
 
-View::OperationEditor::OperationEditor(QList<Model::Domain::Operation *> *operations, QWidget *parent)
+View::OperationEditor::OperationEditor(QList<Model::Domain::Operation> *operations, QWidget *parent)
     : QWidget(parent)
 {
     _operationsTableView = new QTableView;
@@ -43,7 +43,7 @@ View::OperationEditor::OperationEditor(QList<Model::Domain::Operation *> *operat
     _operationsTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
     _operationsTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _operationsTableView -> setEditTriggers(QAbstractItemView::AnyKeyPressed | QAbstractItemView::DoubleClicked);
-    connect(_operationsTableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(rowSelectionChanged()));
+    connect(_operationsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(rowSelectionChanged()));
     connect(_operationModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(dataChanged()));
 
     _addOperationButton = new QPushButton(tr("Add"));
@@ -63,7 +63,7 @@ View::OperationEditor::OperationEditor(QList<Model::Domain::Operation *> *operat
     setLayout(mainlayout);
 }
 
-QList<Model::Domain::Operation *> *View::OperationEditor::operations()
+QList<Model::Domain::Operation> *View::OperationEditor::operations()
 {
     return _operationModel -> operations();
 }

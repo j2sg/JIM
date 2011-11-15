@@ -19,23 +19,22 @@
  **/
 
 #include "operationmodel.h"
-#include "operation.h"
 #include "product.h"
 #include "productmanager.h"
 #include "types.h"
 
-View::OperationModel::OperationModel(QList<Model::Domain::Operation *> *operations, QObject *parent)
+View::OperationModel::OperationModel(QList<Model::Domain::Operation> *operations, QObject *parent)
     : QAbstractTableModel(parent)
 {
     _operations = operations;
 }
 
-QList<Model::Domain::Operation *> *View::OperationModel::operations()
+QList<Model::Domain::Operation> *View::OperationModel::operations()
 {
     return _operations;
 }
 
-void View::OperationModel::setOperations(QList<Model::Domain::Operation *> *operations)
+void View::OperationModel::setOperations(QList<Model::Domain::Operation> *operations)
 {
     _operations = operations;
     reset();
@@ -66,21 +65,21 @@ QVariant View::OperationModel::data(const QModelIndex &index, int role) const
                 return int(Qt::AlignRight | Qt::AlignVCenter);
             }
         } else if(role == Qt::DisplayRole) {
-            Model::Domain::Operation *operation = _operations -> at(index.row());
-            Model::Domain::Product *product = operation -> product();
+            Model::Domain::Operation operation = _operations -> at(index.row());
+            Model::Domain::Product *product = operation.product();
             switch(index.column()) {
             case ColumnOperationId:
                 return (product != 0) ? QString::number(product -> id()) : "";
             case ColumnOperationName:
                 return (product != 0) ? product -> name() : "";
             case ColumnOperationQuantity:
-                return QString::number(operation -> quantity());
+                return QString::number(operation.quantity());
             case ColumnOperationWeight:
-                return QString::number(operation -> weight(), 'f', PRECISION_WEIGHT);
+                return QString::number(operation.weight(), 'f', PRECISION_WEIGHT);
             case ColumnOperationPrice:
-                return QString::number(operation -> price(), 'f', PRECISION_MONEY);
+                return QString::number(operation.price(), 'f', PRECISION_MONEY);
             case ColumnOperationTotal:
-                return QString::number(operation -> total(), 'f', PRECISION_MONEY);
+                return QString::number(operation.total(), 'f', PRECISION_MONEY);
             }
         }
     }
@@ -90,7 +89,7 @@ QVariant View::OperationModel::data(const QModelIndex &index, int role) const
 bool View::OperationModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if(index.isValid() && role == Qt::EditRole) {
-        Model::Domain::Operation *operation = _operations -> at(index.row());
+        Model::Domain::Operation operation = _operations -> at(index.row());
         switch(index.column()) {
         case ColumnOperationTotal:
         case ColumnOperationName:
@@ -100,21 +99,22 @@ bool View::OperationModel::setData(const QModelIndex &index, const QVariant &val
             int id = value.toInt();
             Model::Domain::Product *product = Model::Management::ProductManager::get(id);
             if(product)
-                operation -> setProduct(product);
+                operation.setProduct(product);
             else
                 return false;
         }
             break;
         case ColumnOperationQuantity:
-            operation -> setQuantity(value.toInt());
+            operation.setQuantity(value.toInt());
             break;
         case ColumnOperationWeight:
-            operation -> setWeight(value.toDouble());
+            operation.setWeight(value.toDouble());
             break;
         case ColumnOperationPrice:
-            operation -> setPrice(value.toDouble());
+            operation.setPrice(value.toDouble());
             break;
         }
+        _operations -> replace(index.row(), operation);
         emit dataChanged(index, index);
         if(index.column() == ColumnOperationQuantity ||
            index.column() == ColumnOperationWeight ||
@@ -132,7 +132,7 @@ bool View::OperationModel::insertRows(int row, int count, const QModelIndex &par
     Q_UNUSED(parent);
     beginInsertRows(QModelIndex(), row, row + count - 1);
     for(int k = 1;k <= count; ++k)
-        _operations -> insert(row, new Model::Domain::Operation(row + k));
+        _operations -> insert(row, Model::Domain::Operation(row + k));
     endInsertRows();
     return true;
 }
@@ -141,10 +141,8 @@ bool View::OperationModel::removeRows(int row, int count, const QModelIndex &par
 {
     Q_UNUSED(parent);
     beginRemoveRows(QModelIndex(), row, row + count - 1);
-    for(int k = 0;k < count; ++k) {
-        delete _operations -> at(row);
+    for(int k = 0;k < count; ++k)
         _operations -> removeAt(row);
-    }
     endRemoveRows();
     return true;
 }

@@ -69,4 +69,13 @@ namespace Model
     }
 }
 
+namespace Persistence
+{
+    typedef enum
+    {
+        DBMS
+    } StorageType;
+}
+
+
 #endif // TYPES_H

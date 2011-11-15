@@ -20,8 +20,8 @@
 
 #include <QtGui>
 #include "qinvoicer.h"
-#include "invoiceeditor.h"
 #include "invoice.h"
+#include "invoiceeditor.h"
 #include "invoicemanager.h"
 #include "producteditor.h"
 #include "global.h"
@@ -33,6 +33,7 @@ View::QInvoicer::QInvoicer()
     createMenus();
     createToolBar();
     createStatusBar();
+    createConnections();
 
     _productEditor = 0;
 
@@ -91,8 +92,8 @@ void View::QInvoicer::manageProduct()
     if(!_productEditor) {
         _productEditor = new ProductEditor;
         connect(_productEditor, SIGNAL(finished()), this, SLOT(currentSubWindowFinished()));
-        _mdiArea->addSubWindow(_productEditor);
         connect(_productEditor, SIGNAL(destroyed(QObject*)), this, SLOT(restore(QObject *)));
+        _mdiArea->addSubWindow(_productEditor);
         _productEditor->show();
     }
 }
@@ -149,12 +150,12 @@ void View::QInvoicer::restore(QObject *object)
 
 void View::QInvoicer::invoiceSaved(Model::Domain::Invoice *invoice)
 {
-    statusBar()->showMessage(tr("Invoice number %1 saved").arg(invoice->id()), 2000);
+    statusBar() -> showMessage(tr("Invoice number %1 saved").arg(invoice -> id()), 2000);
 }
 
 void View::QInvoicer::currentSubWindowFinished()
 {
-    _mdiArea->closeActiveSubWindow();
+    _mdiArea -> closeActiveSubWindow();
 }
 
 void View::QInvoicer::createCentralWidget()
@@ -162,7 +163,6 @@ void View::QInvoicer::createCentralWidget()
     _mdiArea = new QMdiArea;
     _mdiArea -> setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     _mdiArea -> setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(updateWindowMenu()));
     setCentralWidget(_mdiArea);
 }
 
@@ -171,78 +171,62 @@ void View::QInvoicer::createActions()
     _exitAction = new QAction(tr("&Exit"), this);
     _exitAction -> setIcon(QIcon(":/images/exit.png"));
     _exitAction -> setStatusTip(tr("Exit the application"));
-    connect(_exitAction, SIGNAL(triggered()), this, SLOT(close()));
 
     _createSaleInvoiceAction = new QAction(tr("Create &Sale Invoice"), this);
     _createSaleInvoiceAction -> setIcon(QIcon(":/images/saleinvoice.png"));
     _createSaleInvoiceAction -> setStatusTip(tr("Create a new Sale Invoice with a customer"));
-    connect(_createSaleInvoiceAction, SIGNAL(triggered()), this, SLOT(createSaleInvoice()));
 
     _createBuyInvoiceAction = new QAction(tr("Create &Buy Invoice"), this);
     _createBuyInvoiceAction -> setIcon(QIcon(":/images/buyinvoice.png"));
     _createBuyInvoiceAction -> setStatusTip(tr("Create a new Buy Invoice with a provider"));
-    connect(_createBuyInvoiceAction, SIGNAL(triggered()), this, SLOT(createBuyInvoice()));
 
     _loadInvoiceAction = new QAction(tr("&Load Invoice"), this);
     _loadInvoiceAction -> setIcon(QIcon(":/images/loadinvoice.png"));
     _loadInvoiceAction -> setStatusTip(tr("Load a specific Invoice"));
-    connect(_loadInvoiceAction, SIGNAL(triggered()), this, SLOT(loadInvoice()));
 
     _manageProductAction = new QAction(tr("Manage &Product"), this);
     _manageProductAction -> setIcon(QIcon(":/images/manageproduct.png"));
     _manageProductAction -> setStatusTip(tr("Product Management"));
-    connect(_manageProductAction, SIGNAL(triggered()), this, SLOT(manageProduct()));
 
     _volumeSaleInvoiceAction = new QAction(tr("Volume Sale Invoice"), this);
     _volumeSaleInvoiceAction -> setIcon(QIcon(":/images/volumesale.png"));
     _volumeSaleInvoiceAction -> setStatusTip(tr("Make a report about Volume Sale Invoice"));
-    connect(_volumeSaleInvoiceAction, SIGNAL(triggered()), this, SLOT(volumeSale()));
 
     _volumeBuyInvoiceAction = new QAction(tr("Volume Buy Invoice"), this);
     _volumeBuyInvoiceAction -> setIcon(QIcon(":/images/volumebuy.png"));
     _volumeBuyInvoiceAction -> setStatusTip(tr("Make a report about Volume Buy Invoice"));
-    connect(_volumeBuyInvoiceAction, SIGNAL(triggered()), this, SLOT(volumeBuy()));
 
     _volumeInvoiceAction = new QAction(tr("&Volume Invoice"), this);
     _volumeInvoiceAction -> setIcon(QIcon(":/images/volume.png"));
     _volumeInvoiceAction -> setStatusTip(tr("Make a report about Volume Invoice"));
-    connect(_volumeInvoiceAction, SIGNAL(triggered()), this, SLOT(volume()));
 
     _unpaidInvoicesAction = new QAction(tr("&Unpaid Invoice"), this);
     _unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
     _unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
-    connect(_unpaidInvoicesAction, SIGNAL(triggered()), this, SLOT(unpaidInvoices()));
 
     _closeAction = new QAction(tr("Close"), this);
     _closeAction -> setStatusTip(tr("Close active window"));
-    connect(_closeAction, SIGNAL(triggered()), _mdiArea, SLOT(closeActiveSubWindow()));
 
     _closeAllAction = new QAction(tr("Close All"), this);
     _closeAllAction -> setStatusTip(tr("Close all windows"));
-    connect(_closeAllAction, SIGNAL(triggered()), _mdiArea, SLOT(closeAllSubWindows()));
 
     _tileAction = new QAction(tr("Tile"), this);
     _tileAction -> setStatusTip(tr("Tile windows"));
-    connect(_tileAction, SIGNAL(triggered()), _mdiArea, SLOT(tileSubWindows()));
 
     _cascadeAction = new QAction(tr("Cascade"), this);
     _cascadeAction -> setStatusTip(tr("Cascade windows"));
-    connect(_cascadeAction, SIGNAL(triggered()), _mdiArea, SLOT(cascadeSubWindows()));
 
     _nextAction = new QAction(tr("Next"), this);
     _nextAction -> setShortcuts(QKeySequence::NextChild);
     _nextAction -> setStatusTip(tr("Go to next window"));
-    connect(_nextAction, SIGNAL(triggered()), _mdiArea, SLOT(activateNextSubWindow()));
 
     _previousAction = new QAction(tr("Previous"), this);
     _previousAction -> setShortcuts(QKeySequence::PreviousChild);
     _previousAction -> setStatusTip(tr("Go to previous window"));
-    connect(_previousAction, SIGNAL(triggered()), _mdiArea, SLOT(activatePreviousSubWindow()));
 
     _aboutAction = new QAction(tr("About"), this);
     _aboutAction -> setIcon(QIcon(":/images/about.png"));
     _aboutAction -> setStatusTip(tr("Show information about QInvoicer"));
-    connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 }
 
 void View::QInvoicer::createMenus()
@@ -302,6 +286,44 @@ void View::QInvoicer::createToolBar()
 void View::QInvoicer::createStatusBar()
 {
     statusBar()->showMessage(tr("Running"));
+}
+
+void View::QInvoicer::createConnections()
+{
+    connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)),
+            this, SLOT(updateWindowMenu()));
+    connect(_exitAction, SIGNAL(triggered()),
+            this, SLOT(close()));
+    connect(_createSaleInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(createSaleInvoice()));
+    connect(_createBuyInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(createBuyInvoice()));
+    connect(_loadInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(loadInvoice()));
+    connect(_manageProductAction, SIGNAL(triggered()),
+            this, SLOT(manageProduct()));
+    connect(_volumeSaleInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(volumeSale()));
+    connect(_volumeBuyInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(volumeBuy()));
+    connect(_volumeInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(volume()));
+    connect(_unpaidInvoicesAction, SIGNAL(triggered()),
+            this, SLOT(unpaidInvoices()));
+    connect(_closeAction, SIGNAL(triggered()),
+            _mdiArea, SLOT(closeActiveSubWindow()));
+    connect(_closeAllAction, SIGNAL(triggered()),
+            _mdiArea, SLOT(closeAllSubWindows()));
+    connect(_tileAction, SIGNAL(triggered()),
+            _mdiArea, SLOT(tileSubWindows()));
+    connect(_cascadeAction, SIGNAL(triggered()),
+            _mdiArea, SLOT(cascadeSubWindows()));
+    connect(_nextAction, SIGNAL(triggered()),
+            _mdiArea, SLOT(activateNextSubWindow()));
+    connect(_previousAction, SIGNAL(triggered()),
+            _mdiArea, SLOT(activatePreviousSubWindow()));
+    connect(_aboutAction, SIGNAL(triggered()),
+            this, SLOT(about()));
 }
 
 View::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Domain::Invoice *invoice)

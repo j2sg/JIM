@@ -21,18 +21,23 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#define ORGANIZATION_NAME   "j2sg Software"
+#include "types.h"
+#include <QDesktopServices>
+
+#define ORGANIZATION_NAME   "j2sg_software"
 #define ORGANIZATION_DOMAIN "http://j2sg.wordpress.com"
 #define AUTHOR_NAME         "Juan Jose Salazar Garcia"
 #define AUTHOR_EMAIL        "jjslzgc@gmail.com"
 #define APPLICATION_NAME    "QInvoicer"
 #define APPLICATION_VERSION "0.1 Alpha"
 
-#define DEFAULT_STORAGE_DRIVER       "QSQLITE"
-#define DEFAULT_STORAGE_DATABASENAME "qinvoicer.db"
-#define DEFAULT_STORAGE_PORT         0
-#define DEFAULT_STORAGE_HOSTNAME     ""
-#define DEFAULT_STORAGE_USERNAME     ""
-#define DEFAULT_STORAGE_PASSWORD     ""
+#define DEFAULT_STORAGE_TYPE        Persistence::DBMS
+#define DEFAULT_STORAGE_PATH        QDesktopServices::storageLocation(QDesktopServices::DataLocation)
+#define DEFAULT_STORAGE_DBMS_DRIVER "QSQLITE"
+#define DEFAULT_STORAGE_DBMS_NAME   DEFAULT_STORAGE_PATH.append("/qinvoicer.db")
+#define DEFAULT_STORAGE_DBMS_HOST   ""
+#define DEFAULT_STORAGE_DBMS_PORT   0
+#define DEFAULT_STORAGE_DBMS_USER   ""
+#define DEFAULT_STORAGE_DBMS_PASS   ""
 
 #endif // GLOBAL_H

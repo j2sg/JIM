@@ -40,5 +40,8 @@ void setUpApplication(QApplication *app)
     app -> setOrganizationDomain(ORGANIZATION_DOMAIN);
     app -> setApplicationName(APPLICATION_NAME);
     app -> setApplicationVersion(APPLICATION_VERSION);
-    Persistence::Manager::setDefaultConfig();
+    if(!Persistence::Manager::existsConfig())
+        Persistence::Manager::createConfig();
+    if(!Persistence::Manager::existsStorage())
+        Persistence::Manager::createStorage();
 }

@@ -59,6 +59,7 @@ namespace View
         void stateChangedOnAutoIdCheckBox();
         void stateChangedOnRegisteredCheckBox();
         void stateChangedOnVatCheckBox();
+        void asignId();
         void invoiceModified(bool modified = true);
         void save();
         void finish();
@@ -69,6 +70,7 @@ namespace View
         void createOperationsWidgets();
         void createPaymentWidgets();
         void createButtonsWidgets();
+        void createConnections();
         void loadInvoice();
         bool saveInvoice();
         bool isSaveable();

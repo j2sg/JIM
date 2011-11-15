@@ -23,6 +23,7 @@
 
 #include <QtSql/QSqlDatabase>
 #include <QString>
+#include <QStringList>
 #include <QVector>
 #include <QVariant>
 
@@ -33,6 +34,7 @@ namespace Persistence
     public:
         ~SQLAgent();
         static SQLAgent *instance();
+        bool create(const QString &sql);
         bool insert(const QString &sql);
         bool update(const QString &sql);
         QVector<QVector<QVariant> > *select(const QString &sql);

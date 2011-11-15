@@ -54,7 +54,8 @@ namespace Model
             int sellerId() const;
             void setSellerName(const QString &sellerName);
             const QString &sellerName() const;
-            QList<Operation *> *operations();
+            void setOperations(QList<Model::Domain::Operation> *operations);
+            QList<Model::Domain::Operation> *operations() const;
             void setVat(double vat);
             double vat() const;
             void setPaid(bool paid);
@@ -71,7 +72,7 @@ namespace Model
             QString _buyerName;
             int _sellerId;
             QString _sellerName;
-            QList<Operation *> *_operations;
+            QList<Model::Domain::Operation> *_operations;
             double _vat;
             bool _paid;
             QString _notes;

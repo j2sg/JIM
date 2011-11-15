@@ -22,18 +22,24 @@
 #include "product.h"
 #include "types.h"
 
-View::ProductModel::ProductModel(QList<Model::Domain::Product *> *products, QObject *parent)
+View::ProductModel::ProductModel(QList<Model::Domain::Product> *products, QObject *parent)
     : QAbstractTableModel(parent)
 {
     _products = products;
 }
 
-QList<Model::Domain::Product *> *View::ProductModel::products()
+QList<Model::Domain::Product> *View::ProductModel::products()
 {
     return _products;
 }
 
-bool View::ProductModel::insertProduct(int k, Model::Domain::Product *product)
+void View::ProductModel::setProducts(QList<Model::Domain::Product> *products)
+{
+    _products = products;
+    reset();
+}
+
+bool View::ProductModel::insertProduct(int k, const Model::Domain::Product &product)
 {
     if(k < 0  || k > _products -> size())
         return false;
@@ -46,16 +52,9 @@ bool View::ProductModel::removeProduct(int k)
 {
     if(k < 0  || k > _products -> size())
         return false;
-    delete _products -> at(k);
     _products -> removeAt(k);
     reset();
     return true;
-}
-
-void View::ProductModel::setProducts(QList<Model::Domain::Product *> *products)
-{
-    _products = products;
-    reset();
 }
 
 int View::ProductModel::rowCount(const QModelIndex &parent) const
@@ -83,14 +82,14 @@ QVariant View::ProductModel::data(const QModelIndex &index, int role) const
                 return int(Qt::AlignRight | Qt::AlignVCenter);
             }
         } else if(role == Qt::DisplayRole) {
-            Model::Domain::Product *product = _products -> at(index.row());
+            Model::Domain::Product product = _products -> at(index.row());
             switch(index.column()) {
             case ColumnProductId:
-                return QString::number(product -> id());
+                return QString::number(product.id());
             case ColumnProductName:
-                return product -> name();
+                return product.name();
             case ColumnProductPrice:
-                return QString::number(product -> price(), 'f', PRECISION_MONEY);
+                return QString::number(product.price(), 'f', PRECISION_MONEY);
             }
         }
     }
@@ -102,7 +101,7 @@ bool View::ProductModel::insertRows(int row, int count, const QModelIndex &paren
     Q_UNUSED(parent);
     beginInsertRows(QModelIndex(), row, row + count - 1);
     for(int k = 1;k <= count; ++k)
-        _products -> insert(row, new Model::Domain::Product);
+        _products -> insert(row, Model::Domain::Product());
     endInsertRows();
     return true;
 }
@@ -111,10 +110,8 @@ bool View::ProductModel::removeRows(int row, int count, const QModelIndex &paren
 {
     Q_UNUSED(parent);
     beginRemoveRows(QModelIndex(), row, row + count - 1);
-    for(int k = 0;k < count; ++k) {
-        delete _products -> at(row);
+    for(int k = 0;k < count; ++k)
         _products -> removeAt(row);
-    }
     endRemoveRows();
     return true;
 }

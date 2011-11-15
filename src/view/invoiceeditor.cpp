@@ -29,9 +29,10 @@ View::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *par
     : QWidget(parent), _invoice(invoice)
 {
     createWidgets();
+    createConnections();
     setWindowTitle(tr("%1 Invoice %2").arg((_invoice -> type()) ? "Sale" : "Buy")
                    .arg(((invoice->id() != NO_ID) ? QString::number(invoice->id()) : "")+"[*]"));
-    //setMinimumWidth(600);
+    setMinimumWidth(500);
     setAttribute(Qt::WA_DeleteOnClose);
     loadInvoice();
 }
@@ -52,7 +53,8 @@ void View::InvoiceEditor::closeEvent(QCloseEvent *event)
 
 void View::InvoiceEditor::stateChangedOnAutoIdCheckBox()
 {
-    _idLineEdit->setEnabled(!_autoIdCheckBox->isChecked());
+    bool isChecked = _autoIdCheckBox -> isChecked();
+    _idLineEdit -> setEnabled(!isChecked);
 }
 
 void View::InvoiceEditor::stateChangedOnRegisteredCheckBox()
@@ -65,6 +67,13 @@ void View::InvoiceEditor::stateChangedOnRegisteredCheckBox()
 void View::InvoiceEditor::stateChangedOnVatCheckBox()
 {
     _vatLineEdit -> setEnabled(_vatCheckBox -> isChecked());
+}
+
+void View::InvoiceEditor::asignId()
+{
+    int autoId = (_autoIdCheckBox -> isChecked() ? Model::Management::InvoiceManager::getId() : _invoice -> id());
+    QString id = (autoId != NO_ID ? QString::number(autoId) : "");
+    _idLineEdit -> setText(id);
 }
 
 void View::InvoiceEditor::invoiceModified(bool modified)
@@ -154,16 +163,13 @@ void View::InvoiceEditor::createIdWidgets()
     _idLabel = new QLabel(tr("&Id: "));
     _idLineEdit = new QLineEdit;
     _idLabel -> setBuddy(_idLineEdit);
+    _idLineEdit -> setEnabled(false);
     _autoIdCheckBox = new QCheckBox(tr("Auto &Generate"));
-    connect(_idLineEdit, SIGNAL(textChanged(QString)), this, SLOT(invoiceModified()));
-    connect(_autoIdCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(stateChangedOnAutoIdCheckBox()));
-    _autoIdCheckBox -> setChecked(true);
+    _autoIdCheckBox -> setChecked((_invoice -> id() == NO_ID));
 
     _dateLabel = new QLabel(tr("&Date: "));
     _dateDateEdit = new QDateEdit(QDate::currentDate());
     _dateLabel -> setBuddy(_dateDateEdit);
-    connect(_dateDateEdit, SIGNAL(dateChanged(QDate)), this, SLOT(invoiceModified()));
 }
 
 void View::InvoiceEditor::createEntityWidgets()
@@ -173,21 +179,16 @@ void View::InvoiceEditor::createEntityWidgets()
     _entityIdLabel -> setBuddy(_entityIdLineEdit);
     _entityRegisteredCheckBox = new QCheckBox(tr("Registered"));
     _entityRegisteredCheckBox -> setChecked(true);
-    connect(_entityIdLineEdit, SIGNAL(textChanged(QString)), this, SLOT(invoiceModified()));
 
     _entityNameLabel = new QLabel(tr("Name: "));
     _entityNameLineEdit = new QLineEdit;
     _entityNameLabel -> setBuddy(_entityNameLineEdit);
     _entityNameLineEdit->setEnabled(false);
-    connect(_entityNameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(invoiceModified()));
-    connect(_entityRegisteredCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(stateChangedOnRegisteredCheckBox()));
 }
 
 void View::InvoiceEditor::createOperationsWidgets()
 {
     _operationEditor = new OperationEditor(_invoice -> operations());
-    connect(_operationEditor, SIGNAL(dataChanged()), this, SLOT(invoiceModified()));
 }
 
 
@@ -200,10 +201,6 @@ void View::InvoiceEditor::createPaymentWidgets()
     _totalLabel = new QLabel(tr("Total: "));
     _paidCheckBox = new QCheckBox(tr("Paid"));
     _paidCheckBox -> setChecked(false);
-
-    connect(_vatCheckBox, SIGNAL(stateChanged(int)), this, SLOT(stateChangedOnVatCheckBox()));
-    connect(_vatLineEdit, SIGNAL(textChanged(QString)), this, SLOT(invoiceModified()));
-    connect(_paidCheckBox, SIGNAL(stateChanged(int)), this, SLOT(invoiceModified()));
 }
 
 void View::InvoiceEditor::createButtonsWidgets()
@@ -212,13 +209,41 @@ void View::InvoiceEditor::createButtonsWidgets()
     _saveButton -> setEnabled(false);
     _finishButton = new QPushButton(tr("&Finish"));
     _finishButton -> setDefault(true);
-    connect(_saveButton, SIGNAL(clicked()), this, SLOT(save()));
-    connect(_finishButton, SIGNAL(clicked()), this, SLOT(finish()));
+}
+
+void View::InvoiceEditor::createConnections()
+{
+    connect(_autoIdCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(stateChangedOnAutoIdCheckBox()));
+    connect(_idLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(invoiceModified()));
+    connect(_autoIdCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(asignId()));
+    connect(_dateDateEdit, SIGNAL(dateChanged(QDate)),
+            this, SLOT(invoiceModified()));
+    connect(_entityIdLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(invoiceModified()));
+    connect(_entityNameLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(invoiceModified()));
+    connect(_entityRegisteredCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(stateChangedOnRegisteredCheckBox()));
+    connect(_operationEditor, SIGNAL(dataChanged()),
+            this, SLOT(invoiceModified()));
+    connect(_vatCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(stateChangedOnVatCheckBox()));
+    connect(_vatLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(invoiceModified()));
+    connect(_paidCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(invoiceModified()));
+    connect(_saveButton, SIGNAL(clicked()),
+            this, SLOT(save()));
+    connect(_finishButton, SIGNAL(clicked()),
+            this, SLOT(finish()));
 }
 
 void View::InvoiceEditor::loadInvoice()
 {
-    _idLineEdit -> setText(QString::number(_invoice -> id()));
+    asignId();
     _dateDateEdit -> setDate(_invoice -> date());
     _entityIdLineEdit -> setText(QString::number((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerId() : _invoice -> sellerId()));
     _entityNameLineEdit -> setText(((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerName() : _invoice -> sellerName()));

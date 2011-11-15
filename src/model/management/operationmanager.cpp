@@ -22,12 +22,12 @@
 #include "productmanager.h"
 #include "sqlagent.h"
 
-QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllByInvoice(int id)
+QList<Model::Domain::Operation> *Model::Management::OperationManager::getAllByInvoice(int id)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("SELECT * FROM operation WHERE invoice=%1").arg(id);
     QVector<QVector<QVariant> > *result = agent -> select(sql);
-    QList<Model::Domain::Operation *> *operations = new QList<Model::Domain::Operation *>();
+    QList<Model::Domain::Operation> *operations = new QList<Model::Domain::Operation>();
 
     foreach(QVector<QVariant> row, *result) {
         int id                          = row.at(0).toInt();
@@ -37,7 +37,7 @@ QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllBy
         double weight                   = row.at(4).toDouble();
         double price                    = row.at(5).toDouble();
 
-        operations -> push_back(new Model::Domain::Operation(id, product, quantity, weight, price));
+        operations -> push_back(Model::Domain::Operation(id, product, quantity, weight, price));
     }
 
     delete result;
@@ -45,12 +45,12 @@ QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllBy
     return operations;
 }
 
-QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllByProduct(const Model::Domain::Product &product)
+QList<Model::Domain::Operation> *Model::Management::OperationManager::getAllByProduct(const Model::Domain::Product &product)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("SELECT * FROM operation WHERE product=%1").arg(product.id());
     QVector<QVector<QVariant> > *result = agent -> select(sql);
-    QList<Model::Domain::Operation *> *operations = new QList<Model::Domain::Operation *>();
+    QList<Model::Domain::Operation> *operations = new QList<Model::Domain::Operation>();
 
     foreach(QVector<QVariant> row, *result) {
         int id                          = row.at(0).toInt();
@@ -58,7 +58,7 @@ QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllBy
         double weight                   = row.at(4).toDouble();
         double price                    = row.at(5).toDouble();
 
-        operations -> push_back(new Model::Domain::Operation(id, new Model::Domain::Product(product), quantity, weight, price));
+        operations -> push_back(Model::Domain::Operation(id, new Model::Domain::Product(product), quantity, weight, price));
     }
 
     delete result;

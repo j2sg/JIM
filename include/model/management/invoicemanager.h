@@ -36,8 +36,8 @@ namespace Model
             static bool modify(const Model::Domain::Invoice &invoice);
             static bool remove(int id);
             static Model::Domain::Invoice *get(int id);
-            static QList<Model::Domain::Invoice *> *getAllByType(Model::Domain::InvoiceType type);
-            static QList<Model::Domain::Invoice *> *getAll();
+            static QList<Model::Domain::Invoice> *getAllByType(Model::Domain::InvoiceType type);
+            static QList<Model::Domain::Invoice> *getAll();
             static int getId();
         };
     }
