@@ -34,6 +34,7 @@ namespace View
         QList<Model::Domain::Product> *products();
         void setProducts(QList<Model::Domain::Product> *products);
         bool insertProduct(int k, const Model::Domain::Product &product);
+        bool modifyProduct(int k, const Model::Domain::Product &product);
         bool removeProduct(int k);
         int rowCount(const QModelIndex &parent) const;
         int columnCount(const QModelIndex &parent) const;

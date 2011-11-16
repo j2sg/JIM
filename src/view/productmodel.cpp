@@ -48,6 +48,15 @@ bool View::ProductModel::insertProduct(int k, const Model::Domain::Product &prod
     return true;
 }
 
+bool View::ProductModel::modifyProduct(int k, const Model::Domain::Product &product)
+{
+    if(k < 0  || k > _products -> size())
+        return false;
+    _products -> replace(k, product);
+    reset();
+    return true;
+}
+
 bool View::ProductModel::removeProduct(int k)
 {
     if(k < 0  || k > _products -> size())

@@ -71,9 +71,14 @@ void View::ProductEditor::modProduct()
     int row = _productsTableView -> currentIndex().row();
     Model::Domain::Product product = _productModel -> products() -> at(row);
     ProductDialog dialog(&product);
-    if(dialog.exec() == QDialog::Accepted)
+    if(dialog.exec() == QDialog::Accepted) {
         if(!Model::Management::ProductManager::modify(product))
             QMessageBox::critical(this, tr("Critical Error"), tr("Error during the product modification"),QMessageBox::Ok);
+        else {
+            int row = _productsTableView -> currentIndex().row();
+            _productModel->modifyProduct(row, product);
+        }
+    }
 }
 
 void View::ProductEditor::delProduct()
@@ -99,9 +104,12 @@ void View::ProductEditor::createWidgets()
     _productsTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     _addProductButton = new QPushButton(tr("&Add"));
+    _addProductButton -> setIcon(QIcon(":/images/add.png"));
     _modProductButton = new QPushButton(tr("&Modify"));
+    _modProductButton -> setIcon(QIcon(":/images/modify.png"));
     _modProductButton -> setEnabled(false);
     _delProductButton = new QPushButton(tr("&Delete"));
+    _delProductButton -> setIcon(QIcon(":/images/delete.png"));
     _delProductButton -> setEnabled(false);
 
     QGridLayout *topLayout = new QGridLayout;
@@ -113,7 +121,8 @@ void View::ProductEditor::createWidgets()
     QGroupBox *productsGroupBox = new QGroupBox(tr("&Products List"));
     productsGroupBox->setLayout(topLayout);
 
-    _closeButton = new QPushButton(tr("&Finish"));
+    _closeButton = new QPushButton(tr("&Close"));
+    _closeButton -> setIcon(QIcon(":/images/ok.png"));
     _closeButton -> setFixedSize(_closeButton -> sizeHint());
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
