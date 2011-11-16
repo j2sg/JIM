@@ -29,6 +29,8 @@
 
 #define DATE_FORMAT "yyyy-M-d"
 
+#define IS_NEW(id) (id == NO_ID)
+
 namespace View
 {
     typedef enum

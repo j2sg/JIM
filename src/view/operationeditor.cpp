@@ -28,39 +28,9 @@
 View::OperationEditor::OperationEditor(QList<Model::Domain::Operation> *operations, QWidget *parent)
     : QWidget(parent)
 {
-    _operationsTableView = new QTableView;
-    _operationModel = new OperationModel(operations);
-    _operationsTableView -> setModel(_operationModel);
-    _operationsTableView -> setAlternatingRowColors(true);
-    _operationsTableView -> setShowGrid(false);
-    _operationsTableView -> setGridStyle(Qt::NoPen);
-    _operationsTableView -> setColumnWidth(ColumnOperationId, 50);
-    _operationsTableView -> setColumnWidth(ColumnOperationName, 150);
-    _operationsTableView -> setColumnWidth(ColumnOperationQuantity, 75);
-    _operationsTableView -> setColumnWidth(ColumnOperationWeight, 75);
-    _operationsTableView -> setColumnWidth(ColumnOperationPrice, 75);
-    _operationsTableView -> setColumnWidth(ColumnOperationTotal, 75);
-    _operationsTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
-    _operationsTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
-    _operationsTableView -> setEditTriggers(QAbstractItemView::AnyKeyPressed | QAbstractItemView::DoubleClicked);
-    connect(_operationsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(rowSelectionChanged()));
-    connect(_operationModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(dataChanged()));
-
-    _addOperationButton = new QPushButton(tr("Add"));
-    _modOperationButton = new QPushButton(tr("Modify"));
-    _modOperationButton -> setEnabled(false);
-    _delOperationButton = new QPushButton(tr("Delete"));
-    _delOperationButton -> setEnabled(false);
-    connect(_addOperationButton, SIGNAL(clicked()), this, SLOT(addOperation()));
-    connect(_modOperationButton, SIGNAL(clicked()), this, SLOT(modOperation()));
-    connect(_delOperationButton, SIGNAL(clicked()), this, SLOT(delOperation()));
-
-    QGridLayout *mainlayout = new QGridLayout;
-    mainlayout -> addWidget(_operationsTableView,0, 0, 1, 6);
-    mainlayout -> addWidget(_addOperationButton, 1, 3, 1, 1);
-    mainlayout -> addWidget(_modOperationButton, 1, 4, 1, 1);
-    mainlayout -> addWidget(_delOperationButton, 1, 5, 1, 1);
-    setLayout(mainlayout);
+    createWidgets();
+    createModel(operations);
+    createConnections();
 }
 
 QList<Model::Domain::Operation> *View::OperationEditor::operations()
@@ -99,4 +69,57 @@ void View::OperationEditor::delOperation()
     _operationsTableView->selectRow(row);
     _operationModel -> removeRows(row, 1);
     emit dataChanged();
+}
+
+void View::OperationEditor::createWidgets()
+{
+    _operationsTableView = new QTableView;
+    _operationsTableView -> setAlternatingRowColors(true);
+    _operationsTableView -> setShowGrid(false);
+    _operationsTableView -> setGridStyle(Qt::NoPen);
+    _operationsTableView -> setColumnWidth(View::ColumnOperationId, 30);
+    _operationsTableView -> setColumnWidth(View::ColumnOperationName, 300);
+    _operationsTableView -> setColumnWidth(View::ColumnOperationQuantity, 50);
+    _operationsTableView -> setColumnWidth(View::ColumnOperationWeight, 50);
+    _operationsTableView -> setColumnWidth(View::ColumnOperationPrice, 50);
+    _operationsTableView -> setColumnWidth(View::ColumnOperationTotal, 50);
+    _operationsTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
+    _operationsTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
+    _operationsTableView -> setEditTriggers(QAbstractItemView::AnyKeyPressed | QAbstractItemView::DoubleClicked);
+
+    _addOperationButton = new QPushButton(tr("Add"));
+    _addOperationButton -> setIcon(QIcon(":/images/add.png"));
+    _modOperationButton = new QPushButton(tr("Modify"));
+    _modOperationButton -> setIcon(QIcon(":/images/modify.png"));
+    _modOperationButton -> setEnabled(false);
+    _delOperationButton = new QPushButton(tr("Delete"));
+    _delOperationButton -> setIcon(QIcon(":/images/delete.png"));
+    _delOperationButton -> setEnabled(false);
+
+    QGridLayout *mainlayout = new QGridLayout;
+    mainlayout -> addWidget(_operationsTableView,0, 0, 1, 6);
+    mainlayout -> addWidget(_addOperationButton, 1, 3, 1, 1);
+    mainlayout -> addWidget(_modOperationButton, 1, 4, 1, 1);
+    mainlayout -> addWidget(_delOperationButton, 1, 5, 1, 1);
+    setLayout(mainlayout);
+}
+
+void View::OperationEditor::createModel(QList<Model::Domain::Operation> *operations)
+{
+    _operationModel = new OperationModel(operations);
+    _operationsTableView -> setModel(_operationModel);
+}
+
+void View::OperationEditor::createConnections()
+{
+    connect(_operationsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(rowSelectionChanged()));
+    connect(_operationModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+            this, SIGNAL(dataChanged()));
+    connect(_addOperationButton, SIGNAL(clicked()),
+            this, SLOT(addOperation()));
+    connect(_modOperationButton, SIGNAL(clicked()),
+            this, SLOT(modOperation()));
+    connect(_delOperationButton, SIGNAL(clicked()),
+            this, SLOT(delOperation()));
 }

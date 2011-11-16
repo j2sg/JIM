@@ -60,7 +60,7 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
 bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &invoice)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("UPDATE invoice SET type=%2, date='%3', buyerId=%4, buyerName='%5', sellerId=%6, sellerName='%7', vat=%8, paid=%9, notes=%10 WHERE id=%1")
+    QString sql = QString("UPDATE invoice SET type=%2, date='%3', buyerId=%4, buyerName='%5', sellerId=%6, sellerName='%7', vat=%8, paid=%9, notes='%10' WHERE id=%1")
                       .arg(invoice.id())
                       .arg(static_cast<int>(invoice.type()))
                       .arg(invoice.date().toString(DATE_FORMAT))
@@ -74,28 +74,20 @@ bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &inv
 
     bool res = agent -> update(sql);
 
-    QListIterator<Model::Domain::Operation> iterator(*Model::Management::OperationManager::getAllByInvoice(invoice.id()));
-    while(iterator.hasNext() && res) {
-        if(!((invoice.operations()) -> contains(iterator.next()))) {
-            Model::Domain::Operation operation = iterator.next();
-            sql = QString("DELETE FROM operation WHERE id=%1 AND invoice=%2")
-                    .arg(operation.id())
-                    .arg(invoice.id());
-            res = agent -> _delete(sql);
-        }
-    }
+    sql = QString("DELETE FROM operation WHERE invoice=%1").arg(invoice.id());
+    res = agent -> _delete(sql);
 
-    iterator = QListIterator<Model::Domain::Operation>(*invoice.operations());
+    QListIterator<Model::Domain::Operation> iterator(*invoice.operations());
     while(iterator.hasNext() && res) {
         Model::Domain::Operation operation = iterator.next();
-        sql = QString("UPDATE operation SET product=%3, quantity=%4, weight=%5, price=%6 WHERE id=%1 AND invoice=%2")
-                .arg(operation.id())
-                .arg(invoice.id())
-                .arg(operation.product()->id())
-                .arg(operation.quantity())
-                .arg(operation.weight())
-                .arg(operation.price());
-        res = agent -> update(sql);
+        sql = QString("INSERT INTO operation VALUES(%1, %2, %3, %4, %5, %6)")
+                           .arg(operation.id())
+                           .arg(invoice.id())
+                           .arg(operation.product() -> id())
+                           .arg(operation.quantity())
+                           .arg(operation.weight())
+                           .arg(operation.price());
+        res = agent -> insert(sql);
     }
 
     return res;

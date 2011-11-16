@@ -12,5 +12,11 @@
         <file>images/about.png</file>
         <file>images/manageproduct.png</file>
         <file>images/package.png</file>
+        <file>images/ok.png</file>
+        <file>images/delete.png</file>
+        <file>images/entity.png</file>
+        <file>images/cancel.png</file>
+        <file>images/modify.png</file>
+        <file>images/add.png</file>
     </qresource>
 </RCC>

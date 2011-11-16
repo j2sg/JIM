@@ -30,8 +30,7 @@ View::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *par
 {
     createWidgets();
     createConnections();
-    setWindowTitle(tr("%1 Invoice %2").arg((_invoice -> type()) ? "Sale" : "Buy")
-                   .arg(((invoice->id() != NO_ID) ? QString::number(invoice->id()) : "")+"[*]"));
+    setTitle();
     setMinimumWidth(500);
     setAttribute(Qt::WA_DeleteOnClose);
     loadInvoice();
@@ -53,15 +52,14 @@ void View::InvoiceEditor::closeEvent(QCloseEvent *event)
 
 void View::InvoiceEditor::stateChangedOnAutoIdCheckBox()
 {
-    bool isChecked = _autoIdCheckBox -> isChecked();
-    _idLineEdit -> setEnabled(!isChecked);
+    _idLineEdit -> setEnabled(!_autoIdCheckBox -> isChecked());
 }
 
 void View::InvoiceEditor::stateChangedOnRegisteredCheckBox()
 {
     bool isChecked = _entityRegisteredCheckBox -> isChecked();
-    _entityIdLineEdit -> setEnabled(isChecked);
     _entityNameLineEdit -> setEnabled(!isChecked);
+    _selectEntityPushButton -> setEnabled(isChecked);
 }
 
 void View::InvoiceEditor::stateChangedOnVatCheckBox()
@@ -69,11 +67,29 @@ void View::InvoiceEditor::stateChangedOnVatCheckBox()
     _vatLineEdit -> setEnabled(_vatCheckBox -> isChecked());
 }
 
-void View::InvoiceEditor::asignId()
+void View::InvoiceEditor::asignInvoiceId()
 {
-    int autoId = (_autoIdCheckBox -> isChecked() ? Model::Management::InvoiceManager::getId() : _invoice -> id());
-    QString id = (autoId != NO_ID ? QString::number(autoId) : "");
-    _idLineEdit -> setText(id);
+    int id = (_autoIdCheckBox -> isChecked() ? Model::Management::InvoiceManager::getId() : _invoice -> id());
+    QString idString = (!IS_NEW(id) ? QString::number(id) : "");
+    _idLineEdit -> setText(idString);
+}
+
+void View::InvoiceEditor::asignEntityId()
+{
+    int id = (_invoice -> type() == Model::Domain::Sale ? _invoice -> buyerId() : _invoice -> sellerId());
+    QString idString = (!IS_NEW(id) ? QString::number(id) : "");
+    _entityIdLineEdit -> setText(idString);
+}
+
+void View::InvoiceEditor::selectEntity()
+{
+
+}
+
+void View::InvoiceEditor::totalChanged()
+{
+    _totalTotalLabel -> setText("<h2><font color=green>" + QString::number(_invoice -> total(), 'f', PRECISION_MONEY)
+                                + " "+ QString::fromUtf8("€") + "</font></h2>");
 }
 
 void View::InvoiceEditor::invoiceModified(bool modified)
@@ -117,8 +133,9 @@ void View::InvoiceEditor::createWidgets()
     entityLayout -> addWidget(_entityIdLabel, 0, 0);
     entityLayout -> addWidget(_entityIdLineEdit, 0, 1);
     entityLayout -> addWidget(_entityRegisteredCheckBox, 0, 2);
+    entityLayout -> addWidget(_selectEntityPushButton, 0, 3);
     entityLayout -> addWidget(_entityNameLabel, 1, 0, 1, 1);
-    entityLayout -> addWidget(_entityNameLineEdit, 1, 1, 1, 2);
+    entityLayout -> addWidget(_entityNameLineEdit, 1, 1, 1, 3);
 
     QGroupBox *entityGroupBox = new QGroupBox(tr("%1").
                                               arg((_invoice -> type() == Model::Domain::Sale)
@@ -136,6 +153,7 @@ void View::InvoiceEditor::createWidgets()
     paymentLayout -> addWidget(_vatCheckBox);
     paymentLayout -> addWidget(_vatLineEdit);
     paymentLayout -> addWidget(_totalLabel);
+    paymentLayout -> addWidget(_totalTotalLabel);
     paymentLayout -> addWidget(_paidCheckBox);
 
     QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
@@ -163,7 +181,7 @@ void View::InvoiceEditor::createIdWidgets()
     _idLabel = new QLabel(tr("&Id: "));
     _idLineEdit = new QLineEdit;
     _idLabel -> setBuddy(_idLineEdit);
-    _idLineEdit -> setEnabled(false);
+    _idLineEdit -> setEnabled((_invoice -> id() != NO_ID));
     _autoIdCheckBox = new QCheckBox(tr("Auto &Generate"));
     _autoIdCheckBox -> setChecked((_invoice -> id() == NO_ID));
 
@@ -177,6 +195,8 @@ void View::InvoiceEditor::createEntityWidgets()
     _entityIdLabel = new QLabel(tr("Id: "));
     _entityIdLineEdit = new QLineEdit;
     _entityIdLabel -> setBuddy(_entityIdLineEdit);
+    _entityIdLineEdit -> setEnabled(false);
+
     _entityRegisteredCheckBox = new QCheckBox(tr("Registered"));
     _entityRegisteredCheckBox -> setChecked(true);
 
@@ -184,6 +204,9 @@ void View::InvoiceEditor::createEntityWidgets()
     _entityNameLineEdit = new QLineEdit;
     _entityNameLabel -> setBuddy(_entityNameLineEdit);
     _entityNameLineEdit->setEnabled(false);
+
+    _selectEntityPushButton = new QPushButton(tr("Select"));
+    _selectEntityPushButton -> setIcon(QIcon(":/images/entity.png"));
 }
 
 void View::InvoiceEditor::createOperationsWidgets()
@@ -199,6 +222,7 @@ void View::InvoiceEditor::createPaymentWidgets()
     _vatLineEdit = new QLineEdit;
     _vatLineEdit -> setEnabled(false);
     _totalLabel = new QLabel(tr("Total: "));
+    _totalTotalLabel = new QLabel;
     _paidCheckBox = new QCheckBox(tr("Paid"));
     _paidCheckBox -> setChecked(false);
 }
@@ -206,8 +230,10 @@ void View::InvoiceEditor::createPaymentWidgets()
 void View::InvoiceEditor::createButtonsWidgets()
 {
     _saveButton = new QPushButton(tr("Save"));
+    _saveButton -> setIcon(QIcon(":/images/ok.png"));
     _saveButton -> setEnabled(false);
     _finishButton = new QPushButton(tr("&Finish"));
+    _finishButton -> setIcon(QIcon(":/images/cancel.png"));
     _finishButton -> setDefault(true);
 }
 
@@ -218,7 +244,7 @@ void View::InvoiceEditor::createConnections()
     connect(_idLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(invoiceModified()));
     connect(_autoIdCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(asignId()));
+            this, SLOT(asignInvoiceId()));
     connect(_dateDateEdit, SIGNAL(dateChanged(QDate)),
             this, SLOT(invoiceModified()));
     connect(_entityIdLineEdit, SIGNAL(textChanged(QString)),
@@ -227,8 +253,14 @@ void View::InvoiceEditor::createConnections()
             this, SLOT(invoiceModified()));
     connect(_entityRegisteredCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnRegisteredCheckBox()));
+    connect(_entityRegisteredCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(asignEntityId()));
+    connect(_selectEntityPushButton, SIGNAL(clicked()),
+            this, SLOT(selectEntity()));
     connect(_operationEditor, SIGNAL(dataChanged()),
             this, SLOT(invoiceModified()));
+    connect(_operationEditor, SIGNAL(dataChanged()),
+            this, SLOT(totalChanged()));
     connect(_vatCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnVatCheckBox()));
     connect(_vatLineEdit, SIGNAL(textChanged(QString)),
@@ -241,19 +273,28 @@ void View::InvoiceEditor::createConnections()
             this, SLOT(finish()));
 }
 
+void View::InvoiceEditor::setTitle()
+{
+    setWindowTitle(tr("%1 Invoice %2").arg((_invoice -> type()) ? tr("Sale") : tr("Buy"))
+                   .arg(((_invoice->id() != NO_ID) ? ("#"+QString::number(_invoice->id())) : tr("New"))+"[*]"));
+}
+
 void View::InvoiceEditor::loadInvoice()
 {
-    asignId();
+    asignInvoiceId();
     _dateDateEdit -> setDate(_invoice -> date());
-    _entityIdLineEdit -> setText(QString::number((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerId() : _invoice -> sellerId()));
+    asignEntityId();
     _entityNameLineEdit -> setText(((_invoice -> type() == Model::Domain::Sale) ? _invoice -> buyerName() : _invoice -> sellerName()));
     _vatLineEdit -> setText(QString::number(_invoice -> vat(), 'f', PRECISION_VAT));
     _paidCheckBox -> setChecked(_invoice -> paid());
+    totalChanged();
+
     invoiceModified(false);
 }
 
 bool View::InvoiceEditor::saveInvoice()
 {
+    bool newInvoice = _invoice->id() == NO_ID;
     _invoice -> setId(_idLineEdit -> text().toInt());
     _invoice -> setDate(_dateDateEdit -> date());
     if(_invoice->type() == Model::Domain::Sale) {
@@ -265,15 +306,16 @@ bool View::InvoiceEditor::saveInvoice()
     }
     _invoice -> setVat(_vatLineEdit -> text().toDouble());
     _invoice -> setPaid(_paidCheckBox -> isChecked());
-    return Model::Management::InvoiceManager::create(*_invoice);
+
+    setTitle();
+
+    return (newInvoice ? Model::Management::InvoiceManager::create(*_invoice) : Model::Management::InvoiceManager::modify(*_invoice));
 }
 
 bool View::InvoiceEditor::isSaveable()
 {
     return !(_idLineEdit -> text().isEmpty()) &&
-           !(_entityIdLineEdit -> text().isEmpty()) &&
            !(_entityNameLineEdit->text().isEmpty()) &&
-           !(_operationEditor -> operations() -> isEmpty()) &&
            !(_vatLineEdit -> text().isEmpty());
 }
 

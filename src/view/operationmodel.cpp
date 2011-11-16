@@ -52,6 +52,15 @@ int View::OperationModel::columnCount(const QModelIndex &parent) const
     return ColumnOperationCount;
 }
 
+int View::OperationModel::getOperationId() const
+{
+    int max = -1;
+    foreach(Model::Domain::Operation operation, *_operations)
+        if(operation.id() > max)
+            max = operation.id();
+    return max + 1;
+}
+
 QVariant View::OperationModel::data(const QModelIndex &index, int role) const
 {
     if(index.isValid()) {
@@ -132,7 +141,7 @@ bool View::OperationModel::insertRows(int row, int count, const QModelIndex &par
     Q_UNUSED(parent);
     beginInsertRows(QModelIndex(), row, row + count - 1);
     for(int k = 1;k <= count; ++k)
-        _operations -> insert(row, Model::Domain::Operation(row + k));
+        _operations -> insert(row, Model::Domain::Operation(getOperationId()));
     endInsertRows();
     return true;
 }

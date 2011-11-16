@@ -48,6 +48,10 @@ namespace View
         void modOperation();
         void delOperation();
     private:
+        void createWidgets();
+        void createModel(QList<Model::Domain::Operation> *operations);
+        void createConnections();
+
         QTableView *_operationsTableView;
         OperationModel *_operationModel;
         QPushButton *_addOperationButton;

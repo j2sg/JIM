@@ -27,17 +27,17 @@ QList<Model::Domain::Operation> *Model::Management::OperationManager::getAllByIn
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("SELECT * FROM operation WHERE invoice=%1").arg(id);
     QVector<QVector<QVariant> > *result = agent -> select(sql);
-    QList<Model::Domain::Operation> *operations = new QList<Model::Domain::Operation>();
+    QList<Model::Domain::Operation> *operations = new QList<Model::Domain::Operation>;
 
     foreach(QVector<QVariant> row, *result) {
-        int id                          = row.at(0).toInt();
+        int operationId                 = row.at(0).toInt();
         int productId                   = row.at(2).toInt();
         Model::Domain::Product *product = Model::Management::ProductManager::get(productId);
         int quantity                    = row.at(3).toInt();
         double weight                   = row.at(4).toDouble();
         double price                    = row.at(5).toDouble();
 
-        operations -> push_back(Model::Domain::Operation(id, product, quantity, weight, price));
+        operations -> push_back(Model::Domain::Operation(operationId, product, quantity, weight, price));
     }
 
     delete result;

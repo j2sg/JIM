@@ -59,7 +59,10 @@ namespace View
         void stateChangedOnAutoIdCheckBox();
         void stateChangedOnRegisteredCheckBox();
         void stateChangedOnVatCheckBox();
-        void asignId();
+        void asignInvoiceId();
+        void asignEntityId();
+        void selectEntity();
+        void totalChanged();
         void invoiceModified(bool modified = true);
         void save();
         void finish();
@@ -71,6 +74,7 @@ namespace View
         void createPaymentWidgets();
         void createButtonsWidgets();
         void createConnections();
+        void setTitle();
         void loadInvoice();
         bool saveInvoice();
         bool isSaveable();
@@ -86,10 +90,12 @@ namespace View
         QCheckBox *_entityRegisteredCheckBox;
         QLabel *_entityNameLabel;
         QLineEdit *_entityNameLineEdit;
+        QPushButton *_selectEntityPushButton;
         OperationEditor *_operationEditor;
         QCheckBox *_vatCheckBox;
         QLineEdit *_vatLineEdit;
         QLabel *_totalLabel;
+        QLabel *_totalTotalLabel;
         QCheckBox *_paidCheckBox;
         QPushButton *_saveButton;
         QPushButton *_finishButton;

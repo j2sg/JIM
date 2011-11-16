@@ -35,6 +35,7 @@ namespace View
         void setOperations(QList<Model::Domain::Operation> *operations);
         int rowCount(const QModelIndex &parent) const;
         int columnCount(const QModelIndex &parent) const;
+        int getOperationId() const;
         QVariant data(const QModelIndex &index, int role) const;
         bool setData(const QModelIndex &index, const QVariant &value, int role);
         bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
