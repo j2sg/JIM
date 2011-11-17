@@ -27,7 +27,7 @@
 bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &invoice)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("INSERT INTO invoice VALUES(%1, %2, '%3', %4, '%5', %6, '%7', %8, %9, '%10')")
+    QString sql = QString("INSERT INTO invoice VALUES(%1, %2, '%3', %4, '%5', %6, '%7', %8, %9, %10, '%11')")
                       .arg(invoice.id())
                       .arg(static_cast<int>(invoice.type()))
                       .arg(invoice.date().toString(DATE_FORMAT))
@@ -37,6 +37,7 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
                       .arg(invoice.sellerName())
                       .arg(invoice.vat())
                       .arg(invoice.paid())
+                      .arg(invoice.payment())
                       .arg(invoice.notes());
 
     bool res = agent -> insert(sql);
@@ -60,7 +61,8 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
 bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &invoice)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("UPDATE invoice SET type=%2, date='%3', buyerId=%4, buyerName='%5', sellerId=%6, sellerName='%7', vat=%8, paid=%9, notes='%10' WHERE id=%1")
+    QString sql = QString("UPDATE invoice SET type=%2, date='%3', buyerId=%4, buyerName='%5', "
+                          "sellerId=%6, sellerName='%7', vat=%8, paid=%9, payment=%10, notes='%11' WHERE id=%1")
                       .arg(invoice.id())
                       .arg(static_cast<int>(invoice.type()))
                       .arg(invoice.date().toString(DATE_FORMAT))
@@ -70,6 +72,7 @@ bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &inv
                       .arg(invoice.sellerName())
                       .arg(invoice.vat())
                       .arg(invoice.paid())
+                      .arg(invoice.payment())
                       .arg(invoice.notes());
 
     bool res = agent -> update(sql);
@@ -109,16 +112,19 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id)
     Model::Domain::Invoice *invoice = 0;
 
     if(!(result -> isEmpty())) {
-        int id                          = (result -> at(0)).at(0).toInt();
-        Model::Domain::InvoiceType type = static_cast<Model::Domain::InvoiceType>((result -> at(0)).at(1).toInt());
-        QDate date                      = (result -> at(0)).at(2).toDate();
-        int buyerId                     = (result -> at(0)).at(3).toInt();
-        QString buyerName               = (result -> at(0)).at(4).toString();
-        int sellerId                    = (result -> at(0)).at(5).toInt();
-        QString sellerName              = (result -> at(0)).at(6).toString();
-        double vat                      = (result -> at(0)).at(7).toDouble();
-        bool paid                       = (result -> at(0)).at(8).toBool();
-        QString notes                   = (result -> at(0)).at(9).toString();
+        int id             = (result -> at(0)).at(0).toInt();
+        Model::Domain::InvoiceType type
+                           = static_cast<Model::Domain::InvoiceType>((result -> at(0)).at(1).toInt());
+        QDate date         = (result -> at(0)).at(2).toDate();
+        int buyerId        = (result -> at(0)).at(3).toInt();
+        QString buyerName  = (result -> at(0)).at(4).toString();
+        int sellerId       = (result -> at(0)).at(5).toInt();
+        QString sellerName = (result -> at(0)).at(6).toString();
+        double vat         = (result -> at(0)).at(7).toDouble();
+        bool paid          = (result -> at(0)).at(8).toBool();
+        Model::Domain::PaymentType payment
+                           = static_cast<Model::Domain::PaymentType>((result -> at(0)).at(9).toInt());
+        QString notes      = (result -> at(0)).at(10).toString();
         invoice = new Model::Domain::Invoice(id, type);
         invoice -> setDate(date);
         invoice -> setBuyerId(buyerId);
@@ -128,6 +134,7 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id)
         invoice -> setOperations(Model::Management::OperationManager::getAllByInvoice(id));
         invoice -> setVat(vat);
         invoice -> setPaid(paid);
+        invoice -> setPayment(payment);
         invoice -> setNotes(notes);
     }
 
@@ -144,16 +151,19 @@ QList<Model::Domain::Invoice> *Model::Management::InvoiceManager::getAllByType(M
     QList<Model::Domain::Invoice> *invoices = new QList<Model::Domain::Invoice>;
 
     foreach(QVector<QVariant> row, *result) {
-        int id                          = row.at(0).toInt();
-        Model::Domain::InvoiceType type = static_cast<Model::Domain::InvoiceType>(row.at(1).toInt());
-        QDate date                      = row.at(2).toDate();
-        int buyerId                     = row.at(3).toInt();
-        QString buyerName               = row.at(4).toString();
-        int sellerId                    = row.at(5).toInt();
-        QString sellerName              = row.at(6).toString();
-        double vat                      = row.at(7).toDouble();
-        bool paid                       = row.at(8).toBool();
-        QString notes                   = row.at(9).toString();
+        int id             = row.at(0).toInt();
+        Model::Domain::InvoiceType type
+                           = static_cast<Model::Domain::InvoiceType>(row.at(1).toInt());
+        QDate date         = row.at(2).toDate();
+        int buyerId        = row.at(3).toInt();
+        QString buyerName  = row.at(4).toString();
+        int sellerId       = row.at(5).toInt();
+        QString sellerName = row.at(6).toString();
+        double vat         = row.at(7).toDouble();
+        bool paid          = row.at(8).toBool();
+        Model::Domain::PaymentType payment
+                           = static_cast<Model::Domain::PaymentType>(row.at(9).toInt());
+        QString notes      = row.at(10).toString();
         Model::Domain::Invoice invoice(id, type);
         invoice.setDate(date);
         invoice.setBuyerId(buyerId);
@@ -163,6 +173,7 @@ QList<Model::Domain::Invoice> *Model::Management::InvoiceManager::getAllByType(M
         invoice.setOperations(Model::Management::OperationManager::getAllByInvoice(id));
         invoice.setVat(vat);
         invoice.setPaid(paid);
+        invoice.setPayment(payment);
         invoice.setNotes(notes);
 
         invoices -> push_back(invoice);

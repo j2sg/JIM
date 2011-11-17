@@ -141,6 +141,7 @@ bool Persistence::Manager::createSQLiteSchema()
                                    "sellerName TEXT    CONSTRAINT invoice_sellername_nn_ct NOT NULL,\n"
                                    "vat        REAL,\n"
                                    "paid       INTEGER CONSTRAINT invoice_paid_nn_ct NOT NULL,\n"
+                                   "payment    INTEGER CONSTRAINT invoice_payment_nn_ct NOT NULL,\n"
                                    "notes      TEXT,\n"
                                    "CONSTRAINT invoice_pk_ct PRIMARY KEY(id),\n"
                                    "CONSTRAINT invoice_type_chk_ct CHECK(type=0 OR type=1),\n"

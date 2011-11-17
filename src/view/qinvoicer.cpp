@@ -61,13 +61,13 @@ void View::QInvoicer::closeEvent(QCloseEvent *event)
 
 void View::QInvoicer::createSaleInvoice()
 {
-    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(NO_ID, Model::Domain::Sale));
+    View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(NO_ID, Model::Domain::Sale));
     editor -> show();
 }
 
 void View::QInvoicer::createBuyInvoice()
 {
-    InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(NO_ID, Model::Domain::Buy));
+    View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(NO_ID, Model::Domain::Buy));
     editor -> show();
 }
 
@@ -81,7 +81,7 @@ void View::QInvoicer::loadInvoice()
         if(!invoice)
             QMessageBox::critical(this, tr("Critical error"), tr("Not exists any invoice with that Id"), QMessageBox::Ok);
         else {
-            InvoiceEditor *editor = createInvoiceEditor(invoice);
+            View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(invoice);
             editor->show();
         }
     }
@@ -90,7 +90,7 @@ void View::QInvoicer::loadInvoice()
 void View::QInvoicer::manageProduct()
 {
     if(!_productEditor) {
-        _productEditor = new ProductEditor;
+        _productEditor = new View::Management::ProductEditor;
         connect(_productEditor, SIGNAL(finished()), this, SLOT(currentSubWindowFinished()));
         connect(_productEditor, SIGNAL(destroyed(QObject*)), this, SLOT(restore(QObject *)));
         _mdiArea->addSubWindow(_productEditor);
@@ -326,9 +326,9 @@ void View::QInvoicer::createConnections()
             this, SLOT(about()));
 }
 
-View::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Domain::Invoice *invoice)
+View::Invoicing::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Domain::Invoice *invoice)
 {
-    InvoiceEditor *editor = new InvoiceEditor(invoice);
+    View::Invoicing::InvoiceEditor *editor = new View::Invoicing::InvoiceEditor(invoice);
     connect(editor, SIGNAL(saved(Model::Domain::Invoice *)), this, SLOT(invoiceSaved(Model::Domain::Invoice *)));
     connect(editor, SIGNAL(finished()), this, SLOT(currentSubWindowFinished()));
     _mdiArea -> addSubWindow(editor);

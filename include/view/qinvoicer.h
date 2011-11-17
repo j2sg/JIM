@@ -44,8 +44,13 @@ namespace Model
 
 namespace View
 {
-    class InvoiceEditor;
-    class ProductEditor;
+    namespace Invoicing {
+        class InvoiceEditor;
+    }
+
+    namespace Management {
+        class ProductEditor;
+    }
 
     class QInvoicer : public QMainWindow
     {
@@ -77,7 +82,7 @@ namespace View
         void createToolBar();
         void createStatusBar();
         void createConnections();
-        InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
+        View::Invoicing::InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
         bool verifyExit();
 
         QMdiArea *_mdiArea;
@@ -107,7 +112,7 @@ namespace View
         QToolBar *_invoicingToolBar;
         QToolBar *_managementToolBar;
         QToolBar *_reportToolBar;
-        ProductEditor *_productEditor;
+        View::Management::ProductEditor *_productEditor;
     };
 }
 

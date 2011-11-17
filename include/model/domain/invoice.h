@@ -60,10 +60,12 @@ namespace Model
             double vat() const;
             void setPaid(bool paid);
             bool paid() const;
+            void setPayment(PaymentType payment);
+            PaymentType payment() const;
             void setNotes(const QString &notes);
             const QString &notes() const;
+            double subtotal() const;
             double total() const;
-
         private:
             int _id;
             InvoiceType _type;
@@ -75,6 +77,7 @@ namespace Model
             QList<Model::Domain::Operation> *_operations;
             double _vat;
             bool _paid;
+            PaymentType _payment;
             QString _notes;
         };
         std::ostream &operator<<(std::ostream &os, const Invoice &invoice);

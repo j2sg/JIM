@@ -68,6 +68,13 @@ namespace Model
             Units,
             Weight
         } PriceType;
+
+        typedef enum
+        {
+            Cash,
+            Card,
+            Transfer
+        } PaymentType;
     }
 }
 

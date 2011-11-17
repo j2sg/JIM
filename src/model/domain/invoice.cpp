@@ -31,6 +31,7 @@ Model::Domain::Invoice::Invoice(int id, Model::Domain::InvoiceType type)
     _operations = new QList<Model::Domain::Operation>;
     _vat = 0.0;
     _paid = false;
+    _payment = Model::Domain::Cash;
     _notes = QString();
 }
 
@@ -55,6 +56,7 @@ Model::Domain::Invoice &Model::Domain::Invoice::operator=(const Invoice &invoice
     _sellerName = invoice._sellerName;
     _vat        = invoice._vat;
     _paid       = invoice._paid;
+    _payment    = invoice._payment;
     _notes      = invoice._notes;
     foreach(Model::Domain::Operation operation, *invoice._operations)
         _operations -> push_back(Model::Domain::Operation(operation));
@@ -164,6 +166,16 @@ bool Model::Domain::Invoice::paid() const
     return _paid;
 }
 
+void Model::Domain::Invoice::setPayment(Model::Domain::PaymentType payment)
+{
+    _payment = payment;
+}
+
+Model::Domain::PaymentType Model::Domain::Invoice::payment() const
+{
+    return _payment;
+}
+
 void Model::Domain::Invoice::setNotes(const QString &notes)
 {
     _notes = notes;
@@ -174,12 +186,17 @@ const QString &Model::Domain::Invoice::notes() const
     return _notes;
 }
 
+double Model::Domain::Invoice::subtotal() const
+{
+    double res = 0.0;
+    for(int k = 0;k < _operations -> size(); ++k)
+        res += (_operations -> at(k)).total();
+    return res;
+}
+
 double Model::Domain::Invoice::total() const
 {
-    double total = 0.0;
-    for(int k = 0;k < _operations -> size(); ++k)
-        total += (_operations -> at(k)).total();
-    return total;
+    return subtotal()*(1 + _vat/100.0);
 }
 
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Invoice &invoice)
@@ -193,5 +210,6 @@ std::ostream &Model::Domain::operator<<(std::ostream &os, const Invoice &invoice
               << invoice._sellerName.toStdString()      << std::endl
               << invoice._vat                           << std::endl
               << invoice._paid                          << std::endl
+              << invoice._payment                       << std::endl
               << invoice._notes.toStdString()           << std::endl;
 }
