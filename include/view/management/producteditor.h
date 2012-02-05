@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,14 @@
 
 #include <QWidget>
 
+#define PRODUCT_EDITOR_MINIMUM_WIDTH 375
+#define CATEGORY_HEIGHT 150
+#define COLUMN_CATEGORY_ID_WIDTH 50
+#define COLUMN_CATEGORY_NAME_WIDTH 250
+#define COLUMN_PRODUCT_ID_WIDTH 50
+#define COLUMN_PRODUCT_NAME_WIDTH 150
+#define COLUMN_PRODUCT_PRICE_WIDTH 75
+
 QT_BEGIN_NAMESPACE
 class QTableView;
 class QPushButton;
@@ -33,6 +41,8 @@ namespace View
     namespace Management
     {
 
+        class CategoryModel;
+
         class ProductModel;
 
         class ProductEditor : public QWidget
@@ -41,19 +51,26 @@ namespace View
         public:
             ProductEditor(QWidget *parent = 0);
             ~ProductEditor();
-        protected:
-            void closeEvent(QCloseEvent *event);
-        signals:
-            void finished();
         private slots:
-            void rowSelectionChanged();
+            void rowSelectionChangedOnCategoriesTableView();
+            void addCategory();
+            void modCategory();
+            void delCategory();
+            void rowSelectionChangedOnProducsTableView();
             void addProduct();
             void modProduct();
             void delProduct();
         private:
             void createWidgets();
+            void createCategoryWidgets();
+            void createProductWidgets();
             void createConnections();
 
+            QTableView *_categoriesTableView;
+            CategoryModel *_categoryModel;
+            QPushButton *_addCategoryButton;
+            QPushButton *_modCategoryButton;
+            QPushButton *_delCategoryButton;
             QTableView *_productsTableView;
             ProductModel *_productModel;
             QPushButton *_addProductButton;

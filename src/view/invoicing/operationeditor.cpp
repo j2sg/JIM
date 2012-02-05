@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,73 +19,76 @@
  **/
 
 #include <QTableView>
+#include <QModelIndex>
 #include <QPushButton>
 #include <QGridLayout>
+#include <QMessageBox>
 #include "operationeditor.h"
+#include "operationtable.h"
 #include "operationmodel.h"
+#include "operation.h"
 #include "types.h"
 
-View::Invoicing::OperationEditor::OperationEditor(QList<Model::Domain::Operation> *operations, QWidget *parent)
+View::Invoicing::OperationEditor::OperationEditor(QList<Model::Domain::Operation *> *operations, QWidget *parent)
     : QWidget(parent)
 {
-    createWidgets();
-    createModel(operations);
+    createWidgets(operations);
     createConnections();
 }
 
-QList<Model::Domain::Operation> *View::Invoicing::OperationEditor::operations()
+void View::Invoicing::OperationEditor::setOperations(QList<Model::Domain::Operation *> *operations)
+{
+    _operationModel -> setOperations(operations);
+}
+
+QList<Model::Domain::Operation *> *View::Invoicing::OperationEditor::operations()
 {
     return _operationModel -> operations();
 }
 
 void View::Invoicing::OperationEditor::rowSelectionChanged()
 {
-    int row = _operationsTableView -> currentIndex().row();
+    int row = _operationsTable -> currentIndex().row();
     _modOperationButton -> setEnabled(row != -1);
     _delOperationButton -> setEnabled(row != -1);
 }
 
+void View::Invoicing::OperationEditor::productNotFound()
+{
+    QMessageBox::critical(this, tr("Critical error"), tr("Not exists any product with that Id"), QMessageBox::Ok);
+}
+
 void View::Invoicing::OperationEditor::addOperation()
 {
-    int row = _operationsTableView -> currentIndex().row();
+    int row = _operationsTable -> currentIndex().row();
     _operationModel -> insertRows(row + 1, 1);
     QModelIndex index = _operationModel -> index(row + 1, ColumnOperationId);
-    _operationsTableView -> setCurrentIndex(index);
-    _operationsTableView -> edit(index);
+    _operationsTable -> setCurrentIndex(index);
+    _operationsTable -> edit(index);
     emit dataChanged();
 }
 
 void View::Invoicing::OperationEditor::modOperation()
 {
-    int row = _operationsTableView -> currentIndex().row();
+    int row = _operationsTable -> currentIndex().row();
     QModelIndex index = _operationModel -> index(row, ColumnOperationId);
-    _operationsTableView -> setCurrentIndex(index);
-    _operationsTableView -> edit(index);
+    _operationsTable -> setCurrentIndex(index);
+    _operationsTable -> edit(index);
 }
 
 void View::Invoicing::OperationEditor::delOperation()
 {
-    int row = _operationsTableView->currentIndex().row();
-    _operationsTableView->selectRow(row);
+    int row = _operationsTable->currentIndex().row();
+    _operationsTable->selectRow(row);
     _operationModel -> removeRows(row, 1);
     emit dataChanged();
 }
 
-void View::Invoicing::OperationEditor::createWidgets()
+void View::Invoicing::OperationEditor::createWidgets(QList<Model::Domain::Operation *> *operations)
 {
-    _operationsTableView = new QTableView;
-    _operationsTableView -> setAlternatingRowColors(true);
-    _operationsTableView -> setShowGrid(false);
-    //_operationsTableView -> setGridStyle(Qt::NoPen);
-    _operationsTableView -> setColumnWidth(View::ColumnOperationId, 30);
-    _operationsTableView -> setColumnWidth(View::ColumnOperationName, 300);
-    _operationsTableView -> setColumnWidth(View::ColumnOperationQuantity, 50);
-    _operationsTableView -> setColumnWidth(View::ColumnOperationWeight, 50);
-    _operationsTableView -> setColumnWidth(View::ColumnOperationPrice, 50);
-    _operationsTableView -> setColumnWidth(View::ColumnOperationTotal, 50);
-    _operationsTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
-    _operationsTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
-    _operationsTableView -> setEditTriggers(QAbstractItemView::AnyKeyPressed | QAbstractItemView::DoubleClicked);
+    _operationsTable = new OperationTable;
+    _operationModel = new OperationModel(operations);
+    _operationsTable -> setModel(_operationModel);
 
     _addOperationButton = new QPushButton(tr("Add"));
     _addOperationButton -> setIcon(QIcon(":/images/add.png"));
@@ -97,24 +100,20 @@ void View::Invoicing::OperationEditor::createWidgets()
     _delOperationButton -> setEnabled(false);
 
     QGridLayout *mainlayout = new QGridLayout;
-    mainlayout -> addWidget(_operationsTableView,0, 0, 1, 6);
+    mainlayout -> addWidget(_operationsTable,0, 0, 1, 6);
     mainlayout -> addWidget(_addOperationButton, 1, 3, 1, 1);
     mainlayout -> addWidget(_modOperationButton, 1, 4, 1, 1);
     mainlayout -> addWidget(_delOperationButton, 1, 5, 1, 1);
     setLayout(mainlayout);
 }
 
-void View::Invoicing::OperationEditor::createModel(QList<Model::Domain::Operation> *operations)
-{
-    _operationModel = new OperationModel(operations);
-    _operationsTableView -> setModel(_operationModel);
-}
-
 void View::Invoicing::OperationEditor::createConnections()
 {
-    connect(_operationsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+    connect(_operationsTable -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(rowSelectionChanged()));
-    connect(_operationModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+    connect(_operationsTable, SIGNAL(productNotFound()),
+            this, SLOT(productNotFound()));
+    connect(_operationModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
             this, SIGNAL(dataChanged()));
     connect(_addOperationButton, SIGNAL(clicked()),
             this, SLOT(addOperation()));

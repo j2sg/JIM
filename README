@@ -1,6 +1,17 @@
-QInvoicer - Invoicing Software for SMBs (Small and Medium Business).
+QInvoicer
 
-To get more details in depth about the domain logic for this application , you should read doc/specification.txt
+- Description. 
+   
+   Invoicing Software for SMBs (Small and Medium Business). You should read doc/specification.txt
+   to get more details in depth about the domain logic for this application.
+
+- Implementation.
+
+   - Developed in C++ and Qt4 framework.
+   - Data to be saved in a SQLite database.
+   - Multiplatform. Works properly on GNU/Linux and Microsoft Windows operating systems.
+
+- Compilation.
 
 From a command prompt, type the commands below to:
 

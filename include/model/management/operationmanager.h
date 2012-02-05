@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 
 #include <QList>
 #include "operation.h"
-#include "product.h"
+#include "types.h"
 
 namespace Model
 {
@@ -32,8 +32,14 @@ namespace Model
         class OperationManager
         {
         public:
-            static QList<Model::Domain::Operation> *getAllByInvoice(int id);
-            static QList<Model::Domain::Operation> *getAllByProduct(const Model::Domain::Product &product);
+            static bool createAll(QList<Model::Domain::Operation *> *operations, int invoiceId,
+                                  Model::Domain::InvoiceType invoiceType, int businessId);
+            static bool removeAll(int invoiceId, Model::Domain::InvoiceType invoiceType,
+                                  int businessId);
+            static QList<Model::Domain::Operation *> *getAllByInvoice(int invoiceId,
+                                                                    Model::Domain::InvoiceType invoiceType,
+                                                                    int businessId);
+            static QList<Model::Domain::Operation *> *getAllByProduct(int productId);
         };
     }
 }

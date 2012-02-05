@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,20 +19,24 @@
  **/
 
 #include "invoice.h"
+#include "entity.h"
+#include "business.h"
+#include "operation.h"
+#include "product.h"
+#include "category.h"
 
-Model::Domain::Invoice::Invoice(int id, Model::Domain::InvoiceType type)
-    : _id(id), _type(type)
+Model::Domain::Invoice::Invoice(Entity *business, int id, InvoiceType type)
+    : _id(id), _type(type), _business(business)
 {
+    _entity = 0;
     _date = QDate::currentDate();
-    _buyerId = NO_ID;
-    _buyerName = QString();
-    _sellerId = NO_ID;
-    _sellerName = QString();
-    _operations = new QList<Model::Domain::Operation>;
-    _vat = 0.0;
+    _place = _notes = QString();
+    _operations = new QList<Operation *>;
+    _taxOnInvoice = (_business ? (_type == Sale ? _business -> taxOnSale() : _business -> taxOnBuy()) : ApplyAllTax);
+    for(int k = 0;k < TaxTypeCount;++k)
+        _tax[k] = (_business ? (_business -> tax())[k] : Tax(static_cast<TaxType>(k)));
     _paid = false;
-    _payment = Model::Domain::Cash;
-    _notes = QString();
+    _payment = Cash;
 }
 
 Model::Domain::Invoice::Invoice(const Invoice &invoice)
@@ -42,25 +46,46 @@ Model::Domain::Invoice::Invoice(const Invoice &invoice)
 
 Model::Domain::Invoice::~Invoice()
 {
-    delete _operations;
+    if(_entity)
+        delete _entity;
+    if(_operations) {
+        foreach(Operation *operation, *_operations)
+            delete operation;
+        delete _operations;
+    }
 }
 
 Model::Domain::Invoice &Model::Domain::Invoice::operator=(const Invoice &invoice)
 {
     _id         = invoice._id;
     _type       = invoice._type;
+    _business   = (invoice._business) ? new Business(dynamic_cast<const Business &>(*invoice._business)) : 0;
+    _entity     = (invoice._entity) ? new Entity(*invoice._entity) : 0;
     _date       = invoice._date;
-    _buyerId    = invoice._buyerId;
-    _buyerName  = invoice._buyerName;
-    _sellerId   = invoice._sellerId;
-    _sellerName = invoice._sellerName;
-    _vat        = invoice._vat;
+    _place      = invoice._place;
+    _operations = new QList<Operation *>;
+    foreach(Operation *operation, *invoice._operations)
+        _operations -> push_back(new Operation(*operation));
+    _taxOnInvoice = invoice._taxOnInvoice;
+    for(int k = 0;k < TaxTypeCount;++k)
+        _tax[k] = invoice._tax[k];
     _paid       = invoice._paid;
     _payment    = invoice._payment;
     _notes      = invoice._notes;
-    foreach(Model::Domain::Operation operation, *invoice._operations)
-        _operations -> push_back(Model::Domain::Operation(operation));
+
     return *this;
+}
+
+bool Model::Domain::Invoice::operator==(const Invoice &invoice) const
+{
+    return *_business == *invoice._business &&
+            _id == invoice._id &&
+            _type == invoice._type;
+}
+
+bool Model::Domain::Invoice::operator!=(const Invoice &invoice) const
+{
+    return !(*this == invoice);
 }
 
 void Model::Domain::Invoice::setId(int id)
@@ -73,7 +98,7 @@ int Model::Domain::Invoice::id() const
     return _id;
 }
 
-void Model::Domain::Invoice::setType(Model::Domain::InvoiceType type)
+void Model::Domain::Invoice::setType(InvoiceType type)
 {
     _type = type;
 }
@@ -81,6 +106,36 @@ void Model::Domain::Invoice::setType(Model::Domain::InvoiceType type)
 Model::Domain::InvoiceType Model::Domain::Invoice::type() const
 {
     return _type;
+}
+
+void Model::Domain::Invoice::setBusiness(Entity *business)
+{
+    if(_business)
+        delete _business;
+
+    _business = business;
+
+    _taxOnInvoice = (_business ? (_type == Sale ? _business -> taxOnSale() : _business -> taxOnBuy()) : ApplyAllTax);
+    for(int k = 0;k < TaxTypeCount;++k)
+        _tax[k] = (_business ? (business -> tax())[k] : Tax(static_cast<TaxType>(k)));
+}
+
+Model::Domain::Entity *Model::Domain::Invoice::business() const
+{
+    return _business;
+}
+
+void Model::Domain::Invoice::setEntity(Entity *entity)
+{
+    if(_entity)
+        delete _entity;
+
+    _entity = entity;
+}
+
+Model::Domain::Entity *Model::Domain::Invoice::entity() const
+{
+    return _entity;
 }
 
 void Model::Domain::Invoice::setDate(const QDate &date)
@@ -93,67 +148,55 @@ const QDate &Model::Domain::Invoice::date() const
     return _date;
 }
 
-void Model::Domain::Invoice::setBuyerId(int buyerId)
+void Model::Domain::Invoice::setPlace(const QString &place)
 {
-    _buyerId = buyerId;
+    _place = place;
 }
 
-int Model::Domain::Invoice::buyerId() const
+const QString &Model::Domain::Invoice::place() const
 {
-    return _buyerId;
+    return _place;
 }
 
-void Model::Domain::Invoice::setBuyerName(const QString &buyerName)
+void Model::Domain::Invoice::setOperations(QList<Operation *> *operations)
 {
-    _buyerName = buyerName;
-}
-
-const QString &Model::Domain::Invoice::buyerName() const
-{
-    return _buyerName;
-}
-
-void Model::Domain::Invoice::setSellerId(int sellerId)
-{
-    _sellerId = sellerId;
-}
-
-int Model::Domain::Invoice::sellerId() const
-{
-    return _sellerId;
-}
-
-void Model::Domain::Invoice::setSellerName(const QString &sellerName)
-{
-    _sellerName = sellerName;
-}
-
-const QString &Model::Domain::Invoice::sellerName() const
-{
-    return _sellerName;
-}
-
-void Model::Domain::Invoice::setOperations(QList<Operation> *operations)
-{
-    if(operations) {
+    if(_operations) {
+        foreach(Operation *operation, *_operations)
+            delete operation;
         delete _operations;
-        _operations = operations;
     }
+
+    _operations = operations;
 }
 
-QList<Model::Domain::Operation> *Model::Domain::Invoice::operations() const
+QList<Model::Domain::Operation *> *Model::Domain::Invoice::operations() const
 {
     return _operations;
 }
 
-void Model::Domain::Invoice::setVat(double vat)
+void Model::Domain::Invoice::setTaxOnInvoice(TaxFlag taxOnInvoice)
 {
-    _vat = vat;
+    _taxOnInvoice = taxOnInvoice;
 }
 
-double Model::Domain::Invoice::vat() const
+Model::Domain::TaxFlag Model::Domain::Invoice::taxOnInvoice() const
 {
-    return _vat;
+    return _taxOnInvoice;
+}
+
+void Model::Domain::Invoice::setTax(const Tax &tax)
+{
+    _tax[static_cast<int>(tax.type())] = tax;
+}
+
+const Model::Domain::Tax &Model::Domain::Invoice::tax(TaxType type) const
+{
+    return _tax[static_cast<int>(type)];
+}
+
+Model::Domain::Tax *Model::Domain::Invoice::tax()
+{
+    return _tax;
 }
 
 void Model::Domain::Invoice::setPaid(bool paid)
@@ -166,7 +209,7 @@ bool Model::Domain::Invoice::paid() const
     return _paid;
 }
 
-void Model::Domain::Invoice::setPayment(Model::Domain::PaymentType payment)
+void Model::Domain::Invoice::setPayment(PaymentType payment)
 {
     _payment = payment;
 }
@@ -189,27 +232,43 @@ const QString &Model::Domain::Invoice::notes() const
 double Model::Domain::Invoice::subtotal() const
 {
     double res = 0.0;
-    for(int k = 0;k < _operations -> size(); ++k)
-        res += (_operations -> at(k)).total();
+
+    foreach(Operation *operation, *_operations)
+        res += operation -> total();
+
     return res;
+}
+
+const QList<Model::Domain::VatBreakdown>  &Model::Domain::Invoice::breakdown() const
+{
+    static QList<VatBreakdown> breakdowns;
+
+    if(breakdowns.isEmpty()) {
+        for(int k = GeneralVAT; k <= SuperReducedVAT; ++k) {
+            breakdowns[k]._vatPercent = _tax[k].value();
+            breakdowns[k]._esPercent = _tax[k + (TaxTypeCount - 1) / 2].value();
+        }
+    }
+
+    foreach(Operation *operation, *_operations) {
+        TaxType type = operation -> product() -> category() -> vatType();
+        breakdowns[static_cast<int>(type)]._vatCost += (operation -> total()) *
+                (breakdowns[static_cast<int>(type)]._vatPercent / 100.0);
+        breakdowns[static_cast<int>(type)]._esCost += (operation -> total()) *
+                (breakdowns[static_cast<int>(type)]._esPercent / 100.0);
+    }
+
+    return breakdowns;
 }
 
 double Model::Domain::Invoice::total() const
 {
-    return subtotal()*(1 + _vat/100.0);
-}
+    double taxes = 0.0;
+    QList<VatBreakdown> breakdowns = breakdown();
 
-std::ostream &Model::Domain::operator<<(std::ostream &os, const Invoice &invoice)
-{
-    return os << invoice._id                            << std::endl
-              << invoice._type                          << std::endl
-              << invoice._date.toString().toStdString() << std::endl
-              << invoice._buyerId                       << std::endl
-              << invoice._buyerName.toStdString()       << std::endl
-              << invoice._sellerId                      << std::endl
-              << invoice._sellerName.toStdString()      << std::endl
-              << invoice._vat                           << std::endl
-              << invoice._paid                          << std::endl
-              << invoice._payment                       << std::endl
-              << invoice._notes.toStdString()           << std::endl;
+    for(int k = GeneralVAT;k <= SuperReducedVAT;++k)
+        taxes += ((_taxOnInvoice & ApplyVAT) ? breakdowns[k]._vatCost : 0.0) +
+                 ((_taxOnInvoice & ApplyES) ? breakdowns[k]._esCost : 0.0);
+
+    return subtotal() + taxes - ((_taxOnInvoice & ApplyPIT) ? _tax[PIT].value() : 0.0);
 }

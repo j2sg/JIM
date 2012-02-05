@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,27 +21,25 @@
 #ifndef SQLAGENT_H
 #define SQLAGENT_H
 
-#include <QtSql/QSqlDatabase>
 #include <QString>
-#include <QStringList>
 #include <QVector>
 #include <QVariant>
+#include <QtSql/QSqlDatabase>
 
 namespace Persistence
 {
     class SQLAgent
     {
     public:
-        ~SQLAgent();
         static SQLAgent *instance();
         bool create(const QString &sql);
         bool insert(const QString &sql);
         bool update(const QString &sql);
         QVector<QVector<QVariant> > *select(const QString &sql);
         bool _delete(const QString &sql);
-        int getId(const QString& table);
     private:
         SQLAgent();
+        ~SQLAgent();
     protected:
         bool setUp();
         bool connect();

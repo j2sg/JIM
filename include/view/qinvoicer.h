@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,14 +18,10 @@
  *
  **/
 
-// QInvoicer class declaration
-
 #ifndef QINVOICER_H
 #define QINVOICER_H
 
 #include <QMainWindow>
-
-// Forward declarations
 
 QT_BEGIN_NAMESPACE
 class QMdiArea;
@@ -39,16 +35,20 @@ namespace Model
     namespace Domain
     {
         class Invoice;
+        class Entity;
     }
 }
 
 namespace View
 {
-    namespace Invoicing {
+    namespace Invoicing
+    {
         class InvoiceEditor;
     }
 
-    namespace Management {
+    namespace Management
+    {
+        class EntityEditor;
         class ProductEditor;
     }
 
@@ -61,20 +61,26 @@ namespace View
     protected:
         void closeEvent(QCloseEvent *event);
     private slots:
+        bool createBusiness();
+        void loadBusiness();
+        void closeBusiness();
+        void setUpBusiness();
+        void options();
+        void printing();
         void createSaleInvoice();
         void createBuyInvoice();
         void loadInvoice();
+        void manageBusiness();
+        void manageCustomer();
+        void manageSupplier();
         void manageProduct();
-        void volumeSale();
-        void volumeBuy();
         void volume();
         void unpaidInvoices();
+        void calculator();
+        void addressBook();
         void about();
         void updateWindowMenu();
-        void restore(QObject *object);
-        void invoiceSaved(Model::Domain::Invoice *invoice);
-        void currentSubWindowFinished();
-
+        void invoiceSaved(const Model::Domain::Invoice &invoice);
     private:
         void createCentralWidget();
         void createActions();
@@ -83,18 +89,29 @@ namespace View
         void createStatusBar();
         void createConnections();
         View::Invoicing::InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
+        void setBusinessOpen(bool open = true);
+        bool verifyCreateBusiness();
         bool verifyExit();
 
         QMdiArea *_mdiArea;
+        QAction *_createBusinessAction;
+        QAction *_loadBusinessAction;
+        QAction *_closeBusinessAction;
+        QAction *_setUpBusinessAction;
+        QAction *_optionsAction;
+        QAction *_printingAction;
         QAction *_exitAction;
         QAction *_createSaleInvoiceAction;
         QAction *_createBuyInvoiceAction;
         QAction *_loadInvoiceAction;
+        QAction *_manageBusinessAction;
+        QAction *_manageCustomerAction;
+        QAction *_manageSupplierAction;
         QAction *_manageProductAction;
-        QAction *_volumeSaleInvoiceAction;
-        QAction *_volumeBuyInvoiceAction;
         QAction *_volumeInvoiceAction;
         QAction *_unpaidInvoicesAction;
+        QAction *_calculatorAction;
+        QAction *_addressBookAction;
         QAction *_closeAction;
         QAction *_closeAllAction;
         QAction *_tileAction;
@@ -112,6 +129,10 @@ namespace View
         QToolBar *_invoicingToolBar;
         QToolBar *_managementToolBar;
         QToolBar *_reportToolBar;
+        Model::Domain::Entity *_business;
+        View::Management::EntityEditor *_businessEditor;
+        View::Management::EntityEditor *_customerEditor;
+        View::Management::EntityEditor *_supplierEditor;
         View::Management::ProductEditor *_productEditor;
     };
 }

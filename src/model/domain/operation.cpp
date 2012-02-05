@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,18 +19,13 @@
  **/
 
 #include "operation.h"
+#include "product.h"
 
 Model::Domain::Operation::Operation(int id, Product *product, int quantity, double weight, double price)
     : _id(id), _product(product), _quantity(quantity), _weight(weight), _price(price)
 {
-    if(_quantity < 0)
-        _quantity = 0;
-    if(_weight < 0)
-        _weight = 0.0;
     if(_product)
         _price = _product -> price();
-    if(_price < 0)
-        _price = 0.0;
 }
 
 Model::Domain::Operation::Operation(const Operation &operation)
@@ -47,13 +42,23 @@ Model::Domain::Operation::~Operation()
 Model::Domain::Operation &Model::Domain::Operation::operator=(const Operation &operation)
 {
     _id = operation._id;
-    _product = (operation._product != 0) ? new Product(*operation._product) : 0;
+    _product = (operation._product) ? new Product(*operation._product) : 0;
     _quantity = operation._quantity;
     _weight = operation._weight;
     _price = operation._price;
+
     return *this;
 }
 
+bool Model::Domain::Operation::operator==(const Operation &operation) const
+{
+    return _id == operation._id;
+}
+
+bool Model::Domain::Operation::operator!=(const Operation &operation) const
+{
+    return !(*this == operation);
+}
 
 void Model::Domain::Operation::setId(int id)
 {
@@ -69,8 +74,11 @@ void Model::Domain::Operation::setProduct(Product *product)
 {
     if(_product)
         delete _product;
+
     _product = product;
-    setPrice(_product -> price());
+
+    if(_product)
+        _price = _product -> price();
 }
 
 Model::Domain::Product *Model::Domain::Operation::product() const
@@ -115,21 +123,4 @@ double Model::Domain::Operation::total() const
     return ((_product -> priceType() == Units) ? _quantity : _weight) * _price;
 }
 
-bool Model::Domain::Operation::operator==(const Operation &operation) const
-{
-    return _id == operation._id;
-}
 
-bool Model::Domain::Operation::operator!=(const Operation &operation) const
-{
-    return !(*this == operation);
-}
-
-std::ostream &Model::Domain::operator<<(std::ostream &os, const Operation &operation)
-{
-    return os << operation._id                                                                   << std::endl
-              << ((operation._product != 0) ? (operation._product -> name()).toStdString() : "") << std::endl
-              << operation._quantity                                                             << std::endl
-              << operation._weight                                                               << std::endl
-              << operation._price                                                                << std::endl;
-}

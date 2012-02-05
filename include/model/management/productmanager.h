@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 #define PRODUCTMANAGER_H
 
 #include <QList>
-#include <QString>
 #include "product.h"
 
 namespace Model
@@ -36,7 +35,7 @@ namespace Model
             static bool modify(const Model::Domain::Product &product);
             static bool remove(int id);
             static Model::Domain::Product *get(int id);
-            static QList<Model::Domain::Product> *getAll();
+            static QList<Model::Domain::Product *> *getAll();
             static int getId();
         };
     }

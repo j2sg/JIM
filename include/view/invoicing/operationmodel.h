@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,14 @@
 
 #include <QAbstractTableModel>
 #include <QList>
-#include "operation.h"
+
+namespace Model
+{
+    namespace Domain
+    {
+        class Operation;
+    }
+}
 
 namespace View
 {
@@ -32,12 +39,12 @@ namespace View
         class OperationModel : public QAbstractTableModel
         {
         public:
-            OperationModel(QList<Model::Domain::Operation> *operations, QObject *parent = 0);
-            QList<Model::Domain::Operation> *operations();
-            void setOperations(QList<Model::Domain::Operation> *operations);
+            OperationModel(QList<Model::Domain::Operation *> *operations = 0, QObject *parent = 0)
+                : QAbstractTableModel(parent), _operations(operations) {}
+            QList<Model::Domain::Operation *> *operations();
+            void setOperations(QList<Model::Domain::Operation *> *operations);
             int rowCount(const QModelIndex &parent) const;
             int columnCount(const QModelIndex &parent) const;
-            int getOperationId() const;
             QVariant data(const QModelIndex &index, int role) const;
             bool setData(const QModelIndex &index, const QVariant &value, int role);
             bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
@@ -45,7 +52,9 @@ namespace View
             QVariant headerData(int section, Qt::Orientation orientation, int role) const;
             Qt::ItemFlags flags(const QModelIndex &index) const;
         private:
-            QList<Model::Domain::Operation> *_operations;
+            int getId() const;
+
+            QList<Model::Domain::Operation *> *_operations;
         };
     }
 }

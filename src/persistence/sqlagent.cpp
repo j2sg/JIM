@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,23 +20,13 @@
 
 #include "sqlagent.h"
 #include "persistencemanager.h"
-#include "types.h"
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
-
-Persistence::SQLAgent::SQLAgent()
-{
-    setUp();
-}
-
-Persistence::SQLAgent::~SQLAgent()
-{
-    disconnect();
-}
 
 Persistence::SQLAgent *Persistence::SQLAgent::instance()
 {
     static SQLAgent instance;
+
     return &instance;
 }
 
@@ -65,21 +55,14 @@ bool Persistence::SQLAgent::_delete(const QString &sql)
     return manipulation(sql);
 }
 
-int Persistence::SQLAgent::getId(const QString& table)
+Persistence::SQLAgent::SQLAgent()
 {
-    QSqlQuery query;
-    query.exec(QString("SELECT count(*) FROM %1").arg(table));
-    if(query.next()) {
-        int count = query.value(0).toInt();
-        if(count == 0)
-            return 1;
-        else {
-            query.exec(QString("SELECT max(id) FROM %1").arg(table));
-            if(query.next())
-                return query.value(0).toInt() + 1;
-        }
-    }
-    return NO_ID;
+    setUp();
+}
+
+Persistence::SQLAgent::~SQLAgent()
+{
+    disconnect();
 }
 
 bool Persistence::SQLAgent::setUp()
@@ -87,12 +70,12 @@ bool Persistence::SQLAgent::setUp()
     if(!Persistence::Manager::existsConfig())
         return false;
 
-    _database = QSqlDatabase::addDatabase(Persistence::Manager::readConfig("Driver", "Storage/DBMS").toString());
-    _database.setDatabaseName(Persistence::Manager::readConfig("Name", "Storage/DBMS").toString());
-    _database.setHostName(Persistence::Manager::readConfig("Host", "Storage/DBMS").toString());
-    _database.setPort(Persistence::Manager::readConfig("Port", "Storage/DBMS").toInt());
-    _database.setUserName(Persistence::Manager::readConfig("User", "Storage/DBMS").toString());
-    _database.setPassword(Persistence::Manager::readConfig("Pass", "Storage/DBMS").toString());
+    _database = QSqlDatabase::addDatabase(Manager::readConfig("Driver", "Storage/DBMS").toString());
+    _database.setDatabaseName(Manager::readConfig("Name", "Storage/DBMS").toString());
+    _database.setHostName(Manager::readConfig("Host", "Storage/DBMS").toString());
+    _database.setPort(Manager::readConfig("Port", "Storage/DBMS").toInt());
+    _database.setUserName(Manager::readConfig("User", "Storage/DBMS").toString());
+    _database.setPassword(Manager::readConfig("Pass", "Storage/DBMS").toString());
 
     return connect();
 }
@@ -104,31 +87,35 @@ bool Persistence::SQLAgent::connect()
 
 void Persistence::SQLAgent::disconnect()
 {
-    if(_database.isOpen())
-        _database.close();
-    QSqlDatabase::removeDatabase(_database.databaseName());
+        if(_database.isOpen())
+            _database.close();
+
+        QSqlDatabase::removeDatabase(_database.databaseName());
 }
 
 bool Persistence::SQLAgent::manipulation(const QString &sql)
 {
     QSqlQuery query;
+
     return query.exec(sql);
 }
 
 QVector<QVector<QVariant> > *Persistence::SQLAgent::query(const QString &sql)
 {
-     QSqlQuery query;
-     query.setForwardOnly(true);
-     if(!query.exec(sql))
+    QSqlQuery query;
+
+    query.setForwardOnly(true);
+
+    if(!query.exec(sql))
          return 0;
 
-     QVector<QVector<QVariant> > *result = new QVector<QVector<QVariant> >;
-     int cols = query.record().count();
-     while(query.next()) {
-         result -> push_back(QVector<QVariant>());
-         for(int col = 0 ; col < cols; ++col)
-             (result -> back()).push_back(query.value(col));
-     }
+    QVector<QVector<QVariant> > *result = new QVector<QVector<QVariant> >;
+    int cols = query.record().count();
+    while(query.next()) {
+        result -> push_back(QVector<QVariant>());
+        for(int col = 0 ; col < cols; ++col)
+            (result -> back()).push_back(query.value(col));
+    }
 
-     return result;
+    return result;
 }

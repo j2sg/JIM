@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,22 +19,17 @@
  **/
 
 #include "operationmodel.h"
+#include "operation.h"
 #include "product.h"
 #include "productmanager.h"
 #include "types.h"
 
-View::Invoicing::OperationModel::OperationModel(QList<Model::Domain::Operation> *operations, QObject *parent)
-    : QAbstractTableModel(parent)
-{
-    _operations = operations;
-}
-
-QList<Model::Domain::Operation> *View::Invoicing::OperationModel::operations()
+QList<Model::Domain::Operation *> *View::Invoicing::OperationModel::operations()
 {
     return _operations;
 }
 
-void View::Invoicing::OperationModel::setOperations(QList<Model::Domain::Operation> *operations)
+void View::Invoicing::OperationModel::setOperations(QList<Model::Domain::Operation *> *operations)
 {
     _operations = operations;
     reset();
@@ -43,27 +38,20 @@ void View::Invoicing::OperationModel::setOperations(QList<Model::Domain::Operati
 int View::Invoicing::OperationModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return _operations -> size();
+
+    return _operations ? _operations -> size() : 0;
 }
 
 int View::Invoicing::OperationModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return ColumnOperationCount;
-}
 
-int View::Invoicing::OperationModel::getOperationId() const
-{
-    int max = -1;
-    foreach(Model::Domain::Operation operation, *_operations)
-        if(operation.id() > max)
-            max = operation.id();
-    return max + 1;
+    return ColumnOperationCount;
 }
 
 QVariant View::Invoicing::OperationModel::data(const QModelIndex &index, int role) const
 {
-    if(index.isValid()) {
+    if(index.isValid() && _operations) {
         if(role == Qt::TextAlignmentRole) {
             switch(index.column()) {
             case ColumnOperationId:
@@ -74,31 +62,32 @@ QVariant View::Invoicing::OperationModel::data(const QModelIndex &index, int rol
                 return int(Qt::AlignRight | Qt::AlignVCenter);
             }
         } else if(role == Qt::DisplayRole) {
-            Model::Domain::Operation operation = _operations -> at(index.row());
-            Model::Domain::Product *product = operation.product();
+            Model::Domain::Operation *operation = _operations -> at(index.row());
+            Model::Domain::Product *product = operation -> product();
             switch(index.column()) {
             case ColumnOperationId:
-                return (product != 0) ? QString::number(product -> id()) : "";
+                return product ? QString::number(product -> id()) : "";
             case ColumnOperationName:
-                return (product != 0) ? product -> name() : "";
+                return product ? product -> name() : "";
             case ColumnOperationQuantity:
-                return QString::number(operation.quantity());
+                return QString::number(operation -> quantity());
             case ColumnOperationWeight:
-                return QString::number(operation.weight(), 'f', PRECISION_WEIGHT);
+                return QString::number(operation -> weight(), 'f', PRECISION_WEIGHT);
             case ColumnOperationPrice:
-                return QString::number(operation.price(), 'f', PRECISION_MONEY);
+                return QString::number(operation -> price(), 'f', PRECISION_MONEY);
             case ColumnOperationTotal:
-                return QString::number(operation.total(), 'f', PRECISION_MONEY);
+                return QString::number(operation -> total(), 'f', PRECISION_MONEY);
             }
         }
     }
+
     return QVariant();
 }
 
 bool View::Invoicing::OperationModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(index.isValid() && role == Qt::EditRole) {
-        Model::Domain::Operation operation = _operations -> at(index.row());
+    if(index.isValid() && role == Qt::EditRole && _operations) {
+        Model::Domain::Operation *operation = _operations -> at(index.row());
         switch(index.column()) {
         case ColumnOperationTotal:
         case ColumnOperationName:
@@ -108,22 +97,22 @@ bool View::Invoicing::OperationModel::setData(const QModelIndex &index, const QV
             int id = value.toInt();
             Model::Domain::Product *product = Model::Management::ProductManager::get(id);
             if(product)
-                operation.setProduct(product);
+                operation -> setProduct(product);
             else
                 return false;
         }
             break;
         case ColumnOperationQuantity:
-            operation.setQuantity(value.toInt());
+            operation -> setQuantity(value.toInt());
             break;
         case ColumnOperationWeight:
-            operation.setWeight(value.toDouble());
+            operation -> setWeight(value.toDouble());
             break;
         case ColumnOperationPrice:
-            operation.setPrice(value.toDouble());
+            operation -> setPrice(value.toDouble());
             break;
         }
-        _operations -> replace(index.row(), operation);
+
         emit dataChanged(index, index);
         if(index.column() == ColumnOperationQuantity ||
            index.column() == ColumnOperationWeight ||
@@ -131,28 +120,42 @@ bool View::Invoicing::OperationModel::setData(const QModelIndex &index, const QV
             QModelIndex totalIndex = createIndex(index.row(), ColumnOperationTotal);
             emit dataChanged(totalIndex, totalIndex);
         }
+
         return true;
     }
+
     return false;
 }
 
 bool View::Invoicing::OperationModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     Q_UNUSED(parent);
+
+    if(!_operations)
+        return false;
+
     beginInsertRows(QModelIndex(), row, row + count - 1);
     for(int k = 1;k <= count; ++k)
-        _operations -> insert(row, Model::Domain::Operation(getOperationId()));
+        _operations -> insert(row, new Model::Domain::Operation(getId()));
     endInsertRows();
+
     return true;
 }
 
 bool View::Invoicing::OperationModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     Q_UNUSED(parent);
+
+    if(!_operations)
+        return false;
+
     beginRemoveRows(QModelIndex(), row, row + count - 1);
-    for(int k = 0;k < count; ++k)
+    for(int k = 0;k < count; ++k) {
+        delete _operations -> at(row);
         _operations -> removeAt(row);
+    }
     endRemoveRows();
+
     return true;
 }
 
@@ -178,6 +181,7 @@ QVariant View::Invoicing::OperationModel::headerData(int section, Qt::Orientatio
             }
         }
     }
+
     return QVariant();
 }
 
@@ -189,5 +193,20 @@ Qt::ItemFlags View::Invoicing::OperationModel::flags(const QModelIndex &index) c
    case ColumnOperationWeight:case ColumnOperationPrice:
        flags |= Qt::ItemIsEditable;
    }
+
    return flags;
+}
+
+int View::Invoicing::OperationModel::getId() const
+{
+    int max = -1;
+
+    if(!_operations)
+        return max;
+
+    foreach(Model::Domain::Operation *operation, *_operations)
+        if(operation -> id() > max)
+            max = operation -> id();
+
+    return max + 1;
 }

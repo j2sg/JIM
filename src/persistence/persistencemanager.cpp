@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 bool Persistence::Manager::existsConfig()
 {
     QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
+
     return setting.value("Executed", false).toBool();
 }
 
@@ -35,7 +36,9 @@ bool Persistence::Manager::createConfig(bool overwrite)
 {
     if(existsConfig() && !overwrite)
         return false;
+
     QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
+
     setting.setValue("Executed", true);
     setting.beginGroup("Storage");
     setting.setValue("Type",   DEFAULT_STORAGE_TYPE);
@@ -49,39 +52,50 @@ bool Persistence::Manager::createConfig(bool overwrite)
     setting.setValue("Pass",   DEFAULT_STORAGE_DBMS_PASS);
     setting.endGroup();
     setting.endGroup();
+    setting.beginGroup("Business");
+    setting.setValue("Default", "");
+    setting.endGroup();
+
     return true;
 }
 
 bool Persistence::Manager::deleteConfig()
 {
     QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
+
     if(!existsConfig())
         return false;
+
     setting.clear();
+
     return true;
 }
 
 QVariant Persistence::Manager::readConfig(const QString &key, const QString &group)
 {
     QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
+
     if(existsConfig()) {
         setting.beginGroup(group);
         return setting.value(key);
-        setting.endGroup();
     }
+
     return QVariant();
 }
 
 bool Persistence::Manager::writeConfig(const QVariant &value, const QString &key, const QString &group)
 {
     QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
+
     if(!existsConfig())
         return false;
+
     setting.beginGroup(group);
     if(!setting.contains(key))
         return false;
     setting.setValue(key, value);
     setting.endGroup();
+
     return true;
 }
 
@@ -90,13 +104,11 @@ bool Persistence::Manager::existsStorage()
     if(!existsConfig())
         return false;
 
-    switch(static_cast<Persistence::StorageType>(readConfig("Type", "Storage").toInt())) {
-    case Persistence::DBMS:
+    switch(static_cast<StorageType>(readConfig("Type", "Storage").toInt())) {
+    case DBMS:
         QString driver = readConfig("Driver", "Storage/DBMS").toString();
-        if(driver == "QSQLITE") {
-            QFile storage(readConfig("Name", "Storage/DBMS").toString());
-            return storage.exists();
-        }
+        if(driver == "QSQLITE")
+            return QFile(readConfig("Name", "Storage/DBMS").toString()).exists();
         break;
     }
 
@@ -107,82 +119,163 @@ bool Persistence::Manager::createStorage(bool overwrite)
 {
     if(!existsConfig() || (existsStorage() && !overwrite))
         return false;
-    QDir path;
-    QString dirPath(readConfig("Path", "Storage").toString());
-    if(!path.exists(dirPath))
-        if(!path.mkpath(dirPath))
+
+    QDir storagePath(readConfig("Path", "Storage").toString());;
+
+    if(!storagePath.exists() && !storagePath.mkpath(storagePath.path()))
             return false;
-    switch(static_cast<Persistence::StorageType>(readConfig("Type", "Storage").toInt())) {
-    case Persistence::DBMS:
-        createSQLiteSchema();
-        break;
+
+    switch(static_cast<StorageType>(readConfig("Type", "Storage").toInt())) {
+    case DBMS:
+        return createSQLiteSchema();
     }
-    return true;
+
+    return false;
 }
 
 bool Persistence::Manager::deleteStorage()
 {
     if(!existsStorage())
         return false;
-    return true;
+
+    return QFile::remove(readConfig("Name", "Storage/DBMS").toString());
 }
 
 bool Persistence::Manager::createSQLiteSchema()
 {
-    Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+    SQLAgent *agent = SQLAgent::instance();
 
-    bool res = agent -> create("CREATE TABLE IF NOT EXISTS invoice (\n"
-                                   "id         INTEGER,\n"
-                                   "type       INTEGER CONSTRAINT invoice_type_nn_ct NOT NULL,\n"
-                                   "date       TEXT    CONSTRAINT invoice_date_nn_ct NOT NULL,\n"
-                                   "buyerId    INTEGER CONSTRAINT invoice_buyerid_nn_ct NOT NULL,\n"
-                                   "buyerName  TEXT    CONSTRAINT invoice_buyername_nn_ct NOT NULL,\n"
-                                   "sellerId   INTEGER CONSTRAINT invoice_sellerid_nn_ct NOT NULL,\n"
-                                   "sellerName TEXT    CONSTRAINT invoice_sellername_nn_ct NOT NULL,\n"
-                                   "vat        REAL,\n"
-                                   "paid       INTEGER CONSTRAINT invoice_paid_nn_ct NOT NULL,\n"
-                                   "payment    INTEGER CONSTRAINT invoice_payment_nn_ct NOT NULL,\n"
-                                   "notes      TEXT,\n"
-                                   "CONSTRAINT invoice_pk_ct PRIMARY KEY(id),\n"
-                                   "CONSTRAINT invoice_type_chk_ct CHECK(type=0 OR type=1),\n"
-                                   "CONSTRAINT invoice_vat_chk_ct CHECK(vat>=0.0 AND vat<=100.0),\n"
-                                   "CONSTRAINT invoice_paid_chk_ct CHECK(paid=0 OR paid=1))");
+    bool entity = agent -> create("CREATE TABLE IF NOT EXISTS entity (\n"
+                                  "    id        INTEGER,\n"
+                                  "    type      INTEGER,\n"
+                                  "    vatin     TEXT,\n"
+                                  "    name      TEXT    CONSTRAINT entity_name_nn_ct NOT NULL,\n"
+                                  "    country   TEXT,\n"
+                                  "    province  TEXT,\n"
+                                  "    city      TEXT,\n"
+                                  "    address   TEXT,\n"
+                                  "    pc        TEXT,\n"
+                                  "    telephone INTEGER,\n"
+                                  "    mobile    INTEGER,\n"
+                                  "    fax       INTEGER,\n"
+                                  "    email     TEXT,\n"
+                                  "    web       TEXT,\n"
+                                  "    notes     TEXT,\n"
+                                  "    taxOnSale INTEGER CONSTRAINT entity_tax_on_sale_def_ct DEFAULT 7,\n"
+                                  "    taxOnBuy  INTEGER CONSTRAINT entity_tax_on_buy_def_ct DEFAULT 7,\n"
+                                  "    CONSTRAINT entity_pk_ct  PRIMARY KEY(id, type),\n"
+                                  "    CONSTRAINT entity_chk_ct CHECK(type=0 OR type=1 OR type=2),\n"
+                                  "    CONSTRAINT entity_unq_ct UNIQUE(vatin)\n"
+                                  ")");
 
-    if(res)
-        res = agent -> create("CREATE TABLE IF NOT EXISTS product (\n"
-                                  "id          INTEGER,\n"
-                                  "name        TEXT    CONSTRAINT product_name_nn_ct NOT NULL,\n"
-                                  "description TEXT,\n"
-                                  "price       REAL    CONSTRAINT product_price_nn_ct NOT NULL,\n"
-                                  "pricetype   INTEGER CONSTRAINT product_pricetype_nn_ct NOT NULL,\n"
-                                  "CONSTRAINT product_pk_ct PRIMARY KEY(id),\n"
-                                  "CONSTRAINT product_price_chk_ct CHECK(price>=0.0),\n"
-                                  "CONSTRAINT product_pricetype_chk_ct CHECK(pricetype=0 OR pricetype=1))");
+    bool invoice = agent -> create("CREATE TABLE IF NOT EXISTS invoice (\n"
+                                   "    id              INTEGER,\n"
+                                   "    type            INTEGER,\n"
+                                   "    businessId      INTEGER,\n"
+                                   "    businessType    INTEGER CONSTRAINT invoice_business_type_def_ct DEFAULT 2,\n"
+                                   "    entityId        INTEGER CONSTRAINT invoice_entity_id_nn_ct NOT NULL,\n"
+                                   "    entityType      INTEGER CONSTRAINT invoice_entity_type_nn_ct NOT NULL,\n"
+                                   "    date            TEXT    CONSTRAINT invoice_date_nn_ct NOT NULL,\n"
+                                   "    place           TEXT,\n"
+                                   "    taxOnInvoice    INTEGER CONSTRAINT invoice_tax_on_invoice_nn_ct NOT NULL,\n"
+                                   "    generalVat      REAL    CONSTRAINT invoice_general_vat_def_ct DEFAULT 0.0,\n"
+                                   "    reducedVat      REAL    CONSTRAINT invoice_reduced_vat_def_ct DEFAULT 0.0,\n"
+                                   "    superReducedVat REAL    CONSTRAINT invoice_super_reduced_vat_def_ct DEFAULT 0.0,\n"
+                                   "    generalEs       REAL    CONSTRAINT invoice_general_es_def_ct DEFAULT 0.0,\n"
+                                   "    reducedEs       REAL    CONSTRAINT invoice_reduced_es_def_ct DEFAULT 0.0,\n"
+                                   "    superReducedEs  REAL    CONSTRAINT invoice_super_reduced_es_def_ct DEFAULT 0.0,\n"
+                                   "    pit             REAL    CONSTRAINT invoice_general_pit_def_ct DEFAULT 0.0,\n"
+                                   "    paid            INTEGER CONSTRAINT invoice_paid_nn_ct NOT NULL,\n"
+                                   "    payment         INTEGER CONSTRAINT invoice_payment_nn_ct NOT NULL,\n"
+                                   "    notes           TEXT,\n"
+                                   "    CONSTRAINT invoice_pk_ct                    PRIMARY KEY(id, type, businessId, businessType),\n"
+                                   "    CONSTRAINT invoice_type_chk_ct              CHECK(type=0 OR type=1),\n"
+                                   "    CONSTRAINT invoice_business_fk_ct           FOREIGN KEY(businessId, businessType)\n"
+                                   "                                                REFERENCES entity(id, type)\n"
+                                   "                                                    ON UPDATE CASCADE\n"
+                                   "                                                    ON DELETE CASCADE,\n"
+                                   "    CONSTRAINT invoice_entity_fk_ct             FOREIGN KEY(entityId, entityType)\n"
+                                   "                                                REFERENCES entity(id, type)\n"
+                                   "                                                    ON UPDATE CASCADE\n"
+                                   "                                                    ON DELETE CASCADE,\n"
+                                   "    CONSTRAINT invoice_general_vat_chk_ct       CHECK(generalVat>=0.0 AND generalVat<=100.0),\n"
+                                   "    CONSTRAINT invoice_reduced_vat_chk_ct       CHECK(reducedVat>=0.0 AND reducedVat<=100.0),\n"
+                                   "    CONSTRAINT invoice_super_reduced_vat_chk_ct CHECK(superReducedVat>=0.0 AND superReducedVat<=100.0),\n"
+                                   "    CONSTRAINT invoice_general_es_chk_ct        CHECK(generalEs>=0.0 AND generalEs<=100.0),\n"
+                                   "    CONSTRAINT invoice_reduced_es_chk_ct        CHECK(reducedEs>=0.0 AND reducedEs<=100.0),\n"
+                                   "    CONSTRAINT invoice_super_reduced_es_chk_ct  CHECK(superReducedEs>=0.0 AND superReducedEs<=100.0),\n"
+                                   "    CONSTRAINT invoice_pit_chk_ct               CHECK(pit>=0.0 AND pit<=100.0),\n"
+                                   "    CONSTRAINT invoice_paid_chk_ct              CHECK(paid=0 OR paid=1),\n"
+                                   "    CONSTRAINT invoice_payment_chk_ct           CHECK(payment=0 OR payment=1 OR payment=2)\n"
+                                   ")");
 
-    if(res)
-        res = agent -> create("CREATE TABLE IF NOT EXISTS operation (\n"
-                                  "id       INTEGER,\n"
-                                  "invoice  INTEGER,\n"
-                                  "product  INTEGER CONSTRAINT operation_product_nn_ct NOT NULL,\n"
-                                  "quantity INTEGER CONSTRAINT operation_quantity_nn_ct NOT NULL,\n"
-                                  "weight   REAL,\n"
-                                  "price    REAL    CONSTRAINT operation_price_nn_ct NOT NULL,\n"
-                                  "CONSTRAINT operation_pk_ct PRIMARY KEY(id, invoice),\n"
-                                  "CONSTRAINT operation_invoice_fk_ct FOREIGN KEY(invoice)\n"
-                                  "                                       REFERENCES invoice(id)\n"
-                                  "                                       ON UPDATE CASCADE\n"
-                                  "                                       ON DELETE CASCADE,\n"
-                                  "CONSTRAINT operation_product_fk_ct FOREIGN KEY(product)\n"
-                                  "                                       REFERENCES product(id)\n"
-                                  "                                       ON UPDATE CASCADE\n"
-                                  "                                       ON DELETE SET NULL,\n"
-                                  "CONSTRAINT operation_quantity_chk_ct CHECK(quantity>=0),\n"
-                                  "CONSTRAINT operation_weight_chk_ct CHECK(weight>=0.0),\n"
-                                  "CONSTRAINT operation_price_chk_ct CHECK(price>=0.0))");
+    bool tax = agent -> create("CREATE TABLE IF NOT EXISTS tax (\n"
+                               "    type         INTEGER,\n"
+                               "    businessId   INTEGER,\n"
+                               "    businessType INTEGER CONSTRAINT tax_business_type_def_ct DEFAULT 2,\n"
+                               "    value        REAL    CONSTRAINT tax_value_nn_ct NOT NULL,\n"
+                               "    CONSTRAINT tax_pk_ct          PRIMARY KEY(type, businessId, businessType),\n"
+                               "    CONSTRAINT tax_business_fk_ct FOREIGN KEY(businessId, businessType)\n"
+                               "                                  REFERENCES entity(id, type)\n"
+                               "                                      ON UPDATE CASCADE\n"
+                               "                                      ON DELETE CASCADE,\n"
+                               "    CONSTRAINT tax_type_chk_ct    CHECK(type=0 OR type=1 OR type=2 OR type=3 OR type=4 OR type=5 OR type=6),\n"
+                               "    CONSTRAINT tax_value_chk_ct   CHECK(value>=0.0 AND value<=100.0)"
+                               ")");
 
-    if(res)
-        res = agent -> create("CREATE VIEW IF NOT EXISTS unpaids AS\n"
-                                  "SELECT * FROM invoice WHERE paid=0");
+    bool category = agent -> create("CREATE TABLE IF NOT EXISTS category (\n"
+                                    "    id          INTEGER,\n"
+                                    "    name        TEXT    CONSTRAINT category_name_nn_ct NOT NULL,\n"
+                                    "    vatType     INTEGER CONSTRAINT category_vat_type_nn_ct NOT NULL,\n"
+                                    "    description TEXT,\n"
+                                    "    CONSTRAINT category_pk_ct           PRIMARY KEY(id),\n"
+                                    "    CONSTRAINT category_vat_type_chk_ct CHECK(vatType=0 OR vatType=1 OR vatType=2)\n"
+                                    ")");
 
-    return res;
+    bool product = agent -> create("CREATE TABLE IF NOT EXISTS product (\n"
+                                   "    id          INTEGER,\n"
+                                   "    name        TEXT    CONSTRAINT product_name_nn_ct NOT NULL,\n"
+                                   "    description TEXT,\n"
+                                   "    category    INTEGER CONSTRAINT product_category_nn_ct NOT NULL,\n"
+                                   "    price       REAL    CONSTRAINT product_price_nn_ct NOT NULL,\n"
+                                   "    priceType   INTEGER CONSTRAINT product_price_type_nn_ct NOT NULL,\n"
+                                   "    CONSTRAINT product_pk_ct             PRIMARY KEY(id),\n"
+                                   "    CONSTRAINT product_category_fk_ct    FOREIGN KEY(category)\n"
+                                   "                                         REFERENCES category(id)\n"
+                                   "                                             ON UPDATE CASCADE\n"
+                                   "                                             ON DELETE CASCADE,\n"
+                                   "    CONSTRAINT product_price_chk_ct      CHECK(price>=0.0),\n"
+                                   "    CONSTRAINT product_price_type_chk_ct CHECK(priceType=0 OR priceType=1)\n"
+                                   ")");
+
+    bool operation = agent -> create("CREATE TABLE IF NOT EXISTS operation (\n"
+                                     "    id           INTEGER,\n"
+                                     "    invoiceId    INTEGER,\n"
+                                     "    invoiceType  INTEGER,\n"
+                                     "    businessId   INTEGER,\n"
+                                     "    businessType INTEGER CONSTRAINT operation_business_type_def_ct DEFAULT 2,\n"
+                                     "    product      INTEGER CONSTRAINT operation_product_nn_ct NOT NULL,\n"
+                                     "    quantity     INTEGER CONSTRAINT operation_quantity_nn_ct NOT NULL,\n"
+                                     "    weight       REAL,\n"
+                                     "    price        REAL    CONSTRAINT operation_price_nn_ct NOT NULL,\n"
+                                     "    CONSTRAINT operation_pk_ct           PRIMARY KEY(id, invoiceId, invoiceType, businessId, businessType),\n"
+                                     "    CONSTRAINT operation_invoice_fk_ct   FOREIGN KEY(invoiceId, invoiceType, businessId, businessType)\n"
+                                     "                                         REFERENCES invoice(id, type, businessId, businessType)\n"
+                                     "                                             ON UPDATE CASCADE\n"
+                                     "                                             ON DELETE CASCADE,\n"
+                                     "    CONSTRAINT operation_product_fk_ct   FOREIGN KEY(product)\n"
+                                     "                                         REFERENCES product(id)\n"
+                                     "                                             ON UPDATE CASCADE\n"
+                                     "                                             ON DELETE SET NULL,\n"
+                                     "    CONSTRAINT operation_quantity_chk_ct CHECK(quantity>=0),\n"
+                                     "    CONSTRAINT operation_weight_chk_ct   CHECK(weight>=0.0),\n"
+                                     "    CONSTRAINT operation_price_chk_ct    CHECK(price>=0.0)\n"
+                                     ")");
+
+    bool unpaids = agent -> create("CREATE VIEW IF NOT EXISTS unpaids AS\n"
+                                   "    SELECT * FROM invoice WHERE paid=0");
+
+    bool foreignKeys = agent -> create("PRAGMA foreign_keys=ON;");
+
+    return entity && invoice && tax && category && product && operation && unpaids && foreignKeys;
 }

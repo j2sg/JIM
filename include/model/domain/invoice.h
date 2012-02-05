@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,39 +25,46 @@
 #include <QDate>
 #include <QList>
 #include <iostream>
-#include "operation.h"
+#include "tax.h"
 #include "types.h"
 
 namespace Model
 {
     namespace Domain
     {
+
+        class Entity;
+        class Operation;
+
         class Invoice
         {
             friend std::ostream &operator<<(std::ostream &os, const Invoice &invoice);
         public:
-            Invoice(int id = NO_ID, InvoiceType type = Sale);
+            Invoice(Entity *business, int id = NO_ID, InvoiceType type = Buy);
             Invoice(const Invoice &invoice);
             ~Invoice();
             Invoice &operator=(const Invoice &invoice);
+            bool operator==(const Invoice &invoice) const;
+            bool operator!=(const Invoice &invoice) const;
             void setId(int id);
             int id() const;
             void setType(InvoiceType type);
             InvoiceType type() const;
+            void setBusiness(Entity *business);
+            Entity *business() const;
+            void setEntity(Entity *entity);
+            Entity *entity() const;
             void setDate(const QDate &date);
             const QDate &date() const;
-            void setBuyerId(int buyerId);
-            int buyerId() const;
-            void setBuyerName(const QString &buyerName);
-            const QString &buyerName() const;
-            void setSellerId(int sellerId);
-            int sellerId() const;
-            void setSellerName(const QString &sellerName);
-            const QString &sellerName() const;
-            void setOperations(QList<Model::Domain::Operation> *operations);
-            QList<Model::Domain::Operation> *operations() const;
-            void setVat(double vat);
-            double vat() const;
+            void setPlace(const QString &place);
+            const QString &place() const;
+            void setOperations(QList<Operation *> *operations);
+            QList<Operation *> *operations() const;
+            void setTaxOnInvoice(TaxFlag taxOnInvoice);
+            TaxFlag taxOnInvoice() const;
+            void setTax(const Tax &tax);
+            const Tax &tax(TaxType type) const;
+            Tax *tax();
             void setPaid(bool paid);
             bool paid() const;
             void setPayment(PaymentType payment);
@@ -65,22 +72,23 @@ namespace Model
             void setNotes(const QString &notes);
             const QString &notes() const;
             double subtotal() const;
+            const QList<VatBreakdown> &breakdown() const;
             double total() const;
+
         private:
             int _id;
             InvoiceType _type;
+            Entity *_business;
+            Entity *_entity;
             QDate _date;
-            int _buyerId;
-            QString _buyerName;
-            int _sellerId;
-            QString _sellerName;
-            QList<Model::Domain::Operation> *_operations;
-            double _vat;
+            QString _place;
+            QList<Operation *> *_operations;
+            TaxFlag _taxOnInvoice;
+            Tax _tax[TaxTypeCount];
             bool _paid;
             PaymentType _payment;
             QString _notes;
         };
-        std::ostream &operator<<(std::ostream &os, const Invoice &invoice);
     }
 }
 

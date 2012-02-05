@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include "types.h"
 #include <QDesktopServices>
 
+// Application Properties
 #define ORGANIZATION_NAME   "j2sg_software"
 #define ORGANIZATION_DOMAIN "http://j2sg.wordpress.com"
 #define AUTHOR_NAME         "Juan Jose Salazar Garcia"
@@ -31,6 +32,7 @@
 #define APPLICATION_NAME    "QInvoicer"
 #define APPLICATION_VERSION "0.1 Alpha"
 
+// Configuration Default Values
 #define DEFAULT_STORAGE_TYPE        Persistence::DBMS
 #define DEFAULT_STORAGE_PATH        QDesktopServices::storageLocation(QDesktopServices::DataLocation)
 #define DEFAULT_STORAGE_DBMS_DRIVER "QSQLITE"

@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #define INVOICEEDITORDATATAB_H
 
 #include <QWidget>
+#include "types.h"
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -45,6 +46,7 @@ namespace View
     namespace Invoicing
     {
         class OperationEditor;
+        class TaxViewerWidget;
 
         class InvoiceEditorDataTab : public QWidget
         {
@@ -56,16 +58,15 @@ namespace View
         public slots:
             void loadInvoice();
             void saveInvoice();
+            void updateTaxApplying(Model::Domain::TaxFlag taxApplying);
+            void updateTax();
             bool isSaveable();
         private slots:
             void stateChangedOnAutoIdCheckBox();
-            void stateChangedOnRegisteredCheckBox();
-            void stateChangedOnVatCheckBox();
             void stateChangedOnPaidCheckBox();
             void updateId();
-            void updateEntityId();
             void selectEntity();
-            void updateVat();
+            void detailEntity();
             void updateTotals();
         private:
             void createWidgets();
@@ -80,15 +81,18 @@ namespace View
             QCheckBox *_autoIdCheckBox;
             QLabel *_dateLabel;
             QDateEdit *_dateDateEdit;
+            QLabel *_placeLabel;
+            QLineEdit *_placeLineEdit;
             QLabel *_entityIdLabel;
             QLineEdit *_entityIdLineEdit;
-            QCheckBox *_entityRegisteredCheckBox;
             QLabel *_entityNameLabel;
             QLineEdit *_entityNameLineEdit;
+            QLabel *_entityVatinLabel;
+            QLineEdit *_entityVatinLineEdit;
             QPushButton *_selectEntityPushButton;
+            QPushButton *_detailEntityPushButton;
             OperationEditor *_operationEditor;
-            QCheckBox *_vatCheckBox;
-            QLineEdit *_vatLineEdit;
+            TaxViewerWidget *_taxViewerWidget;
             QCheckBox *_paidCheckBox;
             QComboBox *_paymentComboBox;
             QLabel *_subtotalLabel;

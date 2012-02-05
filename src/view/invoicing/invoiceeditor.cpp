@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,10 +31,12 @@ View::Invoicing::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, Q
 {
     createWidgets();
     createConnections();
+
     setTitle();
-    setMinimumWidth(550);
-    loadInvoice();
+    setMinimumWidth(INVOICE_EDITOR_MINIMUM_WIDTH);
     setAttribute(Qt::WA_DeleteOnClose);
+
+    loadInvoice();
 }
 
 View::Invoicing::InvoiceEditor::~InvoiceEditor()
@@ -57,19 +59,17 @@ void View::Invoicing::InvoiceEditor::invoiceModified(bool modified)
     _saveButton -> setEnabled(isSaveable() && modified);
 }
 
-void View::Invoicing::InvoiceEditor::save()
+bool View::Invoicing::InvoiceEditor::save()
 {
     if(saveInvoice()) {
+        emit saved(*_invoice);
+        setTitle();
         invoiceModified(false);
-        _saveButton -> setEnabled(false);
-        emit saved(_invoice);
-    } else
+        return true;
+    } else {
         QMessageBox::critical(this, tr("Critical error"), tr("Has been occurred an error when save"), QMessageBox::Ok);
-}
-
-void View::Invoicing::InvoiceEditor::finish()
-{
-    emit finished();
+        return false;
+    }
 }
 
 void View::Invoicing::InvoiceEditor::createWidgets()
@@ -82,10 +82,10 @@ void View::Invoicing::InvoiceEditor::createWidgets()
 
     _saveButton = new QPushButton(tr("Save"));
     _saveButton -> setIcon(QIcon(":/images/ok.png"));
+    _saveButton -> setDefault(true);
     _saveButton -> setEnabled(false);
     _finishButton = new QPushButton(tr("&Finish"));
     _finishButton -> setIcon(QIcon(":/images/cancel.png"));
-    _finishButton -> setDefault(true);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout -> addStretch();
@@ -103,18 +103,26 @@ void View::Invoicing::InvoiceEditor::createConnections()
 {
     connect(_dataTab, SIGNAL(dataChanged()),
             this, SLOT(invoiceModified()));
-    connect(_otherTab, SIGNAL(dataChanged()),
+    connect(_otherTab, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
             this, SLOT(invoiceModified()));
+    connect(_otherTab, SIGNAL(taxChanged(Model::Domain::TaxType,double)),
+            this, SLOT(invoiceModified()));
+    connect(_otherTab, SIGNAL(notesChanged()),
+            this, SLOT(invoiceModified()));
+    connect(_otherTab, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
+            _dataTab, SLOT(updateTaxApplying(Model::Domain::TaxFlag)));
+    connect(_otherTab, SIGNAL(taxChanged(Model::Domain::TaxType,double)),
+            _dataTab, SLOT(updateTax()));
     connect(_saveButton, SIGNAL(clicked()),
             this, SLOT(save()));
     connect(_finishButton, SIGNAL(clicked()),
-            this, SLOT(finish()));
+            this, SIGNAL(finished()));
 }
 
 void View::Invoicing::InvoiceEditor::setTitle()
 {
     setWindowTitle(tr("%1 Invoice %2").arg((static_cast<int>(_invoice -> type())) ? tr("Sale") : tr("Buy"))
-                   .arg(((!IS_NEW(_invoice -> id())) ? ("#"+QString::number(_invoice -> id())) : tr("New"))+"[*]"));
+                   .arg(((!IS_NEW(_invoice -> id())) ? ("#" + QString::number(_invoice -> id())) : tr("New")) + "[*]"));
 }
 
 void View::Invoicing::InvoiceEditor::loadInvoice()
@@ -126,18 +134,11 @@ void View::Invoicing::InvoiceEditor::loadInvoice()
 
 bool View::Invoicing::InvoiceEditor::saveInvoice()
 {
-    bool isNew = IS_NEW(_invoice -> id());
-
     _dataTab -> saveInvoice();
     _otherTab -> saveInvoice();
 
-    bool res = (isNew ? Model::Management::InvoiceManager::create(*_invoice) :
-                        Model::Management::InvoiceManager::modify(*_invoice));
-
-    if(res)
-        setTitle();
-
-    return res;
+    return (IS_NEW(_invoice -> id()) ? Model::Management::InvoiceManager::create(*_invoice) :
+                                       Model::Management::InvoiceManager::modify(*_invoice));
 }
 
 bool View::Invoicing::InvoiceEditor::isSaveable()
@@ -148,17 +149,17 @@ bool View::Invoicing::InvoiceEditor::isSaveable()
 bool View::Invoicing::InvoiceEditor::verifySave()
 {
     if(isWindowModified() && isSaveable()) {
-        int response = QMessageBox::warning(this, tr("Verify Save"),
-                                                  tr("This invoice has been modified\n"
-                                                     "do you want to save the changes?"),
-                                                  QMessageBox::Yes | QMessageBox::Default |
-                                                  QMessageBox::No | QMessageBox::Cancel |
-                                                  QMessageBox::Escape);
-        if(response == QMessageBox::Cancel)
+        int res = QMessageBox::warning(this, tr("Verify Save"),
+                                             tr("This invoice has been modified\n"
+                                                "do you want to save the changes?"),
+                                             QMessageBox::Yes | QMessageBox::Default |
+                                             QMessageBox::No | QMessageBox::Cancel |
+                                             QMessageBox::Escape);
+        if(res == QMessageBox::Yes)
+            return save();
+        else if(res == QMessageBox::Cancel)
             return false;
-        else if(response == QMessageBox::Yes)
-            save();
-        return true;
-     } else
-        return true;
+    }
+
+    return true;
 }

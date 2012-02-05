@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,30 +29,41 @@ namespace Model
 {
     namespace Domain
     {
+
+        class Category;
+
         class Product
         {
             friend std::ostream &operator<<(std::ostream &os, const Product &product);
         public:
             Product(int id = NO_ID, const QString &name = QString(),
-                    double price = 0.0, PriceType priceType = Units);
+                    Category *category = 0, double price = 0.0,
+                    PriceType priceType = Units);
+            Product(const Product &product);
+            ~Product();
+            Product &operator=(const Product &product);
+            bool operator==(const Product &product) const;
+            bool operator!=(const Product &product) const;
             void setId(int id);
             int id() const;
             void setName(const QString &name);
             const QString &name() const;
-            void setDescription(const QString &description);
-            const QString &description() const;
+            void setCategory(Category *category);
+            Category *category() const;
             void setPrice(double price);
             double price() const;
             void setPriceType(PriceType priceType);
             PriceType priceType() const;
+            void setDescription(const QString &description);
+            const QString &description() const;
         private:
             int _id;
             QString _name;
-            QString _description;
+            Category *_category;
             double _price;
             PriceType _priceType;
+            QString _description;
         };
-        std::ostream &operator<<(std::ostream &os, const Product &product);
     }
 }
 

@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,9 +23,11 @@
 
 #include <QWidget>
 
+#define INVOICE_EDITOR_MINIMUM_WIDTH 550
+
 QT_BEGIN_NAMESPACE
-class QPushButton;
 class QTabWidget;
+class QPushButton;
 QT_END_NAMESPACE
 
 namespace Model
@@ -53,12 +55,11 @@ namespace View
         protected:
             void closeEvent(QCloseEvent *event);
         signals:
-            void saved(Model::Domain::Invoice *invoice);
+            void saved(const Model::Domain::Invoice &invoice);
             void finished();
         private slots:
             void invoiceModified(bool modified = true);
-            void save();
-            void finish();
+            bool save();
         private:
             void createWidgets();
             void createConnections();

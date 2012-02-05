@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include "productdialog.h"
 #include "product.h"
 #include "productmanager.h"
+#include "categorymanager.h"
 #include "types.h"
 #include <QtGui>
 
@@ -47,38 +48,42 @@ void View::Management::ProductDialog::productModified(bool modified)
 
 void View::Management::ProductDialog::save()
 {
-    if(saveProduct()) {
-        productModified(false);
-        _saveButton->setEnabled(false);
+    if(saveProduct())
         emit accept();
-    } else
+    else
         QMessageBox::critical(this, tr("Critical error"), tr("Has been occurred an error when save"), QMessageBox::Ok);
 }
 
 void View::Management::ProductDialog::createWidgets()
 {
-    _idLabel = new QLabel(tr("&Id"));
+    _idLabel = new QLabel(tr("&Id:"));
     _idLineEdit = new QLineEdit;
+    _idLineEdit -> setEnabled(!IS_NEW(_product -> id()));
     _idLabel -> setBuddy(_idLineEdit);
     _autoIdCheckBox = new QCheckBox(tr("Auto &Generate"));
-    _autoIdCheckBox -> setChecked(true);
+    _autoIdCheckBox -> setChecked(IS_NEW(_product -> id()));
 
-    _nameLabel = new QLabel(tr("&Name"));
+    _nameLabel = new QLabel(tr("&Name:"));
     _nameLineEdit = new QLineEdit;
     _nameLabel -> setBuddy(_nameLineEdit);
 
-    _descriptionLabel = new QLabel(tr("&Description"));
+    _categoryLabel = new QLabel(tr("&Category:"));
+    _categoryComboBox = new QComboBox;
+    _categoryComboBox -> addItems(Model::Management::CategoryManager::getAllNames().keys());
+    _categoryLabel -> setBuddy(_categoryComboBox);
+
+    _descriptionLabel = new QLabel(tr("&Description:"));
     _descriptionTextEdit = new QTextEdit;
     _descriptionLabel -> setBuddy(_descriptionTextEdit);
     _descriptionTextEdit->setMaximumHeight(50);
 
-    _priceLabel = new QLabel(tr("&Price"));
+    _priceLabel = new QLabel(tr("&Price:"));
     _priceLineEdit = new QLineEdit;
     _priceLabel -> setBuddy(_priceLineEdit);
 
-    _priceTypeLabel = new QLabel(tr("&Type"));
+    _priceTypeLabel = new QLabel(tr("&Type:"));
     _priceTypeComboBox = new QComboBox;
-    _priceTypeComboBox->addItems(QStringList() << tr("Units") << tr("Weight"));
+    _priceTypeComboBox -> addItems(QStringList() << tr("Units") << tr("Weight"));
     _priceTypeLabel -> setBuddy(_priceTypeComboBox);
 
     QGridLayout *topLayout = new QGridLayout;
@@ -87,18 +92,21 @@ void View::Management::ProductDialog::createWidgets()
     topLayout -> addWidget(_autoIdCheckBox, 0, 2, 1, 2);
     topLayout -> addWidget(_nameLabel, 1, 0, 1, 1);
     topLayout -> addWidget(_nameLineEdit, 1, 1, 1, 3);
-
-    topLayout -> addWidget(_descriptionLabel, 2, 0, 1, 2);
-    topLayout -> addWidget(_descriptionTextEdit, 3, 0, 1, 4);
-    topLayout -> addWidget(_priceLabel, 4, 0, 1, 1);
-    topLayout -> addWidget(_priceLineEdit, 4, 1, 1, 1);
-    topLayout -> addWidget(_priceTypeLabel, 4, 2, 1, 1);
-    topLayout -> addWidget(_priceTypeComboBox, 4, 3, 1, 1);
+    topLayout -> addWidget(_categoryLabel, 2, 0, 1, 1);
+    topLayout -> addWidget(_categoryComboBox, 2, 1, 1, 2);
+    topLayout -> addWidget(_descriptionLabel, 3, 0, 1, 2);
+    topLayout -> addWidget(_descriptionTextEdit, 4, 0, 1, 4);
+    topLayout -> addWidget(_priceLabel, 5, 0, 1, 1);
+    topLayout -> addWidget(_priceLineEdit, 5, 1, 1, 1);
+    topLayout -> addWidget(_priceTypeLabel, 5, 2, 1, 1);
+    topLayout -> addWidget(_priceTypeComboBox, 5, 3, 1, 1);
 
     _saveButton = new QPushButton(tr("&Save"));
+    _saveButton -> setIcon(QIcon(":/images/save.png"));
     _saveButton -> setDefault(true);
     _saveButton -> setEnabled(false);
     _cancelButton = new QPushButton(tr("&Cancel"));
+    _cancelButton -> setIcon(QIcon(":/images/cancel.png"));
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
 
@@ -122,6 +130,8 @@ void View::Management::ProductDialog::createConnections()
             this, SLOT(stateChangedOnAutoIdCheckBox()));
     connect(_nameLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(productModified()));
+    connect(_categoryComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(productModified()));
     connect(_descriptionTextEdit, SIGNAL(textChanged()),
             this, SLOT(productModified()));
     connect(_priceLineEdit, SIGNAL(textChanged(QString)),
@@ -136,8 +146,10 @@ void View::Management::ProductDialog::createConnections()
 
 void View::Management::ProductDialog::loadProduct()
 {
-    _idLineEdit -> setText(QString::number(((_product -> id() == NO_ID)? Model::Management::ProductManager::getId() : _product->id())));
-    _autoIdCheckBox -> setEnabled((_product->id() == NO_ID));
+    _idLineEdit -> setText(QString::number(((IS_NEW(_product -> id()))?
+                                                Model::Management::ProductManager::getId() :
+                                                _product->id())));
+    _autoIdCheckBox -> setEnabled((IS_NEW(_product->id())));
     _nameLineEdit -> setText(_product->name());
     _descriptionTextEdit -> setPlainText(_product->description());
     _priceLineEdit -> setText(QString::number(_product->price(),'f', PRECISION_MONEY));
@@ -149,6 +161,7 @@ bool View::Management::ProductDialog::saveProduct()
 {
     _product -> setId(_idLineEdit -> text().toInt());
     _product -> setName(_nameLineEdit -> text());
+    _product -> setCategory(Model::Management::CategoryManager::get(Model::Management::CategoryManager::getAllNames().value(_categoryComboBox -> currentText())));
     _product -> setDescription(_descriptionTextEdit -> toPlainText());
     _product -> setPrice(_priceLineEdit -> text().toDouble());
     _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> currentIndex()));

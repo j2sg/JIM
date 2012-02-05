@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 #define INVOICEMANAGER_H
 
 #include <QList>
-#include <QString>
 #include "invoice.h"
 
 namespace Model
@@ -34,11 +33,11 @@ namespace Model
         public:
             static bool create(const Model::Domain::Invoice &invoice);
             static bool modify(const Model::Domain::Invoice &invoice);
-            static bool remove(int id);
-            static Model::Domain::Invoice *get(int id);
-            static QList<Model::Domain::Invoice> *getAllByType(Model::Domain::InvoiceType type);
-            static QList<Model::Domain::Invoice> *getAll();
-            static int getId();
+            static bool remove(int id, Model::Domain::InvoiceType type, int businessId);
+            static Model::Domain::Invoice *get(int id, Model::Domain::InvoiceType type, int businessId);
+            static QList<Model::Domain::Invoice *> *getAllByType(Model::Domain::InvoiceType type, int businessId);
+            static QList<Model::Domain::Invoice *> *getAll(int businessId);
+            static int getId(Model::Domain::InvoiceType type, int businessId);
         };
     }
 }

@@ -4,33 +4,91 @@
   and business management on scope of SMBs (Small and Medium Business). Therefore, the application must
   be able to:
 
-    - Create, load and store invoices both sale and buy that involve customers or clients.
+    - Create, load and store invoices both sale and buy that involve customers or suppliers.
 
-      Any invoice is composed by next fields:
+      All invoices are composed by next fields:
 
-        - ID unique.
-        - Type that may be sale or buy.
+        - Unique Identifier.
+        - Type which may be sale or buy.
         - Place of invoice emission.
         - Date of invoice emission.
-        - Name and Identifier of seller.
-        - Name and Identifier of buyer.
-        - Operations list where each one is composed by:
+        - Identifier, Name, and contact information of seller.
+        - Identifier, Name, and contact information of buyer.
+        - Operations list that describe goods and services, where each one is composed by:
 
-          - Unique code of good or service involved.
-          - Name that describe the good or service.
-          - Quantity of packages or unitary elements that composes the operation.
-          - Weight of packages.
-          - Price that can be two types, by units or by weight.
-          - Total Price according the quantity, weight and kind.
+            - Unique Identifier of good or service involved.
+            - Name that describe the good or service.
+            - Quantity of packages or unitary elements that composes the good or service.
+            - Weight of packages.
+            - Unitary Price, which can be two types, by quantity or by weight.
+            - Total Price according to product, quantity, weight, unitary price and its type.
 
-        - VAT (Value Added Tax).
-        - Invoice total price.
+        - Tax Payment Details, which will follow spanish fiscal system so we might specify
+          next parameters in each invoice:
+
+            - IVA : VAT (Value Added Tax). Each kind of product has its own VAT which can be:
+
+                - General :       18 %
+                - Reduced :        8 %
+                - Super Reduced :  4 %
+
+              The previous Values corresponds to the last update of july 2010.
+
+            - RE : ES (Equivalent Surcharge). Used in a retail business. It's linked to kind of VAT:
+
+                - General :       4   %
+                - Reduced :       1   %
+                - Super Reduced : 0.5 %
+
+            - IRPF : PIT (Personal Income Tax). Deduction for withholding tax if necessary.
+
+          We will see all VAT charges through a VAT breakdown by types.
+
+        - Subtotal price (without taxes).
+        - Total price which we obtain adding the subtotal and taxes.
         - Paid or not.
+        - Payment method (cash, credit card, bank transaction).
+      
+      Each invoice belongs to a business which has a set of taxes that will be used on invoicing.
 
+    - Management of products, customers and suppliers so will be able to add, modify and remove each one of these.
 
-    - Management of products, customers and providers so will be able to add, modify and remove each one of these.
+        - Products are composed by next fields:
+
+            - Unique identifier.
+            - Name.
+            - Brief description.
+            - Category.
+            - Price.
+
+        - Product Categories are composed by next fields:
+
+            - Unique identifier.
+            - Name.
+            - Brief description.
+            - Associated tax.
+
+        - Tax are composed by next fields:
+        
+            - Unique identifier.
+            - Name.
+            - Type which can be VAT (Value Added Tax), ES (Equivalent Surcharge) or PIT (Personal Income Tax).
+            - Value that will be positive for VAT and ES types and negative for PIT type.
+
+         - Customers, Suppliers and Business are composed by next fields:
+
+            - Unique identifier.
+            - VAT identification number a.k.a. VATIN.
+            - Full Address.
+            - Contact Information (Telephone, email, etc).
+
     - Show reports for invoicing volume, current stocks and unpaid invoices.
 
-    * Note: Likely these requirements will be extended and/or improved on each future version.
+  Likely these requirements will be extended and/or improved on each future version.
 
--
+- References:
+
+  - http://en.wikipedia.org/wiki/Invoice
+  - http://en.wikipedia.org/wiki/Value_added_tax
+  - http://www.aeat.es/AEAT.internet/Inicio_es_ES/_Configuracion_/_top_/Ayuda/Biblioteca_Virtual/Manuales_practicos/Manuales_practicos.shtml
+  - http://en.wikipedia.org/wiki/VAT_identification_number

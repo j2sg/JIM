@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,38 +23,47 @@
 
 #include <QWidget>
 #include <QList>
-#include "operation.h"
 
 QT_BEGIN_NAMESPACE
-class QTableView;
 class QPushButton;
 QT_END_NAMESPACE
+
+namespace Model
+{
+    namespace Domain
+    {
+        class Operation;
+    }
+}
 
 namespace View
 {
     namespace Invoicing
     {
+
+        class OperationTable;
         class OperationModel;
 
         class OperationEditor : public QWidget
         {
             Q_OBJECT
         public:
-            OperationEditor(QList<Model::Domain::Operation> *operations, QWidget *parent = 0);
-            QList<Model::Domain::Operation> *operations();
+            OperationEditor(QList<Model::Domain::Operation *> *operations = 0, QWidget *parent = 0);
+            void setOperations(QList<Model::Domain::Operation *> *operations);
+            QList<Model::Domain::Operation *> *operations();
         signals:
             void dataChanged();
         private slots:
             void rowSelectionChanged();
+            void productNotFound();
             void addOperation();
             void modOperation();
             void delOperation();
         private:
-            void createWidgets();
-            void createModel(QList<Model::Domain::Operation> *operations);
+            void createWidgets(QList<Model::Domain::Operation *> *operations);
             void createConnections();
 
-            QTableView *_operationsTableView;
+            OperationTable *_operationsTable;
             OperationModel *_operationModel;
             QPushButton *_addOperationButton;
             QPushButton *_modOperationButton;

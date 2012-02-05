@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,14 @@
 
 #include <QAbstractTableModel>
 #include <QList>
-#include "product.h"
+
+namespace Model
+{
+    namespace Domain
+    {
+        class Product;
+    }
+}
 
 namespace View
 {
@@ -32,11 +39,13 @@ namespace View
         class ProductModel : public QAbstractTableModel
         {
         public:
-            ProductModel(QList<Model::Domain::Product> *products, QObject *parent = 0);
-            QList<Model::Domain::Product> *products();
-            void setProducts(QList<Model::Domain::Product> *products);
-            bool insertProduct(int k, const Model::Domain::Product &product);
-            bool modifyProduct(int k, const Model::Domain::Product &product);
+            ProductModel(QList<Model::Domain::Product *> *products, QObject *parent = 0)
+                : QAbstractTableModel(parent), _products(products) {}
+            ~ProductModel();
+            QList<Model::Domain::Product *> *products();
+            void setProducts(QList<Model::Domain::Product *> *products);
+            bool insertProduct(int k, Model::Domain::Product *product);
+            bool modifyProduct(int k);
             bool removeProduct(int k);
             int rowCount(const QModelIndex &parent) const;
             int columnCount(const QModelIndex &parent) const;
@@ -45,7 +54,7 @@ namespace View
             bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
             QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         private:
-            QList<Model::Domain::Product> *_products;
+            QList<Model::Domain::Product *> *_products;
         };
     }
 }

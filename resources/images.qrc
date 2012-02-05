@@ -18,5 +18,12 @@
         <file>images/cancel.png</file>
         <file>images/modify.png</file>
         <file>images/add.png</file>
+        <file>images/business.png</file>
+        <file>images/supplier.png</file>
+        <file>images/options.png</file>
+        <file>images/printing.png</file>
+        <file>images/address.png</file>
+        <file>images/calc.png</file>
+        <file>images/save.png</file>
     </qresource>
 </RCC>

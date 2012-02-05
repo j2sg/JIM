@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,12 +22,15 @@
 #define OPERATION_H
 
 #include <iostream>
-#include "product.h"
+#include "types.h"
 
 namespace Model
 {
     namespace Domain
     {
+
+        class Product;
+
         class Operation
         {
             friend std::ostream &operator<<(std::ostream &os, const Operation &operation);
@@ -37,6 +40,8 @@ namespace Model
             Operation(const Operation &operation);
             ~Operation();
             Operation &operator=(const Operation &operation);
+            bool operator==(const Operation &operation) const;
+            bool operator!=(const Operation &operation) const;
             void setId(int id);
             int id() const;
             void setProduct(Product *product);
@@ -48,8 +53,6 @@ namespace Model
             void setPrice(double price);
             double price() const;
             double total() const;
-            bool operator==(const Operation &operation) const;
-            bool operator!=(const Operation &operation) const;
         private:
             int _id;
             Product *_product;
@@ -57,7 +60,6 @@ namespace Model
             double _weight;
             double _price;
         };
-        std::ostream &operator<<(std::ostream &os, const Operation &operation);
     }
 }
 

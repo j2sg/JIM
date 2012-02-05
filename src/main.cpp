@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,9 +28,11 @@ void setUpApplication(QApplication *app);
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
     setUpApplication(&app);
     View::QInvoicer invoicer;
     invoicer.show();
+
     return app.exec();
 }
 
@@ -40,8 +42,10 @@ void setUpApplication(QApplication *app)
     app -> setOrganizationDomain(ORGANIZATION_DOMAIN);
     app -> setApplicationName(APPLICATION_NAME);
     app -> setApplicationVersion(APPLICATION_VERSION);
+
     if(!Persistence::Manager::existsConfig())
         Persistence::Manager::createConfig();
+
     if(!Persistence::Manager::existsStorage())
         Persistence::Manager::createStorage();
 }

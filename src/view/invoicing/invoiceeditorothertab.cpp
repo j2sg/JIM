@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
  **/
 
 #include "invoiceeditorothertab.h"
+#include "taxapplyingwidget.h"
+#include "taxwidget.h"
 #include "invoice.h"
 #include <QtGui>
 
@@ -31,17 +33,29 @@ View::Invoicing::InvoiceEditorOtherTab::InvoiceEditorOtherTab(Model::Domain::Inv
 
 void View::Invoicing::InvoiceEditorOtherTab::loadInvoice()
 {
+    _taxApplyingWidget -> setTaxApplying(_invoice -> taxOnInvoice());
+    _taxWidget -> setTax(_invoice -> tax());
     _notesTextEdit -> setPlainText(_invoice -> notes());
 }
 
 void View::Invoicing::InvoiceEditorOtherTab::saveInvoice()
 {
+    _invoice -> setTaxOnInvoice(_taxApplyingWidget -> taxApplying());
     _invoice -> setNotes(_notesTextEdit -> toPlainText());
 }
 
 void View::Invoicing::InvoiceEditorOtherTab::createWidgets()
 {
+    _taxApplyingWidget = new View::Management::TaxApplyingWidget;
+    _taxWidget = new View::Management::TaxWidget;
     _notesTextEdit = new QTextEdit;
+
+    QVBoxLayout *taxesLayout = new QVBoxLayout;
+    taxesLayout -> addWidget(_taxApplyingWidget);
+    taxesLayout -> addWidget(_taxWidget);
+
+    QGroupBox *taxesGroupBox = new QGroupBox(tr("Taxes"));
+    taxesGroupBox -> setLayout(taxesLayout);
 
     QHBoxLayout *notesLayout = new QHBoxLayout;
     notesLayout -> addWidget(_notesTextEdit);
@@ -50,6 +64,7 @@ void View::Invoicing::InvoiceEditorOtherTab::createWidgets()
     notesGroupBox -> setLayout(notesLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout -> addWidget(taxesGroupBox);
     mainLayout -> addWidget(notesGroupBox);
 
     setLayout(mainLayout);
@@ -57,6 +72,10 @@ void View::Invoicing::InvoiceEditorOtherTab::createWidgets()
 
 void View::Invoicing::InvoiceEditorOtherTab::createConnections()
 {
+    connect(_taxApplyingWidget, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
+            this, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)));
+    connect(_taxWidget, SIGNAL(taxChanged(Model::Domain::TaxType,double)),
+            this, SIGNAL(taxChanged(Model::Domain::TaxType,double)));
     connect(_notesTextEdit, SIGNAL(textChanged()),
-            this, SIGNAL(dataChanged()));
+            this, SIGNAL(notesChanged()));
 }

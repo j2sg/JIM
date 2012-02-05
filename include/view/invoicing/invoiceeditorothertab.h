@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #define INVOICEEDITOROTHERTAB_H
 
 #include <QWidget>
+#include "types.h"
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -37,6 +38,13 @@ namespace Model
 
 namespace View
 {
+
+    namespace Management
+    {
+        class TaxApplyingWidget;
+        class TaxWidget;
+    }
+
     namespace Invoicing
     {
         class InvoiceEditorOtherTab : public QWidget
@@ -45,7 +53,9 @@ namespace View
         public:
             InvoiceEditorOtherTab(Model::Domain::Invoice *invoice, QWidget *parent = 0);
         signals:
-            void dataChanged();
+            void taxApplyingChanged(Model::Domain::TaxFlag taxApplying);
+            void taxChanged(Model::Domain::TaxType type, double value);
+            void notesChanged();
         public slots:
             void loadInvoice();
             void saveInvoice();
@@ -53,6 +63,8 @@ namespace View
             void createWidgets();
             void createConnections();
 
+            View::Management::TaxApplyingWidget *_taxApplyingWidget;
+            View::Management::TaxWidget *_taxWidget;
             QTextEdit *_notesTextEdit;
             Model::Domain::Invoice *_invoice;
         };

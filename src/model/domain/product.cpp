@@ -1,7 +1,7 @@
 /**
  *  This file is part of QInvoicer.
  *
- *  Copyright (c) 2011 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
  *
  *  QInvoicer is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,20 +19,53 @@
  **/
 
 #include "product.h"
+#include "category.h"
 
 Model::Domain::Product::Product(int id, const QString &name,
-                                double price, PriceType priceType)
-    : _id(id), _name(name), _price(price), _priceType(priceType)
+                                Category *category, double price,
+                                PriceType priceType)
+    : _id(id), _name(name), _category(category), _price(price), _priceType(priceType)
 {
-    if(_price < 0)
-        _price = 0.0;
+    _description = QString();
+}
+
+Model::Domain::Product::Product(const Product &product)
+{
+    *this = product;
+}
+
+Model::Domain::Product::~Product()
+{
+    if(_category)
+        delete _category;
+}
+
+Model::Domain::Product &Model::Domain::Product::operator=(const Product &product)
+{
+    _id = product._id;
+    _name = product._name;
+    _category = (product._category) ? new Category(*product._category) : 0;
+    _price = product._price;
+    _priceType = product._priceType;
+    _description = product._description;
+
+    return *this;
+}
+
+bool Model::Domain::Product::operator==(const Product &product) const
+{
+    return _id == product._id;
+}
+
+bool Model::Domain::Product::operator!=(const Product &product) const
+{
+    return !(*this == product);
 }
 
 void Model::Domain::Product::setId(int id)
 {
     _id = id;
 }
-
 
 int Model::Domain::Product::id() const
 {
@@ -49,14 +82,17 @@ const QString &Model::Domain::Product::name() const
     return _name;
 }
 
-void Model::Domain::Product::setDescription(const QString &description)
+void Model::Domain::Product::setCategory(Category *category)
 {
-    _description = description;
+    if(_category)
+        delete _category;
+
+    _category = category;
 }
 
-const QString &Model::Domain::Product::description() const
+Model::Domain::Category *Model::Domain::Product::category() const
 {
-    return _description;
+    return _category;
 }
 
 void Model::Domain::Product::setPrice(double price)
@@ -79,10 +115,12 @@ Model::Domain::PriceType Model::Domain::Product::priceType() const
     return _priceType;
 }
 
-std::ostream &Model::Domain::operator<<(std::ostream &os, const Product &product)
+void Model::Domain::Product::setDescription(const QString &description)
 {
-    return os << product._id                 << std::endl
-              << product._name.toStdString() << std::endl
-              << product._price              << std::endl
-              << product._priceType          << std::endl;
+    _description = description;
+}
+
+const QString &Model::Domain::Product::description() const
+{
+    return _description;
 }
