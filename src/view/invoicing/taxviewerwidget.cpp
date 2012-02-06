@@ -28,40 +28,67 @@ View::Invoicing::TaxViewerWidget::TaxViewerWidget(QWidget *parent) : QWidget(par
     reset();
 }
 
-void View::Invoicing::TaxViewerWidget::setTaxes(Model::Domain::TaxType type, double percent, double value)
+void View::Invoicing::TaxViewerWidget::setTax(Model::Domain::TaxType type, double percent, double value)
 {
     switch(static_cast<int>(type)) {
     case Model::Domain::GeneralVAT:
         _taxTableWidget -> item(0, 0) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(0, 1) -> setText(QString::number(value, 'f', PRECISION_VAT));
+        _taxTableWidget -> item(0, 1) -> setText(QString::number(value, 'f', PRECISION_MONEY));
         break;
     case Model::Domain::ReducedVAT:
         _taxTableWidget -> item(1, 0) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(1, 1) -> setText(QString::number(value, 'f', PRECISION_VAT));
+        _taxTableWidget -> item(1, 1) -> setText(QString::number(value, 'f', PRECISION_MONEY));
         break;
     case Model::Domain::SuperReducedVAT:
         _taxTableWidget -> item(2, 0) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(2, 1) -> setText(QString::number(value, 'f', PRECISION_VAT));
+        _taxTableWidget -> item(2, 1) -> setText(QString::number(value, 'f', PRECISION_MONEY));
         break;
     case Model::Domain::GeneralES:
         _taxTableWidget -> item(0, 2) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(0, 3) -> setText(QString::number(value, 'f', PRECISION_VAT));
+        _taxTableWidget -> item(0, 3) -> setText(QString::number(value, 'f', PRECISION_MONEY));
         break;
     case Model::Domain::ReducedES:
         _taxTableWidget -> item(1, 2) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(1, 3) -> setText(QString::number(value, 'f', PRECISION_VAT));
+        _taxTableWidget -> item(1, 3) -> setText(QString::number(value, 'f', PRECISION_MONEY));
         break;
     case Model::Domain::SuperReducedES:
         _taxTableWidget -> item(2, 2) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(2, 3) -> setText(QString::number(value, 'f', PRECISION_VAT));
+        _taxTableWidget -> item(2, 3) -> setText(QString::number(value, 'f', PRECISION_MONEY));
         break;
     case Model::Domain::PIT:
         _taxTableWidget -> item(3, 0) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(3, 1) -> setText(QString::number(value, 'f', PRECISION_VAT));
+        _taxTableWidget -> item(3, 1) -> setText(QString::number(-value, 'f', PRECISION_MONEY));
         break;
     }
 
     updateRows();
+}
+
+void View::Invoicing::TaxViewerWidget::setTaxes(const QList<Model::Domain::VatBreakdown> &breakdowns)
+{
+    setTax(Model::Domain::GeneralVAT,
+           breakdowns[static_cast<int>(Model::Domain::GeneralVAT)]._vatPercent,
+           breakdowns[static_cast<int>(Model::Domain::GeneralVAT)]._vatCost);
+
+    setTax(Model::Domain::ReducedVAT,
+           breakdowns[static_cast<int>(Model::Domain::ReducedVAT)]._vatPercent,
+           breakdowns[static_cast<int>(Model::Domain::ReducedVAT)]._vatCost);
+
+    setTax(Model::Domain::SuperReducedVAT,
+           breakdowns[static_cast<int>(Model::Domain::SuperReducedVAT)]._vatPercent,
+           breakdowns[static_cast<int>(Model::Domain::SuperReducedVAT)]._vatCost);
+
+    setTax(Model::Domain::GeneralES,
+           breakdowns[static_cast<int>(Model::Domain::GeneralVAT)]._esPercent,
+           breakdowns[static_cast<int>(Model::Domain::GeneralVAT)]._esCost);
+
+    setTax(Model::Domain::ReducedES,
+           breakdowns[static_cast<int>(Model::Domain::ReducedVAT)]._esPercent,
+           breakdowns[static_cast<int>(Model::Domain::ReducedVAT)]._esCost);
+
+    setTax(Model::Domain::SuperReducedES,
+           breakdowns[static_cast<int>(Model::Domain::SuperReducedVAT)]._esPercent,
+           breakdowns[static_cast<int>(Model::Domain::SuperReducedVAT)]._esCost);
 }
 
 void View::Invoicing::TaxViewerWidget::reset()
@@ -122,32 +149,25 @@ void View::Invoicing::TaxViewerWidget::createWidgets()
 
 void View::Invoicing::TaxViewerWidget::updateRows()
 {
-    if(_taxTableWidget -> item(0, 0) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(0, 1) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(0, 2) -> text().toDouble() == 0.0 &&
+    if(_taxTableWidget -> item(0, 1) -> text().toDouble() == 0.0 &&
        _taxTableWidget -> item(0, 3) -> text().toDouble() == 0.0)
         _taxTableWidget -> hideRow(0);
     else
         _taxTableWidget -> showRow(0);
 
-    if(_taxTableWidget -> item(1, 0) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(1, 1) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(1, 2) -> text().toDouble() == 0.0 &&
+    if(_taxTableWidget -> item(1, 1) -> text().toDouble() == 0.0 &&
        _taxTableWidget -> item(1, 3) -> text().toDouble() == 0.0)
         _taxTableWidget -> hideRow(1);
     else
         _taxTableWidget -> showRow(1);
 
-    if(_taxTableWidget -> item(2, 0) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(2, 1) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(2, 2) -> text().toDouble() == 0.0 &&
+    if(_taxTableWidget -> item(2, 1) -> text().toDouble() == 0.0 &&
        _taxTableWidget -> item(2, 3) -> text().toDouble() == 0.0)
         _taxTableWidget -> hideRow(2);
     else
         _taxTableWidget -> showRow(2);
 
-    if(_taxTableWidget -> item(3, 0) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(3, 1) -> text().toDouble() == 0.0)
+    if(_taxTableWidget -> item(3, 1) -> text().toDouble() == 0.0)
         _taxTableWidget -> hideRow(3);
     else
         _taxTableWidget -> showRow(3);

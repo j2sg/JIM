@@ -72,10 +72,10 @@ void View::Management::EntityDialogTaxesTab::createWidgets()
 
 void View::Management::EntityDialogTaxesTab::createConnections()
 {
-    connect(_saleTaxApplyingWidget, SIGNAL(dataChanged()),
+    connect(_saleTaxApplyingWidget, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
             this, SIGNAL(dataChanged()));
-    connect(_buyTaxApplyingWidget, SIGNAL(dataChanged()),
+    connect(_buyTaxApplyingWidget, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
             this, SIGNAL(dataChanged()));
-    connect(_taxTaxWidget, SIGNAL(dataChanged()),
+    connect(_taxTaxWidget, SIGNAL(taxChanged(Model::Domain::TaxType,double)),
             this, SIGNAL(dataChanged()));
 }

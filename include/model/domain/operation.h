@@ -53,6 +53,7 @@ namespace Model
             void setPrice(double price);
             double price() const;
             double total() const;
+            bool isValid() const;
         private:
             int _id;
             Product *_product;

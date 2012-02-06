@@ -118,9 +118,13 @@ double Model::Domain::Operation::price() const
 
 double Model::Domain::Operation::total() const
 {
-    if(!_product || _price <= 0 || (_quantity <= 0 && _weight <= 0.0))
+    if(!isValid())
         return 0.0;
+
     return ((_product -> priceType() == Units) ? _quantity : _weight) * _price;
 }
 
-
+bool Model::Domain::Operation::isValid() const
+{
+    return _product && _price > 0 && (_quantity > 0 || _weight > 0);
+}

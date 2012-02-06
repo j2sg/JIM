@@ -55,7 +55,7 @@ void View::Invoicing::OperationEditor::rowSelectionChanged()
 
 void View::Invoicing::OperationEditor::productNotFound()
 {
-    QMessageBox::critical(this, tr("Critical error"), tr("Not exists any product with that Id"), QMessageBox::Ok);
+    QMessageBox::critical(this, tr("Unknown Product Id"), tr("Not exists any product with that Id"), QMessageBox::Ok);
 }
 
 void View::Invoicing::OperationEditor::addOperation()

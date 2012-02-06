@@ -24,7 +24,6 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QGroupBox>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 View::Management::EntityViewer::EntityViewer(Model::Domain::Entity *entity, QWidget *parent)
@@ -103,51 +102,46 @@ void View::Management::EntityViewer::createWidgets()
     _webValueLabel -> setMinimumSize(_idValueLabel -> sizeHint());
     _webLabel -> setBuddy(_webValueLabel);
 
-    QHBoxLayout *identificationLayout = new QHBoxLayout;
-    identificationLayout -> addWidget(_idLabel);
-    identificationLayout -> addWidget(_idValueLabel, 0, Qt::AlignLeft);
-    identificationLayout -> addWidget(_vatinLabel);
-    identificationLayout -> addWidget(_vatinValueLabel, 0, Qt::AlignLeft);
-    identificationLayout -> addWidget(_nameLabel);
-    identificationLayout -> addWidget(_nameValueLabel, 0, Qt::AlignLeft);
+    QGridLayout *identificationLayout = new QGridLayout;
+    identificationLayout -> addWidget(_idLabel, 0, 0);
+    identificationLayout -> addWidget(_idValueLabel, 0, 1, Qt::AlignCenter);
+    identificationLayout -> addWidget(_vatinLabel, 1, 0);
+    identificationLayout -> addWidget(_vatinValueLabel, 1, 1, Qt::AlignCenter);
+    identificationLayout -> addWidget(_nameLabel, 2, 0);
+    identificationLayout -> addWidget(_nameValueLabel, 2, 1, Qt::AlignCenter);
 
     QGroupBox *identificationGroupBox = new QGroupBox(tr("Identification"));
     identificationGroupBox -> setLayout(identificationLayout);
 
     QGridLayout *ubicationLayout = new QGridLayout;
     ubicationLayout -> addWidget(_countryLabel, 3, 0);
-    ubicationLayout -> addWidget(_countryValueLabel, 3, 1);
+    ubicationLayout -> addWidget(_countryValueLabel, 3, 1, Qt::AlignCenter);
     ubicationLayout -> addWidget(_provinceLabel, 4, 0);
-    ubicationLayout -> addWidget(_provinceValueLabel, 4, 1);
+    ubicationLayout -> addWidget(_provinceValueLabel, 4, 1, Qt::AlignCenter);
     ubicationLayout -> addWidget(_cityLabel, 5, 0);
-    ubicationLayout -> addWidget(_cityValueLabel, 5, 1);
+    ubicationLayout -> addWidget(_cityValueLabel, 5, 1, Qt::AlignCenter);
     ubicationLayout -> addWidget(_addressLabel, 6, 0);
-    ubicationLayout -> addWidget(_addressValueLabel, 6, 1);
+    ubicationLayout -> addWidget(_addressValueLabel, 6, 1, Qt::AlignCenter);
     ubicationLayout -> addWidget(_pcLabel, 7, 0);
-    ubicationLayout -> addWidget(_pcValueLabel, 7, 1);
+    ubicationLayout -> addWidget(_pcValueLabel, 7, 1, Qt::AlignCenter);
 
     QGroupBox *ubicationGroupBox = new QGroupBox(tr("Ubication"));
     ubicationGroupBox -> setLayout(ubicationLayout);
 
     QGridLayout *contactLayout = new QGridLayout;
     contactLayout -> addWidget(_telephoneLabel, 8, 0);
-    contactLayout -> addWidget(_telephoneValueLabel, 8, 1);
+    contactLayout -> addWidget(_telephoneValueLabel, 8, 1, Qt::AlignCenter);
     contactLayout -> addWidget(_mobileLabel, 9, 0);
-    contactLayout -> addWidget(_mobileValueLabel, 9, 1);
+    contactLayout -> addWidget(_mobileValueLabel, 9, 1, Qt::AlignCenter);
     contactLayout -> addWidget(_faxLabel, 10, 0);
-    contactLayout -> addWidget(_faxValueLabel, 10, 1);
+    contactLayout -> addWidget(_faxValueLabel, 10, 1, Qt::AlignCenter);
     contactLayout -> addWidget(_emailLabel, 11, 0);
-    contactLayout -> addWidget(_emailValueLabel, 11, 1);
+    contactLayout -> addWidget(_emailValueLabel, 11, 1, Qt::AlignCenter);
     contactLayout -> addWidget(_webLabel, 12, 0);
-    contactLayout -> addWidget(_webValueLabel, 12, 1);
+    contactLayout -> addWidget(_webValueLabel, 12, 1, Qt::AlignCenter);
 
     QGroupBox *contactGroupBox = new QGroupBox(tr("Contact"));
     contactGroupBox -> setLayout(contactLayout);
-
-    QGridLayout *topLayout = new QGridLayout;
-    topLayout -> addWidget(identificationGroupBox, 0, 0, 1, 2);
-    topLayout -> addWidget(ubicationGroupBox, 1, 0, 1, 1);
-    topLayout -> addWidget(contactGroupBox, 1, 1, 1, 1);
 
     _closeButton = new QPushButton(tr("Close"));
     _closeButton -> setIcon(QIcon(":/images/ok.png"));
@@ -155,7 +149,9 @@ void View::Management::EntityViewer::createWidgets()
     _closeButton -> setFixedSize(_closeButton -> sizeHint());
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addLayout(topLayout);
+    mainLayout -> addWidget(identificationGroupBox);
+    mainLayout -> addWidget(ubicationGroupBox);
+    mainLayout -> addWidget(contactGroupBox);
     mainLayout -> addWidget(_closeButton, 0, Qt::AlignCenter);
 
     setLayout(mainLayout);

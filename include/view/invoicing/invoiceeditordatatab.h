@@ -24,6 +24,8 @@
 #include <QWidget>
 #include "types.h"
 
+#define PAYMENT_GROUPBOX_HEIGHT 150
+
 QT_BEGIN_NAMESPACE
 class QLabel;
 class QLineEdit;
@@ -58,7 +60,6 @@ namespace View
         public slots:
             void loadInvoice();
             void saveInvoice();
-            void updateTaxApplying(Model::Domain::TaxFlag taxApplying);
             void updateTax();
             bool isSaveable();
         private slots:
@@ -94,6 +95,7 @@ namespace View
             OperationEditor *_operationEditor;
             TaxViewerWidget *_taxViewerWidget;
             QCheckBox *_paidCheckBox;
+            QLabel *_paymentLabel;
             QComboBox *_paymentComboBox;
             QLabel *_subtotalLabel;
             QLabel *_subtotalValueLabel;

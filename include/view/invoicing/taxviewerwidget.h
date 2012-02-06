@@ -22,6 +22,7 @@
 #define TAXVIEWERWIDGET_H
 
 #include <QWidget>
+#include <QList>
 #include "types.h"
 
 QT_BEGIN_NAMESPACE
@@ -38,7 +39,8 @@ namespace View
         public:
             TaxViewerWidget(QWidget *parent = 0);
         public slots:
-            void setTaxes(Model::Domain::TaxType type, double percent, double value);
+            void setTax(Model::Domain::TaxType type, double percent, double value);
+            void setTaxes(const QList<Model::Domain::VatBreakdown> &breakdowns);
             void reset();
         private:
             void createWidgets();

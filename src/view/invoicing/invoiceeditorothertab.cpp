@@ -40,8 +40,13 @@ void View::Invoicing::InvoiceEditorOtherTab::loadInvoice()
 
 void View::Invoicing::InvoiceEditorOtherTab::saveInvoice()
 {
-    _invoice -> setTaxOnInvoice(_taxApplyingWidget -> taxApplying());
     _invoice -> setNotes(_notesTextEdit -> toPlainText());
+}
+
+void View::Invoicing::InvoiceEditorOtherTab::taxChangedOnTaxApplying(Model::Domain::TaxFlag taxApplying)
+{
+    _invoice -> setTaxOnInvoice(taxApplying);
+    emit taxesChanged();
 }
 
 void View::Invoicing::InvoiceEditorOtherTab::createWidgets()
@@ -73,9 +78,9 @@ void View::Invoicing::InvoiceEditorOtherTab::createWidgets()
 void View::Invoicing::InvoiceEditorOtherTab::createConnections()
 {
     connect(_taxApplyingWidget, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
-            this, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)));
+            this, SLOT(taxChangedOnTaxApplying(Model::Domain::TaxFlag)));
     connect(_taxWidget, SIGNAL(taxChanged(Model::Domain::TaxType,double)),
-            this, SIGNAL(taxChanged(Model::Domain::TaxType,double)));
+            this, SIGNAL(taxesChanged()));
     connect(_notesTextEdit, SIGNAL(textChanged()),
             this, SIGNAL(notesChanged()));
 }

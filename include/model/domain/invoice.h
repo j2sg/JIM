@@ -72,7 +72,9 @@ namespace Model
             void setNotes(const QString &notes);
             const QString &notes() const;
             double subtotal() const;
-            const QList<VatBreakdown> &breakdown() const;
+            QList<VatBreakdown> breakdown() const;
+            double taxes() const;
+            double deduction() const;
             double total() const;
 
         private:

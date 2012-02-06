@@ -53,12 +53,13 @@ namespace View
         public:
             InvoiceEditorOtherTab(Model::Domain::Invoice *invoice, QWidget *parent = 0);
         signals:
-            void taxApplyingChanged(Model::Domain::TaxFlag taxApplying);
-            void taxChanged(Model::Domain::TaxType type, double value);
+            void taxesChanged();
             void notesChanged();
         public slots:
             void loadInvoice();
             void saveInvoice();
+        private slots:
+            void taxChangedOnTaxApplying(Model::Domain::TaxFlag taxApplying);
         private:
             void createWidgets();
             void createConnections();

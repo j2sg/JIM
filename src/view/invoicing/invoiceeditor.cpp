@@ -103,15 +103,11 @@ void View::Invoicing::InvoiceEditor::createConnections()
 {
     connect(_dataTab, SIGNAL(dataChanged()),
             this, SLOT(invoiceModified()));
-    connect(_otherTab, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
-            this, SLOT(invoiceModified()));
-    connect(_otherTab, SIGNAL(taxChanged(Model::Domain::TaxType,double)),
+    connect(_otherTab, SIGNAL(taxesChanged()),
             this, SLOT(invoiceModified()));
     connect(_otherTab, SIGNAL(notesChanged()),
             this, SLOT(invoiceModified()));
-    connect(_otherTab, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
-            _dataTab, SLOT(updateTaxApplying(Model::Domain::TaxFlag)));
-    connect(_otherTab, SIGNAL(taxChanged(Model::Domain::TaxType,double)),
+    connect(_otherTab, SIGNAL(taxesChanged()),
             _dataTab, SLOT(updateTax()));
     connect(_saveButton, SIGNAL(clicked()),
             this, SLOT(save()));

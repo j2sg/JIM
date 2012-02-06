@@ -234,41 +234,53 @@ double Model::Domain::Invoice::subtotal() const
     double res = 0.0;
 
     foreach(Operation *operation, *_operations)
-        res += operation -> total();
+        if(operation -> isValid())
+            res += operation -> total();
 
     return res;
 }
 
-const QList<Model::Domain::VatBreakdown>  &Model::Domain::Invoice::breakdown() const
+QList<Model::Domain::VatBreakdown>  Model::Domain::Invoice::breakdown() const
 {
-    static QList<VatBreakdown> breakdowns;
+    QList<VatBreakdown> breakdowns;
 
-    if(breakdowns.isEmpty()) {
-        for(int k = GeneralVAT; k <= SuperReducedVAT; ++k) {
-            breakdowns[k]._vatPercent = _tax[k].value();
-            breakdowns[k]._esPercent = _tax[k + (TaxTypeCount - 1) / 2].value();
-        }
+    for(int k = GeneralVAT; k <= SuperReducedVAT; ++k) {
+        VatBreakdown breakdown;
+        breakdown._vatPercent = _tax[k].value();
+        breakdown._esPercent = _tax[k + (TaxTypeCount - 1) / 2].value();
+        breakdowns.push_back(breakdown);
     }
 
     foreach(Operation *operation, *_operations) {
-        TaxType type = operation -> product() -> category() -> vatType();
-        breakdowns[static_cast<int>(type)]._vatCost += (operation -> total()) *
-                (breakdowns[static_cast<int>(type)]._vatPercent / 100.0);
-        breakdowns[static_cast<int>(type)]._esCost += (operation -> total()) *
-                (breakdowns[static_cast<int>(type)]._esPercent / 100.0);
+        if(operation -> isValid()) {
+            TaxType type = operation -> product() -> category() -> vatType();
+            breakdowns[static_cast<int>(type)]._vatCost += ((_taxOnInvoice & ApplyVAT) ?
+                        operation -> total() * (breakdowns[static_cast<int>(type)]._vatPercent / 100.0) : 0.0);
+            breakdowns[static_cast<int>(type)]._esCost += ((_taxOnInvoice & ApplyES) ?
+                        operation -> total() * (breakdowns[static_cast<int>(type)]._esPercent / 100.0) : 0.0);
+        }
     }
 
     return breakdowns;
 }
 
-double Model::Domain::Invoice::total() const
+double Model::Domain::Invoice::taxes() const
 {
-    double taxes = 0.0;
+    double res = 0.0;
     QList<VatBreakdown> breakdowns = breakdown();
 
     for(int k = GeneralVAT;k <= SuperReducedVAT;++k)
-        taxes += ((_taxOnInvoice & ApplyVAT) ? breakdowns[k]._vatCost : 0.0) +
-                 ((_taxOnInvoice & ApplyES) ? breakdowns[k]._esCost : 0.0);
+        res += breakdowns[k]._vatCost  + breakdowns[k]._esCost;
 
-    return subtotal() + taxes - ((_taxOnInvoice & ApplyPIT) ? _tax[PIT].value() : 0.0);
+    return res;
+}
+
+double Model::Domain::Invoice::deduction() const
+{
+    return (subtotal() + taxes()) * ((_taxOnInvoice & ApplyPIT) ? _tax[PIT].value() / 100.0 : 0.0);
+}
+
+double Model::Domain::Invoice::total() const
+{
+    return subtotal() + taxes() - deduction();
 }
