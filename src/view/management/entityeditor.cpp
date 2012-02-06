@@ -102,7 +102,9 @@ void View::Management::EntityEditor::delEntity()
 void View::Management::EntityEditor::createWidgets()
 {
     _entitiesTableView = new QTableView;
-    _entityModel = new EntityModel(Model::Management::EntityManager::getAllByType(_type));
+    _entityModel = new EntityModel(_type == Model::Domain::BusinessEntity ?
+                                       Model::Management::BusinessManager::getAll() :
+                                       Model::Management::EntityManager::getAllByType(_type));
     _entitiesTableView -> setModel(_entityModel);
     _entitiesTableView -> setAlternatingRowColors(true);
     _entitiesTableView -> setShowGrid(false);

@@ -129,11 +129,13 @@ namespace View
         QToolBar *_invoicingToolBar;
         QToolBar *_managementToolBar;
         QToolBar *_reportToolBar;
-        Model::Domain::Entity *_business;
+
         View::Management::EntityEditor *_businessEditor;
         View::Management::EntityEditor *_customerEditor;
         View::Management::EntityEditor *_supplierEditor;
         View::Management::ProductEditor *_productEditor;
+
+        Model::Domain::Entity *_business;
     };
 }
 
