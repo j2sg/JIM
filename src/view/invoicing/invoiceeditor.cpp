@@ -130,11 +130,13 @@ void View::Invoicing::InvoiceEditor::loadInvoice()
 
 bool View::Invoicing::InvoiceEditor::saveInvoice()
 {
+    bool isNew = IS_NEW(_invoice -> id());
+
     _dataTab -> saveInvoice();
     _otherTab -> saveInvoice();
 
-    return (IS_NEW(_invoice -> id()) ? Model::Management::InvoiceManager::create(*_invoice) :
-                                       Model::Management::InvoiceManager::modify(*_invoice));
+    return isNew ? Model::Management::InvoiceManager::create(*_invoice) :
+                   Model::Management::InvoiceManager::modify(*_invoice);
 }
 
 bool View::Invoicing::InvoiceEditor::isSaveable()

@@ -43,9 +43,9 @@ void View::Management::EntityDialogDataTab::loadEntity()
     _cityLineEdit -> setText(_entity -> city());
     _addressLineEdit -> setText(_entity -> address());
     _pcLineEdit -> setText(_entity -> pc());
-    _telephoneLineEdit -> setText(QString::number(_entity -> telephone()));
-    _mobileLineEdit -> setText(QString::number(_entity -> mobile()));
-    _faxLineEdit -> setText(QString::number(_entity -> fax()));
+    _telephoneLineEdit -> setText(_entity -> telephone() ? QString::number(_entity -> telephone()) : "");
+    _mobileLineEdit -> setText(_entity -> mobile() ? QString::number(_entity -> mobile()) : "");
+    _faxLineEdit -> setText(_entity -> fax() ? QString::number(_entity -> fax()) : "");
     _emailLineEdit -> setText(_entity->email());
     _webLineEdit -> setText(_entity->web());
 }
@@ -60,9 +60,9 @@ void View::Management::EntityDialogDataTab::saveEntity()
     _entity -> setCity(_cityLineEdit -> text());
     _entity -> setAddress(_addressLineEdit -> text());
     _entity -> setPc(_pcLineEdit -> text());
-    _entity -> setTelephone(_telephoneLineEdit -> text().toInt());
-    _entity -> setMobile(_mobileLineEdit -> text().toInt());
-    _entity -> setFax(_faxLineEdit -> text().toInt());
+    _entity -> setTelephone(_telephoneLineEdit -> text().isEmpty() ? _telephoneLineEdit -> text().toInt() : 0);
+    _entity -> setMobile(_mobileLineEdit -> text().isEmpty() ? _mobileLineEdit -> text().toInt() : 0);
+    _entity -> setFax(_faxLineEdit -> text().isEmpty() ? _faxLineEdit -> text().toInt() : 0);
     _entity -> setEmail(_emailLineEdit -> text());
     _entity -> setWeb(_webLineEdit -> text());
 }

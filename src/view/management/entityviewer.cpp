@@ -104,41 +104,41 @@ void View::Management::EntityViewer::createWidgets()
 
     QGridLayout *identificationLayout = new QGridLayout;
     identificationLayout -> addWidget(_idLabel, 0, 0);
-    identificationLayout -> addWidget(_idValueLabel, 0, 1, Qt::AlignCenter);
+    identificationLayout -> addWidget(_idValueLabel, 0, 1);
     identificationLayout -> addWidget(_vatinLabel, 1, 0);
-    identificationLayout -> addWidget(_vatinValueLabel, 1, 1, Qt::AlignCenter);
+    identificationLayout -> addWidget(_vatinValueLabel, 1, 1);
     identificationLayout -> addWidget(_nameLabel, 2, 0);
-    identificationLayout -> addWidget(_nameValueLabel, 2, 1, Qt::AlignCenter);
+    identificationLayout -> addWidget(_nameValueLabel, 2, 1);
 
     QGroupBox *identificationGroupBox = new QGroupBox(tr("Identification"));
     identificationGroupBox -> setLayout(identificationLayout);
 
     QGridLayout *ubicationLayout = new QGridLayout;
     ubicationLayout -> addWidget(_countryLabel, 3, 0);
-    ubicationLayout -> addWidget(_countryValueLabel, 3, 1, Qt::AlignCenter);
+    ubicationLayout -> addWidget(_countryValueLabel, 3, 1);
     ubicationLayout -> addWidget(_provinceLabel, 4, 0);
-    ubicationLayout -> addWidget(_provinceValueLabel, 4, 1, Qt::AlignCenter);
+    ubicationLayout -> addWidget(_provinceValueLabel, 4, 1);
     ubicationLayout -> addWidget(_cityLabel, 5, 0);
-    ubicationLayout -> addWidget(_cityValueLabel, 5, 1, Qt::AlignCenter);
+    ubicationLayout -> addWidget(_cityValueLabel, 5, 1);
     ubicationLayout -> addWidget(_addressLabel, 6, 0);
-    ubicationLayout -> addWidget(_addressValueLabel, 6, 1, Qt::AlignCenter);
+    ubicationLayout -> addWidget(_addressValueLabel, 6, 1);
     ubicationLayout -> addWidget(_pcLabel, 7, 0);
-    ubicationLayout -> addWidget(_pcValueLabel, 7, 1, Qt::AlignCenter);
+    ubicationLayout -> addWidget(_pcValueLabel, 7, 1);
 
     QGroupBox *ubicationGroupBox = new QGroupBox(tr("Ubication"));
     ubicationGroupBox -> setLayout(ubicationLayout);
 
     QGridLayout *contactLayout = new QGridLayout;
     contactLayout -> addWidget(_telephoneLabel, 8, 0);
-    contactLayout -> addWidget(_telephoneValueLabel, 8, 1, Qt::AlignCenter);
+    contactLayout -> addWidget(_telephoneValueLabel, 8, 1);
     contactLayout -> addWidget(_mobileLabel, 9, 0);
-    contactLayout -> addWidget(_mobileValueLabel, 9, 1, Qt::AlignCenter);
+    contactLayout -> addWidget(_mobileValueLabel, 9, 1);
     contactLayout -> addWidget(_faxLabel, 10, 0);
-    contactLayout -> addWidget(_faxValueLabel, 10, 1, Qt::AlignCenter);
+    contactLayout -> addWidget(_faxValueLabel, 10, 1);
     contactLayout -> addWidget(_emailLabel, 11, 0);
-    contactLayout -> addWidget(_emailValueLabel, 11, 1, Qt::AlignCenter);
+    contactLayout -> addWidget(_emailValueLabel, 11, 1);
     contactLayout -> addWidget(_webLabel, 12, 0);
-    contactLayout -> addWidget(_webValueLabel, 12, 1, Qt::AlignCenter);
+    contactLayout -> addWidget(_webValueLabel, 12, 1);
 
     QGroupBox *contactGroupBox = new QGroupBox(tr("Contact"));
     contactGroupBox -> setLayout(contactLayout);
@@ -200,9 +200,9 @@ void View::Management::EntityViewer::loadEntity()
     _cityValueLabel -> setText(_entity -> city());
     _addressValueLabel -> setText(_entity -> address());
     _pcValueLabel -> setText(_entity -> pc());
-    _telephoneValueLabel -> setText(QString::number(_entity -> telephone()));
-    _mobileValueLabel -> setText(QString::number(_entity -> mobile()));
-    _faxValueLabel -> setText(QString::number(_entity -> fax()));
+    _telephoneValueLabel -> setText(_entity -> telephone() ? QString::number(_entity -> telephone()) : "");
+    _mobileValueLabel -> setText(_entity -> mobile() ? QString::number(_entity -> mobile()) : "");
+    _faxValueLabel -> setText(_entity -> fax() ? QString::number(_entity -> fax()) : "");
     _emailValueLabel -> setText(_entity -> email());
     _webValueLabel -> setText(_entity -> web());
 }

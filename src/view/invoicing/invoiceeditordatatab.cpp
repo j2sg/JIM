@@ -73,7 +73,6 @@ void View::Invoicing::InvoiceEditorDataTab::updateTax()
 bool View::Invoicing::InvoiceEditorDataTab::isSaveable()
 {
     return !(_idLineEdit -> text().isEmpty()) &&
-           !(_placeLineEdit -> text().isEmpty()) &&
            !(_entityIdLineEdit -> text().isEmpty()) &&
            !(_operationEditor -> operations() -> isEmpty());
 }
@@ -99,7 +98,9 @@ void View::Invoicing::InvoiceEditorDataTab::updateId()
 
 void View::Invoicing::InvoiceEditorDataTab::selectEntity()
 {
-    View::Management::EntitySelector selector(Model::Domain::CustomerEntity);
+    View::Management::EntitySelector selector(_invoice -> type() ?
+                                                  Model::Domain::CustomerEntity :
+                                                  Model::Domain::SupplierEntity);
 
     if(selector.exec()) {
         Model::Domain::Entity *entity = selector.entitySelected();
@@ -107,7 +108,7 @@ void View::Invoicing::InvoiceEditorDataTab::selectEntity()
         _entityIdLineEdit -> setText(QString::number(entity -> id()));
         _entityNameLineEdit -> setText(entity -> name());
         _entityVatinLineEdit -> setText(entity -> vatin());
-        _detailEntityPushButton->setEnabled(true);
+        _detailEntityPushButton -> setEnabled(true);
     }
 }
 
@@ -121,12 +122,21 @@ void View::Invoicing::InvoiceEditorDataTab::updateTotals()
 {    
     bool paid = _paidCheckBox -> isChecked();
 
-    _subtotalValueLabel -> setText("<h3><font color=" + QString(paid ? "green" : "red") + ">" +
+    _subtotalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
                                    QString::number(_invoice -> subtotal(), 'f', PRECISION_MONEY) + " " +
-                                   QString::fromUtf8("€") + "</font></h3>");
-    _totalValueLabel -> setText("<h3><font color=" + QString(paid ? "green" : "red") + ">" +
+                                   QString::fromUtf8("€") + "</font></h4>");
+
+    _taxesValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
+                                QString::number(_invoice -> taxes(), 'f', PRECISION_MONEY) + " " +
+                                QString::fromUtf8("€") + "</font></h4>");
+
+    _deductionValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
+                                    QString::number(_invoice -> deduction(), 'f', PRECISION_MONEY) + " " +
+                                    QString::fromUtf8("€") + "</font></h4>");
+
+    _totalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
                                 QString::number(_invoice -> total(), 'f', PRECISION_MONEY) + " " +
-                                QString::fromUtf8("€") + "</font></h3>");
+                                QString::fromUtf8("€") + "</font></h4>");
 }
 
 void View::Invoicing::InvoiceEditorDataTab::createWidgets()
@@ -173,14 +183,18 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
     createPaymentWidgets();
 
     QGridLayout *paymentLayout = new QGridLayout;
-    paymentLayout -> addWidget(_taxViewerWidget, 0, 0, 4, 1);
-    paymentLayout -> addWidget(_subtotalLabel, 0, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_subtotalValueLabel, 0, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_totalLabel, 1, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_totalValueLabel, 1, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_paidCheckBox, 2, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_paymentLabel, 3, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_paymentComboBox, 3, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_taxViewerWidget, 0, 0, 5, 1);
+    paymentLayout -> addWidget(_paidCheckBox, 0, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_paymentComboBox, 0, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_subtotalLabel, 1, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_subtotalValueLabel, 1, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_taxesLabel, 2, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_taxesValueLabel, 2, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_deductionLabel, 3, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_deductionValueLabel, 3, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_totalLabel, 4, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_totalValueLabel, 4, 2, 1, 1, Qt::AlignCenter);
+
 
     QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
     paymentGroupBox -> setLayout(paymentLayout);
@@ -236,7 +250,7 @@ void View::Invoicing::InvoiceEditorDataTab::createEntityWidgets()
     _detailEntityPushButton = new QPushButton;
     _detailEntityPushButton -> setIcon(QIcon(":/images/about.png"));
     _detailEntityPushButton -> setFixedSize(_detailEntityPushButton -> sizeHint());
-    _detailEntityPushButton -> setEnabled(false);
+    _detailEntityPushButton -> setEnabled(_invoice -> entity());
 }
 
 void View::Invoicing::InvoiceEditorDataTab::createOperationsWidgets()
@@ -247,19 +261,29 @@ void View::Invoicing::InvoiceEditorDataTab::createOperationsWidgets()
 void View::Invoicing::InvoiceEditorDataTab::createPaymentWidgets()
 {
     _taxViewerWidget = new TaxViewerWidget;
+
+    _subtotalLabel = new QLabel("<h4>" + tr("Subtotal:") + "</h4>");
+    _subtotalValueLabel = new QLabel;
+    _subtotalLabel -> setBuddy(_subtotalValueLabel);
+
+    _taxesLabel = new QLabel("<h4>" + tr("Taxes:") + "</h4>");
+    _taxesValueLabel = new QLabel;
+    _taxesLabel -> setBuddy(_taxesValueLabel);
+
+    _deductionLabel = new QLabel("<h4>" + tr("Deduction:") + "</h4>");
+    _deductionValueLabel = new QLabel;
+    _deductionLabel -> setBuddy(_deductionValueLabel);
+
+    _totalLabel = new QLabel("<h4>" + tr("Total:") + "</h4>");
+    _totalValueLabel = new QLabel;
+    _totalLabel -> setBuddy(_totalValueLabel);
+
     _paidCheckBox = new QCheckBox(tr("&Paid"));
     _paidCheckBox -> setChecked(false);
-    _paymentLabel = new QLabel(tr("P&ayment:"));
+
     _paymentComboBox = new QComboBox;
     _paymentComboBox -> setEnabled(false);
     _paymentComboBox -> addItems(QStringList() << tr("Cash") << tr("Card") << tr("Transfer"));
-    _paymentLabel -> setBuddy(_paymentComboBox);
-    _subtotalLabel = new QLabel("<h3>" + tr("Subtotal: ") + "</h3>");
-    _subtotalValueLabel = new QLabel;
-    _subtotalLabel -> setBuddy(_subtotalValueLabel);
-    _totalLabel = new QLabel("<h3>" + tr("Total: ") + "</h3>");
-    _totalValueLabel = new QLabel;
-    _totalLabel -> setBuddy(_totalValueLabel);
 }
 
 void View::Invoicing::InvoiceEditorDataTab::createConnections()

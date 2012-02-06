@@ -94,13 +94,16 @@ namespace View
             QPushButton *_detailEntityPushButton;
             OperationEditor *_operationEditor;
             TaxViewerWidget *_taxViewerWidget;
-            QCheckBox *_paidCheckBox;
-            QLabel *_paymentLabel;
-            QComboBox *_paymentComboBox;
             QLabel *_subtotalLabel;
             QLabel *_subtotalValueLabel;
+            QLabel *_taxesLabel;
+            QLabel *_taxesValueLabel;
+            QLabel *_deductionLabel;
+            QLabel *_deductionValueLabel;
             QLabel *_totalLabel;
             QLabel *_totalValueLabel;
+            QCheckBox *_paidCheckBox;
+            QComboBox *_paymentComboBox;
             Model::Domain::Invoice *_invoice;
         };
     }
