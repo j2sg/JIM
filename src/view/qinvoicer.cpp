@@ -138,6 +138,14 @@ void View::QInvoicer::closeBusiness()
     if(!_business)
         return;
 
+    if(_mdiArea -> activeSubWindow() != 0) {
+        if(verifyCloseBusiness())
+            _mdiArea -> closeAllSubWindows();
+        else
+            return;
+    }
+
+
     statusBar() -> showMessage(tr("Closed Business %1").arg(_business -> name()), 5000);
 
     delete _business;
@@ -579,6 +587,14 @@ bool View::QInvoicer::verifyCreateBusiness()
                                           "do you want to create a new business now?"),
                                        QMessageBox::Yes | QMessageBox::Default | 
                                        QMessageBox::No) == QMessageBox::Yes;
+}
+
+bool View::QInvoicer::verifyCloseBusiness()
+{
+    return QMessageBox::question(this, tr("Verify Close Business"),
+                                 tr("there are active invoices, are you sure you wish to close the business?"),
+                                 QMessageBox::Yes | QMessageBox::Default |
+                                 QMessageBox::No) == QMessageBox::Yes;
 }
 
 bool View::QInvoicer::verifyExit()

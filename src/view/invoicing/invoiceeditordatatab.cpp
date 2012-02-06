@@ -131,7 +131,7 @@ void View::Invoicing::InvoiceEditorDataTab::updateTotals()
                                 QString::fromUtf8("€") + "</font></h4>");
 
     _deductionValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                    QString::number(_invoice -> deduction(), 'f', PRECISION_MONEY) + " " +
+                                    QString::number(-_invoice -> deduction(), 'f', PRECISION_MONEY) + " " +
                                     QString::fromUtf8("€") + "</font></h4>");
 
     _totalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
@@ -184,17 +184,17 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
 
     QGridLayout *paymentLayout = new QGridLayout;
     paymentLayout -> addWidget(_taxViewerWidget, 0, 0, 5, 1);
-    paymentLayout -> addWidget(_paidCheckBox, 0, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_paymentComboBox, 0, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_subtotalLabel, 1, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_subtotalValueLabel, 1, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_taxesLabel, 2, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_taxesValueLabel, 2, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_deductionLabel, 3, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_deductionValueLabel, 3, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_totalLabel, 4, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_totalValueLabel, 4, 2, 1, 1, Qt::AlignCenter);
 
+    paymentLayout -> addWidget(_subtotalLabel, 0, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_subtotalValueLabel, 0, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_taxesLabel, 1, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_taxesValueLabel, 1, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_deductionLabel, 2, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_deductionValueLabel, 2, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_totalLabel, 3, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_totalValueLabel, 3, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_paidCheckBox, 4, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_paymentComboBox, 4, 2, 1, 1, Qt::AlignCenter);
 
     QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
     paymentGroupBox -> setLayout(paymentLayout);

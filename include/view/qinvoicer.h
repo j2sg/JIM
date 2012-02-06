@@ -91,6 +91,7 @@ namespace View
         View::Invoicing::InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
         void setBusinessOpen(bool open = true);
         bool verifyCreateBusiness();
+        bool verifyCloseBusiness();
         bool verifyExit();
 
         QMdiArea *_mdiArea;

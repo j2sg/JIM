@@ -95,6 +95,7 @@ void View::Management::EntityDialog::createWidgets()
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(_tabWidget);
     mainLayout -> addLayout(bottomLayout);
+    mainLayout -> setSizeConstraint(QLayout::SetFixedSize);
 
     setLayout(mainLayout);
 }

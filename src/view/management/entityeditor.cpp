@@ -53,7 +53,7 @@ void View::Management::EntityEditor::addEntity()
 {
     Model::Domain::Entity *entity = (_type == Model::Domain::BusinessEntity ?
                                          new Model::Domain::Business :
-                                         new Model::Domain::Entity);
+                                         new Model::Domain::Entity(NO_ID, _type));
     EntityDialog dialog(entity);
 
     if(dialog.exec()) {
