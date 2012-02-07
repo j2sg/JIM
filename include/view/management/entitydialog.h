@@ -52,19 +52,16 @@ namespace View
             Q_OBJECT
         public:
             EntityDialog(Model::Domain::Entity *entity, QWidget *parent = 0);
-        protected:
-            void closeEvent(QCloseEvent *event);
+            void done(int result);
         private slots:
             void entityModified(bool modified = true);
-            bool save();
         private:
             void createWidgets();
             void createConnections();
             void setTitle();
             void loadEntity();
-            bool saveEntity();
+            void saveEntity();
             bool isSaveable();
-            bool verifySave();
 
             QTabWidget *_tabWidget;
             EntityDialogDataTab *_dataTab;

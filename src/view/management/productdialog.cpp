@@ -35,6 +35,14 @@ View::Management::ProductDialog::ProductDialog(Model::Domain::Product *product, 
     loadProduct();
 }
 
+void View::Management::ProductDialog::done(int result)
+{
+    if(result)
+        saveProduct();
+
+    QDialog::done(result);
+}
+
 void View::Management::ProductDialog::stateChangedOnAutoIdCheckBox()
 {
     _idLineEdit -> setEnabled(!_autoIdCheckBox->isChecked());
@@ -44,14 +52,6 @@ void View::Management::ProductDialog::productModified(bool modified)
 {
     setWindowModified(modified);
     _saveButton -> setEnabled(isSaveable() && modified);
-}
-
-void View::Management::ProductDialog::save()
-{
-    if(saveProduct())
-        emit accept();
-    else
-        QMessageBox::critical(this, tr("Critical error"), tr("Has been occurred an error when save"), QMessageBox::Ok);
 }
 
 void View::Management::ProductDialog::createWidgets()
@@ -139,7 +139,7 @@ void View::Management::ProductDialog::createConnections()
     connect(_priceTypeComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(productModified()));
     connect(_saveButton, SIGNAL(clicked()),
-            this, SLOT(save()));
+            this, SLOT(accept()));
     connect(_cancelButton, SIGNAL(clicked()),
             this, SLOT(reject()));
 }
@@ -157,7 +157,7 @@ void View::Management::ProductDialog::loadProduct()
     productModified(false);
 }
 
-bool View::Management::ProductDialog::saveProduct()
+void View::Management::ProductDialog::saveProduct()
 {
     _product -> setId(_idLineEdit -> text().toInt());
     _product -> setName(_nameLineEdit -> text());
@@ -165,7 +165,6 @@ bool View::Management::ProductDialog::saveProduct()
     _product -> setDescription(_descriptionTextEdit -> toPlainText());
     _product -> setPrice(_priceLineEdit -> text().toDouble());
     _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> currentIndex()));
-    return true;
 }
 
 bool View::Management::ProductDialog::isSaveable()

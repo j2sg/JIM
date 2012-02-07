@@ -25,10 +25,11 @@
 #include "types.h"
 
 #define ENTITY_SELECTOR_MINIMUM_WIDTH 375
+#define COLUMN_ENTITY_ID_WIDTH 50
+#define COLUMN_ENTITY_NAME_WIDTH 250
 
 QT_BEGIN_NAMESPACE
-class QListView;
-class QStringListModel;
+class QTableView;
 class QPushButton;
 QT_END_NAMESPACE
 
@@ -53,19 +54,24 @@ namespace View
         public:
             EntitySelector(Model::Domain::EntityType type, QWidget *parent = 0);
             ~EntitySelector();
-            Model::Domain::Entity *entitySelected() const;
+            void done(int result);
+            Model::Domain::Entity *entity() const;
         private slots:
             void rowSelectionChanged();
+            void createEntity();
         private:
             void createWidgets();
             void setTitle();
             void setIcon();
             void createConnections();
 
-            QListView *_entitiesListView;
-            QStringListModel *_entityModel;
+            QTableView *_entitiesTableView;
+            EntityModel *_entityModel;
+            QPushButton *_createButton;
             QPushButton *_selectButton;
             QPushButton *_cancelButton;
+
+            Model::Domain::Entity *_entity;
             Model::Domain::EntityType _type;
 
         };

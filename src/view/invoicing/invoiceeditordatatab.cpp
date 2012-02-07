@@ -100,10 +100,10 @@ void View::Invoicing::InvoiceEditorDataTab::selectEntity()
 {
     View::Management::EntitySelector selector(_invoice -> type() ?
                                                   Model::Domain::CustomerEntity :
-                                                  Model::Domain::SupplierEntity);
+                                                  Model::Domain::SupplierEntity, this);
 
     if(selector.exec()) {
-        Model::Domain::Entity *entity = selector.entitySelected();
+        Model::Domain::Entity *entity = selector.entity();
         _invoice -> setEntity(entity);
         _entityIdLineEdit -> setText(QString::number(entity -> id()));
         _entityNameLineEdit -> setText(entity -> name());

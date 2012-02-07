@@ -54,7 +54,7 @@ void View::Management::EntityEditor::addEntity()
     Model::Domain::Entity *entity = (_type == Model::Domain::BusinessEntity ?
                                          new Model::Domain::Business :
                                          new Model::Domain::Entity(NO_ID, _type));
-    EntityDialog dialog(entity);
+    EntityDialog dialog(entity, this);
 
     if(dialog.exec()) {
         if(((_type == Model::Domain::BusinessEntity) ?
@@ -68,6 +68,8 @@ void View::Management::EntityEditor::addEntity()
                                   QMessageBox::Ok);
             delete entity;
         }
+
+        rowSelectionChanged();
     } else
         delete entity;
 }
@@ -76,7 +78,7 @@ void View::Management::EntityEditor::modEntity()
 {
     int row = _entitiesTableView -> currentIndex().row();
     Model::Domain::Entity *entity = _entityModel -> entities() -> at(row);
-    EntityDialog dialog(entity);
+    EntityDialog dialog(entity, this);
 
     if(dialog.exec()) {
         if(((_type == Model::Domain::BusinessEntity) ?
@@ -87,6 +89,8 @@ void View::Management::EntityEditor::modEntity()
             QMessageBox::critical(this, tr("Critical Error"),
                                   tr("Error during the entity modification"),
                                   QMessageBox::Ok);
+
+        rowSelectionChanged();
     }
 }
 
@@ -96,7 +100,6 @@ void View::Management::EntityEditor::delEntity()
     Model::Management::EntityManager::remove((_entityModel -> entities() -> at(row)) -> id(), _type);
     _entitiesTableView -> selectRow(row);
     _entityModel -> removeRows(row, 1);
-
 }
 
 void View::Management::EntityEditor::createWidgets()

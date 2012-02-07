@@ -60,9 +60,9 @@ void View::Management::EntityDialogDataTab::saveEntity()
     _entity -> setCity(_cityLineEdit -> text());
     _entity -> setAddress(_addressLineEdit -> text());
     _entity -> setPc(_pcLineEdit -> text());
-    _entity -> setTelephone(_telephoneLineEdit -> text().isEmpty() ? _telephoneLineEdit -> text().toInt() : 0);
-    _entity -> setMobile(_mobileLineEdit -> text().isEmpty() ? _mobileLineEdit -> text().toInt() : 0);
-    _entity -> setFax(_faxLineEdit -> text().isEmpty() ? _faxLineEdit -> text().toInt() : 0);
+    _entity -> setTelephone(!_telephoneLineEdit -> text().isEmpty() ? _telephoneLineEdit -> text().toInt() : 0);
+    _entity -> setMobile(!_mobileLineEdit -> text().isEmpty() ? _mobileLineEdit -> text().toInt() : 0);
+    _entity -> setFax(!_faxLineEdit -> text().isEmpty() ? _faxLineEdit -> text().toInt() : 0);
     _entity -> setEmail(_emailLineEdit -> text());
     _entity -> setWeb(_webLineEdit -> text());
 }

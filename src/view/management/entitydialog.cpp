@@ -41,31 +41,18 @@ View::Management::EntityDialog::EntityDialog(Model::Domain::Entity *entity, QWid
     loadEntity();
 }
 
-void View::Management::EntityDialog::closeEvent(QCloseEvent *event)
+void View::Management::EntityDialog::done(int result)
 {
-    if(verifySave())
-        event -> accept();
-    else
-        event -> ignore();
+    if(result)
+        saveEntity();
+
+    QDialog::done(result);
 }
 
 void View::Management::EntityDialog::entityModified(bool modified)
 {
     setWindowModified(modified);
     _saveButton -> setEnabled(isSaveable() && modified);
-}
-
-bool View::Management::EntityDialog::save()
-{
-    if(saveEntity()) {
-        emit accept();
-        return true;
-    } else {
-        QMessageBox::critical(this, tr("Critical error"),
-                                    tr("Has been occurred an error when save"),
-                                    QMessageBox::Ok);
-        return false;
-    }
 }
 
 void View::Management::EntityDialog::createWidgets()
@@ -82,10 +69,10 @@ void View::Management::EntityDialog::createWidgets()
 
     _saveButton = new QPushButton(tr("Save"));
     _saveButton -> setIcon(QIcon(":/images/save.png"));
+    _saveButton -> setDefault(true);
     _saveButton -> setEnabled(false);
     _finishButton = new QPushButton(tr("&Finish"));
     _finishButton -> setIcon(QIcon(":/images/cancel.png"));
-    _finishButton -> setDefault(true);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout -> addStretch();
@@ -110,9 +97,9 @@ void View::Management::EntityDialog::createConnections()
     connect(_otherTab, SIGNAL(dataChanged()),
             this, SLOT(entityModified()));
     connect(_saveButton, SIGNAL(clicked()),
-            this, SLOT(save()));
+            this, SLOT(accept()));
     connect(_finishButton, SIGNAL(clicked()),
-            this, SLOT(close()));
+            this, SLOT(reject()));
 }
 
 void View::Management::EntityDialog::setTitle()
@@ -146,41 +133,15 @@ void View::Management::EntityDialog::loadEntity()
     entityModified(false);
 }
 
-bool View::Management::EntityDialog::saveEntity()
+void View::Management::EntityDialog::saveEntity()
 {
     _dataTab -> saveEntity();
     if(_taxesTab)
         _taxesTab -> saveEntity();
     _otherTab -> saveEntity();
-
-    return (_entity -> type() == Model::Domain::BusinessEntity ?
-                ((IS_NEW(_entity -> id()) ?
-                     Model::Management::BusinessManager::create(dynamic_cast<Model::Domain::Business &>(*_entity)) :
-                     Model::Management::BusinessManager::modify(dynamic_cast<Model::Domain::Business &>(*_entity)))) :
-                (IS_NEW(_entity -> id()) ?
-                     Model::Management::EntityManager::create(*_entity) :
-                     Model::Management::EntityManager::modify(*_entity)));
 }
 
 bool View::Management::EntityDialog::isSaveable()
 {
     return _dataTab -> isSaveable();
-}
-
-bool View::Management::EntityDialog::verifySave()
-{
-    if(isWindowModified() && isSaveable()) {
-        int res = QMessageBox::warning(this, tr("Verify Save"),
-                                             tr("This entity has been modified\n"
-                                                "do you want to save the changes?"),
-                                             QMessageBox::Yes | QMessageBox::Default |
-                                             QMessageBox::No | QMessageBox::Cancel |
-                                             QMessageBox::Escape);
-        if(res == QMessageBox::Yes)
-            return save();
-        else if(res == QMessageBox::Cancel)
-            return false;
-    }
-
-    return true;
 }

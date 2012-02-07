@@ -34,6 +34,14 @@ View::Management::CategoryDialog::CategoryDialog(Model::Domain::Category *catego
     loadCategory();
 }
 
+void View::Management::CategoryDialog::done(int result)
+{
+    if(result)
+        saveCategory();
+
+    QDialog::done(result);
+}
+
 void View::Management::CategoryDialog::stateChangedOnAutoIdCheckBox()
 {
     _idLineEdit -> setEnabled(!_autoIdCheckBox -> isChecked());
@@ -43,16 +51,6 @@ void View::Management::CategoryDialog::categoryModified(bool modified)
 {
     setWindowModified(modified);
     _saveButton -> setEnabled(isSaveable() && modified);
-}
-
-void View::Management::CategoryDialog::save()
-{
-    if(saveCategory())
-        emit accept();
-    else
-        QMessageBox::critical(this, tr("Critical error"),
-                              tr("Has been occurred an error when save"),
-                              QMessageBox::Ok);
 }
 
 void View::Management::CategoryDialog::createWidgets()
@@ -123,7 +121,7 @@ void View::Management::CategoryDialog::createConnections()
     connect(_taxTypeComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(categoryModified()));
     connect(_saveButton, SIGNAL(clicked()),
-            this, SLOT(save()));
+            this, SLOT(accept()));
     connect(_cancelButton, SIGNAL(clicked()),
             this, SLOT(reject()));
 }
@@ -140,14 +138,12 @@ void View::Management::CategoryDialog::loadCategory()
     categoryModified(false);
 }
 
-bool View::Management::CategoryDialog::saveCategory()
+void View::Management::CategoryDialog::saveCategory()
 {
     _category -> setId(_idLineEdit -> text().toInt());
     _category -> setName(_nameLineEdit -> text());
     _category -> setDescription(_descriptionTextEdit -> toPlainText());
     _category -> setVatType(static_cast<Model::Domain::TaxType>(_taxTypeComboBox -> currentIndex()));
-
-    return true;
 }
 
 bool View::Management::CategoryDialog::isSaveable()

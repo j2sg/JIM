@@ -49,15 +49,15 @@ namespace View
             Q_OBJECT
         public:
             ProductDialog(Model::Domain::Product *product, QWidget *parent = 0);
+            void done(int result);
         private slots:
             void stateChangedOnAutoIdCheckBox();
             void productModified(bool modified = true);
-            void save();
         private:
             void createWidgets();
             void createConnections();
             void loadProduct();
-            bool saveProduct();
+            void saveProduct();
             bool isSaveable();
 
             QLabel *_idLabel;

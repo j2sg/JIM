@@ -49,15 +49,15 @@ namespace View
             Q_OBJECT
         public:
             CategoryDialog(Model::Domain::Category *category, QWidget *parent = 0);
+            void done(int result);
         private slots:
             void stateChangedOnAutoIdCheckBox();
             void categoryModified(bool modified = true);
-            void save();
         private:
             void createWidgets();
             void createConnections();
             void loadCategory();
-            bool saveCategory();
+            void saveCategory();
             bool isSaveable();
 
             QLabel *_idLabel;

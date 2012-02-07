@@ -21,6 +21,7 @@
 #include "entityselector.h"
 #include "entitymodel.h"
 #include "entitymanager.h"
+#include "entitydialog.h"
 #include "entity.h"
 #include <QtGui>
 
@@ -32,6 +33,8 @@ View::Management::EntitySelector::EntitySelector(Model::Domain::EntityType type,
     setTitle();
     setIcon();
     setMinimumWidth(ENTITY_SELECTOR_MINIMUM_WIDTH);
+
+    _entity = 0;
 }
 
 View::Management::EntitySelector::~EntitySelector()
@@ -39,35 +42,71 @@ View::Management::EntitySelector::~EntitySelector()
     delete _entityModel;
 }
 
-Model::Domain::Entity *View::Management::EntitySelector::entitySelected() const
+void View::Management::EntitySelector::done(int result)
 {
-    int row = _entitiesListView -> currentIndex().row();
+    if(result) {
+        int row = _entitiesTableView -> currentIndex().row();
+        _entity = new Model::Domain::Entity(*(_entityModel -> entities() -> at(row)));
+    }
 
-    if(row == -1)
-        return 0;
+    QDialog::done(result);
+}
 
-    return Model::Management::EntityManager::get(Model::Management::EntityManager::getAllNames(_type).value(_entityModel -> stringList().at(row)), _type);
+Model::Domain::Entity *View::Management::EntitySelector::entity() const
+{
+    return _entity;
 }
 
 void View::Management::EntitySelector::rowSelectionChanged()
 {
-    int row = _entitiesListView -> currentIndex().row();
+    int row = _entitiesTableView -> currentIndex().row();
     _selectButton -> setEnabled(row != -1);
+}
+
+void View::Management::EntitySelector::createEntity()
+{
+    Model::Domain::Entity *entity = new Model::Domain::Entity;
+    EntityDialog dialog(entity, this);
+
+    if(dialog.exec()) {
+        if(Model::Management::EntityManager::create(*entity)) {
+            int row = _entitiesTableView -> currentIndex().row();
+            _entityModel -> insertEntity(row + 1, entity);
+            QModelIndex index = _entityModel->index(row + 1, ColumnEntityId);
+            _entitiesTableView -> setCurrentIndex(index);
+            QDialog::accept();
+        } else {
+            QMessageBox::critical(this, tr("Critical Error"),
+                                  tr("Error during the entity addition"),
+                                  QMessageBox::Ok);
+            delete entity;
+        }
+    } else
+        delete entity;
 }
 
 void View::Management::EntitySelector::createWidgets()
 {
-    _entitiesListView = new QListView;
-    _entityModel = new QStringListModel(Model::Management::EntityManager::getAllNames(_type).keys());
-    _entitiesListView -> setModel(_entityModel);
-    _entitiesListView -> setAlternatingRowColors(true);
-    _entitiesListView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _entitiesTableView = new QTableView;
+    _entityModel = new EntityModel(Model::Management::EntityManager::getAllByType(_type));
+    _entitiesTableView -> setModel(_entityModel);
+    _entitiesTableView -> setAlternatingRowColors(true);
+    _entitiesTableView -> setShowGrid(false);
+    _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_ID_WIDTH);
+    _entitiesTableView -> setColumnWidth(ColumnEntityName, COLUMN_ENTITY_NAME_WIDTH);
+    _entitiesTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
+    _entitiesTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
+    _entitiesTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _entitiesTableView -> setFocusPolicy(Qt::NoFocus);
 
     QHBoxLayout *topLayout = new QHBoxLayout;
-    topLayout -> addWidget(_entitiesListView);
+    topLayout -> addWidget(_entitiesTableView);
 
-    QGroupBox *entitiesGroupBox = new QGroupBox(tr("List"));
+    QGroupBox *entitiesGroupBox = new QGroupBox(tr("%1 List").arg(_type ? tr("Supplier") : tr("Customer")));
     entitiesGroupBox -> setLayout(topLayout);
+
+    _createButton = new QPushButton(tr("Create"));
+    _createButton -> setIcon((_type ? QIcon(":/images/supplier.png") : QIcon(":/images/entity.png")));
 
     _selectButton = new QPushButton(tr("&Select"));
     _selectButton -> setIcon(QIcon(":/images/ok.png"));
@@ -78,6 +117,7 @@ void View::Management::EntitySelector::createWidgets()
     _cancelButton -> setIcon(QIcon(":/images/cancel.png"));
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
+    bottomLayout -> addWidget(_createButton);
     bottomLayout -> addStretch();
     bottomLayout -> addWidget(_selectButton);
     bottomLayout -> addWidget(_cancelButton);
@@ -128,8 +168,10 @@ void View::Management::EntitySelector::setIcon()
 
 void View::Management::EntitySelector::createConnections()
 {
-    connect(_entitiesListView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+    connect(_entitiesTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(rowSelectionChanged()));
+    connect(_createButton, SIGNAL(clicked()),
+            this, SLOT(createEntity()));
     connect(_selectButton, SIGNAL(clicked()),
             this, SLOT(accept()));
     connect(_cancelButton, SIGNAL(clicked()),

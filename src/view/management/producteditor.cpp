@@ -54,7 +54,7 @@ void View::Management::ProductEditor::rowSelectionChangedOnCategoriesTableView()
 void View::Management::ProductEditor::addCategory()
 {
     Model::Domain::Category *category = new Model::Domain::Category;
-    CategoryDialog dialog(category);
+    CategoryDialog dialog(category, this);
 
     if(dialog.exec()) {
         if(Model::Management::CategoryManager::create(*category)) {
@@ -66,6 +66,8 @@ void View::Management::ProductEditor::addCategory()
                                   QMessageBox::Ok);
             delete category;
         }
+
+        rowSelectionChangedOnCategoriesTableView();
     } else
         delete category;
 }
@@ -74,7 +76,7 @@ void View::Management::ProductEditor::modCategory()
 {
     int row = _categoriesTableView -> currentIndex().row();
     Model::Domain::Category *category = _categoryModel -> categories() -> at(row);
-    CategoryDialog dialog(category);
+    CategoryDialog dialog(category, this);
 
     if(dialog.exec()) {
         if(Model::Management::CategoryManager::modify(*category))
@@ -83,6 +85,8 @@ void View::Management::ProductEditor::modCategory()
             QMessageBox::critical(this, tr("Critical Error"),
                                   tr("Error during the category modification"),
                                   QMessageBox::Ok);
+
+        rowSelectionChangedOnCategoriesTableView();
     }
 
 }
@@ -106,7 +110,7 @@ void View::Management::ProductEditor::rowSelectionChangedOnProducsTableView()
 void View::Management::ProductEditor::addProduct()
 {
     Model::Domain::Product *product = new Model::Domain::Product;
-    ProductDialog dialog(product);
+    ProductDialog dialog(product, this);
 
     if(dialog.exec()) {
         if(Model::Management::ProductManager::create(*product)) {
@@ -119,6 +123,8 @@ void View::Management::ProductEditor::addProduct()
                                   QMessageBox::Ok);
             delete product;
         }
+
+        rowSelectionChangedOnProducsTableView();
     } else
         delete product;
 }
@@ -127,7 +133,7 @@ void View::Management::ProductEditor::modProduct()
 {
     int row = _productsTableView -> currentIndex().row();
     Model::Domain::Product *product = _productModel -> products() -> at(row);
-    ProductDialog dialog(product);
+    ProductDialog dialog(product, this);
 
     if(dialog.exec()) {
         if(Model::Management::ProductManager::modify(*product))
@@ -136,6 +142,8 @@ void View::Management::ProductEditor::modProduct()
             QMessageBox::critical(this, tr("Critical Error"),
                                   tr("Error during the product modification"),
                                   QMessageBox::Ok);
+
+        rowSelectionChangedOnProducsTableView();
     }
 }
 
