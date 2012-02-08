@@ -24,6 +24,10 @@
 #include <QDialog>
 
 QT_BEGIN_NAMESPACE
+class QLabel;
+class QComboBox;
+class QSpinBox;
+class QLineEdit;
 class QListWidget;
 class QStackedLayout;
 class QPushButton;
@@ -31,21 +35,69 @@ QT_END_NAMESPACE
 
 namespace View
 {
+
+    namespace Management
+    {
+        class TaxWidget;
+    }
+
     class OptionsDialog : public QDialog
     {
         Q_OBJECT
     public:
         OptionsDialog(QWidget *parent = 0);
+        void done(int result);
     private:
         void createWidgets();
         void createApplicationPageWidgets();
+        void createAuthenticationPageWidgets();
         void createInvoicingPageWidgets();
         void createConnections();
         void loadOptions();
         void saveOptions();
 
+        QLabel *_internationalizationLanguageLabel;
+        QComboBox *_internationalizationLanguageComboBox;
+        QLabel *_internationalizationCurrencyLabel;
+        QComboBox *_internationalizationCurrencyComboBox;
+        QLabel *_precisionMoneyLabel;
+        QSpinBox *_precisionMoneySpinBox;
+        QLabel *_precisionTaxLabel;
+        QSpinBox *_precisionTaxSpinBox;
+        QLabel *_precisionWeightLabel;
+        QSpinBox *_precisionWeightSpinBox;
+        QLabel *_dataSourceDBMSLabel;
+        QComboBox *_dataSourceDBMSComboBox;
+        QLabel *_dataSourceNameLabel;
+        QLineEdit *_dataSourceNameLineEdit;
+        QLabel *_dataSourceHostLabel;
+        QLineEdit *_dataSourceHostLineEdit;
+        QLabel *_dataSourcePortLabel;
+        QSpinBox *_dataSourcePortSpinBox;
+        QLabel *_dataSourceUserLabel;
+        QLineEdit *_dataSourceUserLineEdit;
+        QLabel *_dataSourcePassLabel;
+        QLineEdit *_dataSourcePassLineEdit;
         QListWidget *_listWidget;
+        QLabel *_authenticationCurrentPassLabel;
+        QLineEdit *_authenticationCurrentPassLineEdit;
+        QLabel *_authenticationNewPassLabel;
+        QLineEdit *_authenticationNewPassLineEdit;
+        QLabel *_authenticationReNewPassLabel;
+        QLineEdit *_authenticationReNewPassLineEdit;
+        QLabel *_invoicingTaxesLabel;
+        View::Management::TaxWidget *_invoicingTaxesTaxWidget;
+        QLabel *_invoicingMaxChargeByCustomerLabel;
+        QSpinBox *_invoicingMaxChargeByCustomerSpinBox;
+        QLabel *_invoicingMaxChargeBySupplierLabel;
+        QSpinBox *_invoicingMaxChargeBySupplierSpinBox;
+        QLabel *_invoicingCurrencyUnitLabel;
+        QLabel *_invoicingMaxPaymentDelayByCustomerLabel;
+        QSpinBox *_invoicingMaxPaymentDelayByCustomerSpinBox;
+        QLabel *_invoicingMaxPaymentDelayBySupplierLabel;
+        QSpinBox *_invoicingMaxPaymentDelayBySupplierSpinBox;
         QWidget *_applicationPage;
+        QWidget *_authenticationPage;
         QWidget *_invoicingPage;
         QStackedLayout *_stackedLayout;
         QPushButton *_okPushButton;

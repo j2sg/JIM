@@ -21,8 +21,10 @@
 #include "taxwidget.h"
 #include <QtGui>
 
-View::Management::TaxWidget::TaxWidget(Model::Domain::Tax *tax, QWidget *parent)
-    : QWidget(parent), _tax(tax)
+View::Management::TaxWidget::TaxWidget(Model::Domain::Tax *tax,
+                                       Qt::Orientation orientation,
+                                       QWidget *parent)
+    : QWidget(parent), _tax(tax), _orientation(orientation)
 {
     createWidgets();
     createConnections();
@@ -159,10 +161,17 @@ void View::Management::TaxWidget::createWidgets()
     QGroupBox *pitGroupBox = new QGroupBox(tr("PIT"));
     pitGroupBox -> setLayout(pitLayout);
 
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->addWidget(vatGroupBox);
-    mainLayout->addWidget(esGroupBox);
-    mainLayout->addWidget(pitGroupBox,0, Qt::AlignTop);
+    QGridLayout *mainLayout = new QGridLayout;
+
+    if(_orientation == Qt::Horizontal) {
+        mainLayout -> addWidget(vatGroupBox, 0, 0);
+        mainLayout -> addWidget(esGroupBox, 0, 1);
+        mainLayout -> addWidget(pitGroupBox,0, 2, 1, 1, Qt::AlignTop);
+    } else {
+        mainLayout -> addWidget(vatGroupBox, 0, 0);
+        mainLayout -> addWidget(esGroupBox, 1, 0);
+        mainLayout -> addWidget(pitGroupBox,2, 0, 1, 1, Qt::AlignLeft);
+    }
 
     setLayout(mainLayout);
 }

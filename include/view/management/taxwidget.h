@@ -38,7 +38,9 @@ namespace View
         {
             Q_OBJECT
         public:
-            TaxWidget(Model::Domain::Tax *tax = 0, QWidget *parent = 0);
+            TaxWidget(Model::Domain::Tax *tax = 0,
+                      Qt::Orientation orientation = Qt::Horizontal,
+                      QWidget *parent = 0);
             void setTax(Model::Domain::Tax *tax);
             Model::Domain::Tax *tax() const;
         signals:
@@ -64,6 +66,7 @@ namespace View
             QLabel *_pitValueLabel;
             QDoubleSpinBox *_pitDoubleSpinBox;
             Model::Domain::Tax *_tax;
+            Qt::Orientation _orientation;
         };
     }
 }

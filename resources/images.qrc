@@ -25,5 +25,6 @@
         <file>images/address.png</file>
         <file>images/calc.png</file>
         <file>images/save.png</file>
+        <file>images/password.png</file>
     </qresource>
 </RCC>
