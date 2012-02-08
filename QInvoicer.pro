@@ -77,7 +77,8 @@ HEADERS += include/global.h \
            include/view/management/taxapplyingwidget.h \
            include/view/management/taxwidget.h \
     include/view/management/entityviewer.h \
-    include/view/management/entityselector.h
+    include/view/management/entityselector.h \
+    include/view/optionsdialog.h
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
            src/persistence/sqlagent.cpp \
@@ -120,8 +121,15 @@ SOURCES += src/main.cpp \
            src/view/management/taxapplyingwidget.cpp \
            src/view/management/taxwidget.cpp \
     src/view/management/entityviewer.cpp \
-    src/view/management/entityselector.cpp
+    src/view/management/entityselector.cpp \
+    src/view/optionsdialog.cpp
 RESOURCES += resources/images.qrc
+
+
+
+
+
+
 
 
 

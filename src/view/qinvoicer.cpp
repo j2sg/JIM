@@ -31,6 +31,7 @@
 #include "business.h"
 #include "businessmanager.h"
 #include "invoicemanager.h"
+#include "optionsdialog.h"
 #include "global.h"
 
 View::QInvoicer::QInvoicer()
@@ -173,7 +174,9 @@ void View::QInvoicer::setUpBusiness()
 
 void View::QInvoicer::options()
 {
-    QMessageBox::information(this, tr("Options"), tr("Feature not implemented yet"), QMessageBox::Ok);
+    OptionsDialog dialog(this);
+
+    dialog.exec();
 }
 
 void View::QInvoicer::printing()
