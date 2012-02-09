@@ -94,7 +94,7 @@ QVariant View::Management::CategoryModel::data(const QModelIndex &index, int rol
     if(index.isValid()) {
         if(role == Qt::TextAlignmentRole) {
             switch(index.column()) {
-            case ColumnCategoryId:
+            case ColumnCategoryId: case ColumnCategoryVat:
                 return int(Qt::AlignCenter);
             case ColumnCategoryName:
                 return int(Qt::AlignLeft | Qt::AlignVCenter);
@@ -106,6 +106,24 @@ QVariant View::Management::CategoryModel::data(const QModelIndex &index, int rol
                 return QString::number(category -> id());
             case ColumnCategoryName:
                 return category -> name();
+            case ColumnCategoryVat:
+                QString vatType;
+
+                switch(static_cast<int>(category ->vatType())) {
+                case Model::Domain::GeneralVAT:
+                    vatType = tr("General");
+                    break;
+                case Model::Domain::ReducedVAT:
+                    vatType = tr("Reduced");
+                    break;
+                case Model::Domain::SuperReducedVAT:
+                    vatType = tr("Super Reduced");
+                    break;
+                default:
+                    vatType = tr("Unknown");
+                }
+
+                return vatType;
             }
         }
     }
@@ -148,6 +166,8 @@ QVariant View::Management::CategoryModel::headerData(int section, Qt::Orientatio
                 return QString(tr("ID"));
             case ColumnCategoryName:
                 return QString(tr("Name"));
+            case ColumnCategoryVat:
+                return QString(tr("VAT"));
             }
         }
     }

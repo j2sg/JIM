@@ -124,13 +124,3 @@ SOURCES += src/main.cpp \
     src/view/management/entityselector.cpp \
     src/view/optionsdialog.cpp
 RESOURCES += resources/images.qrc
-
-
-
-
-
-
-
-
-
-

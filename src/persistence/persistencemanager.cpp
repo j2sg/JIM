@@ -39,21 +39,45 @@ bool Persistence::Manager::createConfig(bool overwrite)
 
     QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
 
-    setting.setValue("Executed", true);
+    setting.setValue("Executed",                  true);
+    setting.setValue("Password",                  QByteArray(""));
+    setting.setValue("DefaultBusiness",           "");
+    setting.beginGroup("Application");
+    setting.setValue("Currency",                  DEFAULT_APPLICATION_CURRENCY);
+    setting.beginGroup("Precision");
+    setting.setValue("Money",                     DEFAULT_APPLICATION_MONEY_PRECISION);
+    setting.setValue("Tax",                       DEFAULT_APPLICATION_TAX_PRECISION);
+    setting.setValue("Weight",                    DEFAULT_APPLICATION_WEIGHT_PRECISION);
+    setting.endGroup();
+    setting.endGroup();
     setting.beginGroup("Storage");
-    setting.setValue("Type",   DEFAULT_STORAGE_TYPE);
-    setting.setValue("Path",   DEFAULT_STORAGE_PATH);
+    setting.setValue("Type",                      DEFAULT_STORAGE_TYPE);
+    setting.setValue("Path",                      DEFAULT_STORAGE_PATH);
     setting.beginGroup("DBMS");
-    setting.setValue("Driver", DEFAULT_STORAGE_DBMS_DRIVER);
-    setting.setValue("Name",   DEFAULT_STORAGE_DBMS_NAME);
-    setting.setValue("Host",   DEFAULT_STORAGE_DBMS_HOST);
-    setting.setValue("Port",   DEFAULT_STORAGE_DBMS_PORT);
-    setting.setValue("User",   DEFAULT_STORAGE_DBMS_USER);
-    setting.setValue("Pass",   DEFAULT_STORAGE_DBMS_PASS);
+    setting.setValue("Driver",                    DEFAULT_STORAGE_DBMS_DRIVER);
+    setting.setValue("Name",                      DEFAULT_STORAGE_DBMS_NAME);
+    setting.setValue("Host",                      DEFAULT_STORAGE_DBMS_HOST);
+    setting.setValue("Port",                      DEFAULT_STORAGE_DBMS_PORT);
+    setting.setValue("User",                      DEFAULT_STORAGE_DBMS_USER);
+    setting.setValue("Pass",                      DEFAULT_STORAGE_DBMS_PASS);
     setting.endGroup();
     setting.endGroup();
-    setting.beginGroup("Business");
-    setting.setValue("Default", "");
+    setting.beginGroup("Invoicing");
+    setting.beginGroup("Tax");
+    setting.setValue("GeneralVAT",                DEFAULT_INVOICING_TAX_GEN_VAT);
+    setting.setValue("ReducedVAT",                DEFAULT_INVOICING_TAX_RED_VAT);
+    setting.setValue("SuperReducedVAT",           DEFAULT_INVOICING_TAX_SRE_VAT);
+    setting.setValue("GeneralES",                 DEFAULT_INVOICING_TAX_GEN_ES);
+    setting.setValue("ReducedES",                 DEFAULT_INVOICING_TAX_RED_ES);
+    setting.setValue("SuperReducedES",            DEFAULT_INVOICING_TAX_SRE_ES);
+    setting.setValue("PIT",                       DEFAULT_INVOICING_TAX_PIT);
+    setting.endGroup();
+    setting.beginGroup("Unpaids");
+    setting.setValue("MaxDebtByCustomer",         DEFAULT_INVOICING_MAX_DEBT_BY_CUSTOMER);
+    setting.setValue("MaxDebtBySupplier",         DEFAULT_INVOICING_MAX_DEBT_BY_SUPPLIER);
+    setting.setValue("MaxPaymentDelayByCustomer", DEFAULT_INVOICING_MAX_PAYMENT_DELAY_BY_CUSTOMER);
+    setting.setValue("MaxPaymentDelayBySupplier", DEFAULT_INVOICING_MAX_PAYMENT_DELAY_BY_SUPPLIER);
+    setting.endGroup();
     setting.endGroup();
 
     return true;
@@ -104,8 +128,8 @@ bool Persistence::Manager::existsStorage()
     if(!existsConfig())
         return false;
 
-    switch(static_cast<StorageType>(readConfig("Type", "Storage").toInt())) {
-    case DBMS:
+    switch(static_cast<DBMSType>(readConfig("Type", "Storage").toInt())) {
+    case SQLITE:
         QString driver = readConfig("Driver", "Storage/DBMS").toString();
         if(driver == "QSQLITE")
             return QFile(readConfig("Name", "Storage/DBMS").toString()).exists();
@@ -125,8 +149,8 @@ bool Persistence::Manager::createStorage(bool overwrite)
     if(!storagePath.exists() && !storagePath.mkpath(storagePath.path()))
             return false;
 
-    switch(static_cast<StorageType>(readConfig("Type", "Storage").toInt())) {
-    case DBMS:
+    switch(static_cast<DBMSType>(readConfig("Type", "Storage").toInt())) {
+    case SQLITE:
         return createSQLiteSchema();
     }
 

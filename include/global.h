@@ -33,13 +33,28 @@
 #define APPLICATION_VERSION "0.1 Alpha"
 
 // Configuration Default Values
-#define DEFAULT_STORAGE_TYPE        Persistence::DBMS
-#define DEFAULT_STORAGE_PATH        QDesktopServices::storageLocation(QDesktopServices::DataLocation)
-#define DEFAULT_STORAGE_DBMS_DRIVER "QSQLITE"
-#define DEFAULT_STORAGE_DBMS_NAME   DEFAULT_STORAGE_PATH.append("/qinvoicer.db")
-#define DEFAULT_STORAGE_DBMS_HOST   ""
-#define DEFAULT_STORAGE_DBMS_PORT   0
-#define DEFAULT_STORAGE_DBMS_USER   ""
-#define DEFAULT_STORAGE_DBMS_PASS   ""
+#define DEFAULT_APPLICATION_CURRENCY                    "EUR"
+#define DEFAULT_APPLICATION_MONEY_PRECISION             MAX_MONEY_PRECISION
+#define DEFAULT_APPLICATION_TAX_PRECISION               MAX_TAX_PRECISION
+#define DEFAULT_APPLICATION_WEIGHT_PRECISION            MAX_WEIGHT_PRECISION
+#define DEFAULT_STORAGE_TYPE                            Persistence::SQLITE
+#define DEFAULT_STORAGE_PATH                            QDesktopServices::storageLocation(QDesktopServices::DataLocation)
+#define DEFAULT_STORAGE_DBMS_DRIVER                     "QSQLITE"
+#define DEFAULT_STORAGE_DBMS_NAME                       DEFAULT_STORAGE_PATH.append("/qinvoicer.db")
+#define DEFAULT_STORAGE_DBMS_HOST                       ""
+#define DEFAULT_STORAGE_DBMS_PORT                       0
+#define DEFAULT_STORAGE_DBMS_USER                       ""
+#define DEFAULT_STORAGE_DBMS_PASS                       ""
+#define DEFAULT_INVOICING_TAX_GEN_VAT                   18
+#define DEFAULT_INVOICING_TAX_RED_VAT                   8
+#define DEFAULT_INVOICING_TAX_SRE_VAT                   4
+#define DEFAULT_INVOICING_TAX_GEN_ES                    4
+#define DEFAULT_INVOICING_TAX_RED_ES                    1
+#define DEFAULT_INVOICING_TAX_SRE_ES                    0.5
+#define DEFAULT_INVOICING_TAX_PIT                       7
+#define DEFAULT_INVOICING_MAX_DEBT_BY_CUSTOMER          500
+#define DEFAULT_INVOICING_MAX_DEBT_BY_SUPPLIER          500
+#define DEFAULT_INVOICING_MAX_PAYMENT_DELAY_BY_CUSTOMER 30
+#define DEFAULT_INVOICING_MAX_PAYMENT_DELAY_BY_SUPPLIER 30
 
 #endif // GLOBAL_H

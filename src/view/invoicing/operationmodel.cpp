@@ -22,6 +22,7 @@
 #include "operation.h"
 #include "product.h"
 #include "productmanager.h"
+#include "persistencemanager.h"
 #include "types.h"
 
 QList<Model::Domain::Operation *> *View::Invoicing::OperationModel::operations()
@@ -64,6 +65,7 @@ QVariant View::Invoicing::OperationModel::data(const QModelIndex &index, int rol
         } else if(role == Qt::DisplayRole) {
             Model::Domain::Operation *operation = _operations -> at(index.row());
             Model::Domain::Product *product = operation -> product();
+            int precision = Persistence::Manager::readConfig("Weight", "Application/Precision").toInt();
             switch(index.column()) {
             case ColumnOperationId:
                 return product ? QString::number(product -> id()) : "";
@@ -72,11 +74,11 @@ QVariant View::Invoicing::OperationModel::data(const QModelIndex &index, int rol
             case ColumnOperationQuantity:
                 return QString::number(operation -> quantity());
             case ColumnOperationWeight:
-                return QString::number(operation -> weight(), 'f', PRECISION_WEIGHT);
+                return QString::number(operation -> weight(), 'f', precision);
             case ColumnOperationPrice:
-                return QString::number(operation -> price(), 'f', PRECISION_MONEY);
+                return QString::number(operation -> price(), 'f', precision);
             case ColumnOperationTotal:
-                return QString::number(operation -> total(), 'f', PRECISION_MONEY);
+                return QString::number(operation -> total(), 'f', precision);
             }
         }
     }

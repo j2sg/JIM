@@ -19,27 +19,88 @@
  **/
 
 #include "taxwidget.h"
+#include "persistencemanager.h"
 #include <QtGui>
 
 View::Management::TaxWidget::TaxWidget(Model::Domain::Tax *tax,
                                        Qt::Orientation orientation,
                                        QWidget *parent)
-    : QWidget(parent), _tax(tax), _orientation(orientation)
+    : QWidget(parent), _orientation(orientation)
 {
     createWidgets();
     createConnections();
-    loadTaxes();
+    setTax(tax);
 }
 
 void View::Management::TaxWidget::setTax(Model::Domain::Tax *tax)
 {
-    _tax = tax;
-    loadTaxes();
+    if(tax) {
+        _generalVatDoubleSpinBox -> setValue(tax[Model::Domain::GeneralVAT].value());
+        _reducedVatDoubleSpinBox -> setValue(tax[Model::Domain::ReducedVAT].value());
+        _superReducedVatDoubleSpinBox -> setValue(tax[Model::Domain::SuperReducedVAT].value());
+
+        _generalEsDoubleSpinBox -> setValue(tax[Model::Domain::GeneralES].value());
+        _reducedEsDoubleSpinBox -> setValue(tax[Model::Domain::ReducedES].value());
+        _superReducedEsDoubleSpinBox -> setValue(tax[Model::Domain::SuperReducedES].value());
+
+        _pitDoubleSpinBox -> setValue(tax[Model::Domain::PIT].value());
+    }
 }
 
-Model::Domain::Tax *View::Management::TaxWidget::tax() const
+void View::Management::TaxWidget::setTax(Model::Domain::TaxType type, double value)
 {
-    return _tax;
+    switch(static_cast<int>(type)){
+    case Model::Domain::GeneralVAT:
+        _generalVatDoubleSpinBox -> setValue(value);
+        break;
+    case Model::Domain::ReducedVAT:
+        _reducedVatDoubleSpinBox -> setValue(value);
+        break;
+    case Model::Domain::SuperReducedVAT:
+        _superReducedVatDoubleSpinBox -> setValue(value);
+        break;
+    case Model::Domain::GeneralES:
+        _generalEsDoubleSpinBox -> setValue(value);
+        break;
+    case Model::Domain::ReducedES:
+        _reducedEsDoubleSpinBox -> setValue(value);
+        break;
+    case Model::Domain::SuperReducedES:
+        _superReducedEsDoubleSpinBox -> setValue(value);
+        break;
+    case Model::Domain::PIT:
+        _pitDoubleSpinBox -> setValue(value);
+    }
+}
+
+double View::Management::TaxWidget::tax(Model::Domain::TaxType type) const
+{
+    double value = 0.0;
+
+    switch(static_cast<int>(type)){
+    case Model::Domain::GeneralVAT:
+        value = _generalVatDoubleSpinBox -> value();
+        break;
+    case Model::Domain::ReducedVAT:
+        value = _reducedVatDoubleSpinBox -> value();
+        break;
+    case Model::Domain::SuperReducedVAT:
+        value = _superReducedVatDoubleSpinBox -> value();
+        break;
+    case Model::Domain::GeneralES:
+        value = _generalEsDoubleSpinBox -> value();
+        break;
+    case Model::Domain::ReducedES:
+        value = _reducedEsDoubleSpinBox -> value();
+        break;
+    case Model::Domain::SuperReducedES:
+        value = _superReducedEsDoubleSpinBox -> value();
+        break;
+    case Model::Domain::PIT:
+        value = _pitDoubleSpinBox -> value();
+    }
+
+    return value;
 }
 
 void View::Management::TaxWidget::updateTax(double value)
@@ -62,16 +123,16 @@ void View::Management::TaxWidget::updateTax(double value)
     else
         type = Model::Domain::PIT;
 
-    _tax[type].setValue(value);
-
     emit taxChanged(type, value);
 }
 
 void View::Management::TaxWidget::createWidgets()
 {
+    int precisionTax = Persistence::Manager::readConfig("Tax", "Application/Precision").toInt();
+
     _generalVatLabel = new QLabel(tr("General:"));
     _generalVatDoubleSpinBox = new QDoubleSpinBox;
-    _generalVatDoubleSpinBox -> setDecimals(PRECISION_VAT);
+    _generalVatDoubleSpinBox -> setDecimals(precisionTax);
     _generalVatDoubleSpinBox -> setSingleStep(0.1);
     _generalVatDoubleSpinBox -> setSuffix(" %");
     _generalVatDoubleSpinBox -> setMinimum(0.0);
@@ -80,7 +141,7 @@ void View::Management::TaxWidget::createWidgets()
 
     _reducedVatLabel = new QLabel(tr("Reduced:"));
     _reducedVatDoubleSpinBox = new QDoubleSpinBox;
-    _reducedVatDoubleSpinBox -> setDecimals(PRECISION_VAT);
+    _reducedVatDoubleSpinBox -> setDecimals(precisionTax);
     _reducedVatDoubleSpinBox -> setSingleStep(0.1);
     _reducedVatDoubleSpinBox -> setSuffix(" %");
     _reducedVatDoubleSpinBox -> setMinimum(0.0);
@@ -89,7 +150,7 @@ void View::Management::TaxWidget::createWidgets()
 
     _superReducedVatLabel = new QLabel(tr("Super Reduced:"));
     _superReducedVatDoubleSpinBox = new QDoubleSpinBox;
-    _superReducedVatDoubleSpinBox -> setDecimals(PRECISION_VAT);
+    _superReducedVatDoubleSpinBox -> setDecimals(precisionTax);
     _superReducedVatDoubleSpinBox -> setSingleStep(0.1);
     _superReducedVatDoubleSpinBox -> setSuffix(" %");
     _superReducedVatDoubleSpinBox -> setMinimum(0.0);
@@ -98,7 +159,7 @@ void View::Management::TaxWidget::createWidgets()
 
     _generalEsLabel = new QLabel(tr("General:"));
     _generalEsDoubleSpinBox = new QDoubleSpinBox;
-    _generalEsDoubleSpinBox -> setDecimals(PRECISION_VAT);
+    _generalEsDoubleSpinBox -> setDecimals(precisionTax);
     _generalEsDoubleSpinBox -> setSingleStep(0.1);
     _generalEsDoubleSpinBox -> setSuffix(" %");
     _generalEsDoubleSpinBox -> setMinimum(0.0);
@@ -107,7 +168,7 @@ void View::Management::TaxWidget::createWidgets()
 
     _reducedEsLabel = new QLabel(tr("Reduced:"));
     _reducedEsDoubleSpinBox = new QDoubleSpinBox;
-    _reducedEsDoubleSpinBox -> setDecimals(PRECISION_VAT);
+    _reducedEsDoubleSpinBox -> setDecimals(precisionTax);
     _reducedEsDoubleSpinBox -> setSingleStep(0.1);
     _reducedEsDoubleSpinBox -> setSuffix(" %");
     _reducedEsDoubleSpinBox -> setMinimum(0.0);
@@ -116,7 +177,7 @@ void View::Management::TaxWidget::createWidgets()
 
     _superReducedEsLabel = new QLabel(tr("Super Reduced:"));
     _superReducedEsDoubleSpinBox = new QDoubleSpinBox;
-    _superReducedEsDoubleSpinBox -> setDecimals(PRECISION_VAT);
+    _superReducedEsDoubleSpinBox -> setDecimals(precisionTax);
     _superReducedEsDoubleSpinBox -> setSingleStep(0.1);
     _superReducedEsDoubleSpinBox -> setSuffix(" %");
     _superReducedEsDoubleSpinBox -> setMinimum(0.0);
@@ -125,7 +186,7 @@ void View::Management::TaxWidget::createWidgets()
 
     _pitValueLabel = new QLabel(tr("Value:"));
     _pitDoubleSpinBox = new QDoubleSpinBox;
-    _pitDoubleSpinBox -> setDecimals(PRECISION_VAT);
+    _pitDoubleSpinBox -> setDecimals(precisionTax);
     _pitDoubleSpinBox -> setSingleStep(0.1);
     _pitDoubleSpinBox -> setSuffix(" %");
     _pitDoubleSpinBox -> setMinimum(0.0);
@@ -192,19 +253,4 @@ void View::Management::TaxWidget::createConnections()
             this, SLOT(updateTax(double)));
     connect(_pitDoubleSpinBox, SIGNAL(valueChanged(double)),
             this, SLOT(updateTax(double)));
-}
-
-void View::Management::TaxWidget::loadTaxes()
-{
-    if(_tax) {
-        _generalVatDoubleSpinBox -> setValue(_tax[Model::Domain::GeneralVAT].value());
-        _reducedVatDoubleSpinBox -> setValue(_tax[Model::Domain::ReducedVAT].value());
-        _superReducedVatDoubleSpinBox -> setValue(_tax[Model::Domain::SuperReducedVAT].value());
-
-        _generalEsDoubleSpinBox -> setValue(_tax[Model::Domain::GeneralES].value());
-        _reducedEsDoubleSpinBox -> setValue(_tax[Model::Domain::ReducedES].value());
-        _superReducedEsDoubleSpinBox -> setValue(_tax[Model::Domain::SuperReducedES].value());
-
-        _pitDoubleSpinBox -> setValue(_tax[Model::Domain::PIT].value());
-    }
 }

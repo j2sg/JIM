@@ -80,7 +80,7 @@ void View::Invoicing::InvoiceEditor::createWidgets()
     _tabWidget -> addTab(_dataTab, tr("&Data"));
     _tabWidget -> addTab(_otherTab, tr("&Other"));
 
-    _saveButton = new QPushButton(tr("Save"));
+    _saveButton = new QPushButton(tr("&Save"));
     _saveButton -> setIcon(QIcon(":/images/ok.png"));
     _saveButton -> setDefault(true);
     _saveButton -> setEnabled(false);

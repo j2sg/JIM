@@ -27,6 +27,7 @@
 #include "entityviewer.h"
 #include "operationeditor.h"
 #include "taxviewerwidget.h"
+#include "persistencemanager.h"
 #include <QtGui>
 
 View::Invoicing::InvoiceEditorDataTab::InvoiceEditorDataTab(Model::Domain::Invoice *invoice, QWidget *parent)
@@ -121,21 +122,22 @@ void View::Invoicing::InvoiceEditorDataTab::detailEntity()
 void View::Invoicing::InvoiceEditorDataTab::updateTotals()
 {    
     bool paid = _paidCheckBox -> isChecked();
+    int moneyPrecision = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
 
     _subtotalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                   QString::number(_invoice -> subtotal(), 'f', PRECISION_MONEY) + " " +
+                                   QString::number(_invoice -> subtotal(), 'f', moneyPrecision) + " " +
                                    QString::fromUtf8("€") + "</font></h4>");
 
     _taxesValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                QString::number(_invoice -> taxes(), 'f', PRECISION_MONEY) + " " +
+                                QString::number(_invoice -> taxes(), 'f', moneyPrecision) + " " +
                                 QString::fromUtf8("€") + "</font></h4>");
 
     _deductionValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                    QString::number(-_invoice -> deduction(), 'f', PRECISION_MONEY) + " " +
+                                    QString::number(-_invoice -> deduction(), 'f', moneyPrecision) + " " +
                                     QString::fromUtf8("€") + "</font></h4>");
 
     _totalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                QString::number(_invoice -> total(), 'f', PRECISION_MONEY) + " " +
+                                QString::number(_invoice -> total(), 'f', moneyPrecision) + " " +
                                 QString::fromUtf8("€") + "</font></h4>");
 }
 

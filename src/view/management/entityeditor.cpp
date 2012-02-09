@@ -164,6 +164,8 @@ void View::Management::EntityEditor::setTitle()
     case Model::Domain::BusinessEntity:
         entityType = tr("Business");
         break;
+    default:
+        entityType = tr("Unknown");
     }
 
     setWindowTitle(tr("%1 Editor").arg(entityType));

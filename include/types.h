@@ -21,10 +21,17 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-// Number of decimal digits will use in ...
-#define PRECISION_WEIGHT 3
-#define PRECISION_MONEY 2
-#define PRECISION_VAT 1
+// Maximum Decimal Number used on money, tax and weight units.
+#define MAX_MONEY_PRECISION  4
+#define MAX_TAX_PRECISION    2
+#define MAX_WEIGHT_PRECISION 3
+
+// Maximum Value used on debt and delay payments.
+#define MAX_DEBT  999999
+#define MAX_DELAY 999
+
+// Maximum Value for database port.
+#define MAX_PORT 65535
 
 // Invoice Date Format
 #define DATE_FORMAT "yyyy-M-d"
@@ -76,6 +83,7 @@ namespace View
         {
             ColumnCategoryId,
             ColumnCategoryName,
+            ColumnCategoryVat,
             ColumnCategoryCount
         } ColumnCategory;
     }
@@ -150,10 +158,10 @@ namespace Model
 
 namespace Persistence
 {
-    typedef enum StorageTypeEnum
+    typedef enum DBMSTypeEnum
     {
-        DBMS
-    } StorageType;
+        SQLITE
+    } DBMSType;
 }
 
 #endif // TYPES_H

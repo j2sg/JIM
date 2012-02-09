@@ -67,7 +67,7 @@ void View::Management::EntityDialog::createWidgets()
         _tabWidget -> addTab(_taxesTab, tr("&Taxes"));
     _tabWidget -> addTab(_otherTab, tr("&Other"));
 
-    _saveButton = new QPushButton(tr("Save"));
+    _saveButton = new QPushButton(tr("&Save"));
     _saveButton -> setIcon(QIcon(":/images/save.png"));
     _saveButton -> setDefault(true);
     _saveButton -> setEnabled(false);
@@ -116,6 +116,7 @@ void View::Management::EntityDialog::setTitle()
     case Model::Domain::BusinessEntity:
         entityType = tr("Business");
         break;
+        entityType = tr("Unknown");
     }
 
     setWindowTitle(QString("%1 %2")

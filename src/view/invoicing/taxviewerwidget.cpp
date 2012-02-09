@@ -19,6 +19,7 @@
  **/
 
 #include "taxviewerwidget.h"
+#include "persistencemanager.h"
 #include <QTableWidget>
 #include <QVBoxLayout>
 
@@ -30,34 +31,37 @@ View::Invoicing::TaxViewerWidget::TaxViewerWidget(QWidget *parent) : QWidget(par
 
 void View::Invoicing::TaxViewerWidget::setTax(Model::Domain::TaxType type, double percent, double value)
 {
+    int precisionTax = Persistence::Manager::readConfig("Tax", "Application/Precision").toInt();
+    int precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
+
     switch(static_cast<int>(type)) {
     case Model::Domain::GeneralVAT:
-        _taxTableWidget -> item(0, 0) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(0, 1) -> setText(QString::number(value, 'f', PRECISION_MONEY));
+        _taxTableWidget -> item(0, 0) -> setText(QString::number(percent, 'f', precisionTax));
+        _taxTableWidget -> item(0, 1) -> setText(QString::number(value, 'f', precisionMoney));
         break;
     case Model::Domain::ReducedVAT:
-        _taxTableWidget -> item(1, 0) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(1, 1) -> setText(QString::number(value, 'f', PRECISION_MONEY));
+        _taxTableWidget -> item(1, 0) -> setText(QString::number(percent, 'f', precisionTax));
+        _taxTableWidget -> item(1, 1) -> setText(QString::number(value, 'f', precisionMoney));
         break;
     case Model::Domain::SuperReducedVAT:
-        _taxTableWidget -> item(2, 0) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(2, 1) -> setText(QString::number(value, 'f', PRECISION_MONEY));
+        _taxTableWidget -> item(2, 0) -> setText(QString::number(percent, 'f', precisionTax));
+        _taxTableWidget -> item(2, 1) -> setText(QString::number(value, 'f', precisionMoney));
         break;
     case Model::Domain::GeneralES:
-        _taxTableWidget -> item(0, 2) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(0, 3) -> setText(QString::number(value, 'f', PRECISION_MONEY));
+        _taxTableWidget -> item(0, 2) -> setText(QString::number(percent, 'f', precisionTax));
+        _taxTableWidget -> item(0, 3) -> setText(QString::number(value, 'f', precisionMoney));
         break;
     case Model::Domain::ReducedES:
-        _taxTableWidget -> item(1, 2) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(1, 3) -> setText(QString::number(value, 'f', PRECISION_MONEY));
+        _taxTableWidget -> item(1, 2) -> setText(QString::number(percent, 'f', precisionTax));
+        _taxTableWidget -> item(1, 3) -> setText(QString::number(value, 'f', precisionMoney));
         break;
     case Model::Domain::SuperReducedES:
-        _taxTableWidget -> item(2, 2) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(2, 3) -> setText(QString::number(value, 'f', PRECISION_MONEY));
+        _taxTableWidget -> item(2, 2) -> setText(QString::number(percent, 'f', precisionTax));
+        _taxTableWidget -> item(2, 3) -> setText(QString::number(value, 'f', precisionMoney));
         break;
     case Model::Domain::PIT:
-        _taxTableWidget -> item(3, 0) -> setText(QString::number(percent, 'f', PRECISION_VAT));
-        _taxTableWidget -> item(3, 1) -> setText(QString::number(-value, 'f', PRECISION_MONEY));
+        _taxTableWidget -> item(3, 0) -> setText(QString::number(percent, 'f', precisionTax));
+        _taxTableWidget -> item(3, 1) -> setText(QString::number(-value, 'f', precisionMoney));
         break;
     }
 
@@ -93,12 +97,14 @@ void View::Invoicing::TaxViewerWidget::setTaxes(const QList<Model::Domain::VatBr
 
 void View::Invoicing::TaxViewerWidget::reset()
 {
+    int precisionTax = Persistence::Manager::readConfig("Tax", "Application/Precision").toInt();
+
     for(int row = 0;row < 3;++row)
         for(int col = 0;col < 4;++col)
-            _taxTableWidget -> item(row, col) -> setText(QString::number(0.0, 'f', PRECISION_VAT));
+            _taxTableWidget -> item(row, col) -> setText(QString::number(0.0, 'f', precisionTax));
 
-    _taxTableWidget->item(3, 0) -> setText(QString::number(0.0, 'f', PRECISION_VAT));
-    _taxTableWidget->item(3, 1) -> setText(QString::number(0.0, 'f', PRECISION_VAT));
+    _taxTableWidget->item(3, 0) -> setText(QString::number(0.0, 'f', precisionTax));
+    _taxTableWidget->item(3, 1) -> setText(QString::number(0.0, 'f', precisionTax));
 
     updateRows();
 }

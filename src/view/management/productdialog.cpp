@@ -22,6 +22,7 @@
 #include "product.h"
 #include "productmanager.h"
 #include "categorymanager.h"
+#include "persistencemanager.h"
 #include "types.h"
 #include <QtGui>
 
@@ -146,13 +147,15 @@ void View::Management::ProductDialog::createConnections()
 
 void View::Management::ProductDialog::loadProduct()
 {
+    int precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
+
     _idLineEdit -> setText(QString::number(((IS_NEW(_product -> id()))?
                                                 Model::Management::ProductManager::getId() :
                                                 _product->id())));
     _autoIdCheckBox -> setEnabled((IS_NEW(_product->id())));
     _nameLineEdit -> setText(_product->name());
     _descriptionTextEdit -> setPlainText(_product->description());
-    _priceLineEdit -> setText(QString::number(_product->price(),'f', PRECISION_MONEY));
+    _priceLineEdit -> setText(QString::number(_product->price(),'f', precisionMoney));
     _priceTypeComboBox -> setCurrentIndex(static_cast<int>(_product->priceType()));
     productModified(false);
 }

@@ -206,6 +206,7 @@ void View::Management::ProductEditor::createCategoryWidgets()
     _categoriesTableView -> setShowGrid(false);
     _categoriesTableView -> setColumnWidth(ColumnCategoryId, COLUMN_CATEGORY_ID_WIDTH);
     _categoriesTableView -> setColumnWidth(ColumnCategoryName, COLUMN_CATEGORY_NAME_WIDTH);
+    _categoriesTableView -> setColumnWidth(ColumnCategoryVat, COLUMN_CATEGORY_VAT_WIDTH);
     _categoriesTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
     _categoriesTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _categoriesTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);

@@ -60,6 +60,7 @@ namespace View
             void saveInvoice();
         private slots:
             void taxChangedOnTaxApplying(Model::Domain::TaxFlag taxApplying);
+            void taxChangedOnTax(Model::Domain::TaxType type, double value);
         private:
             void createWidgets();
             void createConnections();

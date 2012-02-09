@@ -117,13 +117,13 @@ void View::QInvoicer::loadBusiness()
         businessNames = Model::Management::BusinessManager::getAllNames();
     }
 
-    BusinessLoader loader(businessNames.keys(), Persistence::Manager::readConfig("Default", "Business").toString());
+    BusinessLoader loader(businessNames.keys(), Persistence::Manager::readConfig("DefaultBusiness").toString());
 
     if(loader.exec()) {
         _business = Model::Management::BusinessManager::get(businessNames.value(loader.selectedBusiness()));
         if(_business) {
             if(loader.defaultBusiness())
-                Persistence::Manager::writeConfig(loader.selectedBusiness(), "Default", "Business");
+                Persistence::Manager::writeConfig(loader.selectedBusiness(), "DefaultBusiness");
 
             statusBar() -> showMessage(tr("Loaded Business %1").arg(_business -> name()), 5000);
             setBusinessOpen(true);
@@ -595,7 +595,8 @@ bool View::QInvoicer::verifyCreateBusiness()
 bool View::QInvoicer::verifyCloseBusiness()
 {
     return QMessageBox::question(this, tr("Verify Close Business"),
-                                 tr("there are active invoices, are you sure you wish to close the business?"),
+                                 tr("There are active invoices.\n"
+                                    "are you sure you wish to close the business?"),
                                  QMessageBox::Yes | QMessageBox::Default |
                                  QMessageBox::No) == QMessageBox::Yes;
 }

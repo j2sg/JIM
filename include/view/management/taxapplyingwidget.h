@@ -50,7 +50,6 @@ namespace View
         private:
             void createWidgets();
             void createConnections();
-            void loadTaxApplying();
 
             QRadioButton *_applyAllRadioButton;
             QRadioButton *_customRadioButton;

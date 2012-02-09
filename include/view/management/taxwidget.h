@@ -42,7 +42,9 @@ namespace View
                       Qt::Orientation orientation = Qt::Horizontal,
                       QWidget *parent = 0);
             void setTax(Model::Domain::Tax *tax);
-            Model::Domain::Tax *tax() const;
+            void setTax(Model::Domain::TaxType type, double value);
+            double tax(Model::Domain::TaxType type) const;
+
         signals:
             void taxChanged(Model::Domain::TaxType type, double value);
         private slots:
@@ -50,7 +52,7 @@ namespace View
         private:
             void createWidgets();
             void createConnections();
-            void loadTaxes();
+
             QLabel *_generalVatLabel;
             QDoubleSpinBox *_generalVatDoubleSpinBox;
             QLabel *_reducedVatLabel;
@@ -65,7 +67,6 @@ namespace View
             QDoubleSpinBox *_superReducedEsDoubleSpinBox;
             QLabel *_pitValueLabel;
             QDoubleSpinBox *_pitDoubleSpinBox;
-            Model::Domain::Tax *_tax;
             Qt::Orientation _orientation;
         };
     }

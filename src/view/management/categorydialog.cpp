@@ -71,10 +71,10 @@ void View::Management::CategoryDialog::createWidgets()
     _descriptionLabel -> setBuddy(_descriptionTextEdit);
     _descriptionTextEdit -> setMaximumHeight(50);
 
-    _taxTypeLabel = new QLabel(tr("&Tax:"));
-    _taxTypeComboBox = new QComboBox;
-    _taxTypeComboBox -> addItems(QStringList() << tr("General") << tr("Reduced") << tr("Super Reduced"));
-    _taxTypeLabel -> setBuddy(_taxTypeComboBox);
+    _vatTypeLabel = new QLabel(tr("&VAT:"));
+    _vatTypeComboBox = new QComboBox;
+    _vatTypeComboBox -> addItems(QStringList() << tr("General") << tr("Reduced") << tr("Super Reduced"));
+    _vatTypeLabel -> setBuddy(_vatTypeComboBox);
 
     QGridLayout *topLayout = new QGridLayout;
     topLayout -> addWidget(_idLabel, 0, 0, 1, 1);
@@ -84,8 +84,8 @@ void View::Management::CategoryDialog::createWidgets()
     topLayout -> addWidget(_nameLineEdit, 1, 1, 1, 3);
     topLayout -> addWidget(_descriptionLabel, 2, 0, 1, 2);
     topLayout -> addWidget(_descriptionTextEdit, 3, 0, 1, 4);
-    topLayout -> addWidget(_taxTypeLabel, 4, 0, 1, 1);
-    topLayout -> addWidget(_taxTypeComboBox, 4, 1, 1, 1);
+    topLayout -> addWidget(_vatTypeLabel, 4, 0, 1, 1);
+    topLayout -> addWidget(_vatTypeComboBox, 4, 1, 1, 1);
 
     _saveButton = new QPushButton(tr("&Save"));
     _saveButton -> setIcon(QIcon(":/images/save.png"));
@@ -118,7 +118,7 @@ void View::Management::CategoryDialog::createConnections()
             this, SLOT(categoryModified()));
     connect(_descriptionTextEdit, SIGNAL(textChanged()),
             this, SLOT(categoryModified()));
-    connect(_taxTypeComboBox, SIGNAL(currentIndexChanged(int)),
+    connect(_vatTypeComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(categoryModified()));
     connect(_saveButton, SIGNAL(clicked()),
             this, SLOT(accept()));
@@ -134,7 +134,7 @@ void View::Management::CategoryDialog::loadCategory()
     _autoIdCheckBox -> setEnabled((IS_NEW(_category -> id())));
     _nameLineEdit -> setText(_category -> name());
     _descriptionTextEdit -> setPlainText(_category -> description());
-    _taxTypeComboBox -> setCurrentIndex(static_cast<int>(_category -> vatType()));
+    _vatTypeComboBox -> setCurrentIndex(static_cast<int>(_category -> vatType()));
     categoryModified(false);
 }
 
@@ -143,7 +143,7 @@ void View::Management::CategoryDialog::saveCategory()
     _category -> setId(_idLineEdit -> text().toInt());
     _category -> setName(_nameLineEdit -> text());
     _category -> setDescription(_descriptionTextEdit -> toPlainText());
-    _category -> setVatType(static_cast<Model::Domain::TaxType>(_taxTypeComboBox -> currentIndex()));
+    _category -> setVatType(static_cast<Model::Domain::TaxType>(_vatTypeComboBox -> currentIndex()));
 }
 
 bool View::Management::CategoryDialog::isSaveable()

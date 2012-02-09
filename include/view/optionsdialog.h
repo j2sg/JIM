@@ -47,6 +47,9 @@ namespace View
     public:
         OptionsDialog(QWidget *parent = 0);
         void done(int result);
+    private slots:
+        void currentIndexChangedOnStorageDBMSComboBox();
+        void setDefaultValues();
     private:
         void createWidgets();
         void createApplicationPageWidgets();
@@ -54,30 +57,28 @@ namespace View
         void createInvoicingPageWidgets();
         void createConnections();
         void loadOptions();
-        void saveOptions();
+        bool saveOptions();
 
-        QLabel *_internationalizationLanguageLabel;
-        QComboBox *_internationalizationLanguageComboBox;
-        QLabel *_internationalizationCurrencyLabel;
-        QComboBox *_internationalizationCurrencyComboBox;
+        QLabel *_currencyLabel;
+        QComboBox *_currencyComboBox;
         QLabel *_precisionMoneyLabel;
         QSpinBox *_precisionMoneySpinBox;
         QLabel *_precisionTaxLabel;
         QSpinBox *_precisionTaxSpinBox;
         QLabel *_precisionWeightLabel;
         QSpinBox *_precisionWeightSpinBox;
-        QLabel *_dataSourceDBMSLabel;
-        QComboBox *_dataSourceDBMSComboBox;
-        QLabel *_dataSourceNameLabel;
-        QLineEdit *_dataSourceNameLineEdit;
-        QLabel *_dataSourceHostLabel;
-        QLineEdit *_dataSourceHostLineEdit;
-        QLabel *_dataSourcePortLabel;
-        QSpinBox *_dataSourcePortSpinBox;
-        QLabel *_dataSourceUserLabel;
-        QLineEdit *_dataSourceUserLineEdit;
-        QLabel *_dataSourcePassLabel;
-        QLineEdit *_dataSourcePassLineEdit;
+        QLabel *_storageDBMSLabel;
+        QComboBox *_storageDBMSComboBox;
+        QLabel *_storageNameLabel;
+        QLineEdit *_storageNameLineEdit;
+        QLabel *_storageHostLabel;
+        QLineEdit *_storageHostLineEdit;
+        QLabel *_storagePortLabel;
+        QSpinBox *_storagePortSpinBox;
+        QLabel *_storageUserLabel;
+        QLineEdit *_storageUserLineEdit;
+        QLabel *_storagePassLabel;
+        QLineEdit *_storagePassLineEdit;
         QListWidget *_listWidget;
         QLabel *_authenticationCurrentPassLabel;
         QLineEdit *_authenticationCurrentPassLineEdit;
@@ -85,12 +86,11 @@ namespace View
         QLineEdit *_authenticationNewPassLineEdit;
         QLabel *_authenticationReNewPassLabel;
         QLineEdit *_authenticationReNewPassLineEdit;
-        QLabel *_invoicingTaxesLabel;
         View::Management::TaxWidget *_invoicingTaxesTaxWidget;
-        QLabel *_invoicingMaxChargeByCustomerLabel;
-        QSpinBox *_invoicingMaxChargeByCustomerSpinBox;
-        QLabel *_invoicingMaxChargeBySupplierLabel;
-        QSpinBox *_invoicingMaxChargeBySupplierSpinBox;
+        QLabel *_invoicingMaxDebtByCustomerLabel;
+        QSpinBox *_invoicingMaxDebtByCustomerSpinBox;
+        QLabel *_invoicingMaxDebtBySupplierLabel;
+        QSpinBox *_invoicingMaxDebtBySupplierSpinBox;
         QLabel *_invoicingCurrencyUnitLabel;
         QLabel *_invoicingMaxPaymentDelayByCustomerLabel;
         QSpinBox *_invoicingMaxPaymentDelayByCustomerSpinBox;
@@ -100,6 +100,7 @@ namespace View
         QWidget *_authenticationPage;
         QWidget *_invoicingPage;
         QStackedLayout *_stackedLayout;
+        QPushButton *_defaultPushButton;
         QPushButton *_okPushButton;
         QPushButton *_cancelPushButton;
     };

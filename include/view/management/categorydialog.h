@@ -67,8 +67,8 @@ namespace View
             QLineEdit *_nameLineEdit;
             QLabel *_descriptionLabel;
             QTextEdit *_descriptionTextEdit;
-            QLabel *_taxTypeLabel;
-            QComboBox *_taxTypeComboBox;
+            QLabel *_vatTypeLabel;
+            QComboBox *_vatTypeComboBox;
             QPushButton *_saveButton;
             QPushButton *_cancelButton;
             Model::Domain::Category *_category;

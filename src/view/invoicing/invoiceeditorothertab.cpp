@@ -49,6 +49,12 @@ void View::Invoicing::InvoiceEditorOtherTab::taxChangedOnTaxApplying(Model::Doma
     emit taxesChanged();
 }
 
+void View::Invoicing::InvoiceEditorOtherTab::taxChangedOnTax(Model::Domain::TaxType type, double value)
+{
+    (_invoice -> tax())[static_cast<int>(type)].setValue(value);
+    emit taxesChanged();
+}
+
 void View::Invoicing::InvoiceEditorOtherTab::createWidgets()
 {
     _taxApplyingWidget = new View::Management::TaxApplyingWidget;
@@ -80,7 +86,7 @@ void View::Invoicing::InvoiceEditorOtherTab::createConnections()
     connect(_taxApplyingWidget, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
             this, SLOT(taxChangedOnTaxApplying(Model::Domain::TaxFlag)));
     connect(_taxWidget, SIGNAL(taxChanged(Model::Domain::TaxType,double)),
-            this, SIGNAL(taxesChanged()));
+            this, SLOT(taxChangedOnTax(Model::Domain::TaxType,double)));
     connect(_notesTextEdit, SIGNAL(textChanged()),
             this, SIGNAL(notesChanged()));
 }

@@ -20,6 +20,8 @@
 
 #include "optionsdialog.h"
 #include "taxwidget.h"
+#include "persistencemanager.h"
+#include "types.h"
 #include <QLabel>
 #include <QComboBox>
 #include <QSpinBox>
@@ -30,6 +32,7 @@
 #include <QHBoxLayout>
 #include <QGroupBox>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 View::OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent)
 {
@@ -42,7 +45,35 @@ View::OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent)
 
 void View::OptionsDialog::done(int result)
 {
+    if(result)
+        if(!saveOptions()) {
+            QMessageBox::warning(this, tr("Configuration changes"),
+                                       tr("There are wrong parameters"));
+            return;
+        }
+
     QDialog::done(result);
+}
+
+void View::OptionsDialog::currentIndexChangedOnStorageDBMSComboBox()
+{
+    bool isNotSQLite = _storageDBMSComboBox -> currentIndex() != Persistence::SQLITE;
+
+    _storageNameLineEdit -> setEnabled(isNotSQLite);
+    _storageHostLineEdit -> setEnabled(isNotSQLite);
+    _storagePortSpinBox -> setEnabled(isNotSQLite);
+    _storageUserLineEdit -> setEnabled(isNotSQLite);
+    _storagePassLineEdit -> setEnabled(isNotSQLite);
+}
+
+void View::OptionsDialog::setDefaultValues()
+{
+    QString currentPass = Persistence::Manager::readConfig("Password").toString();
+
+    Persistence::Manager::createConfig(true);
+    Persistence::Manager::writeConfig(currentPass.toAscii(), "Password");
+
+    loadOptions();
 }
 
 void View::OptionsDialog::createWidgets()
@@ -64,14 +95,16 @@ void View::OptionsDialog::createWidgets()
     _stackedLayout -> addWidget(_authenticationPage);
     _stackedLayout -> addWidget(_invoicingPage);
 
-    _okPushButton = new QPushButton(tr("Ok"));
-    _okPushButton -> setIcon(QIcon(":/images/ok.png"));
-    _okPushButton -> setDefault(true);
+    _defaultPushButton = new QPushButton(tr("&Defaults"));
 
-    _cancelPushButton = new QPushButton(tr("Cancel"));
+    _okPushButton = new QPushButton(tr("&Ok"));
+    _okPushButton -> setIcon(QIcon(":/images/ok.png"));
+
+    _cancelPushButton = new QPushButton(tr("&Cancel"));
     _cancelPushButton -> setIcon(QIcon(":/images/cancel.png"));
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
+    bottomLayout -> addWidget(_defaultPushButton);
     bottomLayout -> addStretch();
     bottomLayout -> addWidget(_okPushButton);
     bottomLayout -> addWidget(_cancelPushButton);
@@ -87,106 +120,94 @@ void View::OptionsDialog::createWidgets()
 
 void View::OptionsDialog::createApplicationPageWidgets()
 {
-    _internationalizationLanguageLabel = new QLabel(tr("Language:"));
-    _internationalizationLanguageComboBox = new QComboBox;
-    _internationalizationLanguageComboBox -> addItems(QStringList() << "English");
-    _internationalizationLanguageLabel -> setBuddy(_internationalizationLanguageComboBox);
+    _currencyLabel = new QLabel(tr("&Currency:"));
+    _currencyComboBox = new QComboBox;
+    _currencyComboBox -> addItems(QStringList() << "EUR");
+    _currencyLabel -> setBuddy(_currencyComboBox);
 
-    _internationalizationCurrencyLabel = new QLabel(tr("Currency:"));
-    _internationalizationCurrencyComboBox = new QComboBox;
-    _internationalizationCurrencyComboBox -> addItems(QStringList() << "EUR");
-    _internationalizationCurrencyLabel -> setBuddy(_internationalizationCurrencyComboBox);
-
-    QGridLayout *internationalizationLayout = new QGridLayout;
-    internationalizationLayout -> addWidget(_internationalizationLanguageLabel, 0, 0);
-    internationalizationLayout -> addWidget(_internationalizationLanguageComboBox, 0, 1, 1, 1, Qt::AlignLeft);
-    internationalizationLayout -> addWidget(_internationalizationCurrencyLabel, 1, 0);
-    internationalizationLayout -> addWidget(_internationalizationCurrencyComboBox, 1, 1, 1, 1, Qt::AlignLeft);
-
-    QGroupBox *internationalizationGroupBox = new QGroupBox(tr("Internationalization"));
-    internationalizationGroupBox -> setLayout(internationalizationLayout);
-
-    _precisionMoneyLabel = new QLabel(tr("Money:"));
+    _precisionMoneyLabel = new QLabel(tr("&Money:"));
     _precisionMoneySpinBox = new QSpinBox;
     _precisionMoneySpinBox -> setMinimum(0);
-    _precisionMoneySpinBox -> setSuffix(tr(" decimals"));
+    _precisionMoneySpinBox -> setMaximum(MAX_MONEY_PRECISION);
+    _precisionMoneySpinBox -> setSuffix(tr(" dec"));
     _precisionMoneyLabel -> setBuddy(_precisionMoneySpinBox);
 
-    _precisionTaxLabel = new QLabel(tr("Tax:"));
+    _precisionTaxLabel = new QLabel(tr("&Tax:"));
     _precisionTaxSpinBox = new QSpinBox;
     _precisionTaxSpinBox -> setMinimum(0);
-    _precisionTaxSpinBox -> setSuffix(tr(" decimals"));
+    _precisionTaxSpinBox -> setMaximum(MAX_TAX_PRECISION);
+    _precisionTaxSpinBox -> setSuffix(tr(" dec"));
     _precisionTaxLabel -> setBuddy(_precisionTaxSpinBox);
 
-    _precisionWeightLabel = new QLabel(tr("Weight:"));
+    _precisionWeightLabel = new QLabel(tr("&Weight:"));
     _precisionWeightSpinBox = new QSpinBox;
     _precisionWeightSpinBox -> setMinimum(0);
-    _precisionWeightSpinBox -> setSuffix(tr(" decimals"));
+    _precisionWeightSpinBox -> setMaximum(MAX_WEIGHT_PRECISION);
+    _precisionWeightSpinBox -> setSuffix(tr(" dec"));
     _precisionWeightLabel -> setBuddy(_precisionWeightSpinBox);
 
-    QGridLayout *precisionLayout = new QGridLayout;
-    precisionLayout -> addWidget(_precisionMoneyLabel, 0, 0);
-    precisionLayout -> addWidget(_precisionMoneySpinBox, 0, 1, 1, 1, Qt::AlignLeft);
-    precisionLayout -> addWidget(_precisionTaxLabel, 1, 0);
-    precisionLayout -> addWidget(_precisionTaxSpinBox, 1, 1, 1, 1, Qt::AlignLeft);
-    precisionLayout -> addWidget(_precisionWeightLabel, 2, 0);
-    precisionLayout -> addWidget(_precisionWeightSpinBox, 2, 1, 1, 1, Qt::AlignLeft);
+    QGridLayout *unitsLayout = new QGridLayout;
+    unitsLayout -> addWidget(_currencyLabel, 0, 0);
+    unitsLayout -> addWidget(_currencyComboBox, 0, 1);
+    unitsLayout -> addWidget(_precisionMoneyLabel, 1, 0);
+    unitsLayout -> addWidget(_precisionMoneySpinBox, 1, 1, 1, 1, Qt::AlignLeft);
+    unitsLayout -> addWidget(_precisionTaxLabel, 1, 2);
+    unitsLayout -> addWidget(_precisionTaxSpinBox, 1, 3, 1, 1, Qt::AlignLeft);
+    unitsLayout -> addWidget(_precisionWeightLabel, 1, 4);
+    unitsLayout -> addWidget(_precisionWeightSpinBox, 1, 5, 1, 1, Qt::AlignLeft);
 
-    QGroupBox *precisionGroupBox = new QGroupBox(tr("Unit Precision"));
-    precisionGroupBox -> setLayout(precisionLayout);
+    QGroupBox *unitsGroupBox = new QGroupBox(tr("Unit Precision"));
+    unitsGroupBox -> setLayout(unitsLayout);
 
-    QHBoxLayout *topLayout = new QHBoxLayout;
-    topLayout -> addWidget(internationalizationGroupBox);
-    topLayout -> addWidget(precisionGroupBox);
+    _storageDBMSLabel = new QLabel(tr("&DBMS:"));
+    _storageDBMSComboBox = new QComboBox;
+    _storageDBMSComboBox -> addItems(QStringList() << tr("SQLite"));
+    _storageDBMSLabel -> setBuddy(_storageDBMSComboBox);
 
-    _dataSourceDBMSLabel = new QLabel(tr("DBMS:"));
-    _dataSourceDBMSComboBox = new QComboBox;
-    _dataSourceDBMSComboBox -> addItems(QStringList() << "SQLite");
-    _dataSourceDBMSLabel -> setBuddy(_dataSourceDBMSComboBox);
+    _storageNameLabel = new QLabel(tr("&Name:"));
+    _storageNameLineEdit = new QLineEdit;
+    _storageNameLabel -> setBuddy(_storageNameLineEdit);
 
-    _dataSourceNameLabel = new QLabel(tr("Name:"));
-    _dataSourceNameLineEdit = new QLineEdit;
-    _dataSourceNameLabel -> setBuddy(_dataSourceNameLineEdit);
+    _storageHostLabel = new QLabel(tr("&Host:"));
+    _storageHostLineEdit = new QLineEdit;
+    _storageHostLabel -> setBuddy(_storageHostLineEdit);
 
-    _dataSourceHostLabel = new QLabel(tr("Host:"));
-    _dataSourceHostLineEdit = new QLineEdit;
-    _dataSourceHostLabel -> setBuddy(_dataSourceHostLineEdit);
+    _storagePortLabel = new QLabel(tr("&Port:"));
+    _storagePortSpinBox = new QSpinBox;
+    _storagePortSpinBox -> setMinimum(0);
+    _storagePortSpinBox -> setMaximum(MAX_PORT);
+    _storagePortSpinBox -> setFixedSize(_storagePortSpinBox -> sizeHint());
+    _storagePortLabel -> setBuddy(_storagePortSpinBox);
 
-    _dataSourcePortLabel = new QLabel(tr("Port:"));
-    _dataSourcePortSpinBox = new QSpinBox;
-    _dataSourcePortSpinBox -> setMinimum(0);
-    _dataSourcePortSpinBox -> setMaximum(65535);
-    _dataSourcePortLabel -> setBuddy(_dataSourcePortSpinBox);
+    _storageUserLabel = new QLabel(tr("&User:"));
+    _storageUserLineEdit = new QLineEdit;
+    _storageUserLabel -> setBuddy(_storageUserLineEdit);
 
-    _dataSourceUserLabel = new QLabel(tr("User:"));
-    _dataSourceUserLineEdit = new QLineEdit;
-    _dataSourceUserLabel -> setBuddy(_dataSourceUserLineEdit);
+    _storagePassLabel = new QLabel(tr("P&assword:"));
+    _storagePassLineEdit = new QLineEdit;
+    _storagePassLineEdit -> setEchoMode(QLineEdit::Password);
+    _storagePassLabel -> setBuddy(_storagePassLineEdit);
 
-    _dataSourcePassLabel = new QLabel(tr("Password:"));
-    _dataSourcePassLineEdit = new QLineEdit;
-    _dataSourcePassLineEdit -> setEchoMode(QLineEdit::Password);
-    _dataSourcePassLabel -> setBuddy(_dataSourcePassLineEdit);
+    QGridLayout *storageLayout = new QGridLayout;
+    storageLayout -> addWidget(_storageDBMSLabel, 0, 0);
+    storageLayout -> addWidget(_storageDBMSComboBox, 0, 1);
+    storageLayout -> addWidget(_storageNameLabel, 1, 0);
+    storageLayout -> addWidget(_storageNameLineEdit, 1, 1);
+    storageLayout -> addWidget(_storageHostLabel, 2, 0);
+    storageLayout -> addWidget(_storageHostLineEdit, 2, 1);
+    storageLayout -> addWidget(_storagePortLabel, 2, 2);
+    storageLayout -> addWidget(_storagePortSpinBox, 2, 3);
+    storageLayout -> addWidget(_storageUserLabel, 3, 0);
+    storageLayout -> addWidget(_storageUserLineEdit, 3, 1);
+    storageLayout -> addWidget(_storagePassLabel, 3, 2);
+    storageLayout -> addWidget(_storagePassLineEdit, 3, 3);
 
-    QGridLayout *dataSourceLayout = new QGridLayout;
-    dataSourceLayout -> addWidget(_dataSourceDBMSLabel, 0, 0);
-    dataSourceLayout -> addWidget(_dataSourceDBMSComboBox, 0, 1);
-    dataSourceLayout -> addWidget(_dataSourceNameLabel, 1, 0);
-    dataSourceLayout -> addWidget(_dataSourceNameLineEdit, 1, 1);
-    dataSourceLayout -> addWidget(_dataSourceHostLabel, 1, 2);
-    dataSourceLayout -> addWidget(_dataSourceHostLineEdit, 1, 3);
-    dataSourceLayout -> addWidget(_dataSourcePortLabel, 1, 4);
-    dataSourceLayout -> addWidget(_dataSourcePortSpinBox, 1, 5);
-    dataSourceLayout -> addWidget(_dataSourceUserLabel, 2, 0);
-    dataSourceLayout -> addWidget(_dataSourceUserLineEdit, 2, 1);
-    dataSourceLayout -> addWidget(_dataSourcePassLabel, 2, 2);
-    dataSourceLayout -> addWidget(_dataSourcePassLineEdit, 2, 3);
-
-    QGroupBox *dataSourceGroupBox = new QGroupBox(tr("Data Source"));
-    dataSourceGroupBox -> setLayout(dataSourceLayout);
+    QGroupBox *storageGroupBox = new QGroupBox(tr("Storage"));
+    storageGroupBox -> setLayout(storageLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addLayout(topLayout);
-    mainLayout -> addWidget(dataSourceGroupBox);
+    mainLayout -> addWidget(unitsGroupBox);
+    mainLayout -> addWidget(storageGroupBox);
     mainLayout -> addStretch();
 
     _applicationPage = new QWidget;
@@ -196,17 +217,17 @@ void View::OptionsDialog::createApplicationPageWidgets()
 
 void View::OptionsDialog::createAuthenticationPageWidgets()
 {
-    _authenticationCurrentPassLabel = new QLabel(tr("Current:"));
+    _authenticationCurrentPassLabel = new QLabel(tr("&Current:"));
     _authenticationCurrentPassLineEdit = new QLineEdit;
     _authenticationCurrentPassLineEdit -> setEchoMode(QLineEdit::Password);
     _authenticationCurrentPassLabel -> setBuddy(_authenticationCurrentPassLineEdit);
 
-    _authenticationNewPassLabel = new QLabel(tr("New:"));
+    _authenticationNewPassLabel = new QLabel(tr("&New:"));
     _authenticationNewPassLineEdit = new QLineEdit;
     _authenticationNewPassLineEdit -> setEchoMode(QLineEdit::Password);
     _authenticationNewPassLabel -> setBuddy(_authenticationNewPassLineEdit);
 
-    _authenticationReNewPassLabel = new QLabel(tr("Re-New:"));
+    _authenticationReNewPassLabel = new QLabel(tr("&Re-New:"));
     _authenticationReNewPassLineEdit = new QLineEdit;
     _authenticationReNewPassLineEdit -> setEchoMode(QLineEdit::Password);
     _authenticationReNewPassLabel -> setBuddy(_authenticationReNewPassLineEdit);
@@ -233,54 +254,52 @@ void View::OptionsDialog::createAuthenticationPageWidgets()
 
 void View::OptionsDialog::createInvoicingPageWidgets()
 {
-    _invoicingTaxesLabel = new QLabel(tr("Default values for taxes assigned on business creation:"));
-    _invoicingTaxesTaxWidget = new View::Management::TaxWidget;
+    _invoicingTaxesTaxWidget = new View::Management::TaxWidget(0, Qt::Vertical);
 
     QVBoxLayout *taxesLayout = new QVBoxLayout;
-    taxesLayout -> addWidget(_invoicingTaxesLabel);
     taxesLayout -> addWidget(_invoicingTaxesTaxWidget);
     taxesLayout -> addStretch();
 
     QGroupBox *taxesGroupBox = new QGroupBox(tr("Taxes by Default"));
     taxesGroupBox -> setLayout(taxesLayout);
 
-    _invoicingMaxChargeByCustomerLabel = new QLabel(tr("By Customer:"));
-    _invoicingMaxChargeByCustomerSpinBox = new QSpinBox;
-    _invoicingMaxChargeByCustomerSpinBox -> setSuffix(tr(" CU"));
-    _invoicingMaxChargeByCustomerSpinBox -> setMinimum(0);
-    _invoicingMaxChargeByCustomerSpinBox -> setMaximum(999999);
-    _invoicingMaxChargeByCustomerLabel -> setBuddy(_invoicingMaxChargeByCustomerSpinBox);
+    _invoicingMaxDebtByCustomerLabel = new QLabel(tr("By Customer:"));
+    _invoicingMaxDebtByCustomerSpinBox = new QSpinBox;
+    _invoicingMaxDebtByCustomerSpinBox -> setSuffix(tr(" CU"));
+    _invoicingMaxDebtByCustomerSpinBox -> setMinimum(0);
+    _invoicingMaxDebtByCustomerSpinBox -> setMaximum(MAX_DEBT);
+    _invoicingMaxDebtByCustomerLabel -> setBuddy(_invoicingMaxDebtByCustomerSpinBox);
 
-    _invoicingMaxChargeBySupplierLabel = new QLabel(tr("By Supplier:"));
-    _invoicingMaxChargeBySupplierSpinBox = new QSpinBox;
-    _invoicingMaxChargeBySupplierSpinBox -> setSuffix(tr(" CU"));
-    _invoicingMaxChargeBySupplierSpinBox -> setMinimum(0);
-    _invoicingMaxChargeBySupplierSpinBox -> setMaximum(999999);
-    _invoicingMaxChargeBySupplierLabel -> setBuddy(_invoicingMaxChargeBySupplierSpinBox);
+    _invoicingMaxDebtBySupplierLabel = new QLabel(tr("By Supplier:"));
+    _invoicingMaxDebtBySupplierSpinBox = new QSpinBox;
+    _invoicingMaxDebtBySupplierSpinBox -> setSuffix(tr(" CU"));
+    _invoicingMaxDebtBySupplierSpinBox -> setMinimum(0);
+    _invoicingMaxDebtBySupplierSpinBox -> setMaximum(MAX_DEBT);
+    _invoicingMaxDebtBySupplierLabel -> setBuddy(_invoicingMaxDebtBySupplierSpinBox);
 
     _invoicingCurrencyUnitLabel = new QLabel(tr("CU: Currency Unit"));
 
-    QGridLayout *maxChargeLayout = new QGridLayout;
-    maxChargeLayout -> addWidget(_invoicingMaxChargeByCustomerLabel, 0, 0);
-    maxChargeLayout -> addWidget(_invoicingMaxChargeByCustomerSpinBox, 0, 1, 1, 1, Qt::AlignLeft);
-    maxChargeLayout -> addWidget(_invoicingMaxChargeBySupplierLabel, 1, 0);
-    maxChargeLayout -> addWidget(_invoicingMaxChargeBySupplierSpinBox, 1, 1, 1, 1, Qt::AlignLeft);
-    maxChargeLayout -> addWidget(_invoicingCurrencyUnitLabel, 2, 0, 1, 2, Qt::AlignCenter);
+    QGridLayout *maxDebtLayout = new QGridLayout;
+    maxDebtLayout -> addWidget(_invoicingMaxDebtByCustomerLabel, 0, 0);
+    maxDebtLayout -> addWidget(_invoicingMaxDebtByCustomerSpinBox, 0, 1, 1, 1, Qt::AlignLeft);
+    maxDebtLayout -> addWidget(_invoicingMaxDebtBySupplierLabel, 1, 0);
+    maxDebtLayout -> addWidget(_invoicingMaxDebtBySupplierSpinBox, 1, 1, 1, 1, Qt::AlignLeft);
+    maxDebtLayout -> addWidget(_invoicingCurrencyUnitLabel, 2, 0, 1, 2, Qt::AlignCenter);
 
-    QGroupBox *maxChargeGroupBox = new QGroupBox(tr("Max Charge"));
-    maxChargeGroupBox -> setLayout(maxChargeLayout);
+    QGroupBox *maxDebtGroupBox = new QGroupBox(tr("Max Debt"));
+    maxDebtGroupBox -> setLayout(maxDebtLayout);
 
     _invoicingMaxPaymentDelayByCustomerLabel = new QLabel(tr("By Customer:"));
     _invoicingMaxPaymentDelayByCustomerSpinBox = new QSpinBox;
     _invoicingMaxPaymentDelayByCustomerSpinBox -> setMinimum(0);
-    _invoicingMaxPaymentDelayByCustomerSpinBox -> setMaximum(999);
+    _invoicingMaxPaymentDelayByCustomerSpinBox -> setMaximum(MAX_DELAY);
     _invoicingMaxPaymentDelayByCustomerSpinBox -> setSuffix(tr(" days"));
     _invoicingMaxPaymentDelayByCustomerLabel -> setBuddy(_invoicingMaxPaymentDelayByCustomerSpinBox);
 
     _invoicingMaxPaymentDelayBySupplierLabel = new QLabel(tr("By Supplier:"));
     _invoicingMaxPaymentDelayBySupplierSpinBox = new QSpinBox;
     _invoicingMaxPaymentDelayBySupplierSpinBox -> setMinimum(0);
-    _invoicingMaxPaymentDelayBySupplierSpinBox -> setMaximum(999);
+    _invoicingMaxPaymentDelayBySupplierSpinBox -> setMaximum(MAX_DELAY);
     _invoicingMaxPaymentDelayBySupplierSpinBox -> setSuffix(tr(" days"));
     _invoicingMaxPaymentDelayBySupplierLabel -> setBuddy(_invoicingMaxPaymentDelayBySupplierSpinBox);
 
@@ -293,17 +312,17 @@ void View::OptionsDialog::createInvoicingPageWidgets()
     QGroupBox *maxPaymentDelayGroupBox = new QGroupBox(tr("Max Payment Delay"));
     maxPaymentDelayGroupBox -> setLayout(maxPaymentDelayLayout);
 
-    QHBoxLayout *unpaidLimitsLayout = new QHBoxLayout;
-    unpaidLimitsLayout -> addWidget(maxChargeGroupBox);
+    QVBoxLayout *unpaidLimitsLayout = new QVBoxLayout;
+    unpaidLimitsLayout -> addWidget(maxDebtGroupBox);
     unpaidLimitsLayout -> addWidget(maxPaymentDelayGroupBox);
+    unpaidLimitsLayout -> addStretch();
 
     QGroupBox *unpaidLimitsGroupBox = new QGroupBox(tr("Unpaid Limits"));
     unpaidLimitsGroupBox -> setLayout(unpaidLimitsLayout);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout -> addWidget(taxesGroupBox);
     mainLayout -> addWidget(unpaidLimitsGroupBox);
-    mainLayout -> addStretch();
 
     _invoicingPage = new QWidget;
 
@@ -314,6 +333,10 @@ void View::OptionsDialog::createConnections()
 {
     connect(_listWidget, SIGNAL(currentRowChanged(int)),
             _stackedLayout, SLOT(setCurrentIndex(int)));
+    connect(_storageDBMSComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(currentIndexChangedOnStorageDBMSComboBox()));
+    connect(_defaultPushButton, SIGNAL(clicked()),
+            this, SLOT(setDefaultValues()));
     connect(_okPushButton, SIGNAL(clicked()),
             this, SLOT(accept()));
     connect(_cancelPushButton, SIGNAL(clicked()),
@@ -322,10 +345,75 @@ void View::OptionsDialog::createConnections()
 
 void View::OptionsDialog::loadOptions()
 {
+    _precisionMoneySpinBox -> setValue(Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
+    _precisionTaxSpinBox -> setValue(Persistence::Manager::readConfig("Tax", "Application/Precision").toInt());
+    _precisionWeightSpinBox -> setValue(Persistence::Manager::readConfig("Weight", "Application/Precision").toInt());
 
+    Persistence::DBMSType dbmsType = static_cast<Persistence::DBMSType>(Persistence::Manager::readConfig("Type", "Storage").toInt());
+    _storageDBMSComboBox -> setCurrentIndex(static_cast<int>(dbmsType));
+    _storageNameLineEdit -> setText(dbmsType != Persistence::SQLITE ? Persistence::Manager::readConfig("Name", "Storage/DBMS").toString() : "");
+    _storageNameLineEdit -> setEnabled(dbmsType != Persistence::SQLITE);
+    _storageHostLineEdit -> setText(dbmsType != Persistence::SQLITE ? Persistence::Manager::readConfig("Host", "Storage/DBMS").toString() : "");
+    _storageHostLineEdit -> setEnabled(dbmsType != Persistence::SQLITE);
+    _storagePortSpinBox -> setValue(dbmsType != Persistence::SQLITE ? Persistence::Manager::readConfig("Port", "Storage/DBMS").toInt() : 0);
+    _storagePortSpinBox -> setEnabled(dbmsType != Persistence::SQLITE);
+    _storageUserLineEdit -> setText(dbmsType != Persistence::SQLITE ? Persistence::Manager::readConfig("User", "Storage/DBMS").toString() : "");
+    _storageUserLineEdit -> setEnabled(dbmsType != Persistence::SQLITE);
+    _storagePassLineEdit -> setText(dbmsType != Persistence::SQLITE ? Persistence::Manager::readConfig("Pass", "Storage/DBMS").toString() : "");
+    _storagePassLineEdit -> setEnabled(dbmsType != Persistence::SQLITE);
+
+    _invoicingTaxesTaxWidget -> setTax(Model::Domain::GeneralVAT, Persistence::Manager::readConfig("GeneralVAT", "Invoicing/Tax").toDouble());
+    _invoicingTaxesTaxWidget -> setTax(Model::Domain::ReducedVAT, Persistence::Manager::readConfig("ReducedVAT", "Invoicing/Tax").toDouble());
+    _invoicingTaxesTaxWidget -> setTax(Model::Domain::SuperReducedVAT, Persistence::Manager::readConfig("SuperReducedVAT", "Invoicing/Tax").toDouble());
+    _invoicingTaxesTaxWidget -> setTax(Model::Domain::GeneralES, Persistence::Manager::readConfig("GeneralES", "Invoicing/Tax").toDouble());
+    _invoicingTaxesTaxWidget -> setTax(Model::Domain::ReducedES, Persistence::Manager::readConfig("ReducedES", "Invoicing/Tax").toDouble());
+    _invoicingTaxesTaxWidget -> setTax(Model::Domain::SuperReducedES, Persistence::Manager::readConfig("SuperReducedES", "Invoicing/Tax").toDouble());
+    _invoicingTaxesTaxWidget -> setTax(Model::Domain::PIT, Persistence::Manager::readConfig("PIT", "Invoicing/Tax").toDouble());
+
+    _invoicingMaxDebtByCustomerSpinBox -> setValue(Persistence::Manager::readConfig("MaxDebtByCustomer", "Invoicing/Unpaids").toInt());
+    _invoicingMaxDebtBySupplierSpinBox -> setValue(Persistence::Manager::readConfig("MaxDebtBySupplier", "Invoicing/Unpaids").toInt());
+    _invoicingMaxPaymentDelayByCustomerSpinBox -> setValue(Persistence::Manager::readConfig("MaxPaymentDelayByCustomer", "Invoicing/Unpaids").toInt());
+    _invoicingMaxPaymentDelayBySupplierSpinBox -> setValue(Persistence::Manager::readConfig("MaxPaymentDelayBySupplier", "Invoicing/Unpaids").toInt());
 }
 
-void View::OptionsDialog::saveOptions()
+bool View::OptionsDialog::saveOptions()
 {
+    QString storePass = Persistence::Manager::readConfig("Password").toString();
+    QString currPass = _authenticationCurrentPassLineEdit -> text();
+    QString newPass = _authenticationNewPassLineEdit -> text();
+    QString reNewPass = _authenticationReNewPassLineEdit -> text();
 
+    if(!currPass.isEmpty() || !newPass.isEmpty() || !reNewPass.isEmpty())
+        if(storePass != currPass || newPass != reNewPass)
+            return false;
+
+    Persistence::Manager::writeConfig(_authenticationNewPassLineEdit -> text().toAscii(), "Password");
+
+    Persistence::Manager::writeConfig(_precisionMoneySpinBox -> value(), "Money", "Application/Precision");
+    Persistence::Manager::writeConfig(_precisionTaxSpinBox -> value(), "Tax", "Application/Precision");
+    Persistence::Manager::writeConfig(_precisionWeightSpinBox -> value(), "Weight", "Application/Precision");
+
+    if(static_cast<Persistence::DBMSType>(_storageDBMSComboBox -> currentIndex()) != Persistence::SQLITE) {
+        Persistence::Manager::writeConfig(_storageDBMSComboBox -> currentIndex(), "Type", "Storage");
+        Persistence::Manager::writeConfig(_storageNameLineEdit-> text(), "Name", "Storage/DBMS");
+        Persistence::Manager::writeConfig(_storageHostLineEdit -> text(), "Host", "Storage/DBMS");
+        Persistence::Manager::writeConfig(_storagePortSpinBox -> value(), "Port", "Storage/DBMS");
+        Persistence::Manager::writeConfig(_storageUserLineEdit -> text(), "User", "Storage/DBMS");
+        Persistence::Manager::writeConfig(_storagePassLineEdit -> text().toAscii(), "Pass", "Storage/DBMS");
+    }
+
+    Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::GeneralVAT), "GeneralVAT", "Invoicing/Tax");
+    Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::ReducedVAT), "ReducedVAT", "Invoicing/Tax");
+    Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::SuperReducedVAT), "SuperReducedVAT", "Invoicing/Tax");
+    Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::GeneralES), "GeneralES", "Invoicing/Tax");
+    Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::ReducedES), "ReducedES", "Invoicing/Tax");
+    Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::SuperReducedES), "SuperReducedES", "Invoicing/Tax");
+    Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::PIT), "PIT", "Invoicing/Tax");
+
+    Persistence::Manager::writeConfig(_invoicingMaxDebtByCustomerSpinBox -> value(), "MaxDebtByCustomer", "Invoicing/Unpaids");
+    Persistence::Manager::writeConfig(_invoicingMaxDebtBySupplierSpinBox -> value(), "MaxDebtBySupplier", "Invoicing/Unpaids");
+    Persistence::Manager::writeConfig(_invoicingMaxPaymentDelayByCustomerSpinBox -> value(), "MaxPaymentDelayByCustomer", "Invoicing/Unpaids");
+    Persistence::Manager::writeConfig(_invoicingMaxPaymentDelayBySupplierSpinBox -> value(), "MaxPaymentDelayBySupplier", "Invoicing/Unpaids");
+
+    return true;
 }

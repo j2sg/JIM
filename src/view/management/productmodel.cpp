@@ -20,6 +20,7 @@
 
 #include "productmodel.h"
 #include "product.h"
+#include "persistencemanager.h"
 #include "types.h"
 
 View::Management::ProductModel::~ProductModel()
@@ -104,13 +105,15 @@ QVariant View::Management::ProductModel::data(const QModelIndex &index, int role
             }
         } else if(role == Qt::DisplayRole) {
             Model::Domain::Product *product = _products -> at(index.row());
+            int precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
+
             switch(index.column()) {
             case ColumnProductId:
                 return QString::number(product -> id());
             case ColumnProductName:
                 return product -> name();
             case ColumnProductPrice:
-                return QString::number(product -> price(), 'f', PRECISION_MONEY);
+                return QString::number(product -> price(), 'f', precisionMoney);
             }
         }
     }

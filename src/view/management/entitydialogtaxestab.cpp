@@ -22,6 +22,7 @@
 #include "taxapplyingwidget.h"
 #include "taxwidget.h"
 #include "business.h"
+#include "persistencemanager.h"
 #include <QtGui>
 
 View::Management::EntityDialogTaxesTab::EntityDialogTaxesTab(Model::Domain::Entity *entity, QWidget *parent)
@@ -35,13 +36,26 @@ void View::Management::EntityDialogTaxesTab::loadEntity()
 {
     _saleTaxApplyingWidget -> setTaxApplying(_entity -> taxOnSale());
     _buyTaxApplyingWidget -> setTaxApplying(_entity -> taxOnBuy());
-    _taxTaxWidget -> setTax(_entity -> tax());
+    if(!IS_NEW(_entity -> id()))
+        _taxTaxWidget -> setTax(_entity -> tax());
+    else {
+        _taxTaxWidget->setTax(Model::Domain::GeneralVAT, Persistence::Manager::readConfig("GeneralVAT", "Invoicing/Tax").toDouble());
+        _taxTaxWidget->setTax(Model::Domain::ReducedVAT, Persistence::Manager::readConfig("ReducedVAT", "Invoicing/Tax").toDouble());
+        _taxTaxWidget->setTax(Model::Domain::SuperReducedVAT, Persistence::Manager::readConfig("SuperReducedVAT", "Invoicing/Tax").toDouble());
+        _taxTaxWidget->setTax(Model::Domain::GeneralES, Persistence::Manager::readConfig("GeneralES", "Invoicing/Tax").toDouble());
+        _taxTaxWidget->setTax(Model::Domain::ReducedES, Persistence::Manager::readConfig("ReducedES", "Invoicing/Tax").toDouble());
+        _taxTaxWidget->setTax(Model::Domain::SuperReducedES, Persistence::Manager::readConfig("SuperReducedES", "Invoicing/Tax").toDouble());
+        _taxTaxWidget->setTax(Model::Domain::PIT, Persistence::Manager::readConfig("PIT", "Invoicing/Tax").toDouble());
+    }
 }
 
 void View::Management::EntityDialogTaxesTab::saveEntity()
 {
     _entity -> setTaxOnSale(_saleTaxApplyingWidget -> taxApplying());
     _entity -> setTaxOnBuy(_buyTaxApplyingWidget -> taxApplying());
+
+    for(int i = 0;i < Model::Domain::TaxTypeCount;++i)
+        (_entity -> tax())[i].setValue(_taxTaxWidget -> tax(static_cast<Model::Domain::TaxType>(i)));
 }
 
 void View::Management::EntityDialogTaxesTab::createWidgets()
