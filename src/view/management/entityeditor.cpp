@@ -195,6 +195,8 @@ void View::Management::EntityEditor::createConnections()
 {
     connect(_entitiesTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(rowSelectionChanged()));
+    connect(_entitiesTableView, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(modEntity()));
     connect(_addEntityButton, SIGNAL(clicked()),
             this, SLOT(addEntity()));
     connect(_modEntityButton, SIGNAL(clicked()),

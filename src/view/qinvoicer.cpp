@@ -23,15 +23,16 @@
 #include "qinvoicer.h"
 #include "persistencemanager.h"
 #include "businessloader.h"
+#include "optionsdialog.h"
 #include "invoiceloader.h"
 #include "invoiceeditor.h"
+#include "invoicesearch.h"
 #include "producteditor.h"
 #include "entityeditor.h"
 #include "entitydialog.h"
 #include "business.h"
 #include "businessmanager.h"
 #include "invoicemanager.h"
-#include "optionsdialog.h"
 #include "global.h"
 
 View::QInvoicer::QInvoicer()
@@ -224,6 +225,12 @@ void View::QInvoicer::loadInvoice()
     }
 }
 
+void View::QInvoicer::searchInvoice()
+{
+    View::Invoicing::InvoiceSearch dialog(this);
+    dialog.exec();
+}
+
 void View::QInvoicer::manageBusiness()
 {
     if(!_businessEditor)
@@ -366,6 +373,10 @@ void View::QInvoicer::createActions()
     _loadInvoiceAction -> setIcon(QIcon(":/images/loadinvoice.png"));
     _loadInvoiceAction -> setStatusTip(tr("Load a specific Invoice"));
 
+    _searchInvoiceAction = new QAction(tr("&Search Invoice..."), this);
+    _searchInvoiceAction -> setIcon(QIcon(":/images/search.png"));
+    _searchInvoiceAction -> setStatusTip(tr("Make an advanced Search"));
+
     _manageBusinessAction = new QAction(tr("&Businesses..."), this);
     _manageBusinessAction -> setIcon(QIcon(":/images/business.png"));
     _manageBusinessAction -> setStatusTip(tr("Business Management"));
@@ -439,7 +450,9 @@ void View::QInvoicer::createMenus()
     _invoicingMenu = menuBar() -> addMenu(tr("&Invoicing"));
     _invoicingMenu -> addAction(_createSaleInvoiceAction);
     _invoicingMenu -> addAction(_createBuyInvoiceAction);
+    _invoicingMenu -> addSeparator();
     _invoicingMenu -> addAction(_loadInvoiceAction);
+    _invoicingMenu -> addAction(_searchInvoiceAction);
 
     _managementMenu = menuBar() -> addMenu(tr("&Management"));
     _managementMenu -> addAction(_manageBusinessAction);
@@ -477,18 +490,19 @@ void View::QInvoicer::createToolBar()
     _invoicingToolBar -> addAction(_createSaleInvoiceAction);
     _invoicingToolBar -> addAction(_createBuyInvoiceAction);
     _invoicingToolBar -> addAction(_loadInvoiceAction);
-    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _invoicingToolBar -> addAction(_searchInvoiceAction);
+    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     _managementToolBar = addToolBar(tr("Management"));
     _managementToolBar -> addAction(_manageCustomerAction);
     _managementToolBar -> addAction(_manageSupplierAction);
     _managementToolBar -> addAction(_manageProductAction);
-    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     _reportToolBar = addToolBar(tr("Report"));
     _reportToolBar -> addAction(_volumeInvoiceAction);
     _reportToolBar -> addAction(_unpaidInvoicesAction);
-    _reportToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _reportToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 }
 
 void View::QInvoicer::createStatusBar()
@@ -520,6 +534,8 @@ void View::QInvoicer::createConnections()
             this, SLOT(createBuyInvoice()));
     connect(_loadInvoiceAction, SIGNAL(triggered()),
             this, SLOT(loadInvoice()));
+    connect(_searchInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(searchInvoice()));
     connect(_manageBusinessAction, SIGNAL(triggered()),
             this, SLOT(manageBusiness()));
     connect(_manageCustomerAction, SIGNAL(triggered()),
@@ -571,6 +587,7 @@ void View::QInvoicer::setBusinessOpen(bool open)
     _createSaleInvoiceAction -> setEnabled(open);
     _createBuyInvoiceAction -> setEnabled(open);
     _loadInvoiceAction -> setEnabled(open);
+    _searchInvoiceAction -> setEnabled(open);
     _manageBusinessAction -> setEnabled(!open);
     _volumeInvoiceAction -> setEnabled(open);
     _unpaidInvoicesAction -> setEnabled(open);

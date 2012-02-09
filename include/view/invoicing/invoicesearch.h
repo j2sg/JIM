@@ -1,0 +1,50 @@
+/**
+ *  This file is part of QInvoicer.
+ *
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *
+ *  QInvoicer is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  QInvoicer is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with QInvoicer.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+#ifndef INVOICESEARCH_H
+#define INVOICESEARCH_H
+
+#include <QDialog>
+
+QT_BEGIN_NAMESPACE
+class QPushButton;
+QT_END_NAMESPACE
+
+namespace View
+{
+    namespace Invoicing
+    {
+        class InvoiceSearch : public QDialog
+        {
+            Q_OBJECT
+        public:
+            InvoiceSearch(QWidget *parent = 0);
+            void done(int result);
+        private:
+            void createWidgets();
+            void createConnections();
+
+            QPushButton *_searchPushButton;
+            QPushButton *_cancelPushButton;
+        };
+    }
+}
+
+#endif // INVOICESEARCH_H

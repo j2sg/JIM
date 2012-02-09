@@ -251,6 +251,8 @@ void View::Management::ProductEditor::createConnections()
 {
     connect(_categoriesTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(rowSelectionChangedOnCategoriesTableView()));
+    connect(_categoriesTableView, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(modCategory()));
     connect(_addCategoryButton, SIGNAL(clicked()),
             this, SLOT(addCategory()));
     connect(_modCategoryButton, SIGNAL(clicked()),
@@ -259,6 +261,8 @@ void View::Management::ProductEditor::createConnections()
             this, SLOT(delCategory()));
     connect(_productsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(rowSelectionChangedOnProducsTableView()));
+    connect(_productsTableView, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(modProduct()));
     connect(_addProductButton, SIGNAL(clicked()),
             this, SLOT(addProduct()));
     connect(_modProductButton, SIGNAL(clicked()),

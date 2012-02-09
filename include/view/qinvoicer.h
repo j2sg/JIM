@@ -70,6 +70,7 @@ namespace View
         void createSaleInvoice();
         void createBuyInvoice();
         void loadInvoice();
+        void searchInvoice();
         void manageBusiness();
         void manageCustomer();
         void manageSupplier();
@@ -105,6 +106,7 @@ namespace View
         QAction *_createSaleInvoiceAction;
         QAction *_createBuyInvoiceAction;
         QAction *_loadInvoiceAction;
+        QAction *_searchInvoiceAction;
         QAction *_manageBusinessAction;
         QAction *_manageCustomerAction;
         QAction *_manageSupplierAction;
