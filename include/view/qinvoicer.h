@@ -60,6 +60,8 @@ namespace View
         ~QInvoicer();
     protected:
         void closeEvent(QCloseEvent *event);
+    public slots:
+        bool login();
     private slots:
         bool createBusiness();
         void loadBusiness();
@@ -139,6 +141,7 @@ namespace View
         View::Management::ProductEditor *_productEditor;
 
         Model::Domain::Entity *_business;
+        bool _authorized;
     };
 }
 

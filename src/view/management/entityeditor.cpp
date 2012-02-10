@@ -190,7 +190,6 @@ void View::Management::EntityEditor::setIcon()
     setWindowIcon(icon);
 }
 
-
 void View::Management::EntityEditor::createConnections()
 {
     connect(_entitiesTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),

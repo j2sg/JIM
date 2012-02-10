@@ -30,10 +30,11 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     setUpApplication(&app);
+
     View::QInvoicer invoicer;
     invoicer.show();
 
-    return app.exec();
+    return invoicer.login() ? app.exec() : 1;
 }
 
 void setUpApplication(QApplication *app)
@@ -42,6 +43,7 @@ void setUpApplication(QApplication *app)
     app -> setOrganizationDomain(ORGANIZATION_DOMAIN);
     app -> setApplicationName(APPLICATION_NAME);
     app -> setApplicationVersion(APPLICATION_VERSION);
+    app -> setQuitOnLastWindowClosed(true);
 
     if(!Persistence::Manager::existsConfig())
         Persistence::Manager::createConfig();

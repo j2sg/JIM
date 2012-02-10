@@ -34,10 +34,8 @@ View::Management::EntityDialog::EntityDialog(Model::Domain::Entity *entity, QWid
 {
     createWidgets();
     createConnections();
-
     setTitle();
     setMinimumWidth(ENTITY_DIALOG_MINIMUM_SIZE);
-
     loadEntity();
 }
 

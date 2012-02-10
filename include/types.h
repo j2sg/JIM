@@ -21,6 +21,9 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+// Maximum Authentication Attempts.
+#define MAX_AUTH_ATTEMPTS 3
+
 // Maximum Decimal Number used on money, tax and weight units.
 #define MAX_MONEY_PRECISION  4
 #define MAX_TAX_PRECISION    2

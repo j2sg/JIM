@@ -24,7 +24,14 @@
 #include <QDialog>
 
 QT_BEGIN_NAMESPACE
+class QLabel;
+class QRadioButton;
+class QCheckBox;
+class QDateEdit;
+class QLineEdit;
+class QDoubleSpinBox;
 class QPushButton;
+class QGroupBox;
 QT_END_NAMESPACE
 
 namespace View
@@ -37,12 +44,47 @@ namespace View
         public:
             InvoiceSearch(QWidget *parent = 0);
             void done(int result);
+        private slots:
+            void toggledOnRadioButton();
+            void stateChangedOnDateCheckBox();
+            void stateChangedOnEntityCheckBox();
+            void stateChangedOnStateCheckBox();
+            void stateChangedOnTotalsCheckBox();
         private:
             void createWidgets();
             void createConnections();
 
+            QLabel *_typeLabel;
+            QRadioButton *_buyRadioButton;
+            QRadioButton *_saleRadioButton;
+            QCheckBox *_dateCheckBox;
+            QLabel *_beginDateLabel;
+            QDateEdit *_beginDateDateEdit;
+            QLabel *_endDateLabel;
+            QDateEdit *_endDateDateEdit;
+            QCheckBox *_entityCheckBox;
+            QLabel *_entityIdLabel;
+            QLineEdit *_entityIdLineEdit;
+            QLabel *_entityNameLabel;
+            QLineEdit *_entityNameLineEdit;
+            QPushButton *_selectPushButton;
+            QCheckBox *_stateCheckBox;
+            QRadioButton *_anyStateRadioButton;
+            QRadioButton *_paidStateRadioButton;
+            QRadioButton *_unpaidStateRadioButton;
+            QCheckBox *_totalsCheckBox;
+            QLabel *_minTotalLabel;
+            QDoubleSpinBox *_minTotalDoubleSpinBox;
+            QLabel *_maxTotalLabel;
+            QDoubleSpinBox *_maxTotalDoubleSpinBox;
             QPushButton *_searchPushButton;
             QPushButton *_cancelPushButton;
+            QPushButton *_morePushButton;
+            QGroupBox *_typeGroupBox;
+            QGroupBox *_dateGroupBox;
+            QGroupBox *_entityGroupBox;
+            QGroupBox *_stateGroupBox;
+            QGroupBox *_totalsGroupBox;
         };
     }
 }

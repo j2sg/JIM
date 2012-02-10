@@ -72,7 +72,7 @@ void View::Management::EntitySelector::createEntity()
         if(Model::Management::EntityManager::create(*entity)) {
             int row = _entitiesTableView -> currentIndex().row();
             _entityModel -> insertEntity(row + 1, entity);
-            QModelIndex index = _entityModel->index(row + 1, ColumnEntityId);
+            QModelIndex index = _entityModel -> index(row + 1, ColumnEntityId);
             _entitiesTableView -> setCurrentIndex(index);
             QDialog::accept();
         } else {
@@ -170,6 +170,8 @@ void View::Management::EntitySelector::createConnections()
 {
     connect(_entitiesTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(rowSelectionChanged()));
+    connect(_entitiesTableView, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(accept()));
     connect(_createButton, SIGNAL(clicked()),
             this, SLOT(createEntity()));
     connect(_selectButton, SIGNAL(clicked()),

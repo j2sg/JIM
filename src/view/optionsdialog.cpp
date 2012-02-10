@@ -39,7 +39,7 @@ View::OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent)
     createWidgets();
     createConnections();
     setWindowTitle(tr("Options"));
-
+    setWindowIcon(QIcon(":/images/options.png"));
     loadOptions();
 }
 

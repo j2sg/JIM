@@ -25,8 +25,8 @@ View::InvoiceLoader::InvoiceLoader(QWidget *parent) : QDialog(parent)
 {
     createWidgets();
     createConnections();
-
     setWindowTitle(tr("Load Invoice"));
+    setWindowIcon(QIcon(":/images/loadinvoice.png"));
     setFixedSize(sizeHint());
 }
 

@@ -79,7 +79,8 @@ HEADERS += include/global.h \
     include/view/management/entityviewer.h \
     include/view/management/entityselector.h \
     include/view/optionsdialog.h \
-    include/view/invoicing/invoicesearch.h
+    include/view/invoicing/invoicesearch.h \
+    include/view/authdialog.h
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
            src/persistence/sqlagent.cpp \
@@ -124,7 +125,10 @@ SOURCES += src/main.cpp \
     src/view/management/entityviewer.cpp \
     src/view/management/entityselector.cpp \
     src/view/optionsdialog.cpp \
-    src/view/invoicing/invoicesearch.cpp
+    src/view/invoicing/invoicesearch.cpp \
+    src/view/authdialog.cpp
 RESOURCES += resources/images.qrc
+
+
 
 

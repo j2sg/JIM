@@ -22,6 +22,7 @@
 #include <QPrintDialog>
 #include "qinvoicer.h"
 #include "persistencemanager.h"
+#include "authdialog.h"
 #include "businessloader.h"
 #include "optionsdialog.h"
 #include "invoiceloader.h"
@@ -43,13 +44,14 @@ View::QInvoicer::QInvoicer()
     createToolBar();
     createStatusBar();
     createConnections();
+    setBusinessOpen(false);
+    setWindowIcon(QIcon(":/images/appicon.png"));
 
     _business = 0;
     _businessEditor = _customerEditor = _supplierEditor = 0;
     _productEditor = 0;
 
-    setBusinessOpen(false);
-    setWindowIcon(QIcon(":/images/appicon.png"));
+    _authorized = false;
 }
 
 View::QInvoicer::~QInvoicer()
@@ -68,7 +70,9 @@ View::QInvoicer::~QInvoicer()
 
 void View::QInvoicer::closeEvent(QCloseEvent *event)
 {
-    if(verifyExit()) {
+    if(!_authorized)
+        event -> accept();
+    else if(verifyExit()) {
         if(_businessEditor)
             _businessEditor -> close();
         if(_customerEditor)
@@ -86,6 +90,32 @@ void View::QInvoicer::closeEvent(QCloseEvent *event)
             event -> ignore();
     } else
         event -> ignore();
+}
+
+bool View::QInvoicer::login()
+{
+    AuthDialog dialog(this);
+    QString password = Persistence::Manager::readConfig("Password").toString();
+    int attempts = 0;
+
+    do {
+        if(!dialog.exec())
+            return false;
+        else if(dialog.password() != password) {
+            if(attempts < MAX_AUTH_ATTEMPTS - 1)
+                QMessageBox::warning(this, tr("Authentication Failed"),
+                                           tr("Wrong Password. You have %1 attempts more.")
+                                               .arg(MAX_AUTH_ATTEMPTS - attempts - 1));
+            ++attempts;
+        } else
+            _authorized = true;
+    } while(!_authorized && attempts < MAX_AUTH_ATTEMPTS);
+
+    if(attempts == MAX_AUTH_ATTEMPTS)
+        QMessageBox::warning(this, tr("Authentication Failed"),
+                                   tr("Max attempts number exceeded. Application will be closed."));
+
+    return _authorized;
 }
 
 bool View::QInvoicer::createBusiness()

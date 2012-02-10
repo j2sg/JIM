@@ -33,6 +33,9 @@
 View::Invoicing::InvoiceEditorDataTab::InvoiceEditorDataTab(Model::Domain::Invoice *invoice, QWidget *parent)
     : QWidget(parent), _invoice(invoice)
 {
+    _precision = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
+    _currency = Persistence::Manager::readConfig("Currency", "Application").toString();
+
     createWidgets();
     createConnections();
 }
@@ -122,23 +125,22 @@ void View::Invoicing::InvoiceEditorDataTab::detailEntity()
 void View::Invoicing::InvoiceEditorDataTab::updateTotals()
 {    
     bool paid = _paidCheckBox -> isChecked();
-    int moneyPrecision = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
 
     _subtotalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                   QString::number(_invoice -> subtotal(), 'f', moneyPrecision) + " " +
-                                   QString::fromUtf8("€") + "</font></h4>");
+                                   QString::number(_invoice -> subtotal(), 'f', _precision) + " " +
+                                   _currency + "</font></h4>");
 
     _taxesValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                QString::number(_invoice -> taxes(), 'f', moneyPrecision) + " " +
-                                QString::fromUtf8("€") + "</font></h4>");
+                                QString::number(_invoice -> taxes(), 'f', _precision) + " " +
+                                _currency + "</font></h4>");
 
     _deductionValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                    QString::number(-_invoice -> deduction(), 'f', moneyPrecision) + " " +
-                                    QString::fromUtf8("€") + "</font></h4>");
+                                    QString::number(-_invoice -> deduction(), 'f', _precision) + " " +
+                                    _currency + "</font></h4>");
 
     _totalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                QString::number(_invoice -> total(), 'f', moneyPrecision) + " " +
-                                QString::fromUtf8("€") + "</font></h4>");
+                                QString::number(_invoice -> total(), 'f', _precision) + " " +
+                                _currency + "</font></h4>");
 }
 
 void View::Invoicing::InvoiceEditorDataTab::createWidgets()
@@ -246,7 +248,9 @@ void View::Invoicing::InvoiceEditorDataTab::createEntityWidgets()
     _entityVatinLabel -> setBuddy(_entityVatinLineEdit);
 
     _selectEntityPushButton = new QPushButton(tr("&Select"));
-    _selectEntityPushButton -> setIcon(QIcon(":/images/entity.png"));
+    _selectEntityPushButton -> setIcon(_invoice -> type() ?
+                                           QIcon(":/images/entity.png") :
+                                           QIcon(":/images/supplier.png"));
     _selectEntityPushButton -> setFixedSize(_selectEntityPushButton -> sizeHint());
 
     _detailEntityPushButton = new QPushButton;
