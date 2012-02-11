@@ -48,7 +48,9 @@ namespace View
         {
             Q_OBJECT
         public:
-            OperationEditor(QList<Model::Domain::Operation *> *operations = 0, QWidget *parent = 0);
+            OperationEditor(QList<Model::Domain::Operation *> *operations = 0,
+                            int precisionWeight = 2, int precisionMoney = 2,
+                            QWidget *parent = 0);
             void setOperations(QList<Model::Domain::Operation *> *operations);
             QList<Model::Domain::Operation *> *operations();
         signals:
@@ -68,6 +70,8 @@ namespace View
             QPushButton *_addOperationButton;
             QPushButton *_modOperationButton;
             QPushButton *_delOperationButton;
+            int _precisionWeight;
+            int _precisionMoney;
         };
     }
 }

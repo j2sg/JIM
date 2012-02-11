@@ -39,8 +39,9 @@ namespace View
         class OperationModel : public QAbstractTableModel
         {
         public:
-            OperationModel(QList<Model::Domain::Operation *> *operations = 0, QObject *parent = 0)
-                : QAbstractTableModel(parent), _operations(operations) {}
+            OperationModel(QList<Model::Domain::Operation *> *operations = 0,
+                           int precisionWeight = 2, int precisionMoney = 2,
+                           QObject *parent = 0);
             QList<Model::Domain::Operation *> *operations();
             void setOperations(QList<Model::Domain::Operation *> *operations);
             int rowCount(const QModelIndex &parent) const;
@@ -55,6 +56,8 @@ namespace View
             int getId() const;
 
             QList<Model::Domain::Operation *> *_operations;
+            int _precisionWeight;
+            int _precisionMoney;
         };
     }
 }

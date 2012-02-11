@@ -33,8 +33,10 @@
 View::Invoicing::InvoiceEditorDataTab::InvoiceEditorDataTab(Model::Domain::Invoice *invoice, QWidget *parent)
     : QWidget(parent), _invoice(invoice)
 {
-    _precision = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
     _currency = Persistence::Manager::readConfig("Currency", "Application").toString();
+    _precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
+    _precisionTax = Persistence::Manager::readConfig("Tax", "Application/Precision").toInt();
+    _precisionWeight = Persistence::Manager::readConfig("Weight", "Application/Precision").toInt();
 
     createWidgets();
     createConnections();
@@ -104,7 +106,8 @@ void View::Invoicing::InvoiceEditorDataTab::selectEntity()
 {
     View::Management::EntitySelector selector(_invoice -> type() ?
                                                   Model::Domain::CustomerEntity :
-                                                  Model::Domain::SupplierEntity, this);
+                                                  Model::Domain::SupplierEntity,
+                                              View::Management::CreateAndSelect, this);
 
     if(selector.exec()) {
         Model::Domain::Entity *entity = selector.entity();
@@ -127,19 +130,19 @@ void View::Invoicing::InvoiceEditorDataTab::updateTotals()
     bool paid = _paidCheckBox -> isChecked();
 
     _subtotalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                   QString::number(_invoice -> subtotal(), 'f', _precision) + " " +
+                                   QString::number(_invoice -> subtotal(), 'f', _precisionMoney) + " " +
                                    _currency + "</font></h4>");
 
     _taxesValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                QString::number(_invoice -> taxes(), 'f', _precision) + " " +
+                                QString::number(_invoice -> taxes(), 'f', _precisionMoney) + " " +
                                 _currency + "</font></h4>");
 
     _deductionValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                    QString::number(-_invoice -> deduction(), 'f', _precision) + " " +
+                                    QString::number(-_invoice -> deduction(), 'f', _precisionMoney) + " " +
                                     _currency + "</font></h4>");
 
     _totalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                QString::number(_invoice -> total(), 'f', _precision) + " " +
+                                QString::number(_invoice -> total(), 'f', _precisionMoney) + " " +
                                 _currency + "</font></h4>");
 }
 
@@ -261,12 +264,12 @@ void View::Invoicing::InvoiceEditorDataTab::createEntityWidgets()
 
 void View::Invoicing::InvoiceEditorDataTab::createOperationsWidgets()
 {
-    _operationEditor = new OperationEditor;
+    _operationEditor = new OperationEditor(0, _precisionWeight, _precisionMoney);
 }
 
 void View::Invoicing::InvoiceEditorDataTab::createPaymentWidgets()
 {
-    _taxViewerWidget = new TaxViewerWidget;
+    _taxViewerWidget = new TaxViewerWidget(_precisionTax, _precisionMoney);
 
     _subtotalLabel = new QLabel("<h4>" + tr("Subtotal:") + "</h4>");
     _subtotalValueLabel = new QLabel;

@@ -18,39 +18,40 @@
  *
  **/
 
-#ifndef TAXVIEWERWIDGET_H
-#define TAXVIEWERWIDGET_H
+#ifndef REGISTERDIALOG_H
+#define REGISTERDIALOG_H
 
-#include <QWidget>
-#include <QList>
-#include "types.h"
+#include <QDialog>
 
 QT_BEGIN_NAMESPACE
-class QTableWidget;
+class QLabel;
+class QLineEdit;
+class QPushButton;
 QT_END_NAMESPACE
 
 namespace View
 {
-    namespace Invoicing
+    class RegisterDialog : public QDialog
     {
-        class TaxViewerWidget : public QWidget
-        {
-            Q_OBJECT
-        public:
-            TaxViewerWidget(int precisionTax = 2, int precisionMoney = 2, QWidget *parent = 0);
-        public slots:
-            void setTax(Model::Domain::TaxType type, double percent, double value);
-            void setTaxes(const QList<Model::Domain::VatBreakdown> &breakdowns);
-            void reset();
-        private:
-            void createWidgets();
-            void updateRows();
+        Q_OBJECT
+    public:
+        RegisterDialog(QWidget *parent = 0);
+        void done(int result);
+        const QString password() const;
+    private slots:
+        void textChangedOnLineEdit();
+    private:
+        void createWidgets();
+        void createConnections();
 
-            QTableWidget *_taxTableWidget;
-            int _precisionTax;
-            int _precisionMoney;
-        };
-    }
+        QLabel *_passLabel;
+        QLineEdit *_passLineEdit;
+        QLabel *_rePassLabel;
+        QLineEdit *_rePassLineEdit;
+        QPushButton *_okPushButton;
+        QPushButton *_cancelPushButton;
+        QString _password;
+    };
 }
 
-#endif // TAXVIEWERWIDGET_H
+#endif // REGISTERDIALOG_H

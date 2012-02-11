@@ -383,11 +383,12 @@ bool View::OptionsDialog::saveOptions()
     QString newPass = _authenticationNewPassLineEdit -> text();
     QString reNewPass = _authenticationReNewPassLineEdit -> text();
 
-    if(!currPass.isEmpty() || !newPass.isEmpty() || !reNewPass.isEmpty())
+    if(!currPass.isEmpty() || !newPass.isEmpty() || !reNewPass.isEmpty()) {
         if(storePass != currPass || newPass != reNewPass)
             return false;
-
-    Persistence::Manager::writeConfig(_authenticationNewPassLineEdit -> text().toAscii(), "Password");
+        else
+            Persistence::Manager::writeConfig(_authenticationNewPassLineEdit -> text(), "Password");
+    }
 
     Persistence::Manager::writeConfig(_precisionMoneySpinBox -> value(), "Money", "Application/Precision");
     Persistence::Manager::writeConfig(_precisionTaxSpinBox -> value(), "Tax", "Application/Precision");

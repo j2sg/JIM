@@ -61,6 +61,7 @@ namespace View
     protected:
         void closeEvent(QCloseEvent *event);
     public slots:
+        bool firstExecution();
         bool login();
     private slots:
         bool createBusiness();

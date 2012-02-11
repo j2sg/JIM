@@ -105,8 +105,10 @@ namespace View
             QCheckBox *_paidCheckBox;
             QComboBox *_paymentComboBox;
             Model::Domain::Invoice *_invoice;
-            int _precision;
             QString _currency;
+            int _precisionMoney;
+            int _precisionTax;
+            int _precisionWeight;
         };
     }
 }

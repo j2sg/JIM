@@ -19,7 +19,9 @@
  **/
 
 #include "invoicesearch.h"
+#include "entityselector.h"
 #include "persistencemanager.h"
+#include "entity.h"
 #include <QLabel>
 #include <QRadioButton>
 #include <QCheckBox>
@@ -51,6 +53,8 @@ void View::Invoicing::InvoiceSearch::toggledOnRadioButton()
 {
     bool isBuyChecked = _buyRadioButton -> isChecked();
     _entityCheckBox -> setText(isBuyChecked ? tr("Supplier") : tr("Customer"));
+    _entityIdLineEdit -> clear();
+    _entityNameLineEdit -> clear();
     _selectPushButton -> setIcon(isBuyChecked ? QIcon(":/images/supplier.png") :
                                                 QIcon(":/images/entity.png"));
 }
@@ -72,6 +76,8 @@ void View::Invoicing::InvoiceSearch::stateChangedOnEntityCheckBox()
     _selectPushButton -> setEnabled(isChecked);
     _entityIdLabel -> setEnabled(isChecked);
     _entityNameLabel -> setEnabled(isChecked);
+    _entityIdLineEdit -> clear();
+    _entityNameLineEdit -> clear();
 }
 
 void View::Invoicing::InvoiceSearch::stateChangedOnStateCheckBox()
@@ -89,6 +95,23 @@ void View::Invoicing::InvoiceSearch::stateChangedOnTotalsCheckBox()
     _minTotalDoubleSpinBox->setEnabled(isChecked);
     _maxTotalLabel->setEnabled(isChecked);
     _maxTotalDoubleSpinBox->setEnabled(isChecked);
+}
+
+void View::Invoicing::InvoiceSearch::selectEntity()
+{
+    View::Management::EntitySelector dialog(_buyRadioButton -> isChecked() ?
+                                                Model::Domain::SupplierEntity :
+                                                Model::Domain::CustomerEntity,
+                                            View::Management::SelectOnly,
+                                            this);
+    if(dialog.exec()) {
+        Model::Domain::Entity *entity = dialog.entity();
+
+        _entityIdLineEdit -> setText(QString::number(entity -> id()));
+        _entityNameLineEdit -> setText(entity -> name());
+
+        delete entity;
+    }
 }
 
 void View::Invoicing::InvoiceSearch::createWidgets()
@@ -262,6 +285,8 @@ void View::Invoicing::InvoiceSearch::createConnections()
             this, SLOT(stateChangedOnDateCheckBox()));
     connect(_entityCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnEntityCheckBox()));
+    connect(_selectPushButton, SIGNAL(clicked()),
+            this, SLOT(selectEntity()));
     connect(_stateCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnStateCheckBox()));
     connect(_totalsCheckBox, SIGNAL(stateChanged(int)),

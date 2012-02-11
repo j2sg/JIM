@@ -89,6 +89,12 @@ namespace View
             ColumnCategoryVat,
             ColumnCategoryCount
         } ColumnCategory;
+
+        typedef enum SelectorBehaviorEnum
+        {
+            SelectOnly,
+            CreateAndSelect
+        } SelectorBehavior;
     }
 }
 

@@ -50,6 +50,7 @@ namespace View
             void stateChangedOnEntityCheckBox();
             void stateChangedOnStateCheckBox();
             void stateChangedOnTotalsCheckBox();
+            void selectEntity();
         private:
             void createWidgets();
             void createConnections();

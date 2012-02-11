@@ -25,8 +25,10 @@
 #include "entity.h"
 #include <QtGui>
 
-View::Management::EntitySelector::EntitySelector(Model::Domain::EntityType type, QWidget *parent)
-    : QDialog(parent) , _type(type)
+View::Management::EntitySelector::EntitySelector(Model::Domain::EntityType type,
+                                                 SelectorBehavior behavior,
+                                                 QWidget *parent)
+    : QDialog(parent) , _type(type), _behavior(behavior)
 {
     createWidgets();
     createConnections();
@@ -107,6 +109,7 @@ void View::Management::EntitySelector::createWidgets()
 
     _createButton = new QPushButton(tr("Create"));
     _createButton -> setIcon((_type ? QIcon(":/images/supplier.png") : QIcon(":/images/entity.png")));
+    _createButton -> setVisible(_behavior == CreateAndSelect);
 
     _selectButton = new QPushButton(tr("&Select"));
     _selectButton -> setIcon(QIcon(":/images/ok.png"));

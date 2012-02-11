@@ -29,8 +29,10 @@
 #include "operation.h"
 #include "types.h"
 
-View::Invoicing::OperationEditor::OperationEditor(QList<Model::Domain::Operation *> *operations, QWidget *parent)
-    : QWidget(parent)
+View::Invoicing::OperationEditor::OperationEditor(QList<Model::Domain::Operation *> *operations,
+                                                  int precisionWeight, int precisionMoney,
+                                                  QWidget *parent)
+    : QWidget(parent), _precisionWeight(precisionWeight), _precisionMoney(precisionMoney)
 {
     createWidgets(operations);
     createConnections();
@@ -55,7 +57,7 @@ void View::Invoicing::OperationEditor::rowSelectionChanged()
 
 void View::Invoicing::OperationEditor::productNotFound()
 {
-    QMessageBox::critical(this, tr("Unknown Product Id"), tr("Not exists any product with that Id"), QMessageBox::Ok);
+    QMessageBox::warning(this, tr("Unknown Product Id"), tr("Not exists any product with that Id"), QMessageBox::Ok);
 }
 
 void View::Invoicing::OperationEditor::addOperation()
@@ -87,7 +89,7 @@ void View::Invoicing::OperationEditor::delOperation()
 void View::Invoicing::OperationEditor::createWidgets(QList<Model::Domain::Operation *> *operations)
 {
     _operationsTable = new OperationTable;
-    _operationModel = new OperationModel(operations);
+    _operationModel = new OperationModel(operations, _precisionWeight, _precisionMoney);
     _operationsTable -> setModel(_operationModel);
 
     _addOperationButton = new QPushButton(tr("Add"));

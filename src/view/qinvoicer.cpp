@@ -22,6 +22,7 @@
 #include <QPrintDialog>
 #include "qinvoicer.h"
 #include "persistencemanager.h"
+#include "registerdialog.h"
 #include "authdialog.h"
 #include "businessloader.h"
 #include "optionsdialog.h"
@@ -92,6 +93,43 @@ void View::QInvoicer::closeEvent(QCloseEvent *event)
         event -> ignore();
 }
 
+bool View::QInvoicer::firstExecution()
+{
+    QMessageBox::information(this, tr("First Execution"),
+                                   tr("This is the first time that you run the application.\n"
+                                      "You must set an access password."),
+                             QMessageBox::Ok);
+
+    RegisterDialog dialog(this);
+
+    if(dialog.exec()) {
+        QString password = dialog.password();
+
+        if(Persistence::Manager::writeConfig(password, "Password")) {
+            QMessageBox::information(this, tr("First Execution"),
+                                           tr("Password saved. Welcome to %1.").arg(APPLICATION_NAME),
+                                     QMessageBox::Ok);
+            _authorized = true;
+        }
+        else  {
+            QMessageBox::critical(this, tr("First Execution"),
+                                        tr("Password cannot be saved. Application will be closed."),
+                                        QMessageBox::Ok);
+            return false;
+        }
+    } else {
+        QMessageBox::critical(this, tr("First Execution"),
+                                    tr("Setting up password canceled. Application will be closed."),
+                                    QMessageBox::Ok);
+
+        Persistence::Manager::deleteConfig();
+
+        return false;
+    }
+
+    return true;
+}
+
 bool View::QInvoicer::login()
 {
     AuthDialog dialog(this);
@@ -99,9 +137,11 @@ bool View::QInvoicer::login()
     int attempts = 0;
 
     do {
-        if(!dialog.exec())
+        if(!dialog.exec()) {
+            QMessageBox::critical(this, tr("Authentication Failed"),
+                                       tr("Authentication canceled. Application will be closed."));
             return false;
-        else if(dialog.password() != password) {
+        } else if(dialog.password() != password) {
             if(attempts < MAX_AUTH_ATTEMPTS - 1)
                 QMessageBox::warning(this, tr("Authentication Failed"),
                                            tr("Wrong Password. You have %1 attempts more.")
@@ -112,7 +152,7 @@ bool View::QInvoicer::login()
     } while(!_authorized && attempts < MAX_AUTH_ATTEMPTS);
 
     if(attempts == MAX_AUTH_ATTEMPTS)
-        QMessageBox::warning(this, tr("Authentication Failed"),
+        QMessageBox::critical(this, tr("Authentication Failed"),
                                    tr("Max attempts number exceeded. Application will be closed."));
 
     return _authorized;

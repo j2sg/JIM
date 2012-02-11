@@ -52,7 +52,9 @@ namespace View
         {
             Q_OBJECT
         public:
-            EntitySelector(Model::Domain::EntityType type, QWidget *parent = 0);
+            EntitySelector(Model::Domain::EntityType type,
+                           SelectorBehavior behavior = SelectOnly,
+                           QWidget *parent = 0);
             ~EntitySelector();
             void done(int result);
             Model::Domain::Entity *entity() const;
@@ -73,7 +75,7 @@ namespace View
 
             Model::Domain::Entity *_entity;
             Model::Domain::EntityType _type;
-
+            SelectorBehavior _behavior;
         };
     }
 }
