@@ -45,18 +45,23 @@ View::QInvoicer::QInvoicer()
     createToolBar();
     createStatusBar();
     createConnections();
-    setBusinessOpen(false);
     setWindowIcon(QIcon(":/images/appicon.png"));
+    setBusinessOpen(false);
 
     _business = 0;
+    _authorized = false;
+    _connected = false;
+
     _businessEditor = _customerEditor = _supplierEditor = 0;
     _productEditor = 0;
 
-    _authorized = false;
+    connectStorage();
 }
 
 View::QInvoicer::~QInvoicer()
 {
+    disconnectStorage();
+
     if(_business)
         delete _business;
     if(_businessEditor)
@@ -156,6 +161,18 @@ bool View::QInvoicer::login()
                                    tr("Max attempts number exceeded. Application will be closed."));
 
     return _authorized;
+}
+
+void View::QInvoicer::connectStorage()
+{
+    setStorageConnected((_connected = Persistence::Manager::connectStorage()));
+}
+
+void View::QInvoicer::disconnectStorage()
+{
+    closeBusiness();
+    Persistence::Manager::disconnectStorage();
+    setStorageConnected((_connected = false));
 }
 
 bool View::QInvoicer::createBusiness()
@@ -419,6 +436,14 @@ void View::QInvoicer::createActions()
     _setUpBusinessAction -> setIcon(QIcon(":/images/about.png"));
     _setUpBusinessAction -> setStatusTip(tr("Set up business details"));
 
+    _connectStorageAction = new QAction(tr("Connect Storage"), this);
+    _connectStorageAction -> setIcon(QIcon(":/images/storageon.png"));
+    _connectStorageAction -> setStatusTip(tr("Establish the connection to storage media"));
+
+    _disconnectStorageAction = new QAction(tr("Disconnect Storage"), this);
+    _disconnectStorageAction -> setIcon(QIcon(":/images/storageoff.png"));
+    _disconnectStorageAction -> setStatusTip(tr("Finish the connection to storage media"));
+
     _optionsAction = new QAction(tr("&Options..."), this);
     _optionsAction -> setIcon(QIcon(":/images/options.png"));
     _optionsAction -> setStatusTip(tr("Set up application options"));
@@ -512,6 +537,9 @@ void View::QInvoicer::createMenus()
     _applicationMenu -> addAction(_closeBusinessAction);
     _applicationMenu -> addAction(_setUpBusinessAction);
     _applicationMenu -> addSeparator();
+    _applicationMenu -> addAction(_connectStorageAction);
+    _applicationMenu -> addAction(_disconnectStorageAction);
+    _applicationMenu -> addSeparator();
     _applicationMenu -> addAction(_optionsAction);
     _applicationMenu -> addAction(_printingAction);
     _applicationMenu -> addSeparator();
@@ -577,7 +605,11 @@ void View::QInvoicer::createToolBar()
 
 void View::QInvoicer::createStatusBar()
 {
-    statusBar() -> showMessage(tr("QInvoicer Running"));
+    _storageIconLabel = new QLabel;
+    _storageStateLabel = new QLabel;
+
+    statusBar() ->addWidget(_storageIconLabel);
+    statusBar() ->addWidget(_storageStateLabel);
 }
 
 void View::QInvoicer::createConnections()
@@ -592,6 +624,10 @@ void View::QInvoicer::createConnections()
             this, SLOT(closeBusiness()));
     connect(_setUpBusinessAction, SIGNAL(triggered()),
             this, SLOT(setUpBusiness()));
+    connect(_connectStorageAction, SIGNAL(triggered()),
+            this, SLOT(connectStorage()));
+    connect(_disconnectStorageAction, SIGNAL(triggered()),
+            this, SLOT(disconnectStorage()));
     connect(_optionsAction, SIGNAL(triggered()),
             this, SLOT(options()));
     connect(_printingAction, SIGNAL(triggered()),
@@ -646,6 +682,28 @@ View::Invoicing::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Doma
     connect(editor, SIGNAL(finished()), _mdiArea, SLOT(closeActiveSubWindow()));
 
     return editor;
+}
+
+void View::QInvoicer::setStorageConnected(bool connected)
+{
+    QString host = Persistence::Manager::readConfig("Host", "Storage/DBMS").toString();
+
+    _createBusinessAction -> setEnabled(connected);
+    _loadBusinessAction -> setEnabled(connected);
+    _connectStorageAction -> setEnabled(!connected);
+    _disconnectStorageAction -> setEnabled(connected);
+    _manageBusinessAction -> setEnabled(connected);
+    _manageCustomerAction -> setEnabled(connected);
+    _manageSupplierAction -> setEnabled(connected);
+    _manageProductAction -> setEnabled(connected);
+    _addressBookAction -> setEnabled(connected);
+
+    _managementMenu -> setEnabled(connected);
+
+    _storageIconLabel -> setPixmap(QPixmap(QString(":/images/storage%1.png")
+                                           .arg(connected ? "on" : "off"))
+                                   .scaled(QSize(16, 16)));
+    _storageStateLabel -> setText(connected ? tr("Connected to %1").arg(host) : tr("Disconnected"));
 }
 
 void View::QInvoicer::setBusinessOpen(bool open)

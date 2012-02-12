@@ -24,14 +24,34 @@
 #include <QString>
 #include <QVector>
 #include <QVariant>
-#include <QtSql/QSqlDatabase>
+
+QT_BEGIN_NAMESPACE
+class QSqlDatabase;
+QT_END_NAMESPACE
 
 namespace Persistence
 {
+
+    class SQLAgentException
+    {
+    public:
+        SQLAgentException(const QString &message = QString()) : _message(message) {}
+        const QString &message() const
+        {
+            return _message;
+        }
+    protected:
+        QString _message;
+    };
+
     class SQLAgent
     {
     public:
         static SQLAgent *instance();
+        ~SQLAgent();
+        bool connect();
+        void disconnect();
+        bool isConnected();
         bool create(const QString &sql);
         bool insert(const QString &sql);
         bool update(const QString &sql);
@@ -39,15 +59,11 @@ namespace Persistence
         bool _delete(const QString &sql);
     private:
         SQLAgent();
-        ~SQLAgent();
-    protected:
-        bool setUp();
-        bool connect();
-        void disconnect();
         bool manipulation(const QString &sql);
         QVector<QVector<QVariant> > *query(const QString &sql);
-
-        QSqlDatabase _database;
+    protected:        
+        static SQLAgent *_instance;
+        QSqlDatabase *_database;
     };
 }
 

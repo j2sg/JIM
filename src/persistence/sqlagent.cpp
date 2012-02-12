@@ -20,14 +20,44 @@
 
 #include "sqlagent.h"
 #include "persistencemanager.h"
+#include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
 
 Persistence::SQLAgent *Persistence::SQLAgent::instance()
 {
-    static SQLAgent instance;
+    if(!_instance)
+        _instance = new SQLAgent;
 
-    return &instance;
+    return _instance;
+}
+
+Persistence::SQLAgent::~SQLAgent()
+{
+    QString connectionName = _database -> connectionName();
+
+    disconnect();
+
+    _instance = 0;
+    delete _database;
+
+    QSqlDatabase::removeDatabase(connectionName);
+}
+
+bool Persistence::SQLAgent::connect()
+{
+    return _database -> open();
+}
+
+void Persistence::SQLAgent::disconnect()
+{
+    if(isConnected())
+        _database -> close();
+}
+
+bool Persistence::SQLAgent::isConnected()
+{
+    return _database -> isOpen();
 }
 
 bool Persistence::SQLAgent::create(const QString &sql)
@@ -57,40 +87,16 @@ bool Persistence::SQLAgent::_delete(const QString &sql)
 
 Persistence::SQLAgent::SQLAgent()
 {
-    setUp();
-}
-
-Persistence::SQLAgent::~SQLAgent()
-{
-    disconnect();
-}
-
-bool Persistence::SQLAgent::setUp()
-{
     if(!Persistence::Manager::existsConfig())
-        return false;
+        throw SQLAgentException("Database Configuration not found");
 
-    _database = QSqlDatabase::addDatabase(Manager::readConfig("Driver", "Storage/DBMS").toString());
-    _database.setDatabaseName(Manager::readConfig("Name", "Storage/DBMS").toString());
-    _database.setHostName(Manager::readConfig("Host", "Storage/DBMS").toString());
-    _database.setPort(Manager::readConfig("Port", "Storage/DBMS").toInt());
-    _database.setUserName(Manager::readConfig("User", "Storage/DBMS").toString());
-    _database.setPassword(Manager::readConfig("Pass", "Storage/DBMS").toString());
+    _database = new QSqlDatabase(QSqlDatabase::addDatabase(Manager::readConfig("Driver", "Storage/DBMS").toString()));
 
-    return connect();
-}
-
-bool Persistence::SQLAgent::connect()
-{
-    return _database.open();
-}
-
-void Persistence::SQLAgent::disconnect()
-{
-        if(_database.isOpen())
-            _database.close();
-
-        QSqlDatabase::removeDatabase(_database.databaseName());
+    _database -> setDatabaseName(Manager::readConfig("Name", "Storage/DBMS").toString());
+    _database -> setHostName(Manager::readConfig("Host", "Storage/DBMS").toString());
+    _database -> setPort(Manager::readConfig("Port", "Storage/DBMS").toInt());
+    _database -> setUserName(Manager::readConfig("User", "Storage/DBMS").toString());
+    _database -> setPassword(Manager::readConfig("Pass", "Storage/DBMS").toString());
 }
 
 bool Persistence::SQLAgent::manipulation(const QString &sql)
@@ -119,3 +125,5 @@ QVector<QVector<QVariant> > *Persistence::SQLAgent::query(const QString &sql)
 
     return result;
 }
+
+Persistence::SQLAgent *Persistence::SQLAgent::_instance = 0;

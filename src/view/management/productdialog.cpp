@@ -174,5 +174,6 @@ bool View::Management::ProductDialog::isSaveable()
 {
     return !(_idLineEdit -> text().isEmpty()) &&
            !(_nameLineEdit -> text().isEmpty()) &&
+           !(_categoryComboBox -> currentIndex() == -1) &&
            !(_priceLineEdit -> text().isEmpty());
 }

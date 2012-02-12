@@ -169,6 +169,9 @@ bool Persistence::Manager::createSQLiteSchema()
 {
     SQLAgent *agent = SQLAgent::instance();
 
+    if(!agent -> connect())
+        return false;
+
     bool entity = agent -> create("CREATE TABLE IF NOT EXISTS entity (\n"
                                   "    id        INTEGER,\n"
                                   "    type      INTEGER,\n"
@@ -301,5 +304,29 @@ bool Persistence::Manager::createSQLiteSchema()
 
     bool foreignKeys = agent -> create("PRAGMA foreign_keys=ON;");
 
+    agent -> disconnect();
+
     return entity && invoice && tax && category && product && operation && unpaids && foreignKeys;
+}
+
+bool Persistence::Manager::connectStorage()
+{
+    bool ok = false;
+
+    try {
+        Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+
+        ok = agent -> connect();
+    } catch(Persistence::SQLAgentException sqlException) {}
+
+    return ok;
+}
+
+void Persistence::Manager::disconnectStorage()
+{
+    try {
+        Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+        agent -> disconnect();
+        delete agent;
+    } catch(Persistence::SQLAgentException sqlException) {}
 }

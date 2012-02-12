@@ -37,6 +37,8 @@ namespace Persistence
         static bool existsStorage();
         static bool createStorage(bool overwrite = false);
         static bool deleteStorage();
+        static bool connectStorage();
+        static void disconnectStorage();
     private:
         static bool createSQLiteSchema();
     };

@@ -32,13 +32,13 @@ bool initApplication(View::QInvoicer *invoicer, bool firstExecution);
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    bool firstExecution = false;
+    bool firstLogin = false;
 
     setUpApplication(&app);
 
     std::cout << QString("%1 %2").arg(app.applicationName()).arg(app.applicationVersion()).toStdString() << std::endl;
 
-    if(!verifyConfig(&firstExecution)) {
+    if(!verifyConfig(&firstLogin)) {
         std::cout << QObject::tr("Config  : Error : Application will be closed").toStdString() << std::endl;
         return 1;
     } else
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     View::QInvoicer invoicer;
     invoicer.show();
 
-    if(!initApplication(&invoicer, firstExecution)) {
+    if(!initApplication(&invoicer, firstLogin)) {
         std::cout << QObject::tr("Running : Error : Application will be closed").toStdString() << std::endl;
         return 1;
     } else
@@ -70,12 +70,13 @@ void setUpApplication(QApplication *app)
     app -> setApplicationVersion(APPLICATION_VERSION);
 }
 
-bool verifyConfig(bool *firstExecution)
+bool verifyConfig(bool *firstLogin)
 {
-    if(!Persistence::Manager::existsConfig()) {
-        *firstExecution = true;
-        return Persistence::Manager::createConfig();
-    }
+    if(!Persistence::Manager::existsConfig())
+        if(!Persistence::Manager::createConfig())
+            return false;
+
+    *firstLogin = Persistence::Manager::readConfig("Password").toString().isEmpty();
 
     return true;
 }
@@ -88,7 +89,7 @@ bool verifyStorage()
     return true;
 }
 
-bool initApplication(View::QInvoicer *invoicer, bool firstExecution)
+bool initApplication(View::QInvoicer *invoicer, bool firstLogin)
 {
-    return firstExecution ? invoicer -> firstExecution() : invoicer -> login();
+    return firstLogin ? invoicer -> firstExecution() : invoicer -> login();
 }

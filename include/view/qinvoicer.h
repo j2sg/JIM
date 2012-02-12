@@ -28,6 +28,7 @@ class QMdiArea;
 class QAction;
 class QMenu;
 class QToolBar;
+class QLabel;
 QT_END_NAMESPACE
 
 namespace Model
@@ -64,6 +65,8 @@ namespace View
         bool firstExecution();
         bool login();
     private slots:
+        void connectStorage();
+        void disconnectStorage();
         bool createBusiness();
         void loadBusiness();
         void closeBusiness();
@@ -93,6 +96,7 @@ namespace View
         void createStatusBar();
         void createConnections();
         View::Invoicing::InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
+        void setStorageConnected(bool connected = true);
         void setBusinessOpen(bool open = true);
         bool verifyCreateBusiness();
         bool verifyCloseBusiness();
@@ -102,6 +106,8 @@ namespace View
         QAction *_createBusinessAction;
         QAction *_loadBusinessAction;
         QAction *_closeBusinessAction;
+        QAction *_connectStorageAction;
+        QAction *_disconnectStorageAction;
         QAction *_setUpBusinessAction;
         QAction *_optionsAction;
         QAction *_printingAction;
@@ -135,14 +141,17 @@ namespace View
         QToolBar *_invoicingToolBar;
         QToolBar *_managementToolBar;
         QToolBar *_reportToolBar;
+        QLabel *_storageIconLabel;
+        QLabel *_storageStateLabel;
+
+        Model::Domain::Entity *_business;
+        bool _authorized;
+        bool _connected;
 
         View::Management::EntityEditor *_businessEditor;
         View::Management::EntityEditor *_customerEditor;
         View::Management::EntityEditor *_supplierEditor;
         View::Management::ProductEditor *_productEditor;
-
-        Model::Domain::Entity *_business;
-        bool _authorized;
     };
 }
 

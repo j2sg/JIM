@@ -53,6 +53,7 @@ void View::Invoicing::InvoiceEditorDataTab::loadInvoice()
     _entityNameLineEdit-> setText((_invoice -> entity() ? _invoice -> entity() -> name() : ""));
     _entityVatinLineEdit -> setText((_invoice -> entity() ? _invoice -> entity() -> vatin() : ""));
     _operationEditor -> setOperations(_invoice -> operations());
+    updateTotals();
     _paidCheckBox -> setChecked(_invoice -> paid());
     _paymentComboBox -> setCurrentIndex(static_cast<int>(_invoice -> payment()));
 }
@@ -90,7 +91,12 @@ void View::Invoicing::InvoiceEditorDataTab::stateChangedOnAutoIdCheckBox()
 
 void View::Invoicing::InvoiceEditorDataTab::stateChangedOnPaidCheckBox()
 {
-    _paymentComboBox -> setEnabled(_paidCheckBox -> isChecked());
+    bool isChecked = _paidCheckBox -> isChecked();
+    _subtotalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
+    _taxesValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
+    _deductionValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
+    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
+    _paymentComboBox -> setEnabled(isChecked);
 }
 
 void View::Invoicing::InvoiceEditorDataTab::updateId()
@@ -126,24 +132,17 @@ void View::Invoicing::InvoiceEditorDataTab::detailEntity()
 }
 
 void View::Invoicing::InvoiceEditorDataTab::updateTotals()
-{    
+{
     bool paid = _paidCheckBox -> isChecked();
 
-    _subtotalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                   QString::number(_invoice -> subtotal(), 'f', _precisionMoney) + " " +
-                                   _currency + "</font></h4>");
-
-    _taxesValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                QString::number(_invoice -> taxes(), 'f', _precisionMoney) + " " +
-                                _currency + "</font></h4>");
-
-    _deductionValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                    QString::number(-_invoice -> deduction(), 'f', _precisionMoney) + " " +
-                                    _currency + "</font></h4>");
-
-    _totalValueLabel -> setText("<h4><font color=" + QString(paid ? "green" : "red") + ">" +
-                                QString::number(_invoice -> total(), 'f', _precisionMoney) + " " +
-                                _currency + "</font></h4>");
+    _subtotalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(paid ? "green" : "red"));
+    _subtotalValueLabel -> setText(QString::number(_invoice -> subtotal(), 'f', _precisionMoney) + " " + _currency);
+    _taxesValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(paid ? "green" : "red"));
+    _taxesValueLabel -> setText(QString::number(_invoice -> taxes(), 'f', _precisionMoney) + " " + _currency);
+    _deductionValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(paid ? "green" : "red"));
+    _deductionValueLabel -> setText(QString::number(_invoice -> deduction(), 'f', _precisionMoney) + " " + _currency);
+    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(paid ? "green" : "red"));
+    _totalValueLabel -> setText(QString::number(_invoice -> total(), 'f', _precisionMoney) + " " + _currency);
 }
 
 void View::Invoicing::InvoiceEditorDataTab::createWidgets()
@@ -271,19 +270,23 @@ void View::Invoicing::InvoiceEditorDataTab::createPaymentWidgets()
 {
     _taxViewerWidget = new TaxViewerWidget(_precisionTax, _precisionMoney);
 
-    _subtotalLabel = new QLabel("<h4>" + tr("Subtotal:") + "</h4>");
+    _subtotalLabel = new QLabel(tr("Subtotal:"));
+    _subtotalLabel -> setStyleSheet("QLabel { font : bold 10px; }");
     _subtotalValueLabel = new QLabel;
     _subtotalLabel -> setBuddy(_subtotalValueLabel);
 
-    _taxesLabel = new QLabel("<h4>" + tr("Taxes:") + "</h4>");
+    _taxesLabel = new QLabel(tr("Taxes:"));
+    _taxesLabel -> setStyleSheet("QLabel { font : bold 10px; }");
     _taxesValueLabel = new QLabel;
     _taxesLabel -> setBuddy(_taxesValueLabel);
 
-    _deductionLabel = new QLabel("<h4>" + tr("Deduction:") + "</h4>");
+    _deductionLabel = new QLabel(tr("Deduction:"));
+    _deductionLabel -> setStyleSheet("QLabel { font : bold 10px; }");
     _deductionValueLabel = new QLabel;
     _deductionLabel -> setBuddy(_deductionValueLabel);
 
-    _totalLabel = new QLabel("<h4>" + tr("Total:") + "</h4>");
+    _totalLabel = new QLabel(tr("Total:"));
+    _totalLabel -> setStyleSheet("QLabel { font : bold 10px; }");
     _totalValueLabel = new QLabel;
     _totalLabel -> setBuddy(_totalValueLabel);
 
@@ -319,8 +322,6 @@ void View::Invoicing::InvoiceEditorDataTab::createConnections()
             this, SLOT(stateChangedOnPaidCheckBox()));
     connect(_paidCheckBox, SIGNAL(stateChanged(int)),
             this, SIGNAL(dataChanged()));
-    connect(_paidCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(updateTotals()));
     connect(_paymentComboBox, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));
 }
