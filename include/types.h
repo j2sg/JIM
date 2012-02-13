@@ -163,6 +163,21 @@ namespace Model
             }
         } VatBreakdown;
     }
+
+    namespace Management
+    {
+        typedef enum SearchModeEnum
+        {
+            SearchByTypeOnly = 0x00,
+            SearchByDateRange = 0x01,
+            SearchByEntity = 0x02,
+            SearchByTotalRange = 0x04,
+            SearchByState = 0x08,
+            SearchByAllParameters = 0x15
+        } SearchMode;
+
+        typedef int SearchFlag;
+    }
 }
 
 namespace Persistence

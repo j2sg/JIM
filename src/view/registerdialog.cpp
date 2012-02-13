@@ -86,6 +86,7 @@ void View::RegisterDialog::createWidgets()
     bottomLayout -> addStretch();
     bottomLayout -> addWidget(_okPushButton);
     bottomLayout -> addWidget(_cancelPushButton);
+    bottomLayout -> addStretch();
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addLayout(topLayout);

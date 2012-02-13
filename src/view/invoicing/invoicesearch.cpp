@@ -46,7 +46,66 @@ View::Invoicing::InvoiceSearch::InvoiceSearch(QWidget *parent)
 
 void View::Invoicing::InvoiceSearch::done(int result)
 {
+    if(result) {
+        bool isDateChecked = _dateCheckBox -> isChecked();
+        bool isEntityChecked = _entityCheckBox -> isChecked();
+        bool isTotalsChecked = _totalsCheckBox -> isChecked();
+        bool isStateChecked = _stateCheckBox -> isChecked();
+
+        _searchMode = static_cast<Model::Management::SearchFlag>((isDateChecked ? Model::Management::SearchByDateRange : 0) |
+                                                                 (isEntityChecked ? Model::Management::SearchByEntity : 0) |
+                                                                 (isTotalsChecked ? Model::Management::SearchByTotalRange : 0)|
+                                                                 (isStateChecked ? Model::Management::SearchByState : 0));
+        _type = static_cast<Model::Domain::InvoiceType>(_saleRadioButton -> isChecked());
+        _beginDate = _beginDateDateEdit -> date();
+        _endDate = _endDateDateEdit -> date();
+        _entityId = _entityIdLineEdit -> text().toInt();
+        _minTotal = _minTotalDoubleSpinBox -> value();
+        _maxTotal = _maxTotalDoubleSpinBox -> value();
+        _paid = _paidStateRadioButton -> isChecked();
+    }
+
     QDialog::done(result);
+}
+
+Model::Management::SearchFlag View::Invoicing::InvoiceSearch::searchMode() const
+{
+    return _searchMode;
+}
+
+Model::Domain::InvoiceType View::Invoicing::InvoiceSearch::type() const
+{
+    return _type;
+}
+
+const QDate &View::Invoicing::InvoiceSearch::beginDate() const
+{
+    return _beginDate;
+}
+
+const QDate &View::Invoicing::InvoiceSearch::endDate() const
+{
+    return _endDate;
+}
+
+int View::Invoicing::InvoiceSearch::entityId() const
+{
+    return _entityId;
+}
+
+double View::Invoicing::InvoiceSearch::minTotal() const
+{
+    return _minTotal;
+}
+
+double View::Invoicing::InvoiceSearch::maxTotal() const
+{
+    return _maxTotal;
+}
+
+bool View::Invoicing::InvoiceSearch::paid() const
+{
+    return _paid;
 }
 
 void View::Invoicing::InvoiceSearch::toggledOnRadioButton()
@@ -83,7 +142,6 @@ void View::Invoicing::InvoiceSearch::stateChangedOnEntityCheckBox()
 void View::Invoicing::InvoiceSearch::stateChangedOnStateCheckBox()
 {
     bool isChecked = _stateCheckBox -> isChecked();
-    _anyStateRadioButton -> setEnabled(isChecked);
     _paidStateRadioButton -> setEnabled(isChecked);
     _unpaidStateRadioButton -> setEnabled(isChecked);
 }
@@ -112,6 +170,22 @@ void View::Invoicing::InvoiceSearch::selectEntity()
 
         delete entity;
     }
+}
+
+void View::Invoicing::InvoiceSearch::verifySearch()
+{
+    bool isDateChecked = _dateCheckBox -> isChecked();
+    QDate beginDate = _beginDateDateEdit -> date();
+    QDate endDate = _endDateDateEdit -> date();
+    bool isEntityChecked = _entityCheckBox -> isChecked();
+    QString entityId = _entityIdLineEdit -> text();
+    bool isTotalsChecked = _totalsCheckBox -> isChecked();
+    double minTotal = _minTotalDoubleSpinBox -> value();
+    double maxTotal = _maxTotalDoubleSpinBox -> value();
+
+    _searchPushButton -> setEnabled(!((isDateChecked && beginDate > endDate)  ||
+                                      (isEntityChecked && entityId.isEmpty()) ||
+                                      (isTotalsChecked && minTotal > maxTotal)));
 }
 
 void View::Invoicing::InvoiceSearch::createWidgets()
@@ -193,19 +267,16 @@ void View::Invoicing::InvoiceSearch::createWidgets()
     _stateCheckBox = new QCheckBox(tr("State"));
     _stateCheckBox -> setChecked(false);
 
-    _anyStateRadioButton = new QRadioButton(tr("&Any"));
-    _anyStateRadioButton -> setEnabled(false);
     _paidStateRadioButton = new QRadioButton(tr("&Paid"));
     _paidStateRadioButton -> setEnabled(false);
     _unpaidStateRadioButton = new QRadioButton(tr("&Unpaid"));
     _unpaidStateRadioButton -> setEnabled(false);
-    _anyStateRadioButton -> setChecked(true);
+    _paidStateRadioButton -> setChecked(true);
 
     QGridLayout *stateLayout = new QGridLayout;
     stateLayout -> addWidget(_stateCheckBox, 0, 0);
-    stateLayout -> addWidget(_anyStateRadioButton, 1, 0);
-    stateLayout -> addWidget(_paidStateRadioButton, 1, 1);
-    stateLayout -> addWidget(_unpaidStateRadioButton, 1, 2);
+    stateLayout -> addWidget(_paidStateRadioButton, 1, 0);
+    stateLayout -> addWidget(_unpaidStateRadioButton, 1, 1);
 
     _stateGroupBox = new QGroupBox;
     _stateGroupBox -> setLayout(stateLayout);
@@ -297,6 +368,22 @@ void View::Invoicing::InvoiceSearch::createConnections()
             _stateGroupBox, SLOT(setVisible(bool)));
     connect(_morePushButton, SIGNAL(toggled(bool)),
             _totalsGroupBox, SLOT(setVisible(bool)));
+    connect(_dateCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(verifySearch()));
+    connect(_beginDateDateEdit, SIGNAL(dateChanged(QDate)),
+            this, SLOT(verifySearch()));
+    connect(_endDateDateEdit, SIGNAL(dateChanged(QDate)),
+            this, SLOT(verifySearch()));
+    connect(_entityCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(verifySearch()));
+    connect(_entityNameLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(verifySearch()));
+    connect(_totalsCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(verifySearch()));
+    connect(_minTotalDoubleSpinBox, SIGNAL(valueChanged(double)),
+            this, SLOT(verifySearch()));
+    connect(_maxTotalDoubleSpinBox, SIGNAL(valueChanged(double)),
+            this, SLOT(verifySearch()));
     connect(_searchPushButton, SIGNAL(clicked()),
             this, SLOT(accept()));
     connect(_cancelPushButton, SIGNAL(clicked()),

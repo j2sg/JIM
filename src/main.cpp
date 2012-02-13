@@ -72,8 +72,7 @@ void setUpApplication(QApplication *app)
 
 bool verifyConfig(bool *firstLogin)
 {
-    if(!Persistence::Manager::existsConfig())
-        if(!Persistence::Manager::createConfig())
+    if(!Persistence::Manager::existsConfig() && !Persistence::Manager::createConfig())
             return false;
 
     *firstLogin = Persistence::Manager::readConfig("Password").toString().isEmpty();

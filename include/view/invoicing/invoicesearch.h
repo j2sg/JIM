@@ -22,6 +22,8 @@
 #define INVOICESEARCH_H
 
 #include <QDialog>
+#include <QDate>
+#include "types.h"
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -44,6 +46,14 @@ namespace View
         public:
             InvoiceSearch(QWidget *parent = 0);
             void done(int result);
+            Model::Management::SearchFlag searchMode() const;
+            Model::Domain::InvoiceType type() const;
+            const QDate &beginDate() const;
+            const QDate &endDate() const;
+            int entityId() const;
+            double minTotal() const;
+            double maxTotal() const;
+            bool paid() const;
         private slots:
             void toggledOnRadioButton();
             void stateChangedOnDateCheckBox();
@@ -51,6 +61,7 @@ namespace View
             void stateChangedOnStateCheckBox();
             void stateChangedOnTotalsCheckBox();
             void selectEntity();
+            void verifySearch();
         private:
             void createWidgets();
             void createConnections();
@@ -70,7 +81,6 @@ namespace View
             QLineEdit *_entityNameLineEdit;
             QPushButton *_selectPushButton;
             QCheckBox *_stateCheckBox;
-            QRadioButton *_anyStateRadioButton;
             QRadioButton *_paidStateRadioButton;
             QRadioButton *_unpaidStateRadioButton;
             QCheckBox *_totalsCheckBox;
@@ -86,6 +96,15 @@ namespace View
             QGroupBox *_entityGroupBox;
             QGroupBox *_stateGroupBox;
             QGroupBox *_totalsGroupBox;
+
+            Model::Management::SearchFlag _searchMode;
+            Model::Domain::InvoiceType _type;
+            QDate _beginDate;
+            QDate _endDate;
+            int _entityId;
+            double _minTotal;
+            double _maxTotal;
+            bool _paid;
         };
     }
 }

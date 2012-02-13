@@ -79,6 +79,7 @@ void View::BusinessLoader::createWidgets(const QStringList &businessNames, const
     bottomLayout -> addStretch();
     bottomLayout -> addWidget(_loadButton);
     bottomLayout -> addWidget(_cancelButton);
+    bottomLayout -> addStretch();
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(businessGroupBox);

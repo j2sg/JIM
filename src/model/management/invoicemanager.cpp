@@ -222,6 +222,92 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAll(int b
     return invoices;
 }
 
+QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model::Domain::InvoiceType type, int businessId,
+                                                                           Model::Management::SearchFlag mode,
+                                                                           const QDate &beginDate, const QDate &endDate,
+                                                                           int entityId, double minTotal, double maxTotal,
+                                                                           bool paid)
+{
+    Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+    QString sql = QString("SELECT * FROM invoice WHERE type=%1 AND businessId=%2")
+                  .arg(type)
+                  .arg(businessId);
+
+    if(mode & SearchByDateRange)
+        sql.append(QString(" AND date>='%1' AND date<='%2'")
+                   .arg(beginDate.toString(DATE_FORMAT))
+                   .arg(endDate.toString(DATE_FORMAT)));
+
+    if(mode & SearchByEntity)
+        sql.append(QString(" AND entityId=%1 AND entityType=%2")
+                   .arg(entityId)
+                   .arg(static_cast<int>(type ?
+                                             Model::Domain::CustomerEntity :
+                                             Model::Domain::SupplierEntity)));
+
+    if(mode & SearchByState)
+        sql.append(QString(" AND paid=%1").arg(paid));
+
+    QVector<QVector<QVariant> > *result = agent -> select(sql);
+    QList<Model::Domain::Invoice *> *invoices = new QList<Model::Domain::Invoice *>;
+
+    foreach(QVector<QVariant> row, *result) {
+        int id                              = row.at(0).toInt();
+        Model::Domain::Entity *business     = BusinessManager::get(businessId);
+        Model::Domain::Entity *entity       = EntityManager::get(row.at(4).toInt(),
+                                                                 static_cast<Model::Domain::EntityType>(
+                                                                     row.at(5).toInt()));
+        QDate date                          = row.at(6).toDate();
+        QString place                       = row.at(7).toString();
+        Model::Domain::TaxFlag taxOnInvoice = static_cast<Model::Domain::TaxFlag>(row.at(8).toInt());
+        double generalVat                   = row.at(9).toDouble();
+        double reducedVat                   = row.at(10).toDouble();
+        double superReducedVat              = row.at(11).toDouble();
+        double generalEs                    = row.at(12).toDouble();
+        double reducedEs                    = row.at(13).toDouble();
+        double superReducedEs               = row.at(14).toDouble();
+        double pit                          = row.at(15).toDouble();
+        bool paid                           = row.at(16).toBool();
+        Model::Domain::PaymentType payment  = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
+        QString notes                       = row.at(18).toString();
+
+        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(business, id, type);
+        invoice -> setEntity(entity);
+        invoice -> setDate(date);
+        invoice -> setPlace(place);
+        invoice -> setOperations(OperationManager::getAllByInvoice(id, type, businessId));
+        invoice -> setTaxOnInvoice(taxOnInvoice);
+        invoice -> setTax(Model::Domain::Tax(Model::Domain::GeneralVAT, generalVat));
+        invoice -> setTax(Model::Domain::Tax(Model::Domain::ReducedVAT, reducedVat));
+        invoice -> setTax(Model::Domain::Tax(Model::Domain::SuperReducedVAT, superReducedVat));
+        invoice -> setTax(Model::Domain::Tax(Model::Domain::GeneralES, generalEs));
+        invoice -> setTax(Model::Domain::Tax(Model::Domain::ReducedES, reducedEs));
+        invoice -> setTax(Model::Domain::Tax(Model::Domain::SuperReducedES, superReducedEs));
+        invoice -> setTax(Model::Domain::Tax(Model::Domain::PIT, pit));
+        invoice -> setPaid(paid);
+        invoice -> setPayment(payment);
+        invoice -> setNotes(notes);
+
+        bool correct = true;
+
+        if(mode & SearchByTotalRange) {
+            double total = invoice -> total();
+
+            if(total < minTotal || total > maxTotal)
+                correct = false;
+        }
+
+        if(!correct)
+            delete invoice;
+        else
+            invoices -> push_back(invoice);
+    }
+
+    delete result;
+
+    return invoices;
+}
+
 int Model::Management::InvoiceManager::getId(Model::Domain::InvoiceType type, int businessId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();

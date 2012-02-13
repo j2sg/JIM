@@ -76,6 +76,7 @@ void View::InvoiceLoader::createWidgets()
     bottomLayout -> addStretch();
     bottomLayout -> addWidget(_loadButton);
     bottomLayout -> addWidget(_cancelButton);
+    bottomLayout -> addStretch();
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(invoiceGroupBox);

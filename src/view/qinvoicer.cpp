@@ -102,7 +102,7 @@ bool View::QInvoicer::firstExecution()
 {
     QMessageBox::information(this, tr("First Execution"),
                                    tr("This is the first time that you run the application.\n"
-                                      "You must set an access password."),
+                                      "You must set the access password."),
                              QMessageBox::Ok);
 
     RegisterDialog dialog(this);
@@ -170,7 +170,6 @@ void View::QInvoicer::connectStorage()
 
 void View::QInvoicer::disconnectStorage()
 {
-    closeBusiness();
     Persistence::Manager::disconnectStorage();
     setStorageConnected((_connected = false));
 }
@@ -184,7 +183,7 @@ bool View::QInvoicer::createBusiness()
         if(Model::Management::BusinessManager::create(business))
             statusBar() -> showMessage(tr("Created Business %1").arg(business.id()), 5000);
         else {
-            QMessageBox::critical(this, tr("Business Creation"),
+            QMessageBox::warning(this, tr("Business Creation"),
                                   tr("There was an error on business creation"),
                                   QMessageBox::Ok);
             return false;
@@ -216,7 +215,7 @@ void View::QInvoicer::loadBusiness()
             statusBar() -> showMessage(tr("Loaded Business %1").arg(_business -> name()), 5000);
             setBusinessOpen(true);
         } else
-            QMessageBox::critical(this, tr("Critical error"),
+            QMessageBox::warning(this, tr("Load Business"),
                                   tr("Not exists any business with that Id"),
                                   QMessageBox::Ok);
     }
@@ -233,7 +232,6 @@ void View::QInvoicer::closeBusiness()
         else
             return;
     }
-
 
     statusBar() -> showMessage(tr("Closed Business %1").arg(_business -> name()), 5000);
 
@@ -254,7 +252,7 @@ void View::QInvoicer::setUpBusiness()
         if(Model::Management::BusinessManager::modify(*_business))
             statusBar() -> showMessage(tr("Modified Business %1").arg(_business -> name()), 5000);
         else
-            QMessageBox::critical(this, tr("Business Modification"),
+            QMessageBox::warning(this, tr("Business Modification"),
                                   tr("There was an error on business update"),
                                   QMessageBox::Ok);
     }
@@ -303,7 +301,7 @@ void View::QInvoicer::loadInvoice()
     if(loader.exec()) {
         Model::Domain::Invoice *invoice = Model::Management::InvoiceManager::get(loader.id(), loader.type(), _business -> id());
         if(!invoice)
-            QMessageBox::critical(this, tr("Critical error"), tr("Not exists any invoice with that Id"), QMessageBox::Ok);
+            QMessageBox::warning(this, tr("Load Invoice"), tr("Not exists any invoice with that Id"), QMessageBox::Ok);
         else {
             View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(invoice);
             _mdiArea -> addSubWindow(editor);
@@ -314,8 +312,27 @@ void View::QInvoicer::loadInvoice()
 
 void View::QInvoicer::searchInvoice()
 {
+    if(!_business)
+        return;
+
     View::Invoicing::InvoiceSearch dialog(this);
-    dialog.exec();
+
+    if(dialog.exec()) {
+        Model::Management::SearchFlag mode = dialog.searchMode();
+        Model::Domain::InvoiceType type = dialog.type();
+        QDate beginDate = dialog.beginDate();
+        QDate endDate = dialog.endDate();
+        int entityId = dialog.entityId();
+        double minTotal = dialog.minTotal();
+        double maxTotal = dialog.maxTotal();
+        bool paid = dialog.paid();
+
+        QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _business -> id(),mode, beginDate, endDate, entityId, minTotal, maxTotal, paid);
+
+        // SHOW RESULTS -> TO DO
+
+        delete invoices;
+    }
 }
 
 void View::QInvoicer::manageBusiness()
@@ -712,6 +729,7 @@ void View::QInvoicer::setBusinessOpen(bool open)
     _loadBusinessAction -> setEnabled(!open);
     _closeBusinessAction -> setEnabled(open);
     _setUpBusinessAction -> setEnabled(open);
+    _disconnectStorageAction -> setEnabled(!open);
     _createSaleInvoiceAction -> setEnabled(open);
     _createBuyInvoiceAction -> setEnabled(open);
     _loadInvoiceAction -> setEnabled(open);
@@ -722,6 +740,7 @@ void View::QInvoicer::setBusinessOpen(bool open)
 
     _invoicingMenu -> setEnabled(open);
     _reportMenu -> setEnabled(open);
+    _windowMenu -> setEnabled(open);
 
     setWindowTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION) +
                    (open ? tr(" - Business #%1 - %2").arg(_business -> id()).arg(_business -> name()) : QString()));
