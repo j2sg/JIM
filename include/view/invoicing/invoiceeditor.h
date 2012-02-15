@@ -57,23 +57,28 @@ namespace View
             void closeEvent(QCloseEvent *event);
         signals:
             void saved(const Model::Domain::Invoice &invoice);
+            void deleted(const Model::Domain::Invoice &invoice);
             void finished();
         private slots:
             void invoiceModified(bool modified = true);
             bool save();
+            void _delete();
         private:
             void createWidgets();
             void createConnections();
             void setTitle();
             void loadInvoice();
             bool saveInvoice();
+            bool deleteInvoice();
             bool isSaveable();
             bool verifySave();
 
             QTabWidget *_tabWidget;
             InvoiceEditorDataTab *_dataTab;
             InvoiceEditorOtherTab *_otherTab;
+            QPushButton *_printButton;
             QPushButton *_saveButton;
+            QPushButton *_deleteButton;
             QPushButton *_finishButton;
             Model::Domain::Invoice *_invoice;
             int _id;

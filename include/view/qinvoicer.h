@@ -88,6 +88,7 @@ namespace View
         void about();
         void updateWindowMenu();
         void invoiceSaved(const Model::Domain::Invoice &invoice);
+        void invoiceDeleted(const Model::Domain::Invoice &invoice);
 
     private:
         void createCentralWidget();

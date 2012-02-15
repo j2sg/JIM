@@ -443,6 +443,13 @@ void View::QInvoicer::invoiceSaved(const Model::Domain::Invoice &invoice)
                                .arg(invoice.id()), 2000);
 }
 
+void View::QInvoicer::invoiceDeleted(const Model::Domain::Invoice &invoice)
+{
+    statusBar() -> showMessage(tr("%1 Invoice %2 deleted")
+                               .arg((static_cast<int>(invoice.type())) ? tr("Sale") : tr("Buy"))
+                               .arg(invoice.id()), 2000);
+}
+
 void View::QInvoicer::createCentralWidget()
 {
     _mdiArea = new QMdiArea;
@@ -709,8 +716,12 @@ View::Invoicing::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Doma
 {
     View::Invoicing::InvoiceEditor *editor = new View::Invoicing::InvoiceEditor(invoice);
 
-    connect(editor, SIGNAL(saved(const Model::Domain::Invoice &)), this, SLOT(invoiceSaved(const Model::Domain::Invoice &)));
-    connect(editor, SIGNAL(finished()), _mdiArea, SLOT(closeActiveSubWindow()));
+    connect(editor, SIGNAL(saved(const Model::Domain::Invoice &)),
+            this, SLOT(invoiceSaved(const Model::Domain::Invoice &)));
+    connect(editor, SIGNAL(deleted(const Model::Domain::Invoice &)),
+            this, SLOT(invoiceDeleted(const Model::Domain::Invoice &)));
+    connect(editor, SIGNAL(finished()),
+            _mdiArea, SLOT(closeActiveSubWindow()));
 
     return editor;
 }
