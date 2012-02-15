@@ -29,6 +29,7 @@
 #include "invoiceloader.h"
 #include "invoiceeditor.h"
 #include "invoicesearch.h"
+#include "invoicesearchresult.h"
 #include "producteditor.h"
 #include "entityeditor.h"
 #include "entitydialog.h"
@@ -291,23 +292,35 @@ void View::QInvoicer::createBuyInvoice()
     editor -> show();
 }
 
-void View::QInvoicer::loadInvoice()
+void View::QInvoicer::loadInvoice(Model::Domain::Invoice *invoice)
 {
     if(!_business)
         return;
 
-    InvoiceLoader loader;
+    if(!invoice) {
+        InvoiceLoader loader;
 
-    if(loader.exec()) {
-        Model::Domain::Invoice *invoice = Model::Management::InvoiceManager::get(loader.id(), loader.type(), _business -> id());
-        if(!invoice)
-            QMessageBox::warning(this, tr("Load Invoice"), tr("Not exists any invoice with that Id"), QMessageBox::Ok);
-        else {
-            View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(invoice);
-            _mdiArea -> addSubWindow(editor);
-            editor -> show();
+        if(!loader.exec())
+            return;
+
+        invoice = Model::Management::InvoiceManager::get(loader.id(), loader.type(), _business -> id());
+
+        if(!invoice) {
+            QMessageBox::warning(this, tr("Load Invoice"),
+                                       tr("Not exists any invoice with that Id"),
+                                       QMessageBox::Ok);
+            return;
         }
     }
+
+    View::Invoicing::InvoiceEditor *editor = findInvoiceEditor(invoice);
+
+    if(!editor) {
+        editor = createInvoiceEditor(invoice);
+        _mdiArea -> addSubWindow(editor);
+    }
+
+    editor -> show();
 }
 
 void View::QInvoicer::searchInvoice()
@@ -329,9 +342,10 @@ void View::QInvoicer::searchInvoice()
 
         QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _business -> id(),mode, beginDate, endDate, entityId, minTotal, maxTotal, paid);
 
-        // SHOW RESULTS -> TO DO
+        View::Invoicing::InvoiceSearchResult *result = new View::Invoicing::InvoiceSearchResult(invoices, type);
 
-        delete invoices;
+        connect(result, SIGNAL(loaded(Model::Domain::Invoice*)), this, SLOT(loadInvoice(Model::Domain::Invoice*)));
+        result -> show();
     }
 }
 
@@ -699,6 +713,20 @@ View::Invoicing::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Doma
     connect(editor, SIGNAL(finished()), _mdiArea, SLOT(closeActiveSubWindow()));
 
     return editor;
+}
+
+
+View::Invoicing::InvoiceEditor *View::QInvoicer::findInvoiceEditor(Model::Domain::Invoice *invoice)
+{
+    foreach(QMdiSubWindow *subWindow, _mdiArea -> subWindowList()) {
+        View::Invoicing::InvoiceEditor *editor = qobject_cast<View::Invoicing::InvoiceEditor *>(subWindow -> widget());
+        if(editor -> id() == invoice -> id()) {
+            return editor;
+        }
+    }
+
+
+    return 0;
 }
 
 void View::QInvoicer::setStorageConnected(bool connected)

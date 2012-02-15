@@ -113,30 +113,6 @@ QVariant View::Management::EntityModel::data(const QModelIndex &index, int role)
     return QVariant();
 }
 
-bool View::Management::EntityModel::insertRows(int row, int count, const QModelIndex &parent)
-{
-    Q_UNUSED(parent);
-    beginInsertRows(QModelIndex(), row, row + count - 1);
-    for(int k = 1;k <= count; ++k)
-        _entities -> insert(row, new Model::Domain::Entity);
-    endInsertRows();
-
-    return true;
-}
-
-bool View::Management::EntityModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    Q_UNUSED(parent);
-    beginRemoveRows(QModelIndex(), row, row + count - 1);
-    for(int k = 0;k < count; ++k) {
-        delete _entities -> at(row);
-        _entities -> removeAt(row);
-    }
-    endRemoveRows();
-
-    return true;
-}
-
 QVariant View::Management::EntityModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(role == Qt::DisplayRole) {

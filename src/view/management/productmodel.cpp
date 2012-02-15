@@ -119,30 +119,6 @@ QVariant View::Management::ProductModel::data(const QModelIndex &index, int role
     return QVariant();
 }
 
-bool View::Management::ProductModel::insertRows(int row, int count, const QModelIndex &parent)
-{
-    Q_UNUSED(parent);
-    beginInsertRows(QModelIndex(), row, row + count - 1);
-    for(int k = 1;k <= count; ++k)
-        _products -> insert(row, new Model::Domain::Product);
-    endInsertRows();
-
-    return true;
-}
-
-bool View::Management::ProductModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    Q_UNUSED(parent);
-    beginRemoveRows(QModelIndex(), row, row + count - 1);
-    for(int k = 0;k < count; ++k) {
-        delete _products -> at(row);
-        _products -> removeAt(row);
-    }
-    endRemoveRows();
-
-    return true;
-}
-
 QVariant View::Management::ProductModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(role == Qt::DisplayRole) {

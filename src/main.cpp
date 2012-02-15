@@ -37,27 +37,30 @@ int main(int argc, char *argv[])
     setUpApplication(&app);
 
     std::cout << QString("%1 %2").arg(app.applicationName()).arg(app.applicationVersion()).toStdString() << std::endl;
+    std::cout << "Starting ..." << std::endl << std::endl;
 
     if(!verifyConfig(&firstLogin)) {
-        std::cout << QObject::tr("Config  : Error : Application will be closed").toStdString() << std::endl;
+        std::cout << QObject::tr("Config          :  Error  :  Application will be closed").toStdString() << std::endl;
         return 1;
     } else
-        std::cout << QObject::tr("Config  : OK").toStdString() << std::endl;
+        std::cout << QObject::tr("Config          :  OK").toStdString() << std::endl;
 
     if(!verifyStorage()) {
-        std::cout << QObject::tr("Storage : Error : Application will be closed").toStdString() << std::endl;
+        std::cout << QObject::tr("Storage         :  Error  :  Application will be closed").toStdString() << std::endl;
         return 1;
     } else
-        std::cout << QObject::tr("Storage : OK").toStdString() << std::endl;
+        std::cout << QObject::tr("Storage         :  OK").toStdString() << std::endl;
 
     View::QInvoicer invoicer;
     invoicer.show();
 
     if(!initApplication(&invoicer, firstLogin)) {
-        std::cout << QObject::tr("Running : Error : Application will be closed").toStdString() << std::endl;
+        std::cout << QObject::tr("Authentication  :  Error  :  Application will be closed").toStdString() << std::endl;
         return 1;
     } else
-        std::cout << QObject::tr("Running : OK").toStdString() << std::endl;
+        std::cout << QObject::tr("Authentication  :  OK").toStdString() << std::endl;
+
+    std::cout << std::endl << "Running ..." << std::endl;
 
     return app.exec();
 }

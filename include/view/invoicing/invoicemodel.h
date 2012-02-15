@@ -18,43 +18,47 @@
  *
  **/
 
-#ifndef CATEGORYMODEL_H
-#define CATEGORYMODEL_H
+#ifndef INVOICEMODEL_H
+#define INVOICEMODEL_H
 
 #include <QAbstractTableModel>
 #include <QList>
+#include "types.h"
 
 namespace Model
 {
     namespace Domain
     {
-        class Category;
+        class Invoice;
     }
 }
 
 namespace View
 {
-    namespace Management
+    namespace Invoicing
     {
-        class CategoryModel : public QAbstractTableModel
+        class InvoiceModel : public QAbstractTableModel
         {
         public:
-            CategoryModel(QList<Model::Domain::Category *> *categories, QObject *parent = 0)
-                : QAbstractTableModel(parent), _categories(categories) {}
-            ~CategoryModel();
-            QList<Model::Domain::Category *> *categories();
-            void setCategories(QList<Model::Domain::Category *> *categories);
-            bool insertCategory(int k, Model::Domain::Category *category);
-            bool modifyCategory(int k);
-            bool removeCategory(int k);
+            InvoiceModel(QList<Model::Domain::Invoice *> *invoices, Model::Domain::InvoiceType type,
+                         int precision = 2, QObject *parent = 0)
+                : QAbstractTableModel(parent), _invoices(invoices), _type(type), _precision(precision) {}
+            ~InvoiceModel();
+            QList<Model::Domain::Invoice *> *invoices();
+            void setInvoices(QList<Model::Domain::Invoice *> *invoices);
+            bool insertInvoice(int k, Model::Domain::Invoice *invoice);
+            bool modifyInvoice(int k);
+            bool removeInvoice(int k);
             int rowCount(const QModelIndex &parent) const;
             int columnCount(const QModelIndex &parent) const;
             QVariant data(const QModelIndex &index, int role) const;
             QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         private:
-            QList<Model::Domain::Category *> *_categories;
+            QList<Model::Domain::Invoice *> *_invoices;
+            Model::Domain::InvoiceType _type;
+            int _precision;
         };
     }
 }
 
-#endif // CATEGORYMODEL_H
+#endif // INVOICEMODEL_H

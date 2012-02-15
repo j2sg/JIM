@@ -39,6 +39,11 @@ View::Invoicing::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, Q
     loadInvoice();
 }
 
+int View::Invoicing::InvoiceEditor::id() const
+{
+    return _id;
+}
+
 View::Invoicing::InvoiceEditor::~InvoiceEditor()
 {
     if(_invoice)
@@ -123,20 +128,26 @@ void View::Invoicing::InvoiceEditor::setTitle()
 
 void View::Invoicing::InvoiceEditor::loadInvoice()
 {
+    _id = _invoice -> id();
+
     _dataTab -> loadInvoice();
     _otherTab -> loadInvoice();
+
     invoiceModified(false);
 }
 
 bool View::Invoicing::InvoiceEditor::saveInvoice()
 {
-    bool isNew = IS_NEW(_invoice -> id());
-
     _dataTab -> saveInvoice();
     _otherTab -> saveInvoice();
 
-    return isNew ? Model::Management::InvoiceManager::create(*_invoice) :
-                   Model::Management::InvoiceManager::modify(*_invoice);
+    bool ok = (IS_NEW(_id) ? Model::Management::InvoiceManager::create(*_invoice) :
+                             Model::Management::InvoiceManager::modify(*_invoice));
+
+    if(ok)
+        _id = _invoice -> id();
+
+    return ok;
 }
 
 bool View::Invoicing::InvoiceEditor::isSaveable()

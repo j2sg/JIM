@@ -131,30 +131,6 @@ QVariant View::Management::CategoryModel::data(const QModelIndex &index, int rol
     return QVariant();
 }
 
-bool View::Management::CategoryModel::insertRows(int row, int count, const QModelIndex &parent)
-{
-    Q_UNUSED(parent);
-    beginInsertRows(QModelIndex(), row, row + count - 1);
-    for(int k = 1;k <= count; ++k)
-        _categories -> insert(row, new Model::Domain::Category);
-    endInsertRows();
-
-    return true;
-}
-
-bool View::Management::CategoryModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    Q_UNUSED(parent);
-    beginRemoveRows(QModelIndex(), row, row + count - 1);
-    for(int k = 0;k < count; ++k) {
-        delete _categories -> at(row);
-        _categories -> removeAt(row);
-    }
-    endRemoveRows();
-
-    return true;
-}
-
 QVariant View::Management::CategoryModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(role == Qt::DisplayRole) {

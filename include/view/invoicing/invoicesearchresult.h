@@ -18,15 +18,24 @@
  *
  **/
 
-#ifndef INVOICEEDITOR_H
-#define INVOICEEDITOR_H
+#ifndef INVOICESEARCHRESULT_H
+#define INVOICESEARCHRESULT_H
 
 #include <QWidget>
+#include <QList>
+#include "types.h"
 
-#define INVOICE_EDITOR_MINIMUM_WIDTH 550
+#define INVOICE_SEARCH_RESULT_MINIMUM_WIDTH 640
+#define INVOICE_SEARCH_RESULT_MINIMUM_HEIGHT 480
+#define COLUMN_INVOICE_ID_WIDTH 50
+#define COLUMN_INVOICE_DATE_WIDTH 100
+#define COLUMN_INVOICE_ENTITY_NAME_WIDTH 200
+#define COLUMN_INVOICE_OPERATIONS_WIDTH 50
+#define COLUMN_INVOICE_TOTAL_WIDTH 100
+#define COLUMN_INVOICE_STATE_WIDTH 50
 
 QT_BEGIN_NAMESPACE
-class QTabWidget;
+class QTableView;
 class QPushButton;
 QT_END_NAMESPACE
 
@@ -43,42 +52,29 @@ namespace View
     namespace Invoicing
     {
 
-        class InvoiceEditorDataTab;
-        class InvoiceEditorOtherTab;
+        class InvoiceModel;
 
-        class InvoiceEditor : public QWidget
+        class InvoiceSearchResult : public QWidget
         {
             Q_OBJECT
         public:
-            InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *parent = 0);
-            int id() const;
-            ~InvoiceEditor();
-        protected:
-            void closeEvent(QCloseEvent *event);
+            InvoiceSearchResult(QList<Model::Domain::Invoice *> *invoices, Model::Domain::InvoiceType type, QWidget *parent = 0);
+            ~InvoiceSearchResult();
         signals:
-            void saved(const Model::Domain::Invoice &invoice);
-            void finished();
+            void loaded(Model::Domain::Invoice *invoice);
         private slots:
-            void invoiceModified(bool modified = true);
-            bool save();
+            void rowSelectionChangedOnInvoicesTableView();
+            void load();
         private:
-            void createWidgets();
+            void createWidgets(QList<Model::Domain::Invoice *> *invoices, Model::Domain::InvoiceType type);
             void createConnections();
-            void setTitle();
-            void loadInvoice();
-            bool saveInvoice();
-            bool isSaveable();
-            bool verifySave();
 
-            QTabWidget *_tabWidget;
-            InvoiceEditorDataTab *_dataTab;
-            InvoiceEditorOtherTab *_otherTab;
-            QPushButton *_saveButton;
-            QPushButton *_finishButton;
-            Model::Domain::Invoice *_invoice;
-            int _id;
+            QTableView *_invoicesTableView;
+            InvoiceModel *_invoiceModel;
+            QPushButton *_loadPushButton;
+            QPushButton *_closePushButton;
         };
     }
 }
 
-#endif // INVOICEEDITOR_H
+#endif // INVOICESEARCHRESULT_H

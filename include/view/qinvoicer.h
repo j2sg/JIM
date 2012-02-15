@@ -75,7 +75,7 @@ namespace View
         void printing();
         void createSaleInvoice();
         void createBuyInvoice();
-        void loadInvoice();
+        void loadInvoice(Model::Domain::Invoice *invoice = 0);
         void searchInvoice();
         void manageBusiness();
         void manageCustomer();
@@ -88,6 +88,7 @@ namespace View
         void about();
         void updateWindowMenu();
         void invoiceSaved(const Model::Domain::Invoice &invoice);
+
     private:
         void createCentralWidget();
         void createActions();
@@ -96,6 +97,7 @@ namespace View
         void createStatusBar();
         void createConnections();
         View::Invoicing::InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
+        View::Invoicing::InvoiceEditor *findInvoiceEditor(Model::Domain::Invoice *invoice);
         void setStorageConnected(bool connected = true);
         void setBusinessOpen(bool open = true);
         bool verifyCreateBusiness();

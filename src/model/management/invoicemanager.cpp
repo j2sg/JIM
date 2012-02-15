@@ -121,7 +121,7 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Do
         Model::Domain::Entity *entity       = EntityManager::get((result -> at(0)).at(4).toInt(),
                                                                  static_cast<Model::Domain::EntityType>(
                                                                      (result -> at(0)).at(5).toInt()));
-        QDate date                          = (result -> at(0)).at(6).toDate();
+        QDate date                          = QDate::fromString((result -> at(0)).at(6).toString(), DATE_FORMAT);
         QString place                       = (result -> at(0)).at(7).toString();
         Model::Domain::TaxFlag taxOnInvoice = static_cast<Model::Domain::TaxFlag>(
                                                  (result -> at(0)).at(8).toInt());
@@ -175,7 +175,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
         Model::Domain::Entity *entity       = EntityManager::get(row.at(4).toInt(),
                                                                  static_cast<Model::Domain::EntityType>(
                                                                      row.at(5).toInt()));
-        QDate date                          = row.at(6).toDate();
+        QDate date                          = QDate::fromString(row.at(6).toString(), DATE_FORMAT);
         QString place                       = row.at(7).toString();
         Model::Domain::TaxFlag taxOnInvoice = static_cast<Model::Domain::TaxFlag>(row.at(8).toInt());
         double generalVat                   = row.at(9).toDouble();
@@ -257,7 +257,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
         Model::Domain::Entity *entity       = EntityManager::get(row.at(4).toInt(),
                                                                  static_cast<Model::Domain::EntityType>(
                                                                      row.at(5).toInt()));
-        QDate date                          = row.at(6).toDate();
+        QDate date                          = QDate::fromString(row.at(6).toString(), DATE_FORMAT);
         QString place                       = row.at(7).toString();
         Model::Domain::TaxFlag taxOnInvoice = static_cast<Model::Domain::TaxFlag>(row.at(8).toInt());
         double generalVat                   = row.at(9).toDouble();

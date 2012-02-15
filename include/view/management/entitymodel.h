@@ -50,8 +50,6 @@ namespace View
             int rowCount(const QModelIndex &parent) const;
             int columnCount(const QModelIndex &parent) const;
             QVariant data(const QModelIndex &index, int role) const;
-            bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-            bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
             QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         private:
             QList<Model::Domain::Entity *> *_entities;

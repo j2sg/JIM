@@ -302,11 +302,9 @@ bool Persistence::Manager::createSQLiteSchema()
     bool unpaids = agent -> create("CREATE VIEW IF NOT EXISTS unpaids AS\n"
                                    "    SELECT * FROM invoice WHERE paid=0");
 
-    bool foreignKeys = agent -> create("PRAGMA foreign_keys=ON;");
-
     agent -> disconnect();
 
-    return entity && invoice && tax && category && product && operation && unpaids && foreignKeys;
+    return entity && invoice && tax && category && product && operation && unpaids;
 }
 
 bool Persistence::Manager::connectStorage()
@@ -315,8 +313,7 @@ bool Persistence::Manager::connectStorage()
 
     try {
         Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-
-        ok = agent -> connect();
+        ok = agent -> connect() && agent -> create("PRAGMA foreign_keys=ON;");
     } catch(Persistence::SQLAgentException sqlException) {}
 
     return ok;
