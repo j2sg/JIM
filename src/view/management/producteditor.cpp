@@ -93,10 +93,16 @@ void View::Management::ProductEditor::modCategory()
 
 void View::Management::ProductEditor::delCategory()
 {
+    if(!verifyDeleteCategory())
+        return;
+
     int row = _categoriesTableView -> currentIndex().row();
     Model::Management::CategoryManager::remove(_categoryModel -> categories() -> at(row) -> id());
-    _categoriesTableView -> selectRow(row);
-    _categoryModel -> removeRows(row, 1);
+    _categoryModel -> removeCategory(row);
+
+    QList<Model::Domain::Product *> *oldProducts = _productModel -> products();
+    _productModel -> setProducts(Model::Management::ProductManager::getAll());
+    delete oldProducts;
 }
 
 
@@ -151,8 +157,7 @@ void View::Management::ProductEditor::delProduct()
 {
     int row = _productsTableView -> currentIndex().row();
     Model::Management::ProductManager::remove(_productModel -> products() -> at(row) -> id());
-    _productsTableView -> selectRow(row);
-    _productModel -> removeRows(row, 1);
+    _productModel -> removeProduct(row);
 }
 
 void View::Management::ProductEditor::createWidgets()
@@ -271,4 +276,13 @@ void View::Management::ProductEditor::createConnections()
             this, SLOT(delProduct()));
     connect(_closeButton, SIGNAL(clicked()),
             this, SLOT(close()));
+}
+
+bool View::Management::ProductEditor::verifyDeleteCategory()
+{
+    return QMessageBox::question(this, tr("Verify Category Elimination"),
+                                       tr("All products that belongs to category will be deleted.\n"
+                                          "are you sure you want to delete the category?"),
+                                       QMessageBox::Yes | QMessageBox::Default |
+                                       QMessageBox::No) == QMessageBox::Yes;
 }

@@ -66,6 +66,11 @@ void View::Invoicing::InvoiceEditor::invoiceModified(bool modified)
     _saveButton -> setEnabled(isSaveable() && modified);
 }
 
+void View::Invoicing::InvoiceEditor::print()
+{
+    emit printed(*_invoice);
+}
+
 bool View::Invoicing::InvoiceEditor::save()
 {
     if(saveInvoice()) {
@@ -144,6 +149,8 @@ void View::Invoicing::InvoiceEditor::createConnections()
             this, SLOT(invoiceModified()));
     connect(_otherTab, SIGNAL(taxesChanged()),
             _dataTab, SLOT(updateTax()));
+    connect(_printButton, SIGNAL(clicked()),
+            this, SLOT(print()));
     connect(_saveButton, SIGNAL(clicked()),
             this, SLOT(save()));
     connect(_deleteButton, SIGNAL(clicked()),

@@ -56,11 +56,13 @@ namespace View
         protected:
             void closeEvent(QCloseEvent *event);
         signals:
+            void printed(const Model::Domain::Invoice &invoice);
             void saved(const Model::Domain::Invoice &invoice);
             void deleted(const Model::Domain::Invoice &invoice);
             void finished();
         private slots:
             void invoiceModified(bool modified = true);
+            void print();
             bool save();
             void _delete();
         private:

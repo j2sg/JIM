@@ -29,6 +29,7 @@ class QAction;
 class QMenu;
 class QToolBar;
 class QLabel;
+class QPrinter;
 QT_END_NAMESPACE
 
 namespace Model
@@ -87,10 +88,12 @@ namespace View
         void addressBook();
         void about();
         void updateWindowMenu();
+        void invoicePrinted(const Model::Domain::Invoice &invoice);
         void invoiceSaved(const Model::Domain::Invoice &invoice);
         void invoiceDeleted(const Model::Domain::Invoice &invoice);
 
     private:
+        void createWidgets();
         void createCentralWidget();
         void createActions();
         void createMenus();
@@ -146,6 +149,7 @@ namespace View
         QToolBar *_reportToolBar;
         QLabel *_storageIconLabel;
         QLabel *_storageStateLabel;
+        QPrinter *_printer;
 
         Model::Domain::Entity *_business;
         bool _authorized;

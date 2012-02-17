@@ -95,7 +95,7 @@ void View::Invoicing::InvoiceEditorDataTab::stateChangedOnPaidCheckBox()
     _subtotalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
     _taxesValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
     _deductionValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
-    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
+    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 12px; }").arg(isChecked ? "green" : "red"));
     _paymentComboBox -> setEnabled(isChecked);
 }
 
@@ -141,7 +141,7 @@ void View::Invoicing::InvoiceEditorDataTab::updateTotals()
     _taxesValueLabel -> setText(QString::number(_invoice -> taxes(), 'f', _precisionMoney) + " " + _currency);
     _deductionValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(paid ? "green" : "red"));
     _deductionValueLabel -> setText(QString::number(_invoice -> deduction(), 'f', _precisionMoney) + " " + _currency);
-    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(paid ? "green" : "red"));
+    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 12px; }").arg(paid ? "green" : "red"));
     _totalValueLabel -> setText(QString::number(_invoice -> total(), 'f', _precisionMoney) + " " + _currency);
 }
 
@@ -286,7 +286,7 @@ void View::Invoicing::InvoiceEditorDataTab::createPaymentWidgets()
     _deductionLabel -> setBuddy(_deductionValueLabel);
 
     _totalLabel = new QLabel(tr("Total:"));
-    _totalLabel -> setStyleSheet("QLabel { font : bold 10px; }");
+    _totalLabel -> setStyleSheet("QLabel { font : bold 12px; }");
     _totalValueLabel = new QLabel;
     _totalLabel -> setBuddy(_totalValueLabel);
 

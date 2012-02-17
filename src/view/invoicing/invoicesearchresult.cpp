@@ -78,6 +78,7 @@ void View::Invoicing::InvoiceSearchResult::createWidgets(QList<Model::Domain::In
 
     _loadPushButton = new QPushButton(tr("&Load"));
     _loadPushButton -> setIcon(QIcon(":/images/loadinvoice.png"));
+    _loadPushButton -> setEnabled(false);
     _loadPushButton -> setFixedSize(_loadPushButton -> sizeHint());
 
     QVBoxLayout *topLayout = new QVBoxLayout;

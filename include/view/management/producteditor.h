@@ -66,6 +66,7 @@ namespace View
             void createCategoryWidgets();
             void createProductWidgets();
             void createConnections();
+            bool verifyDeleteCategory();
 
             QTableView *_categoriesTableView;
             CategoryModel *_categoryModel;

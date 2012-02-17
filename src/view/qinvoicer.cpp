@@ -19,7 +19,6 @@
  **/
 
 #include <QtGui>
-#include <QPrintDialog>
 #include "qinvoicer.h"
 #include "persistencemanager.h"
 #include "registerdialog.h"
@@ -40,12 +39,7 @@
 
 View::QInvoicer::QInvoicer()
 {
-    createCentralWidget();
-    createActions();
-    createMenus();
-    createToolBar();
-    createStatusBar();
-    createConnections();
+    createWidgets();
     setWindowIcon(QIcon(":/images/appicon.png"));
     setBusinessOpen(false);
 
@@ -62,6 +56,8 @@ View::QInvoicer::QInvoicer()
 View::QInvoicer::~QInvoicer()
 {
     disconnectStorage();
+
+    delete _printer;
 
     if(_business)
         delete _business;
@@ -111,29 +107,23 @@ bool View::QInvoicer::firstExecution()
     if(dialog.exec()) {
         QString password = dialog.password();
 
-        if(Persistence::Manager::writeConfig(password, "Password")) {
+        if((_authorized = Persistence::Manager::writeConfig(password, "Password")))
             QMessageBox::information(this, tr("First Execution"),
                                            tr("Password saved. Welcome to %1.").arg(APPLICATION_NAME),
-                                     QMessageBox::Ok);
-            _authorized = true;
-        }
-        else  {
+                                           QMessageBox::Ok);
+        else
             QMessageBox::critical(this, tr("First Execution"),
                                         tr("Password cannot be saved. Application will be closed."),
                                         QMessageBox::Ok);
-            return false;
-        }
     } else {
         QMessageBox::critical(this, tr("First Execution"),
                                     tr("Setting up password canceled. Application will be closed."),
                                     QMessageBox::Ok);
 
         Persistence::Manager::deleteConfig();
-
-        return false;
     }
 
-    return true;
+    return _authorized;
 }
 
 bool View::QInvoicer::login()
@@ -268,7 +258,7 @@ void View::QInvoicer::options()
 
 void View::QInvoicer::printing()
 {
-    QPrintDialog printDialog;
+    QPrintDialog printDialog(_printer, this);
     printDialog.exec();
 }
 
@@ -436,6 +426,16 @@ void View::QInvoicer::updateWindowMenu()
     _previousAction -> setEnabled(hasWindowActive);
 }
 
+void View::QInvoicer::invoicePrinted(const Model::Domain::Invoice &invoice)
+{
+    statusBar() -> showMessage(tr("Printing %1 Invoice %2")
+                               .arg((static_cast<int>(invoice.type())) ? tr("Sale") : tr("Buy"))
+                               .arg(invoice.id()), 2000);
+
+    Model::Management::InvoiceManager::print(invoice, _printer);
+}
+
+
 void View::QInvoicer::invoiceSaved(const Model::Domain::Invoice &invoice)
 {
     statusBar() -> showMessage(tr("%1 Invoice %2 saved")
@@ -448,6 +448,19 @@ void View::QInvoicer::invoiceDeleted(const Model::Domain::Invoice &invoice)
     statusBar() -> showMessage(tr("%1 Invoice %2 deleted")
                                .arg((static_cast<int>(invoice.type())) ? tr("Sale") : tr("Buy"))
                                .arg(invoice.id()), 2000);
+}
+
+void View::QInvoicer::createWidgets()
+{
+    createCentralWidget();
+    createActions();
+    createMenus();
+    createToolBar();
+    createStatusBar();
+
+    _printer = new QPrinter;
+
+    createConnections();
 }
 
 void View::QInvoicer::createCentralWidget()
@@ -716,6 +729,8 @@ View::Invoicing::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Doma
 {
     View::Invoicing::InvoiceEditor *editor = new View::Invoicing::InvoiceEditor(invoice);
 
+    connect(editor, SIGNAL(printed(const Model::Domain::Invoice &)),
+            this, SLOT(invoicePrinted(const Model::Domain::Invoice &)));
     connect(editor, SIGNAL(saved(const Model::Domain::Invoice &)),
             this, SLOT(invoiceSaved(const Model::Domain::Invoice &)));
     connect(editor, SIGNAL(deleted(const Model::Domain::Invoice &)),
