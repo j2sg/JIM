@@ -127,11 +127,11 @@ QVariant View::Management::ProductModel::headerData(int section, Qt::Orientation
         else {
             switch(section) {
             case ColumnProductId:
-                return QString(tr("ID"));
+                return QObject::tr("ID");
             case ColumnProductName:
-                return QString(tr("Name"));
+                return QObject::tr("Name");
             case ColumnProductPrice:
-                return QString(tr("Price"));
+                return QObject::tr("Price");
             }
         }
     }

@@ -111,16 +111,16 @@ QVariant View::Management::CategoryModel::data(const QModelIndex &index, int rol
 
                 switch(static_cast<int>(category ->vatType())) {
                 case Model::Domain::GeneralVAT:
-                    vatType = tr("General");
+                    vatType = QObject::tr("General");
                     break;
                 case Model::Domain::ReducedVAT:
-                    vatType = tr("Reduced");
+                    vatType = QObject::tr("Reduced");
                     break;
                 case Model::Domain::SuperReducedVAT:
-                    vatType = tr("Super Reduced");
+                    vatType = QObject::tr("Super Reduced");
                     break;
                 default:
-                    vatType = tr("Unknown");
+                    vatType = QObject::tr("Unknown");
                 }
 
                 return vatType;
@@ -139,11 +139,11 @@ QVariant View::Management::CategoryModel::headerData(int section, Qt::Orientatio
         else {
             switch(section) {
             case ColumnCategoryId:
-                return QString(tr("ID"));
+                return QObject::tr("ID");
             case ColumnCategoryName:
-                return QString(tr("Name"));
+                return QObject::tr("Name");
             case ColumnCategoryVat:
-                return QString(tr("VAT"));
+                return QObject::tr("VAT");
             }
         }
     }

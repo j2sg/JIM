@@ -29,7 +29,7 @@ View::BusinessLoader::BusinessLoader(const QStringList &businessNames,
     createWidgets(businessNames, def);
     createConnections();
     setWindowTitle(tr("Load Business"));
-    setWindowIcon(QIcon(tr(":/images/business.png")));
+    setWindowIcon(QIcon(":/images/business.png"));
     setFixedSize(sizeHint());
 }
 

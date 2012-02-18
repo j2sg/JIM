@@ -173,17 +173,17 @@ QVariant View::Invoicing::OperationModel::headerData(int section, Qt::Orientatio
         else {
             switch(section) {
             case ColumnOperationId:
-                return QString(tr("ID"));
+                return QObject::tr("ID");
             case ColumnOperationName:
-                return QString(tr("Name"));
+                return QObject::tr("Name");
             case ColumnOperationQuantity:
-                return QString(tr("Quantity"));
+                return QObject::tr("Quantity");
             case ColumnOperationWeight:
-                return QString(tr("Weight"));
+                return QObject::tr("Weight");
             case ColumnOperationPrice:
-                return QString(tr("Price"));
+                return QObject::tr("Price");
             case ColumnOperationTotal:
-                return QString(tr("Total"));
+                return QObject::tr("Total");
             }
         }
     }

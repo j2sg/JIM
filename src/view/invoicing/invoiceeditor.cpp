@@ -118,7 +118,7 @@ void View::Invoicing::InvoiceEditor::createWidgets()
     _saveButton -> setDefault(true);
     _saveButton -> setEnabled(false);
 
-    _deleteButton = new QPushButton("&Delete");
+    _deleteButton = new QPushButton(tr("&Delete"));
     _deleteButton -> setIcon(QIcon(":/images/delete.png"));
     _deleteButton -> setEnabled(!IS_NEW(_invoice -> id()));
 
@@ -161,7 +161,7 @@ void View::Invoicing::InvoiceEditor::createConnections()
 
 void View::Invoicing::InvoiceEditor::setTitle()
 {
-    setWindowTitle(tr("%1 Invoice %2").arg((static_cast<int>(_invoice -> type())) ? tr("Sale") : tr("Buy"))
+    setWindowTitle(QString("%1 - %2").arg(_invoice -> type() ? tr("Sale Invoice") : tr("Buy Invoice"))
                    .arg(((!IS_NEW(_invoice -> id())) ? ("#" + QString::number(_invoice -> id())) : tr("New")) + "[*]"));
 }
 

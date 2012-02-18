@@ -116,7 +116,7 @@ QVariant View::Invoicing::InvoiceModel::data(const QModelIndex &index, int role)
             case ColumnInvoiceTotal:
                 return QString::number(invoice -> total(), 'f', _precision);
             case ColumnInvoiceState:
-                return QString(invoice -> paid() ? tr("Paid") : tr("Unpaid"));
+                return QString(invoice -> paid() ? QObject::tr("Paid") : QObject::tr("Unpaid"));
             }
         }
     }
@@ -132,17 +132,17 @@ QVariant View::Invoicing::InvoiceModel::headerData(int section, Qt::Orientation 
         else {
             switch(section) {
             case ColumnInvoiceId:
-                return QString(tr("ID"));
+                return QObject::tr("ID");
             case ColumnInvoiceDate:
-                return QString(tr("Date"));
+                return QObject::tr("Date");
             case ColumnInvoiceEntityName:
-                return QString(_type ? tr("Customer") : tr("Supplier"));
+                return (_type ? QObject::tr("Customer") : QObject::tr("Supplier"));
             case ColumnInvoiceOperations:
-                return QString(tr("Ops"));
+                return QObject::tr("Ops");
             case ColumnInvoiceTotal:
-                return QString(tr("Total"));
+                return QObject::tr("Total");
             case ColumnInvoiceState:
-                return QString(tr("State"));
+                return QObject::tr("State");
             }
         }
     }

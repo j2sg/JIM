@@ -104,7 +104,7 @@ void View::Management::EntitySelector::createWidgets()
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout -> addWidget(_entitiesTableView);
 
-    QGroupBox *entitiesGroupBox = new QGroupBox(tr("%1 List").arg(_type ? tr("Supplier") : tr("Customer")));
+    QGroupBox *entitiesGroupBox = new QGroupBox(tr("List"));
     entitiesGroupBox -> setLayout(topLayout);
 
     _createButton = new QPushButton(tr("Create"));

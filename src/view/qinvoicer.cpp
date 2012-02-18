@@ -135,13 +135,15 @@ bool View::QInvoicer::login()
     do {
         if(!dialog.exec()) {
             QMessageBox::critical(this, tr("Authentication Failed"),
-                                       tr("Authentication canceled. Application will be closed."));
+                                       tr("Authentication canceled. Application will be closed."),
+                                       QMessageBox::Ok);
             return false;
         } else if(dialog.password() != password) {
             if(attempts < MAX_AUTH_ATTEMPTS - 1)
                 QMessageBox::warning(this, tr("Authentication Failed"),
                                            tr("Wrong Password. You have %1 attempts more.")
-                                               .arg(MAX_AUTH_ATTEMPTS - attempts - 1));
+                                               .arg(MAX_AUTH_ATTEMPTS - attempts - 1),
+                                           QMessageBox::Ok);
             ++attempts;
         } else
             _authorized = true;
@@ -149,7 +151,8 @@ bool View::QInvoicer::login()
 
     if(attempts == MAX_AUTH_ATTEMPTS)
         QMessageBox::critical(this, tr("Authentication Failed"),
-                                   tr("Max attempts number exceeded. Application will be closed."));
+                                    tr("Max attempts number exceeded. Application will be closed."),
+                                    QMessageBox::Ok);
 
     return _authorized;
 }
@@ -375,31 +378,31 @@ void View::QInvoicer::manageProduct()
     _productEditor -> activateWindow();
 }
 
-void View::QInvoicer::volume()
+/*void View::QInvoicer::volume()
 {
     if(!_business)
         return;
 
     QMessageBox::information(this, tr("Volume"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}
+}*/
 
-void View::QInvoicer::unpaidInvoices()
+/*void View::QInvoicer::unpaidInvoices()
 {
     if(!_business)
         return;
 
     QMessageBox::information(this, tr("Unpaid invoices"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}
+}*/
 
-void View::QInvoicer::calculator()
+/*void View::QInvoicer::calculator()
 {
     QMessageBox::information(this, tr("Calculator"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}
+}*/
 
-void View::QInvoicer::addressBook()
+/*void View::QInvoicer::addressBook()
 {
     QMessageBox::information(this, tr("Address Book"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}
+}*/
 
 void View::QInvoicer::about()
 {
@@ -428,8 +431,8 @@ void View::QInvoicer::updateWindowMenu()
 
 void View::QInvoicer::invoicePrinted(const Model::Domain::Invoice &invoice)
 {
-    statusBar() -> showMessage(tr("Printing %1 Invoice %2")
-                               .arg((static_cast<int>(invoice.type())) ? tr("Sale") : tr("Buy"))
+    statusBar() -> showMessage(tr("Printing %1 %2")
+                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
                                .arg(invoice.id()), 2000);
 
     Model::Management::InvoiceManager::print(invoice, _printer);
@@ -438,15 +441,15 @@ void View::QInvoicer::invoicePrinted(const Model::Domain::Invoice &invoice)
 
 void View::QInvoicer::invoiceSaved(const Model::Domain::Invoice &invoice)
 {
-    statusBar() -> showMessage(tr("%1 Invoice %2 saved")
-                               .arg((static_cast<int>(invoice.type())) ? tr("Sale") : tr("Buy"))
+    statusBar() -> showMessage(tr("%1 %2 saved")
+                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
                                .arg(invoice.id()), 2000);
 }
 
 void View::QInvoicer::invoiceDeleted(const Model::Domain::Invoice &invoice)
 {
-    statusBar() -> showMessage(tr("%1 Invoice %2 deleted")
-                               .arg((static_cast<int>(invoice.type())) ? tr("Sale") : tr("Buy"))
+    statusBar() -> showMessage(tr("%1 %2 deleted")
+                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
                                .arg(invoice.id()), 2000);
 }
 
@@ -521,7 +524,7 @@ void View::QInvoicer::createActions()
 
     _searchInvoiceAction = new QAction(tr("&Search Invoice..."), this);
     _searchInvoiceAction -> setIcon(QIcon(":/images/search.png"));
-    _searchInvoiceAction -> setStatusTip(tr("Make an advanced Search"));
+    _searchInvoiceAction -> setStatusTip(tr("Make an invoice search"));
 
     _manageBusinessAction = new QAction(tr("&Businesses..."), this);
     _manageBusinessAction -> setIcon(QIcon(":/images/business.png"));
@@ -539,21 +542,21 @@ void View::QInvoicer::createActions()
     _manageProductAction -> setIcon(QIcon(":/images/manageproduct.png"));
     _manageProductAction -> setStatusTip(tr("Product Management"));
 
-    _volumeInvoiceAction = new QAction(tr("&Volume Invoice..."), this);
-    _volumeInvoiceAction -> setIcon(QIcon(":/images/volume.png"));
-    _volumeInvoiceAction -> setStatusTip(tr("Make a report about Volume Invoice"));
+    //_volumeInvoiceAction = new QAction(tr("&Volume Invoice..."), this);
+    //_volumeInvoiceAction -> setIcon(QIcon(":/images/volume.png"));
+    //_volumeInvoiceAction -> setStatusTip(tr("Make a report about Volume Invoice"));
 
-    _unpaidInvoicesAction = new QAction(tr("&Unpaid Invoice..."), this);
-    _unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
-    _unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
+    //_unpaidInvoicesAction = new QAction(tr("&Unpaid Invoice..."), this);
+    //_unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
+    //_unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
 
-    _calculatorAction = new QAction(tr("&Calculator..."), this);
-    _calculatorAction -> setIcon(QIcon(":/images/calc.png"));
-    _calculatorAction -> setStatusTip(tr("Open Calculator"));
+    //_calculatorAction = new QAction(tr("&Calculator..."), this);
+    //_calculatorAction -> setIcon(QIcon(":/images/calc.png"));
+    //_calculatorAction -> setStatusTip(tr("Open Calculator"));
 
-    _addressBookAction = new QAction(tr("&Address Book..."), this);
-    _addressBookAction -> setIcon(QIcon(":/images/address.png"));
-    _addressBookAction -> setStatusTip(tr("Open Address Book"));
+    //_addressBookAction = new QAction(tr("&Address Book..."), this);
+    //_addressBookAction -> setIcon(QIcon(":/images/address.png"));
+    //_addressBookAction -> setStatusTip(tr("Open Address Book"));
 
     _closeAction = new QAction(tr("Close"), this);
     _closeAction -> setStatusTip(tr("Close active window"));
@@ -609,13 +612,13 @@ void View::QInvoicer::createMenus()
     _managementMenu -> addAction(_manageSupplierAction);
     _managementMenu -> addAction(_manageProductAction);
 
-    _reportMenu = menuBar() -> addMenu(tr("&Report"));
-    _reportMenu -> addAction(_volumeInvoiceAction);
-    _reportMenu -> addAction(_unpaidInvoicesAction);
+    //_reportMenu = menuBar() -> addMenu(tr("&Report"));
+    //_reportMenu -> addAction(_volumeInvoiceAction);
+    //_reportMenu -> addAction(_unpaidInvoicesAction);
 
-    _toolsMenu = menuBar() -> addMenu(tr("&Tools"));
-    _toolsMenu -> addAction(_calculatorAction);
-    _toolsMenu -> addAction(_addressBookAction);
+    //_toolsMenu = menuBar() -> addMenu(tr("&Tools"));
+    //_toolsMenu -> addAction(_calculatorAction);
+    //_toolsMenu -> addAction(_addressBookAction);
 
     _windowMenu = menuBar() -> addMenu(tr("&Window"));
     _windowMenu -> addAction(_closeAction);
@@ -648,10 +651,10 @@ void View::QInvoicer::createToolBar()
     _managementToolBar -> addAction(_manageProductAction);
     _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
-    _reportToolBar = addToolBar(tr("Report"));
-    _reportToolBar -> addAction(_volumeInvoiceAction);
-    _reportToolBar -> addAction(_unpaidInvoicesAction);
-    _reportToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    //_reportToolBar = addToolBar(tr("Report"));
+    //_reportToolBar -> addAction(_volumeInvoiceAction);
+    //_reportToolBar -> addAction(_unpaidInvoicesAction);
+    //_reportToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 }
 
 void View::QInvoicer::createStatusBar()
@@ -701,14 +704,14 @@ void View::QInvoicer::createConnections()
             this, SLOT(manageSupplier()));
     connect(_manageProductAction, SIGNAL(triggered()),
             this, SLOT(manageProduct()));
-    connect(_volumeInvoiceAction, SIGNAL(triggered()),
-            this, SLOT(volume()));
-    connect(_unpaidInvoicesAction, SIGNAL(triggered()),
-            this, SLOT(unpaidInvoices()));
-    connect(_calculatorAction, SIGNAL(triggered()),
-            this, SLOT(calculator()));
-    connect(_addressBookAction, SIGNAL(triggered()),
-            this, SLOT(addressBook()));
+    //connect(_volumeInvoiceAction, SIGNAL(triggered()),
+    //        this, SLOT(volume()));
+    //connect(_unpaidInvoicesAction, SIGNAL(triggered()),
+    //        this, SLOT(unpaidInvoices()));
+    //connect(_calculatorAction, SIGNAL(triggered()),
+    //        this, SLOT(calculator()));
+    //connect(_addressBookAction, SIGNAL(triggered()),
+    //        this, SLOT(addressBook()));
     connect(_closeAction, SIGNAL(triggered()),
             _mdiArea, SLOT(closeActiveSubWindow()));
     connect(_closeAllAction, SIGNAL(triggered()),
@@ -767,7 +770,7 @@ void View::QInvoicer::setStorageConnected(bool connected)
     _manageCustomerAction -> setEnabled(connected);
     _manageSupplierAction -> setEnabled(connected);
     _manageProductAction -> setEnabled(connected);
-    _addressBookAction -> setEnabled(connected);
+    //_addressBookAction -> setEnabled(connected);
 
     _managementMenu -> setEnabled(connected);
 
@@ -789,11 +792,11 @@ void View::QInvoicer::setBusinessOpen(bool open)
     _loadInvoiceAction -> setEnabled(open);
     _searchInvoiceAction -> setEnabled(open);
     _manageBusinessAction -> setEnabled(!open);
-    _volumeInvoiceAction -> setEnabled(open);
-    _unpaidInvoicesAction -> setEnabled(open);
+    //_volumeInvoiceAction -> setEnabled(open);
+    //_unpaidInvoicesAction -> setEnabled(open);
 
     _invoicingMenu -> setEnabled(open);
-    _reportMenu -> setEnabled(open);
+    //_reportMenu -> setEnabled(open);
     _windowMenu -> setEnabled(open);
 
     setWindowTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION) +

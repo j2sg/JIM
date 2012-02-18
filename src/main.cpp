@@ -19,12 +19,14 @@
  **/
 
 #include <QApplication>
+#include <QTranslator>
+#include <QLocale>
 #include <iostream>
 #include "qinvoicer.h"
 #include "persistencemanager.h"
 #include "global.h"
 
-void setUpApplication(QApplication *app);
+void setUpApplication(QApplication *app, QTranslator *translator);
 bool verifyConfig(bool *firstExecution);
 bool verifyStorage();
 bool initApplication(View::QInvoicer *invoicer, bool firstExecution);
@@ -32,12 +34,13 @@ bool initApplication(View::QInvoicer *invoicer, bool firstExecution);
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    QTranslator translator;
     bool firstLogin = false;
 
-    setUpApplication(&app);
+    setUpApplication(&app, &translator);
 
     std::cout << QString("%1 %2").arg(app.applicationName()).arg(app.applicationVersion()).toStdString() << std::endl;
-    std::cout << "Starting ..." << std::endl << std::endl;
+    std::cout << QObject::tr("Starting ...").toStdString() << std::endl << std::endl;
 
     if(!verifyConfig(&firstLogin)) {
         std::cout << QObject::tr("Config          :  Error  :  Application will be closed").toStdString() << std::endl;
@@ -60,17 +63,20 @@ int main(int argc, char *argv[])
     } else
         std::cout << QObject::tr("Authentication  :  OK").toStdString() << std::endl;
 
-    std::cout << std::endl << "Running ..." << std::endl;
+    std::cout << std::endl << QObject::tr("Running ...").toStdString() << std::endl;
 
     return app.exec();
 }
 
-void setUpApplication(QApplication *app)
+void setUpApplication(QApplication *app, QTranslator *translator)
 {
     app -> setOrganizationName(ORGANIZATION_NAME);
     app -> setOrganizationDomain(ORGANIZATION_DOMAIN);
     app -> setApplicationName(APPLICATION_NAME);
     app -> setApplicationVersion(APPLICATION_VERSION);
+
+    translator -> load("qinvoicer_" + QLocale::system().name(), ":/translations");
+    app -> installTranslator(translator);
 }
 
 bool verifyConfig(bool *firstLogin)

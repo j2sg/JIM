@@ -29,5 +29,6 @@
         <file>images/search.png</file>
         <file>images/storageoff.png</file>
         <file>images/storageon.png</file>
+        <file>translations/qinvoicer_es.qm</file>
     </qresource>
 </RCC>

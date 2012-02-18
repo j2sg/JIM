@@ -133,18 +133,7 @@ SOURCES += src/main.cpp \
     src/view/registerdialog.cpp \
     src/view/invoicing/invoicemodel.cpp \
     src/view/invoicing/invoicesearchresult.cpp
-RESOURCES += resources/images.qrc
-
-
-
-
-
-
-
-
-
-
-
-
+RESOURCES += resources/qinvoicer.qrc
+TRANSLATIONS += resources/translations/qinvoicer_es.ts
 
 

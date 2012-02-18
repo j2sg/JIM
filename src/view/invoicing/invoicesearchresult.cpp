@@ -85,7 +85,7 @@ void View::Invoicing::InvoiceSearchResult::createWidgets(QList<Model::Domain::In
     topLayout -> addWidget(_invoicesTableView);
     topLayout -> addWidget(_loadPushButton, 0, Qt::AlignRight);
 
-    QGroupBox *topGroupBox = new QGroupBox(tr("%1 Invoices").arg(type ? tr("Sale") : tr("Buy")));
+    QGroupBox *topGroupBox = new QGroupBox(type ? tr("Sale Invoices") : tr("Buy Invoices"));
     topGroupBox -> setLayout(topLayout);
 
     _closePushButton = new QPushButton(tr("&Close"));

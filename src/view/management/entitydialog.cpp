@@ -117,10 +117,11 @@ void View::Management::EntityDialog::setTitle()
         entityType = tr("Unknown");
     }
 
-    setWindowTitle(QString("%1 %2")
+    setWindowTitle(QString("%1 - %2")
                    .arg(entityType)
-                   .arg(((!IS_NEW(_entity -> id())) ?
-                             ("#"+QString::number(_entity -> id())) : tr("New"))+"[*]"));
+                   .arg(!IS_NEW(_entity -> id()) ?
+                            ("#" + QString::number(_entity -> id())) :
+                            tr("New")));
 }
 
 void View::Management::EntityDialog::loadEntity()

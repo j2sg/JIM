@@ -121,9 +121,9 @@ QVariant View::Management::EntityModel::headerData(int section, Qt::Orientation 
         else {
             switch(section) {
             case ColumnEntityId:
-                return QString(tr("ID"));
+                return QObject::tr("ID");
             case ColumnEntityName:
-                return QString(tr("Name"));
+                return QObject::tr("Name");
             }
         }
     }
