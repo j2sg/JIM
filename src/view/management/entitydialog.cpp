@@ -121,7 +121,7 @@ void View::Management::EntityDialog::setTitle()
                    .arg(entityType)
                    .arg(!IS_NEW(_entity -> id()) ?
                             ("#" + QString::number(_entity -> id())) :
-                            tr("New")));
+                            tr("New")) + "[*]");
 }
 
 void View::Management::EntityDialog::loadEntity()

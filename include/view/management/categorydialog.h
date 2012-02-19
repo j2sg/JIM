@@ -52,6 +52,7 @@ namespace View
             void done(int result);
         private slots:
             void stateChangedOnAutoIdCheckBox();
+            void updateId();
             void categoryModified(bool modified = true);
         private:
             void createWidgets();

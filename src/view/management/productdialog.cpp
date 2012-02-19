@@ -49,6 +49,14 @@ void View::Management::ProductDialog::stateChangedOnAutoIdCheckBox()
     _idLineEdit -> setEnabled(!_autoIdCheckBox->isChecked());
 }
 
+void View::Management::ProductDialog::updateId()
+{
+    int id = (_autoIdCheckBox -> isChecked() ?
+                  Model::Management::ProductManager::getId() : _product -> id());
+
+    _idLineEdit -> setText((!IS_NEW(id) ? QString::number(id) : ""));
+}
+
 void View::Management::ProductDialog::productModified(bool modified)
 {
     setWindowModified(modified);
@@ -59,10 +67,9 @@ void View::Management::ProductDialog::createWidgets()
 {
     _idLabel = new QLabel(tr("&Id:"));
     _idLineEdit = new QLineEdit;
-    _idLineEdit -> setEnabled(!IS_NEW(_product -> id()));
+    _idLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
     _idLabel -> setBuddy(_idLineEdit);
     _autoIdCheckBox = new QCheckBox(tr("Auto &Generate"));
-    _autoIdCheckBox -> setChecked(IS_NEW(_product -> id()));
 
     _nameLabel = new QLabel(tr("&Name:"));
     _nameLineEdit = new QLineEdit;
@@ -80,6 +87,7 @@ void View::Management::ProductDialog::createWidgets()
 
     _priceLabel = new QLabel(tr("&Price:"));
     _priceLineEdit = new QLineEdit;
+    _priceLineEdit -> setValidator(new QRegExpValidator(QRegExp("[0-9]+(.[0-9]+)?"), this));
     _priceLabel -> setBuddy(_priceLineEdit);
 
     _priceTypeLabel = new QLabel(tr("&Type:"));
@@ -129,6 +137,8 @@ void View::Management::ProductDialog::createConnections()
             this, SLOT(productModified()));
     connect(_autoIdCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnAutoIdCheckBox()));
+    connect(_autoIdCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(updateId()));
     connect(_nameLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(productModified()));
     connect(_categoryComboBox, SIGNAL(currentIndexChanged(int)),
@@ -149,10 +159,9 @@ void View::Management::ProductDialog::loadProduct()
 {
     int precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
 
-    _idLineEdit -> setText(QString::number(((IS_NEW(_product -> id()))?
-                                                Model::Management::ProductManager::getId() :
-                                                _product->id())));
-    _autoIdCheckBox -> setEnabled((IS_NEW(_product->id())));
+    updateId();
+    _idLineEdit -> setEnabled(!IS_NEW(_product -> id()));
+    _autoIdCheckBox -> setChecked(IS_NEW(_product -> id()));
     _nameLineEdit -> setText(_product->name());
     _descriptionTextEdit -> setPlainText(_product->description());
     _priceLineEdit -> setText(QString::number(_product->price(),'f', precisionMoney));

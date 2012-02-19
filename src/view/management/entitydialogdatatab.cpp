@@ -35,6 +35,8 @@ View::Management::EntityDialogDataTab::EntityDialogDataTab(Model::Domain::Entity
 
 void View::Management::EntityDialogDataTab::loadEntity()
 {
+    _idLineEdit -> setEnabled(!IS_NEW(_entity -> id()));
+    _autoIdCheckBox -> setChecked(IS_NEW(_entity -> id()));
     updateId();
     _vatinLineEdit -> setText(_entity -> vatin());
     _nameLineEdit -> setText(_entity -> name());
@@ -149,10 +151,9 @@ void View::Management::EntityDialogDataTab::createIdWidgets()
 {
     _idLabel = new QLabel(tr("&Id:"));
     _idLineEdit = new QLineEdit;
+    _idLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
     _idLabel -> setBuddy(_idLineEdit);
-    _idLineEdit -> setEnabled(!IS_NEW(_entity -> id()));
     _autoIdCheckBox = new QCheckBox(tr("&Auto"));
-    _autoIdCheckBox -> setChecked(IS_NEW(_entity -> id()));
 
     _vatinLabel = new QLabel(tr("&VATIN:"));
     _vatinLineEdit = new QLineEdit;
@@ -190,14 +191,17 @@ void View::Management::EntityDialogDataTab::createContactWidgets()
 {
     _telephoneLabel = new QLabel(tr("&Telephone:"));
     _telephoneLineEdit = new QLineEdit;
+    _telephoneLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
     _telephoneLabel -> setBuddy(_telephoneLineEdit);
 
     _mobileLabel = new QLabel(tr("&Mobile:"));
     _mobileLineEdit = new QLineEdit;
+    _mobileLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
     _mobileLabel -> setBuddy(_mobileLineEdit);
 
     _faxLabel = new QLabel(tr("&Fax:"));
     _faxLineEdit = new QLineEdit;
+    _faxLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
     _faxLabel -> setBuddy(_faxLineEdit);
 
     _emailLabel = new QLabel(tr("&Email:"));

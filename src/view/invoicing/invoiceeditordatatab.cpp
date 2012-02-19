@@ -218,6 +218,7 @@ void View::Invoicing::InvoiceEditorDataTab::createIdWidgets()
 {
     _idLabel = new QLabel(tr("&Id:"));
     _idLineEdit = new QLineEdit;
+    _idLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
     _idLineEdit -> setFixedSize(_idLineEdit -> sizeHint());
     _idLabel -> setBuddy(_idLineEdit);
     _autoIdCheckBox = new QCheckBox(tr("&Auto"));

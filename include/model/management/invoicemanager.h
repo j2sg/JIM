@@ -25,10 +25,6 @@
 #include <QDate>
 #include "invoice.h"
 
-QT_BEGIN_NAMESPACE
-class QPrinter;
-QT_END_NAMESPACE
-
 namespace Model
 {
     namespace Management
@@ -46,10 +42,7 @@ namespace Model
                                                            Model::Management::SearchFlag mode = Model::Management::SearchByTypeOnly,
                                                            const QDate &beginDate = QDate::currentDate(), const QDate &endDate = QDate::currentDate(),
                                                            int entityId = NO_ID, double minTotal = 0.0, double maxTotal = 0.0, bool paid = true);
-            static bool print(const Model::Domain::Invoice &invoice, QPrinter *printer = 0);
-            static int getId(Model::Domain::InvoiceType type, int businessId);
-        private:
-            static void generatePage(QString *html, QString *css, const Model::Domain::Invoice &invoice);
+            static int getId(Model::Domain::InvoiceType type, int businessId);            
         };
     }
 }

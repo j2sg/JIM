@@ -1649,7 +1649,7 @@ are you sure you want to delete the category?</source>
         <location filename="../../src/view/optionsdialog.cpp" line="139"/>
         <location filename="../../src/view/optionsdialog.cpp" line="146"/>
         <source> dec</source>
-        <translation>dec</translation>
+        <translation> dec</translation>
     </message>
     <message>
         <location filename="../../src/view/optionsdialog.cpp" line="135"/>
@@ -1790,8 +1790,8 @@ are you sure you want to delete the category?</source>
         <location filename="../../src/view/qinvoicer.cpp" line="101"/>
         <source>This is the first time that you run the application.
 You must set the access password.</source>
-        <translation>Esta es la primera vez que ejecutas la aplicación
-Debes establecer una contraseña de acceso.</translation>
+        <translation>Esta es la primera vez que ejecuta la aplicación
+Debe establecer una contraseña de acceso.</translation>
     </message>
     <message>
         <location filename="../../src/view/qinvoicer.cpp" line="112"/>
@@ -2233,8 +2233,8 @@ Debes establecer una contraseña de acceso.</translation>
         <source>Not found any business. Perhaps this is the first time that
 you execute the application or all business has been removed.
 do you want to create a new business now?</source>
-        <translation>No se ha encontrado ninguna empresa. Tal vez esta es la primera vez que
-ejecuta la aplicación o todas las empresas han sido eliminadas.
+        <translation>No se ha encontrado ninguna empresa. Tal vez es la primera vez
+que ejecuta la aplicación o todas las empresas han sido eliminadas.
 ¿Quiere crear una nueva empresa ahora?</translation>
     </message>
     <message>

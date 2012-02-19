@@ -162,7 +162,7 @@ void View::Invoicing::InvoiceEditor::createConnections()
 void View::Invoicing::InvoiceEditor::setTitle()
 {
     setWindowTitle(QString("%1 - %2").arg(_invoice -> type() ? tr("Sale Invoice") : tr("Buy Invoice"))
-                   .arg(((!IS_NEW(_invoice -> id())) ? ("#" + QString::number(_invoice -> id())) : tr("New")) + "[*]"));
+                   .arg(!IS_NEW(_invoice -> id()) ? ("#" + QString::number(_invoice -> id())) : tr("New")) + "[*]");
 }
 
 void View::Invoicing::InvoiceEditor::loadInvoice()

@@ -47,6 +47,14 @@ void View::Management::CategoryDialog::stateChangedOnAutoIdCheckBox()
     _idLineEdit -> setEnabled(!_autoIdCheckBox -> isChecked());
 }
 
+void View::Management::CategoryDialog::updateId()
+{
+    int id = (_autoIdCheckBox -> isChecked() ?
+                  Model::Management::CategoryManager::getId() : _category -> id());
+
+    _idLineEdit -> setText((!IS_NEW(id) ? QString::number(id) : ""));
+}
+
 void View::Management::CategoryDialog::categoryModified(bool modified)
 {
     setWindowModified(modified);
@@ -57,10 +65,9 @@ void View::Management::CategoryDialog::createWidgets()
 {
     _idLabel = new QLabel(tr("&Id:"));
     _idLineEdit = new QLineEdit;
-    _idLineEdit -> setEnabled(!IS_NEW(_category -> id()));
+    _idLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
     _idLabel -> setBuddy(_idLineEdit);
     _autoIdCheckBox = new QCheckBox(tr("Auto &Generate"));
-    _autoIdCheckBox -> setChecked(IS_NEW(_category -> id()));
 
     _nameLabel = new QLabel(tr("&Name:"));
     _nameLineEdit = new QLineEdit;
@@ -114,6 +121,8 @@ void View::Management::CategoryDialog::createConnections()
             this, SLOT(categoryModified()));
     connect(_autoIdCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnAutoIdCheckBox()));
+    connect(_autoIdCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(updateId()));
     connect(_nameLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(categoryModified()));
     connect(_descriptionTextEdit, SIGNAL(textChanged()),
@@ -128,10 +137,9 @@ void View::Management::CategoryDialog::createConnections()
 
 void View::Management::CategoryDialog::loadCategory()
 {
-    _idLineEdit -> setText(QString::number(((IS_NEW(_category -> id()))?
-                                                Model::Management::CategoryManager::getId() :
-                                                _category -> id())));
-    _autoIdCheckBox -> setEnabled((IS_NEW(_category -> id())));
+    updateId();
+    _idLineEdit -> setEnabled(!IS_NEW(_category -> id()));
+    _autoIdCheckBox -> setChecked(IS_NEW(_category -> id()));
     _nameLineEdit -> setText(_category -> name());
     _descriptionTextEdit -> setPlainText(_category -> description());
     _vatTypeComboBox -> setCurrentIndex(static_cast<int>(_category -> vatType()));

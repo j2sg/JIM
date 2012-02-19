@@ -35,6 +35,7 @@
 #include "business.h"
 #include "businessmanager.h"
 #include "invoicemanager.h"
+#include "printingmanager.h"
 #include "global.h"
 
 View::QInvoicer::QInvoicer()
@@ -435,7 +436,7 @@ void View::QInvoicer::invoicePrinted(const Model::Domain::Invoice &invoice)
                                .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
                                .arg(invoice.id()), 2000);
 
-    Model::Management::InvoiceManager::print(invoice, _printer);
+    Printing::Manager::print(invoice, _printer);
 }
 
 
