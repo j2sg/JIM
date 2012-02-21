@@ -180,8 +180,14 @@ bool View::Invoicing::InvoiceEditor::saveInvoice()
     _dataTab -> saveInvoice();
     _otherTab -> saveInvoice();
 
-    return (IS_NEW(_id) ? Model::Management::InvoiceManager::create(*_invoice) :
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+    bool ok = (IS_NEW(_id) ? Model::Management::InvoiceManager::create(*_invoice) :
                              Model::Management::InvoiceManager::modify(*_invoice));
+
+    QApplication::restoreOverrideCursor();
+
+    return ok;
 }
 
 bool View::Invoicing::InvoiceEditor::deleteInvoice()

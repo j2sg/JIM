@@ -35,6 +35,8 @@
 #include "business.h"
 #include "businessmanager.h"
 #include "invoicemanager.h"
+#include "volumereportdialog.h"
+#include "volumereport.h"
 #include "printingmanager.h"
 #include "global.h"
 
@@ -379,31 +381,49 @@ void View::QInvoicer::manageProduct()
     _productEditor -> activateWindow();
 }
 
-/*void View::QInvoicer::volume()
+void View::QInvoicer::volumeBuy()
 {
     if(!_business)
         return;
 
-    QMessageBox::information(this, tr("Volume"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}*/
+    View::Report::VolumeReportDialog dialog(this);
 
-/*void View::QInvoicer::unpaidInvoices()
+    if(dialog.exec()) {
+        View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(0, Model::Domain::Buy);
+        volumeReport -> show();
+    }
+}
+
+void View::QInvoicer::volumeSale()
+{
+    if(!_business)
+        return;
+
+    View::Report::VolumeReportDialog dialog(this);
+
+    if(dialog.exec()) {
+        View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(0, Model::Domain::Sale);
+        volumeReport -> show();
+    }
+}
+
+void View::QInvoicer::unpaidInvoices()
 {
     if(!_business)
         return;
 
     QMessageBox::information(this, tr("Unpaid invoices"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}*/
+}
 
-/*void View::QInvoicer::calculator()
+void View::QInvoicer::calculator()
 {
     QMessageBox::information(this, tr("Calculator"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}*/
+}
 
-/*void View::QInvoicer::addressBook()
+void View::QInvoicer::addressBook()
 {
     QMessageBox::information(this, tr("Address Book"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}*/
+}
 
 void View::QInvoicer::about()
 {
@@ -543,21 +563,25 @@ void View::QInvoicer::createActions()
     _manageProductAction -> setIcon(QIcon(":/images/manageproduct.png"));
     _manageProductAction -> setStatusTip(tr("Product Management"));
 
-    //_volumeInvoiceAction = new QAction(tr("&Volume Invoice..."), this);
-    //_volumeInvoiceAction -> setIcon(QIcon(":/images/volume.png"));
-    //_volumeInvoiceAction -> setStatusTip(tr("Make a report about Volume Invoice"));
+    _volumeBuyAction = new QAction(tr("&Volume Buy..."), this);
+    _volumeBuyAction -> setIcon(QIcon(":/images/volumebuy.png"));
+    _volumeBuyAction -> setStatusTip(tr("Make a report about Volume Buy"));
 
-    //_unpaidInvoicesAction = new QAction(tr("&Unpaid Invoice..."), this);
-    //_unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
-    //_unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
+    _volumeSaleAction = new QAction(tr("&Volume Sale..."), this);
+    _volumeSaleAction -> setIcon(QIcon(":/images/volumesale.png"));
+    _volumeSaleAction -> setStatusTip(tr("Make a report about Volume Sale"));
 
-    //_calculatorAction = new QAction(tr("&Calculator..."), this);
-    //_calculatorAction -> setIcon(QIcon(":/images/calc.png"));
-    //_calculatorAction -> setStatusTip(tr("Open Calculator"));
+    _unpaidInvoicesAction = new QAction(tr("&Unpaid Invoice..."), this);
+    _unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
+    _unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
 
-    //_addressBookAction = new QAction(tr("&Address Book..."), this);
-    //_addressBookAction -> setIcon(QIcon(":/images/address.png"));
-    //_addressBookAction -> setStatusTip(tr("Open Address Book"));
+    _calculatorAction = new QAction(tr("&Calculator..."), this);
+    _calculatorAction -> setIcon(QIcon(":/images/calc.png"));
+    _calculatorAction -> setStatusTip(tr("Open Calculator"));
+
+    _addressBookAction = new QAction(tr("&Address Book..."), this);
+    _addressBookAction -> setIcon(QIcon(":/images/address.png"));
+    _addressBookAction -> setStatusTip(tr("Open Address Book"));
 
     _closeAction = new QAction(tr("Close"), this);
     _closeAction -> setStatusTip(tr("Close active window"));
@@ -613,13 +637,14 @@ void View::QInvoicer::createMenus()
     _managementMenu -> addAction(_manageSupplierAction);
     _managementMenu -> addAction(_manageProductAction);
 
-    //_reportMenu = menuBar() -> addMenu(tr("&Report"));
-    //_reportMenu -> addAction(_volumeInvoiceAction);
-    //_reportMenu -> addAction(_unpaidInvoicesAction);
+    _reportMenu = menuBar() -> addMenu(tr("&Report"));
+    _reportMenu -> addAction(_volumeBuyAction);
+    _reportMenu -> addAction(_volumeSaleAction);
+    _reportMenu -> addAction(_unpaidInvoicesAction);
 
-    //_toolsMenu = menuBar() -> addMenu(tr("&Tools"));
-    //_toolsMenu -> addAction(_calculatorAction);
-    //_toolsMenu -> addAction(_addressBookAction);
+    _toolsMenu = menuBar() -> addMenu(tr("&Tools"));
+    _toolsMenu -> addAction(_calculatorAction);
+    _toolsMenu -> addAction(_addressBookAction);
 
     _windowMenu = menuBar() -> addMenu(tr("&Window"));
     _windowMenu -> addAction(_closeAction);
@@ -644,18 +669,19 @@ void View::QInvoicer::createToolBar()
     _invoicingToolBar -> addAction(_createBuyInvoiceAction);
     _invoicingToolBar -> addAction(_loadInvoiceAction);
     _invoicingToolBar -> addAction(_searchInvoiceAction);
-    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
 
     _managementToolBar = addToolBar(tr("Management"));
     _managementToolBar -> addAction(_manageCustomerAction);
     _managementToolBar -> addAction(_manageSupplierAction);
     _managementToolBar -> addAction(_manageProductAction);
-    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    //_reportToolBar = addToolBar(tr("Report"));
-    //_reportToolBar -> addAction(_volumeInvoiceAction);
-    //_reportToolBar -> addAction(_unpaidInvoicesAction);
-    //_reportToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    _reportToolBar = addToolBar(tr("Report"));
+    _reportToolBar -> addAction(_volumeBuyAction);
+    _reportToolBar -> addAction(_volumeSaleAction);
+    _reportToolBar -> addAction(_unpaidInvoicesAction);
+    _reportToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
 }
 
 void View::QInvoicer::createStatusBar()
@@ -705,14 +731,16 @@ void View::QInvoicer::createConnections()
             this, SLOT(manageSupplier()));
     connect(_manageProductAction, SIGNAL(triggered()),
             this, SLOT(manageProduct()));
-    //connect(_volumeInvoiceAction, SIGNAL(triggered()),
-    //        this, SLOT(volume()));
-    //connect(_unpaidInvoicesAction, SIGNAL(triggered()),
-    //        this, SLOT(unpaidInvoices()));
-    //connect(_calculatorAction, SIGNAL(triggered()),
-    //        this, SLOT(calculator()));
-    //connect(_addressBookAction, SIGNAL(triggered()),
-    //        this, SLOT(addressBook()));
+    connect(_volumeBuyAction, SIGNAL(triggered()),
+            this, SLOT(volumeBuy()));
+    connect(_volumeSaleAction, SIGNAL(triggered()),
+            this, SLOT(volumeSale()));
+    connect(_unpaidInvoicesAction, SIGNAL(triggered()),
+            this, SLOT(unpaidInvoices()));
+    connect(_calculatorAction, SIGNAL(triggered()),
+            this, SLOT(calculator()));
+    connect(_addressBookAction, SIGNAL(triggered()),
+            this, SLOT(addressBook()));
     connect(_closeAction, SIGNAL(triggered()),
             _mdiArea, SLOT(closeActiveSubWindow()));
     connect(_closeAllAction, SIGNAL(triggered()),
@@ -771,7 +799,7 @@ void View::QInvoicer::setStorageConnected(bool connected)
     _manageCustomerAction -> setEnabled(connected);
     _manageSupplierAction -> setEnabled(connected);
     _manageProductAction -> setEnabled(connected);
-    //_addressBookAction -> setEnabled(connected);
+    _addressBookAction -> setEnabled(connected);
 
     _managementMenu -> setEnabled(connected);
 
@@ -793,11 +821,12 @@ void View::QInvoicer::setBusinessOpen(bool open)
     _loadInvoiceAction -> setEnabled(open);
     _searchInvoiceAction -> setEnabled(open);
     _manageBusinessAction -> setEnabled(!open);
-    //_volumeInvoiceAction -> setEnabled(open);
-    //_unpaidInvoicesAction -> setEnabled(open);
+    _volumeBuyAction -> setEnabled(open);
+    _volumeSaleAction -> setEnabled(open);
+    _unpaidInvoicesAction -> setEnabled(open);
 
     _invoicingMenu -> setEnabled(open);
-    //_reportMenu -> setEnabled(open);
+    _reportMenu -> setEnabled(open);
     _windowMenu -> setEnabled(open);
 
     setWindowTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION) +
