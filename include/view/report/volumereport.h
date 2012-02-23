@@ -22,21 +22,15 @@
 #define VOLUMEREPORT_H
 
 #include <QWidget>
-#include <QList>
+#include "reportmanager.h"
 #include "types.h"
+
+#define VOLUME_REPORT_MINIMUM_WIDTH 600
 
 QT_BEGIN_NAMESPACE
 class QTabWidget;
 class QPushButton;
 QT_END_NAMESPACE
-
-namespace Model
-{
-    namespace Domain
-    {
-        class Invoice;
-    }
-}
 
 namespace View
 {
@@ -51,11 +45,16 @@ namespace View
         {
             Q_OBJECT
         public:
-            VolumeReport(QList<Model::Domain::Invoice *> *invoices,
-                         Model::Domain::InvoiceType type, QWidget *parent = 0);
-            ~VolumeReport();
+            VolumeReport(Model::Domain::InvoiceType type,
+                         Model::Report::VolumeReportByDateResult *reportByDate,
+                         Model::Report::VolumeReportByEntityResult *reportByEntity,
+                         Model::Report::VolumeReportByProductResult *reportByProduct,
+                         QWidget *parent = 0);
         private:
-            void createWidgets(Model::Domain::InvoiceType type);
+            void createWidgets(Model::Domain::InvoiceType type,
+                               Model::Report::VolumeReportByDateResult *reportByDate,
+                               Model::Report::VolumeReportByEntityResult *reportByEntity,
+                               Model::Report::VolumeReportByProductResult *reportByProduct);
             void createConnections();
 
             QTabWidget *_tabWidget;
@@ -63,8 +62,6 @@ namespace View
             VolumeReportByEntityTab *_volumeReportByEntityTab;
             VolumeReportByProductTab *_volumeReportByProductTab;
             QPushButton *_closePushButton;
-
-            QList <Model::Domain::Invoice *> *_invoices;
         };
     }
 }

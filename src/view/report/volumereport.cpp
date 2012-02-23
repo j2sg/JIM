@@ -22,37 +22,34 @@
 #include "volumereportbydatetab.h"
 #include "volumereportbyentitytab.h"
 #include "volumereportbyproducttab.h"
-#include "invoice.h"
 #include <QTabWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
 
-View::Report::VolumeReport::VolumeReport(QList<Model::Domain::Invoice *> *invoices,
-                                         Model::Domain::InvoiceType type, QWidget *parent)
-    : QWidget(parent), _invoices(invoices)
+View::Report::VolumeReport::VolumeReport(Model::Domain::InvoiceType type,
+                                         Model::Report::VolumeReportByDateResult *reportByDate,
+                                         Model::Report::VolumeReportByEntityResult *reportByEntity,
+                                         Model::Report::VolumeReportByProductResult *reportByProduct,
+                                         QWidget *parent)
+    : QWidget(parent)
 {
-    createWidgets(type);
+    createWidgets(type, reportByDate, reportByEntity, reportByProduct);
     createConnections();
     setWindowTitle(tr("Volume %1 Report").arg(type ? tr("Sale") : tr("Buy")));
     setWindowIcon(QIcon(type ? ":/images/volumesale.png" : ":/images/volumebuy.png"));
+    setMinimumWidth(VOLUME_REPORT_MINIMUM_WIDTH);
     setAttribute(Qt::WA_DeleteOnClose);
 }
 
-View::Report::VolumeReport::~VolumeReport()
-{
-    if(_invoices) {
-        foreach(Model::Domain::Invoice *invoice, *_invoices)
-            delete invoice;
-        delete _invoices;
-    }
-}
-
-void View::Report::VolumeReport::createWidgets(Model::Domain::InvoiceType type)
+void View::Report::VolumeReport::createWidgets(Model::Domain::InvoiceType type,
+                                               Model::Report::VolumeReportByDateResult *reportByDate,
+                                               Model::Report::VolumeReportByEntityResult *reportByEntity,
+                                               Model::Report::VolumeReportByProductResult *reportByProduct)
 {
     _tabWidget = new QTabWidget;
-    _volumeReportByDateTab = new VolumeReportByDateTab(_invoices);
-    _volumeReportByEntityTab = new VolumeReportByEntityTab(_invoices, type);
-    _volumeReportByProductTab = new VolumeReportByProductTab(_invoices);
+    _volumeReportByDateTab = new VolumeReportByDateTab(reportByDate);
+    _volumeReportByEntityTab = new VolumeReportByEntityTab(reportByEntity);
+    _volumeReportByProductTab = new VolumeReportByProductTab(reportByProduct);
     _tabWidget -> addTab(_volumeReportByDateTab, tr("By Date"));
     _tabWidget -> addTab(_volumeReportByEntityTab, tr("By %1").arg(type ? tr("Customer") : tr("Supplier")));
     _tabWidget -> addTab(_volumeReportByProductTab, tr("By Product"));

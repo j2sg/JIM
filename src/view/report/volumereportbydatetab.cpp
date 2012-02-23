@@ -19,27 +19,42 @@
  **/
 
 #include "volumereportbydatetab.h"
-#include <QTableWidget>
+#include "volumereportbydatemodel.h"
+#include "persistencemanager.h"
+#include "types.h"
+#include <QTableView>
 #include <QVBoxLayout>
 
-View::Report::VolumeReportByDateTab::VolumeReportByDateTab(QList<Model::Domain::Invoice *> *invoices,
+View::Report::VolumeReportByDateTab::VolumeReportByDateTab(Model::Report::VolumeReportByDateResult *report,
                                                            QWidget *parent)
     : QWidget(parent)
 {
-    createWidgets();
-    createConnections();
+    createWidgets(report);
 }
 
-void View::Report::VolumeReportByDateTab::createWidgets()
+View::Report::VolumeReportByDateTab::~VolumeReportByDateTab()
 {
-    _reportTableWidget = new QTableWidget;
+    if(_reportByDateModel)
+        delete _reportByDateModel;
+}
+
+void View::Report::VolumeReportByDateTab::createWidgets(Model::Report::VolumeReportByDateResult *report)
+{
+    _reportTableView = new QTableView;
+    _reportByDateModel = new VolumeReportByDateModel(report, Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
+    _reportTableView -> setModel(_reportByDateModel);
+    _reportTableView -> setAlternatingRowColors(true);
+    _reportTableView -> setShowGrid(false);
+    _reportTableView -> setColumnWidth(ColumnVolumeReportByDateDate, COLUMN_VOLUME_REPORT_BY_DATE_DATE_WIDTH);
+    _reportTableView -> setColumnWidth(ColumnVolumeReportByDateInvoices, COLUMN_VOLUME_REPORT_BY_DATE_INVOICES_WIDTH);
+    _reportTableView -> setColumnWidth(ColumnVolumeReportByDateTotal, COLUMN_VOLUME_REPORT_BY_DATE_TOTAL_WIDTH);
+    _reportTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
+    _reportTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
+    _reportTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _reportTableView -> setFocusPolicy(Qt::NoFocus);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addWidget(_reportTableWidget);
+    mainLayout -> addWidget(_reportTableView);
 
     setLayout(mainLayout);
-}
-
-void View::Report::VolumeReportByDateTab::createConnections()
-{
 }

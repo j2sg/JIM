@@ -19,21 +19,72 @@
  **/
 
 #include "reportmanager.h"
+#include "invoice.h"
+#include "operation.h"
+#include "category.h"
 #include "entity.h"
 #include "product.h"
-#include "invoice.h"
 
-Model::Report::VolumeReportByDateResult Model::Report::ReportManager::reportByDate(QList<Model::Domain::Invoice *> */*invoices*/)
+Model::Report::VolumeReportByDateResult *Model::Report::ReportManager::reportByDate(QList<Model::Domain::Invoice *> *invoices)
 {
+    if(!invoices)
+        return 0;
 
+    VolumeReportByDateResult *result = new VolumeReportByDateResult;
+
+    foreach(Model::Domain::Invoice *invoice, *invoices) {
+        VolumeReportByDateEntry entry = result -> value(invoice -> date());
+
+        entry._invoices++;
+        entry._paid += invoice -> paid() ? 1 : 0;
+        entry._total += invoice -> total();
+
+        result -> insert(invoice->date(), entry);
+    }
+
+    return result;
 }
 
-Model::Report::VolumeReportByEntityResult Model::Report::ReportManager::reportByEntity(QList<Model::Domain::Invoice *> */*invoices*/)
+Model::Report::VolumeReportByEntityResult *Model::Report::ReportManager::reportByEntity(QList<Model::Domain::Invoice *> *invoices)
 {
+    if(!invoices)
+        return 0;
 
+    VolumeReportByEntityResult *result = new VolumeReportByEntityResult;
+
+    foreach(Model::Domain::Invoice *invoice, *invoices) {
+        VolumeReportByEntityEntry entry = result -> value(invoice -> entity() -> id());
+
+        entry._name = invoice -> entity() -> name();
+        entry._invoices++;
+        entry._paid += invoice -> paid() ? 1 : 0;
+        entry._total += invoice -> total();
+
+        result -> insert(invoice -> entity() -> id(), entry);
+    }
+
+    return result;
 }
 
-Model::Report::VolumeReportByProductResult Model::Report::ReportManager::reportByProduct(QList<Model::Domain::Invoice *> */*invoices*/)
+Model::Report::VolumeReportByProductResult *Model::Report::ReportManager::reportByProduct(QList<Model::Domain::Invoice *> *invoices)
 {
+    if(!invoices)
+        return 0;
 
+    VolumeReportByProductResult *result = new VolumeReportByProductResult;
+
+    foreach(Model::Domain::Invoice *invoice, *invoices) {
+        foreach(Model::Domain::Operation *operation, *(invoice -> operations())) {
+            VolumeReportByProductEntry entry = result -> value(operation -> product() -> id());
+
+            entry._name = operation -> product() -> name();
+            entry._quantity += operation -> quantity();
+            entry._weight += operation -> weight();
+            entry._total += operation -> total();
+
+            result -> insert(operation -> product() -> id(), entry);
+        }
+    }
+
+    return result;
 }

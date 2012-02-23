@@ -102,7 +102,10 @@ HEADERS += include/global.h \
            include/view/report/volumereportbydatetab.h \
            include/view/report/volumereportbyentitytab.h \
            include/view/report/volumereportbyproducttab.h \
-           include/view/report/volumereportdialog.h
+           include/view/report/volumereportdialog.h \
+    include/view/report/volumereportbydatemodel.h \
+    include/view/report/volumereportbyentitymodel.h \
+    include/view/report/volumereportbyproductmodel.h
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
            src/persistence/sqlagent.cpp \
@@ -160,6 +163,15 @@ SOURCES += src/main.cpp \
            src/view/report/volumereportbydatetab.cpp \
            src/view/report/volumereportbyentitytab.cpp \
            src/view/report/volumereportbyproducttab.cpp \
-           src/view/report/volumereportdialog.cpp
+           src/view/report/volumereportdialog.cpp \
+    src/view/report/volumereportbydatemodel.cpp \
+    src/view/report/volumereportbyentitymodel.cpp \
+    src/view/report/volumereportbyproductmodel.cpp
 RESOURCES += resources/qinvoicer.qrc
 TRANSLATIONS += resources/translations/qinvoicer_es.ts
+
+
+
+
+
+

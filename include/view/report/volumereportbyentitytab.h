@@ -22,36 +22,36 @@
 #define VOLUMEREPORTBYENTITYTAB_H
 
 #include <QWidget>
-#include <QList>
-#include "types.h"
+#include "reportmanager.h"
+
+#define COLUMN_VOLUME_REPORT_BY_ENTITY_ID_WIDTH 50
+#define COLUMN_VOLUME_REPORT_BY_ENTITY_NAME_WIDTH 200
+#define COLUMN_VOLUME_REPORT_BY_ENTITY_INVOICES_WIDTH 100
+#define COLUMN_VOLUME_REPORT_BY_ENTITY_TOTAL_WIDTH 100
 
 QT_BEGIN_NAMESPACE
-class QTableWidget;
+class QTableView;
 QT_END_NAMESPACE
-
-namespace Model
-{
-    namespace Domain
-    {
-        class Invoice;
-    }
-}
 
 namespace View
 {
     namespace Report
     {
+
+        class VolumeReportByEntityModel;
+
         class VolumeReportByEntityTab : public QWidget
         {
             Q_OBJECT
         public:
-            VolumeReportByEntityTab(QList<Model::Domain::Invoice *> *invoices,
-                                    Model::Domain::InvoiceType type, QWidget *parent = 0);
+            VolumeReportByEntityTab(Model::Report::VolumeReportByEntityResult *report,
+                                    QWidget *parent = 0);
+            ~VolumeReportByEntityTab();
         private:
-            void createWidgets();
-            void createConnections();
+            void createWidgets(Model::Report::VolumeReportByEntityResult *report);
 
-            QTableWidget *_reportTableWidget;
+            QTableView *_reportTableView;
+            VolumeReportByEntityModel *_reportByEntityModel;
         };
     }
 }

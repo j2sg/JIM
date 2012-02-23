@@ -22,11 +22,22 @@
 #define UNPAIDSREPORT_H
 
 #include <QWidget>
+#include <QList>
+
+#define UNPAIDS_REPORT_MINIMUM_WIDTH 600
 
 QT_BEGIN_NAMESPACE
 class QTabWidget;
 class QPushButton;
 QT_END_NAMESPACE
+
+namespace Model
+{
+    namespace Domain
+    {
+        class Invoice;
+    }
+}
 
 namespace View
 {
@@ -39,10 +50,12 @@ namespace View
         {
             Q_OBJECT
         public:
-            UnpaidsReport(QWidget *parent = 0);
-            ~UnpaidsReport();
+            UnpaidsReport(QList<Model::Domain::Invoice *> *buyInvoices,
+                          QList<Model::Domain::Invoice *> *saleInvoices,
+                          QWidget *parent = 0);
         private:
-            void createWidgets();
+            void createWidgets(QList<Model::Domain::Invoice *> *buyInvoices,
+                               QList<Model::Domain::Invoice *> *saleInvoices);
             void createConnections();
 
             QTabWidget *_tabWidget;

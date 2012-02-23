@@ -67,7 +67,7 @@ void View::Management::EntitySelector::rowSelectionChanged()
 
 void View::Management::EntitySelector::createEntity()
 {
-    Model::Domain::Entity *entity = new Model::Domain::Entity;
+    Model::Domain::Entity *entity = new Model::Domain::Entity(NO_ID, _type);
     EntityDialog dialog(entity, this);
 
     if(dialog.exec()) {

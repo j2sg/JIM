@@ -21,15 +21,14 @@
 #ifndef REPORTMANAGER_H
 #define REPORTMANAGER_H
 
-#include <QList>
+#include <QMap>
 #include <QDate>
+#include <QString>
 
 namespace Model
 {
     namespace Domain
     {
-        class Entity;
-        class Product;
         class Invoice;
     }
 
@@ -37,62 +36,60 @@ namespace Model
     {
         typedef struct VolumeReportByDateEntryStruct
         {
-            QDate _date;
             int _invoices;
             int _paid;
             double _total;
 
             VolumeReportByDateEntryStruct()
             {
-                _date = QDate::currentDate();
                 _invoices = _paid = 0;
                 _total = 0.0;
             }
         } VolumeReportByDateEntry;
 
-        typedef QList<VolumeReportByDateEntry> VolumeReportByDateResult;
+        typedef QMap<QDate, VolumeReportByDateEntry> VolumeReportByDateResult;
 
         typedef struct VolumeReportByEntityEntryStruct
         {
-            Model::Domain::Entity *_entity;
+            QString _name;
             int _invoices;
             int _paid;
             double _total;
 
             VolumeReportByEntityEntryStruct()
             {
-                _entity = 0;
+                _name = "";
                 _invoices = _paid = 0;
                 _total = 0.0;
             }
         } VolumeReportByEntityEntry;
 
-        typedef QList<VolumeReportByEntityEntry> VolumeReportByEntityResult;
+        typedef QMap<int, VolumeReportByEntityEntry> VolumeReportByEntityResult;
 
         typedef struct VolumeReportByProductEntryStruct
         {
-            Model::Domain::Product *_product;
+            QString _name;
             int _quantity;
             double _weight;
             double _total;
 
             VolumeReportByProductEntryStruct()
             {
-                _product = 0;
+                _name = "";
                 _quantity = 0;
                 _weight = _total = 0.0;
             }
         } VolumeReportByProductEntry;
 
-        typedef QList<VolumeReportByProductEntry> VolumeReportByProductResult;
+        typedef QMap<int, VolumeReportByProductEntry> VolumeReportByProductResult;
 
 
         class ReportManager
         {
         public:
-            static VolumeReportByDateResult reportByDate(QList<Model::Domain::Invoice *> *invoices);
-            static VolumeReportByEntityResult reportByEntity(QList<Model::Domain::Invoice *> *invoices);
-            static VolumeReportByProductResult reportByProduct(QList<Model::Domain::Invoice *> *invoices);
+            static VolumeReportByDateResult *reportByDate(QList<Model::Domain::Invoice *> *invoices);
+            static VolumeReportByEntityResult *reportByEntity(QList<Model::Domain::Invoice *> *invoices);
+            static VolumeReportByProductResult *reportByProduct(QList<Model::Domain::Invoice *> *invoices);
         };
     }
 }

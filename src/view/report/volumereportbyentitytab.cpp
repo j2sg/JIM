@@ -19,27 +19,43 @@
  **/
 
 #include "volumereportbyentitytab.h"
-#include <QTableWidget>
+#include "volumereportbyentitymodel.h"
+#include "persistencemanager.h"
+#include "types.h"
+#include <QTableView>
 #include <QVBoxLayout>
 
-View::Report::VolumeReportByEntityTab::VolumeReportByEntityTab(QList<Model::Domain::Invoice *> *invoices,
-                                                               Model::Domain::InvoiceType type, QWidget *parent)
+View::Report::VolumeReportByEntityTab::VolumeReportByEntityTab(Model::Report::VolumeReportByEntityResult *report,
+                                                               QWidget *parent)
     : QWidget(parent)
 {
-    createWidgets();
-    createConnections();
+    createWidgets(report);
 }
 
-void View::Report::VolumeReportByEntityTab::createWidgets()
+View::Report::VolumeReportByEntityTab::~VolumeReportByEntityTab()
 {
-    _reportTableWidget = new QTableWidget;
+    if(_reportByEntityModel)
+        delete _reportByEntityModel;
+}
+
+void View::Report::VolumeReportByEntityTab::createWidgets(Model::Report::VolumeReportByEntityResult *report)
+{
+    _reportTableView = new QTableView;
+    _reportByEntityModel = new VolumeReportByEntityModel(report, Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
+    _reportTableView -> setModel(_reportByEntityModel);
+    _reportTableView -> setAlternatingRowColors(true);
+    _reportTableView -> setShowGrid(false);
+    _reportTableView -> setColumnWidth(ColumnVolumeReportByEntityId, COLUMN_VOLUME_REPORT_BY_ENTITY_ID_WIDTH);
+    _reportTableView -> setColumnWidth(ColumnVolumeReportByEntityName, COLUMN_VOLUME_REPORT_BY_ENTITY_NAME_WIDTH);
+    _reportTableView -> setColumnWidth(ColumnVolumeReportByEntityInvoices, COLUMN_VOLUME_REPORT_BY_ENTITY_INVOICES_WIDTH);
+    _reportTableView -> setColumnWidth(ColumnVolumeReportByEntityTotal, COLUMN_VOLUME_REPORT_BY_ENTITY_TOTAL_WIDTH);
+    _reportTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
+    _reportTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
+    _reportTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _reportTableView -> setFocusPolicy(Qt::NoFocus);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addWidget(_reportTableWidget);
+    mainLayout -> addWidget(_reportTableView);
 
     setLayout(mainLayout);
-}
-
-void View::Report::VolumeReportByEntityTab::createConnections()
-{
 }

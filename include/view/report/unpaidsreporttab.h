@@ -22,21 +22,47 @@
 #define UNPAIDSREPORTTAB_H
 
 #include <QWidget>
+#include <QList>
+#include "types.h"
+
+#define COLUMN_UNPAIDS_REPORT_ID_WIDTH 50
+#define COLUMN_UNPAIDS_REPORT_DATE_WIDTH 100
+#define COLUMN_UNPAIDS_REPORT_ENTITY_WIDTH 200
+#define COLUMN_UNPAIDS_REPORT_OPERATIONS_WIDTH 50
+#define COLUMN_UNPAIDS_REPORT_TOTAL_WIDTH 100
+
+QT_BEGIN_NAMESPACE
+class QTableView;
+QT_END_NAMESPACE
+
+namespace Model
+{
+    namespace Domain
+    {
+        class Invoice;
+    }
+}
 
 namespace View
 {
+    namespace Invoicing
+    {
+        class InvoiceModel;
+    }
+
     namespace Report
     {
         class UnpaidsReportTab : public QWidget
         {
             Q_OBJECT
         public:
-            UnpaidsReportTab(QWidget *parent = 0);
+            UnpaidsReportTab(Model::Domain::InvoiceType type, QList<Model::Domain::Invoice *> *invoices, QWidget *parent = 0);
             ~UnpaidsReportTab();
         private:
-            void createWidgets();
-            void createConnections();
+            void createWidgets(Model::Domain::InvoiceType type, QList<Model::Domain::Invoice *> *invoices);
 
+            QTableView *_invoicesTableView;
+            View::Invoicing::InvoiceModel *_invoiceModel;
         };
     }
 }

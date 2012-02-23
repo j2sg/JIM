@@ -19,21 +19,47 @@
  **/
 
 #include "unpaidsreport.h"
+#include "unpaidsreporttab.h"
+#include "types.h"
+#include <QTabWidget>
+#include <QPushButton>
+#include <QVBoxLayout>
 
-View::Report::UnpaidsReport::UnpaidsReport(QWidget *parent) : QWidget(parent)
+View::Report::UnpaidsReport::UnpaidsReport(QList<Model::Domain::Invoice *> *buyInvoices,
+                                           QList<Model::Domain::Invoice *> *saleInvoices,
+                                           QWidget *parent)
+    : QWidget(parent)
 {
+    createWidgets(buyInvoices,saleInvoices);
+    createConnections();
+    setWindowTitle(tr("Unpaids Report"));
+    setWindowIcon(QIcon(":/images/unpaid.png"));
+    setMinimumWidth(UNPAIDS_REPORT_MINIMUM_WIDTH);
+    setAttribute(Qt::WA_DeleteOnClose);
 }
 
-View::Report::UnpaidsReport::~UnpaidsReport()
+void View::Report::UnpaidsReport::createWidgets(QList<Model::Domain::Invoice *> *buyInvoices,
+                                                QList<Model::Domain::Invoice *> *saleInvoices)
 {
-}
+    _tabWidget = new QTabWidget;
+    _unpaidsReportBuyTab = new UnpaidsReportTab(Model::Domain::Buy, buyInvoices);
+    _unpaidsReportSaleTab = new UnpaidsReportTab(Model::Domain::Sale, saleInvoices);
+    _tabWidget -> addTab(_unpaidsReportBuyTab, tr("Buy"));
+    _tabWidget -> addTab(_unpaidsReportSaleTab, tr("Sale"));
 
-void View::Report::UnpaidsReport::createWidgets()
-{
+    _closePushButton = new QPushButton(tr("&Close"));
+    _closePushButton -> setIcon(QIcon(":/images/ok.png"));
+    _closePushButton -> setFixedSize(_closePushButton -> sizeHint());
 
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout -> addWidget(_tabWidget);
+    mainLayout -> addWidget(_closePushButton, 0, Qt::AlignRight);
+
+    setLayout(mainLayout);
 }
 
 void View::Report::UnpaidsReport::createConnections()
 {
-
+    connect(_closePushButton, SIGNAL(clicked()),
+            this, SLOT(close()));
 }

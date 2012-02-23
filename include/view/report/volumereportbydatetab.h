@@ -22,35 +22,35 @@
 #define VOLUMEREPORTBYDATETAB_H
 
 #include <QWidget>
-#include <QList>
+#include "reportmanager.h"
+
+#define COLUMN_VOLUME_REPORT_BY_DATE_DATE_WIDTH 100
+#define COLUMN_VOLUME_REPORT_BY_DATE_INVOICES_WIDTH 100
+#define COLUMN_VOLUME_REPORT_BY_DATE_TOTAL_WIDTH 100
 
 QT_BEGIN_NAMESPACE
-class QTableWidget;
+class QTableView;
 QT_END_NAMESPACE
-
-namespace Model
-{
-    namespace Domain
-    {
-        class Invoice;
-    }
-}
 
 namespace View
 {
     namespace Report
     {
+
+        class VolumeReportByDateModel;
+
         class VolumeReportByDateTab : public QWidget
         {
             Q_OBJECT
         public:
-            VolumeReportByDateTab(QList<Model::Domain::Invoice *> *invoices,
+            VolumeReportByDateTab(Model::Report::VolumeReportByDateResult *report,
                                   QWidget *parent = 0);
+            ~VolumeReportByDateTab();
         private:
-            void createWidgets();
-            void createConnections();
+            void createWidgets(Model::Report::VolumeReportByDateResult *report);
 
-            QTableWidget *_reportTableWidget;
+            QTableView *_reportTableView;
+            VolumeReportByDateModel *_reportByDateModel;
         };
     }
 }

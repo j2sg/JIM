@@ -22,35 +22,37 @@
 #define VOLUMEREPORTBYPRODUCTTAB_H
 
 #include <QWidget>
-#include <QList>
+#include "reportmanager.h"
+
+#define COLUMN_VOLUME_REPORT_BY_PRODUCT_ID_WIDTH 50
+#define COLUMN_VOLUME_REPORT_BY_PRODUCT_NAME_WIDTH 200
+#define COLUMN_VOLUME_REPORT_BY_PRODUCT_QUANTITY_WIDTH 100
+#define COLUMN_VOLUME_REPORT_BY_PRODUCT_WEIGHT_WIDTH 100
+#define COLUMN_VOLUME_REPORT_BY_PRODUCT_TOTAL_WIDTH 100
 
 QT_BEGIN_NAMESPACE
-class QTableWidget;
+class QTableView;
 QT_END_NAMESPACE
-
-namespace Model
-{
-    namespace Domain
-    {
-        class Invoice;
-    }
-}
 
 namespace View
 {
     namespace Report
     {
+
+        class VolumeReportByProductModel;
+
         class VolumeReportByProductTab : public QWidget
         {
             Q_OBJECT
         public:
-            VolumeReportByProductTab(QList<Model::Domain::Invoice *> *invoices,
+            VolumeReportByProductTab(Model::Report::VolumeReportByProductResult *report,
                                      QWidget *parent = 0);
+            ~VolumeReportByProductTab();
         private:
-            void createWidgets();
-            void createConnections();
+            void createWidgets(Model::Report::VolumeReportByProductResult *report);
 
-            QTableWidget *_reportTableWidget;
+            QTableView *_reportTableView;
+            VolumeReportByProductModel *_reportByProductModel;
         };
     }
 }

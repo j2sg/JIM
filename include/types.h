@@ -107,6 +107,36 @@ namespace View
             CreateAndSelect
         } SelectorBehavior;
     }
+
+    namespace Report
+    {
+        typedef enum ColumnVolumeReportByDateEnum
+        {
+            ColumnVolumeReportByDateDate,
+            ColumnVolumeReportByDateInvoices,
+            ColumnVolumeReportByDateTotal,
+            ColumnVolumeReportByDateCount
+        } ColumnVolumeReportByDate;
+
+        typedef enum ColumnVolumeReportByEntityEnum
+        {
+            ColumnVolumeReportByEntityId,
+            ColumnVolumeReportByEntityName,
+            ColumnVolumeReportByEntityInvoices,
+            ColumnVolumeReportByEntityTotal,
+            ColumnVolumeReportByEntityCount
+        } ColumnVolumeReportByEntity;
+
+        typedef enum ColumnVolumeReportByProductEnum
+        {
+            ColumnVolumeReportByProductId,
+            ColumnVolumeReportByProductName,
+            ColumnVolumeReportByProductQuantity,
+            ColumnVolumeReportByProductWeight,
+            ColumnVolumeReportByProductTotal,
+            ColumnVolumeReportByProductCount
+        } ColumnVolumeReportByProduct;
+    }
 }
 
 namespace Model

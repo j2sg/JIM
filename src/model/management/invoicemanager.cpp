@@ -310,6 +310,11 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
     return invoices;
 }
 
+QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::unpaids(Model::Domain::InvoiceType type, int businessId)
+{
+    return search(type,businessId,Model::Management::SearchByState, QDate(), QDate(), NO_ID, 0.0, 0.0, false);
+}
+
 int Model::Management::InvoiceManager::getId(Model::Domain::InvoiceType type, int businessId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();

@@ -37,6 +37,8 @@
 #include "invoicemanager.h"
 #include "volumereportdialog.h"
 #include "volumereport.h"
+#include "unpaidsreport.h"
+#include "reportmanager.h"
 #include "printingmanager.h"
 #include "global.h"
 
@@ -327,20 +329,10 @@ void View::QInvoicer::searchInvoice()
     View::Invoicing::InvoiceSearch dialog(this);
 
     if(dialog.exec()) {
-        Model::Management::SearchFlag mode = dialog.searchMode();
-        Model::Domain::InvoiceType type = dialog.type();
-        QDate beginDate = dialog.beginDate();
-        QDate endDate = dialog.endDate();
-        int entityId = dialog.entityId();
-        double minTotal = dialog.minTotal();
-        double maxTotal = dialog.maxTotal();
-        bool paid = dialog.paid();
+        View::Invoicing::InvoiceSearchResult *result = createInvoiceSearchResult(dialog.type(), dialog.searchMode(),
+                                                                                 dialog.beginDate(), dialog.endDate(), dialog.entityId(),
+                                                                                 dialog.minTotal(), dialog.maxTotal(), dialog.paid());
 
-        QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _business -> id(),mode, beginDate, endDate, entityId, minTotal, maxTotal, paid);
-
-        View::Invoicing::InvoiceSearchResult *result = new View::Invoicing::InvoiceSearchResult(invoices, type);
-
-        connect(result, SIGNAL(loaded(Model::Domain::Invoice*)), this, SLOT(loadInvoice(Model::Domain::Invoice*)));
         result -> show();
     }
 }
@@ -389,7 +381,11 @@ void View::QInvoicer::volumeBuy()
     View::Report::VolumeReportDialog dialog(this);
 
     if(dialog.exec()) {
-        View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(0, Model::Domain::Buy);
+        View::Report::VolumeReport *volumeReport = createVolumeReport(Model::Domain::Buy,
+                                                                      dialog.dateRange() ?
+                                                                          Model::Management::SearchByDateRange :
+                                                                          Model::Management::SearchByTypeOnly,
+                                                                      dialog.beginDate(), dialog.endDate());
         volumeReport -> show();
     }
 }
@@ -402,7 +398,11 @@ void View::QInvoicer::volumeSale()
     View::Report::VolumeReportDialog dialog(this);
 
     if(dialog.exec()) {
-        View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(0, Model::Domain::Sale);
+        View::Report::VolumeReport *volumeReport = createVolumeReport(Model::Domain::Sale,
+                                                                      dialog.dateRange() ?
+                                                                          Model::Management::SearchByDateRange :
+                                                                          Model::Management::SearchByTypeOnly,
+                                                                      dialog.beginDate(), dialog.endDate());
         volumeReport -> show();
     }
 }
@@ -412,7 +412,9 @@ void View::QInvoicer::unpaidInvoices()
     if(!_business)
         return;
 
-    QMessageBox::information(this, tr("Unpaid invoices"), tr("Feature not implemented yet"), QMessageBox::Ok);
+    View::Report::UnpaidsReport *unpaidsReport = createUnpaidsReport();
+
+    unpaidsReport -> show();
 }
 
 void View::QInvoicer::calculator()
@@ -785,6 +787,45 @@ View::Invoicing::InvoiceEditor *View::QInvoicer::findInvoiceEditor(Model::Domain
 
 
     return 0;
+}
+
+View::Invoicing::InvoiceSearchResult *View::QInvoicer::createInvoiceSearchResult(Model::Domain::InvoiceType type,
+                                                                Model::Management::SearchFlag mode,
+                                                                const QDate &beginDate, const QDate &endDate,
+                                                                int entityId, double minTotal, double maxTotal, bool paid)
+{
+    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _business -> id(), mode, beginDate, endDate, entityId, minTotal, maxTotal, paid);
+    View::Invoicing::InvoiceSearchResult *result = new View::Invoicing::InvoiceSearchResult(invoices, type);
+
+    connect(result, SIGNAL(loaded(Model::Domain::Invoice*)), this, SLOT(loadInvoice(Model::Domain::Invoice*)));
+
+    return result;
+}
+
+View::Report::VolumeReport *View::QInvoicer::createVolumeReport(Model::Domain::InvoiceType type,
+                                               Model::Management::SearchFlag mode,
+                                               const QDate &beginDate, const QDate &endDate)
+{
+    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _business -> id(), mode, beginDate, endDate);
+
+    Model::Report::VolumeReportByDateResult *reportByDate = Model::Report::ReportManager::reportByDate(invoices);
+    Model::Report::VolumeReportByEntityResult *reportByEntity = Model::Report::ReportManager::reportByEntity(invoices);
+    Model::Report::VolumeReportByProductResult *reportByProduct = Model::Report::ReportManager::reportByProduct(invoices);
+
+    View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(Model::Domain::Buy, reportByDate, reportByEntity, reportByProduct);
+
+    delete invoices;
+
+    return volumeReport;
+}
+
+View::Report::UnpaidsReport *View::QInvoicer::createUnpaidsReport()
+{
+    QList<Model::Domain::Invoice *> *buyInvoices = Model::Management::InvoiceManager::unpaids(Model::Domain::Buy, _business -> id());
+    QList<Model::Domain::Invoice *> *saleInvoices = Model::Management::InvoiceManager::unpaids(Model::Domain::Sale, _business -> id());
+    View::Report::UnpaidsReport *unpaidsReport = new View::Report::UnpaidsReport(buyInvoices, saleInvoices);
+
+    return unpaidsReport;
 }
 
 void View::QInvoicer::setStorageConnected(bool connected)

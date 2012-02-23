@@ -22,6 +22,9 @@
 #define QINVOICER_H
 
 #include <QMainWindow>
+#include <QList>
+#include <QDate>
+#include "types.h"
 
 QT_BEGIN_NAMESPACE
 class QMdiArea;
@@ -46,12 +49,19 @@ namespace View
     namespace Invoicing
     {
         class InvoiceEditor;
+        class InvoiceSearchResult;
     }
 
     namespace Management
     {
         class EntityEditor;
         class ProductEditor;
+    }
+
+    namespace Report
+    {
+        class VolumeReport;
+        class UnpaidsReport;
     }
 
     class QInvoicer : public QMainWindow
@@ -103,6 +113,16 @@ namespace View
         void createConnections();
         View::Invoicing::InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
         View::Invoicing::InvoiceEditor *findInvoiceEditor(Model::Domain::Invoice *invoice);
+        View::Invoicing::InvoiceSearchResult *createInvoiceSearchResult(Model::Domain::InvoiceType type,
+                                                                        Model::Management::SearchFlag mode = Model::Management::SearchByTypeOnly,
+                                                                        const QDate &beginDate = QDate::currentDate(),
+                                                                        const QDate &endDate = QDate::currentDate(), int entityId = NO_ID,
+                                                                        double minTotal = 0.0, double maxTotal = 0.0, bool paid = true);
+        View::Report::VolumeReport *createVolumeReport(Model::Domain::InvoiceType type,
+                                                       Model::Management::SearchFlag mode = Model::Management::SearchByTypeOnly,
+                                                       const QDate &beginDate = QDate::currentDate(),
+                                                       const QDate &endDate = QDate::currentDate());
+        View::Report::UnpaidsReport *createUnpaidsReport();
         void setStorageConnected(bool connected = true);
         void setBusinessOpen(bool open = true);
         bool verifyCreateBusiness();
