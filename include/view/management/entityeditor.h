@@ -33,6 +33,14 @@ class QTableView;
 class QPushButton;
 QT_END_NAMESPACE
 
+namespace Model
+{
+    namespace Domain
+    {
+        class Entity;
+    }
+}
+
 namespace View
 {
     namespace Management
@@ -46,6 +54,8 @@ namespace View
         public:
             EntityEditor(Model::Domain::EntityType type, QWidget *parent = 0);
             ~EntityEditor();
+        public slots:
+            void addEntityFromInvoice(const Model::Domain::Entity &entity);
         private slots:
             void rowSelectionChanged();
             void addEntity();

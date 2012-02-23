@@ -42,6 +42,12 @@ View::Management::EntityEditor::~EntityEditor()
     delete _entityModel;
 }
 
+void View::Management::EntityEditor::addEntityFromInvoice(const Model::Domain::Entity &entity)
+{
+    int rows = _entityModel -> rowCount(QModelIndex());
+    _entityModel -> insertEntity(rows, new Model::Domain::Entity(entity));
+}
+
 void View::Management::EntityEditor::rowSelectionChanged()
 {
     int row = _entitiesTableView -> currentIndex().row();

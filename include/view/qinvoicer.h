@@ -102,7 +102,7 @@ namespace View
         void invoicePrinted(const Model::Domain::Invoice &invoice);
         void invoiceSaved(const Model::Domain::Invoice &invoice);
         void invoiceDeleted(const Model::Domain::Invoice &invoice);
-
+        void invoiceHasAddedNewEntity(const Model::Domain::Invoice &invoice);
     private:
         void createWidgets();
         void createCentralWidget();

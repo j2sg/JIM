@@ -143,6 +143,8 @@ void View::Invoicing::InvoiceEditor::createConnections()
 {
     connect(_dataTab, SIGNAL(dataChanged()),
             this, SLOT(invoiceModified()));
+    connect(_dataTab, SIGNAL(entityAdded(const Model::Domain::Invoice &)),
+            this, SIGNAL(entityAdded(const Model::Domain::Invoice &)));
     connect(_otherTab, SIGNAL(taxesChanged()),
             this, SLOT(invoiceModified()));
     connect(_otherTab, SIGNAL(notesChanged()),

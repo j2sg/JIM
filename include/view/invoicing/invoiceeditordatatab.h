@@ -57,6 +57,7 @@ namespace View
             InvoiceEditorDataTab(Model::Domain::Invoice *invoice, QWidget *parent = 0);
         signals:
             void dataChanged();
+            void entityAdded(const Model::Domain::Invoice &invoice);
         public slots:
             void loadInvoice();
             void saveInvoice();

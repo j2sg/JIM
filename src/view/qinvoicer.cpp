@@ -476,6 +476,20 @@ void View::QInvoicer::invoiceDeleted(const Model::Domain::Invoice &invoice)
                                .arg(invoice.id()), 2000);
 }
 
+void View::QInvoicer::invoiceHasAddedNewEntity(const Model::Domain::Invoice &invoice)
+{
+    statusBar() -> showMessage(tr("%1 has added a new %2 %3")
+                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
+                               .arg(invoice.entity() -> type() ? tr("Supplier") : tr("Customer"))
+                               .arg(invoice.entity() -> id()), 2000);
+
+    if(_supplierEditor && invoice.entity() -> type() == Model::Domain::SupplierEntity)
+        _supplierEditor -> addEntityFromInvoice(*(invoice.entity()));
+    else if(_customerEditor && invoice.entity() -> type() == Model::Domain::CustomerEntity)
+        _customerEditor -> addEntityFromInvoice(*(invoice.entity()));
+
+}
+
 void View::QInvoicer::createWidgets()
 {
     createCentralWidget();
@@ -769,6 +783,8 @@ View::Invoicing::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Doma
             this, SLOT(invoiceSaved(const Model::Domain::Invoice &)));
     connect(editor, SIGNAL(deleted(const Model::Domain::Invoice &)),
             this, SLOT(invoiceDeleted(const Model::Domain::Invoice &)));
+    connect(editor, SIGNAL(entityAdded(const Model::Domain::Invoice &)),
+            this, SLOT(invoiceHasAddedNewEntity(const Model::Domain::Invoice &)));
     connect(editor, SIGNAL(finished()),
             _mdiArea, SLOT(closeActiveSubWindow()));
 

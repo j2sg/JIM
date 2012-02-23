@@ -35,6 +35,7 @@ namespace Model
     namespace Domain
     {
         class Invoice;
+        class Entity;
     }
 }
 
@@ -59,6 +60,7 @@ namespace View
             void printed(const Model::Domain::Invoice &invoice);
             void saved(const Model::Domain::Invoice &invoice);
             void deleted(const Model::Domain::Invoice &invoice);
+            void entityAdded(const Model::Domain::Invoice &invoice);
             void finished();
         private slots:
             void invoiceModified(bool modified = true);

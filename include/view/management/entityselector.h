@@ -58,6 +58,7 @@ namespace View
             ~EntitySelector();
             void done(int result);
             Model::Domain::Entity *entity() const;
+            bool created() const;
         private slots:
             void rowSelectionChanged();
             void createEntity();
@@ -76,6 +77,7 @@ namespace View
             Model::Domain::Entity *_entity;
             Model::Domain::EntityType _type;
             SelectorBehavior _behavior;
+            bool _created;
         };
     }
 }

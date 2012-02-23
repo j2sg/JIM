@@ -37,6 +37,7 @@ View::Management::EntitySelector::EntitySelector(Model::Domain::EntityType type,
     setMinimumWidth(ENTITY_SELECTOR_MINIMUM_WIDTH);
 
     _entity = 0;
+    _created = false;
 }
 
 View::Management::EntitySelector::~EntitySelector()
@@ -59,6 +60,11 @@ Model::Domain::Entity *View::Management::EntitySelector::entity() const
     return _entity;
 }
 
+bool View::Management::EntitySelector::created() const
+{
+    return _created;
+}
+
 void View::Management::EntitySelector::rowSelectionChanged()
 {
     int row = _entitiesTableView -> currentIndex().row();
@@ -76,6 +82,7 @@ void View::Management::EntitySelector::createEntity()
             _entityModel -> insertEntity(row + 1, entity);
             QModelIndex index = _entityModel -> index(row + 1, ColumnEntityId);
             _entitiesTableView -> setCurrentIndex(index);
+            _created = true;
             QDialog::accept();
         } else {
             QMessageBox::critical(this, tr("Critical Error"),
