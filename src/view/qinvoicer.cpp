@@ -417,15 +417,15 @@ void View::QInvoicer::unpaidInvoices()
     unpaidsReport -> show();
 }
 
-void View::QInvoicer::calculator()
+/*void View::QInvoicer::calculator()
 {
     QMessageBox::information(this, tr("Calculator"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}
+}*/
 
-void View::QInvoicer::addressBook()
+/*void View::QInvoicer::addressBook()
 {
     QMessageBox::information(this, tr("Address Book"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}
+}*/
 
 void View::QInvoicer::about()
 {
@@ -591,13 +591,13 @@ void View::QInvoicer::createActions()
     _unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
     _unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
 
-    _calculatorAction = new QAction(tr("&Calculator..."), this);
-    _calculatorAction -> setIcon(QIcon(":/images/calc.png"));
-    _calculatorAction -> setStatusTip(tr("Open Calculator"));
+    //_calculatorAction = new QAction(tr("&Calculator..."), this);
+    //_calculatorAction -> setIcon(QIcon(":/images/calc.png"));
+    //_calculatorAction -> setStatusTip(tr("Open Calculator"));
 
-    _addressBookAction = new QAction(tr("&Address Book..."), this);
-    _addressBookAction -> setIcon(QIcon(":/images/address.png"));
-    _addressBookAction -> setStatusTip(tr("Open Address Book"));
+    //_addressBookAction = new QAction(tr("&Address Book..."), this);
+    //_addressBookAction -> setIcon(QIcon(":/images/address.png"));
+    //_addressBookAction -> setStatusTip(tr("Open Address Book"));
 
     _closeAction = new QAction(tr("Close"), this);
     _closeAction -> setStatusTip(tr("Close active window"));
@@ -658,9 +658,9 @@ void View::QInvoicer::createMenus()
     _reportMenu -> addAction(_volumeSaleAction);
     _reportMenu -> addAction(_unpaidInvoicesAction);
 
-    _toolsMenu = menuBar() -> addMenu(tr("&Tools"));
-    _toolsMenu -> addAction(_calculatorAction);
-    _toolsMenu -> addAction(_addressBookAction);
+    //_toolsMenu = menuBar() -> addMenu(tr("&Tools"));
+    //_toolsMenu -> addAction(_calculatorAction);
+    //_toolsMenu -> addAction(_addressBookAction);
 
     _windowMenu = menuBar() -> addMenu(tr("&Window"));
     _windowMenu -> addAction(_closeAction);
@@ -753,10 +753,10 @@ void View::QInvoicer::createConnections()
             this, SLOT(volumeSale()));
     connect(_unpaidInvoicesAction, SIGNAL(triggered()),
             this, SLOT(unpaidInvoices()));
-    connect(_calculatorAction, SIGNAL(triggered()),
-            this, SLOT(calculator()));
-    connect(_addressBookAction, SIGNAL(triggered()),
-            this, SLOT(addressBook()));
+    //connect(_calculatorAction, SIGNAL(triggered()),
+    //        this, SLOT(calculator()));
+    //connect(_addressBookAction, SIGNAL(triggered()),
+    //        this, SLOT(addressBook()));
     connect(_closeAction, SIGNAL(triggered()),
             _mdiArea, SLOT(closeActiveSubWindow()));
     connect(_closeAllAction, SIGNAL(triggered()),
@@ -822,15 +822,19 @@ View::Report::VolumeReport *View::QInvoicer::createVolumeReport(Model::Domain::I
                                                Model::Management::SearchFlag mode,
                                                const QDate &beginDate, const QDate &endDate)
 {
-    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _business -> id(), mode, beginDate, endDate);
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
+    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _business -> id(), mode, beginDate, endDate);
     Model::Report::VolumeReportByDateResult *reportByDate = Model::Report::ReportManager::reportByDate(invoices);
     Model::Report::VolumeReportByEntityResult *reportByEntity = Model::Report::ReportManager::reportByEntity(invoices);
     Model::Report::VolumeReportByProductResult *reportByProduct = Model::Report::ReportManager::reportByProduct(invoices);
 
+    QApplication::restoreOverrideCursor();
+
     View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(Model::Domain::Buy, reportByDate, reportByEntity, reportByProduct);
 
     delete invoices;
+
 
     return volumeReport;
 }
@@ -856,7 +860,7 @@ void View::QInvoicer::setStorageConnected(bool connected)
     _manageCustomerAction -> setEnabled(connected);
     _manageSupplierAction -> setEnabled(connected);
     _manageProductAction -> setEnabled(connected);
-    _addressBookAction -> setEnabled(connected);
+    //_addressBookAction -> setEnabled(connected);
 
     _managementMenu -> setEnabled(connected);
 

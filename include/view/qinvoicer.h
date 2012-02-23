@@ -95,8 +95,8 @@ namespace View
         void volumeBuy();
         void volumeSale();
         void unpaidInvoices();
-        void calculator();
-        void addressBook();
+        //void calculator();
+        //void addressBook();
         void about();
         void updateWindowMenu();
         void invoicePrinted(const Model::Domain::Invoice &invoice);
@@ -150,8 +150,8 @@ namespace View
         QAction *_volumeBuyAction;
         QAction *_volumeSaleAction;
         QAction *_unpaidInvoicesAction;
-        QAction *_calculatorAction;
-        QAction *_addressBookAction;
+        //QAction *_calculatorAction;
+        //QAction *_addressBookAction;
         QAction *_closeAction;
         QAction *_closeAllAction;
         QAction *_tileAction;
@@ -163,7 +163,7 @@ namespace View
         QMenu *_invoicingMenu;
         QMenu *_managementMenu;
         QMenu *_reportMenu;
-        QMenu *_toolsMenu;
+        //QMenu *_toolsMenu;
         QMenu *_windowMenu;
         QMenu *_helpMenu;
         QToolBar *_invoicingToolBar;
