@@ -354,6 +354,11 @@ bool Persistence::Manager::exportStorage(const QString &fileName)
 {
     switch(static_cast<DBMSType>(readConfig("Type", "Storage").toInt())) {
     case SQLITE:
+        QFile file(fileName);
+
+        if(file.exists() && !file.remove())
+                return false;
+
         return QFile(readConfig("Name", "Storage/DBMS").toString()).copy(fileName);
     }
 

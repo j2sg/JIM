@@ -74,6 +74,7 @@ void View::QInvoicer::closeEvent(QCloseEvent *event)
         event -> accept();
     else if(verifyExit()) {
         closeAllEditors();
+        closeOtherWindows();
         _mdiArea -> closeAllSubWindows();
         if(!_mdiArea -> currentSubWindow())
             event -> accept();
@@ -163,6 +164,7 @@ void View::QInvoicer::disconnectStorage()
 
     closeAllEditors();
     deleteAllEditors();
+    closeOtherWindows();
 }
 
 void View::QInvoicer::importStorage()
@@ -172,16 +174,20 @@ void View::QInvoicer::importStorage()
                                                     QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
                                                     tr("All Files"));
 
-    if(!verifyImportStorage())
+    if(fileName.isEmpty() || !verifyImportStorage())
         return;
 
-    if(!Persistence::Manager::importStorage(fileName))
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    bool ok = Persistence::Manager::importStorage(fileName);
+    QApplication::restoreOverrideCursor();
+
+    if(!ok)
         QMessageBox::warning(this, tr("Import Storage"),
                                    tr("There was errors on import.\n"
                                       "Verify if file exists and/or directory permissions."),
                                    QMessageBox::Ok);
     else
-        statusBar() -> showMessage(tr("Importe Completed"), 5000);
+        statusBar() -> showMessage(tr("Import Completed"), 5000);
 }
 
 void View::QInvoicer::exportStorage()
@@ -190,7 +196,14 @@ void View::QInvoicer::exportStorage()
                                                 QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
                                                 tr("All Files"));
 
-    if(!Persistence::Manager::exportStorage(fileName))
+    if(fileName.isEmpty())
+        return;
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    bool ok = Persistence::Manager::exportStorage(fileName);
+    QApplication::restoreOverrideCursor();
+
+    if(!ok)
         QMessageBox::warning(this, tr("Export Storage"),
                                    tr("There was errors on export.\n"
                                       "Verify permissions of destination directory."),
@@ -257,6 +270,8 @@ void View::QInvoicer::closeBusiness()
         else
             return;
     }
+
+    closeOtherWindows();
 
     statusBar() -> showMessage(tr("Closed Business %1").arg(_business -> name()), 5000);
 
@@ -359,6 +374,9 @@ void View::QInvoicer::searchInvoice()
                                                                                  dialog.beginDate(), dialog.endDate(), dialog.entityId(),
                                                                                  dialog.minTotal(), dialog.maxTotal(), dialog.paid());
 
+        connect(result, SIGNAL(destroyed(QObject*)), this, SLOT(updateOtherWindows(QObject*)));
+        _otherWindows.push_back(result);
+
         result -> show();
     }
 }
@@ -412,6 +430,10 @@ void View::QInvoicer::volumeBuy()
                                                                           Model::Management::SearchByDateRange :
                                                                           Model::Management::SearchByTypeOnly,
                                                                       dialog.beginDate(), dialog.endDate());
+
+        connect(volumeReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
+        _otherWindows.push_back(volumeReport);
+
         volumeReport -> show();
     }
 }
@@ -429,6 +451,10 @@ void View::QInvoicer::volumeSale()
                                                                           Model::Management::SearchByDateRange :
                                                                           Model::Management::SearchByTypeOnly,
                                                                       dialog.beginDate(), dialog.endDate());
+
+        connect(volumeReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
+        _otherWindows.push_back(volumeReport);
+
         volumeReport -> show();
     }
 }
@@ -439,6 +465,9 @@ void View::QInvoicer::unpaidInvoices()
         return;
 
     View::Report::UnpaidsReport *unpaidsReport = createUnpaidsReport();
+
+    connect(unpaidsReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
+    _otherWindows.push_back(unpaidsReport);
 
     unpaidsReport -> show();
 }
@@ -514,6 +543,13 @@ void View::QInvoicer::invoiceHasAddedNewEntity(const Model::Domain::Invoice &inv
     else if(_customerEditor && invoice.entity() -> type() == Model::Domain::CustomerEntity)
         _customerEditor -> addEntityFromInvoice(*(invoice.entity()));
 
+}
+
+void View::QInvoicer::updateOtherWindows(QObject *object)
+{
+    QWidget *window = qobject_cast<QWidget *>(object);
+    window -> close();
+    _otherWindows.removeAll(window);
 }
 
 void View::QInvoicer::createWidgets()
@@ -907,6 +943,12 @@ void View::QInvoicer::closeAllEditors()
         _supplierEditor -> close();
     if(_productEditor)
         _productEditor -> close();
+}
+
+void View::QInvoicer::closeOtherWindows()
+{
+    foreach(QWidget *window, _otherWindows)
+        window -> close();
 }
 
 void View::QInvoicer::deleteAllEditors()

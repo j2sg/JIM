@@ -105,6 +105,7 @@ namespace View
         void invoiceSaved(const Model::Domain::Invoice &invoice);
         void invoiceDeleted(const Model::Domain::Invoice &invoice);
         void invoiceHasAddedNewEntity(const Model::Domain::Invoice &invoice);
+        void updateOtherWindows(QObject *object);
     private:
         void createWidgets();
         void createCentralWidget();
@@ -126,6 +127,7 @@ namespace View
                                                        const QDate &endDate = QDate::currentDate());
         View::Report::UnpaidsReport *createUnpaidsReport();
         void closeAllEditors();
+        void closeOtherWindows();
         void deleteAllEditors();
         void setStorageConnected(bool connected = true);
         void setBusinessOpen(bool open = true);
@@ -188,6 +190,7 @@ namespace View
         View::Management::EntityEditor *_customerEditor;
         View::Management::EntityEditor *_supplierEditor;
         View::Management::ProductEditor *_productEditor;
+        QList<QWidget *> _otherWindows;
     };
 }
 
