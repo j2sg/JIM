@@ -115,7 +115,7 @@ Model::Report::VolumeReportStatistics Model::Report::ReportManager::reportStatis
 
     statistics._minTotal = min;
     statistics._maxTotal = max;
-    statistics._dailyAvg = statistics._greatTotal / (double) report -> size();
+    statistics._dailyAvg = !report -> isEmpty() ? statistics._greatTotal / (double) report -> size() : 0.0;
 
     return statistics;
 }
@@ -151,7 +151,7 @@ Model::Report::UnpaidStatistics Model::Report::ReportManager::unpaidStatistics(Q
 
     statistics._maxDaysDebt = maxDaysDebt;
     statistics._maxDebt = maxDebt;
-    statistics._debtAvg = statistics._debtTotal / (double) invoices -> size();
+    statistics._debtAvg = !invoices -> isEmpty() ? statistics._debtTotal / (double) invoices -> size() : 0.0;
 
     return statistics;
 }

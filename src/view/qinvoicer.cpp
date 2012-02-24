@@ -192,7 +192,7 @@ void View::QInvoicer::importStorage()
 
 void View::QInvoicer::exportStorage()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Export Storage"),
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export Storage"),
                                                 QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
                                                 tr("All Files"));
 
