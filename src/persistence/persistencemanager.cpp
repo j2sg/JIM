@@ -162,7 +162,12 @@ bool Persistence::Manager::deleteStorage()
     if(!existsStorage())
         return false;
 
-    return QFile::remove(readConfig("Name", "Storage/DBMS").toString());
+    switch(static_cast<DBMSType>(readConfig("Type", "Storage").toInt())) {
+    case SQLITE:
+        return QFile::remove(readConfig("Name", "Storage/DBMS").toString());
+    }
+
+    return false;
 }
 
 bool Persistence::Manager::createSQLiteSchema()
@@ -313,7 +318,11 @@ bool Persistence::Manager::connectStorage()
 
     try {
         Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-        ok = agent -> connect() && agent -> create("PRAGMA foreign_keys=ON;");
+        switch(static_cast<DBMSType>(readConfig("Type", "Storage").toInt())) {
+        case SQLITE:
+            ok = agent -> connect() && agent -> create("PRAGMA foreign_keys=ON;");
+            break;
+        }
     } catch(Persistence::SQLAgentException sqlException) {}
 
     return ok;
@@ -326,4 +335,27 @@ void Persistence::Manager::disconnectStorage()
         agent -> disconnect();
         delete agent;
     } catch(Persistence::SQLAgentException sqlException) {}
+}
+
+bool Persistence::Manager::importStorage(const QString &fileName)
+{
+    switch(static_cast<DBMSType>(readConfig("Type", "Storage").toInt())) {
+    case SQLITE:
+        QFile storage(readConfig("Name", "Storage/DBMS").toString());
+
+        if(storage.remove())
+            return QFile(fileName).copy(readConfig("Name", "Storage/DBMS").toString());
+    }
+
+    return false;
+}
+
+bool Persistence::Manager::exportStorage(const QString &fileName)
+{
+    switch(static_cast<DBMSType>(readConfig("Type", "Storage").toInt())) {
+    case SQLITE:
+        return QFile(readConfig("Name", "Storage/DBMS").toString()).copy(fileName);
+    }
+
+    return false;
 }

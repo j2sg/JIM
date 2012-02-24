@@ -39,6 +39,8 @@ namespace Persistence
         static bool deleteStorage();
         static bool connectStorage();
         static void disconnectStorage();
+        static bool importStorage(const QString &fileName);
+        static bool exportStorage(const QString &fileName);
     private:
         static bool createSQLiteSchema();
     };

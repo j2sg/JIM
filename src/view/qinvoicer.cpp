@@ -66,14 +66,6 @@ View::QInvoicer::~QInvoicer()
 
     if(_business)
         delete _business;
-    if(_businessEditor)
-        delete _businessEditor;
-    if(_customerEditor)
-        delete _customerEditor;
-    if(_supplierEditor)
-        delete _supplierEditor;
-    if(_productEditor)
-        delete _productEditor;
 }
 
 void View::QInvoicer::closeEvent(QCloseEvent *event)
@@ -81,17 +73,8 @@ void View::QInvoicer::closeEvent(QCloseEvent *event)
     if(!_authorized)
         event -> accept();
     else if(verifyExit()) {
-        if(_businessEditor)
-            _businessEditor -> close();
-        if(_customerEditor)
-            _customerEditor -> close();
-        if(_supplierEditor)
-            _supplierEditor -> close();
-        if(_productEditor)
-            _productEditor -> close();
-
+        closeAllEditors();
         _mdiArea -> closeAllSubWindows();
-
         if(!_mdiArea -> currentSubWindow())
             event -> accept();
         else
@@ -164,13 +147,56 @@ bool View::QInvoicer::login()
 
 void View::QInvoicer::connectStorage()
 {
-    setStorageConnected((_connected = Persistence::Manager::connectStorage()));
+    if(!(_connected = Persistence::Manager::connectStorage()))
+        QMessageBox::critical(this, tr("Connect Storage"),
+                                    tr("There was an error on connection attempt.\n"
+                                       "Check out your storage configuration."),
+                                    QMessageBox::Ok);
+
+    setStorageConnected(_connected);
 }
 
 void View::QInvoicer::disconnectStorage()
 {
     Persistence::Manager::disconnectStorage();
     setStorageConnected((_connected = false));
+
+    closeAllEditors();
+    deleteAllEditors();
+}
+
+void View::QInvoicer::importStorage()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Import Storage"),
+                                                    QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                    tr("All Files"));
+
+    if(!verifyImportStorage())
+        return;
+
+    if(!Persistence::Manager::importStorage(fileName))
+        QMessageBox::warning(this, tr("Import Storage"),
+                                   tr("There was errors on import.\n"
+                                      "Verify if file exists and/or directory permissions."),
+                                   QMessageBox::Ok);
+    else
+        statusBar() -> showMessage(tr("Importe Completed"), 5000);
+}
+
+void View::QInvoicer::exportStorage()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Export Storage"),
+                                                QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                                tr("All Files"));
+
+    if(!Persistence::Manager::exportStorage(fileName))
+        QMessageBox::warning(this, tr("Export Storage"),
+                                   tr("There was errors on export.\n"
+                                      "Verify permissions of destination directory."),
+                                   QMessageBox::Ok);
+    else
+        statusBar() -> showMessage(tr("Export Completed"), 5000);
 }
 
 bool View::QInvoicer::createBusiness()
@@ -535,6 +561,14 @@ void View::QInvoicer::createActions()
     _disconnectStorageAction -> setIcon(QIcon(":/images/storageoff.png"));
     _disconnectStorageAction -> setStatusTip(tr("Finish the connection to storage media"));
 
+    _importStorageAction = new QAction(tr("&Import Storage..."), this);
+    _importStorageAction -> setIcon(QIcon(":/images/import.png"));
+    _importStorageAction -> setStatusTip(tr("Import Storage from an existing file"));
+
+    _exportStorageAction = new QAction(tr("&Export Storage..."), this);
+    _exportStorageAction -> setIcon(QIcon(":/images/export.png"));
+    _exportStorageAction -> setStatusTip(tr("Export Storage to a file"));
+
     _optionsAction = new QAction(tr("&Options..."), this);
     _optionsAction -> setIcon(QIcon(":/images/options.png"));
     _optionsAction -> setStatusTip(tr("Set up application options"));
@@ -543,7 +577,7 @@ void View::QInvoicer::createActions()
     _printingAction -> setIcon(QIcon(":/images/printing.png"));
     _printingAction -> setStatusTip(tr("Set up printing configuration"));
 
-    _exitAction = new QAction(tr("&Exit"), this);
+    _exitAction = new QAction(tr("E&xit"), this);
     _exitAction -> setIcon(QIcon(":/images/exit.png"));
     _exitAction -> setStatusTip(tr("Exit the application"));
 
@@ -635,6 +669,9 @@ void View::QInvoicer::createMenus()
     _applicationMenu -> addAction(_connectStorageAction);
     _applicationMenu -> addAction(_disconnectStorageAction);
     _applicationMenu -> addSeparator();
+    _applicationMenu -> addAction(_importStorageAction);
+    _applicationMenu -> addAction(_exportStorageAction);
+    _applicationMenu -> addSeparator();
     _applicationMenu -> addAction(_optionsAction);
     _applicationMenu -> addAction(_printingAction);
     _applicationMenu -> addSeparator();
@@ -725,6 +762,10 @@ void View::QInvoicer::createConnections()
             this, SLOT(connectStorage()));
     connect(_disconnectStorageAction, SIGNAL(triggered()),
             this, SLOT(disconnectStorage()));
+    connect(_importStorageAction, SIGNAL(triggered()),
+            this, SLOT(importStorage()));
+    connect(_exportStorageAction, SIGNAL(triggered()),
+            this, SLOT(exportStorage()));
     connect(_optionsAction, SIGNAL(triggered()),
             this, SLOT(options()));
     connect(_printingAction, SIGNAL(triggered()),
@@ -832,12 +873,10 @@ View::Report::VolumeReport *View::QInvoicer::createVolumeReport(Model::Domain::I
 
     QApplication::restoreOverrideCursor();
 
-    View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(Model::Domain::Buy,
-                                                                              reportByDate, reportByEntity,
+    View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(type, reportByDate, reportByEntity,
                                                                               reportByProduct, statistics);
 
     delete invoices;
-
 
     return volumeReport;
 }
@@ -858,6 +897,41 @@ View::Report::UnpaidsReport *View::QInvoicer::createUnpaidsReport()
     return unpaidsReport;
 }
 
+void View::QInvoicer::closeAllEditors()
+{
+    if(_businessEditor)
+        _businessEditor -> close();
+    if(_customerEditor)
+        _customerEditor -> close();
+    if(_supplierEditor)
+        _supplierEditor -> close();
+    if(_productEditor)
+        _productEditor -> close();
+}
+
+void View::QInvoicer::deleteAllEditors()
+{
+    if(_businessEditor) {
+        delete _businessEditor;
+        _businessEditor = 0;
+    }
+
+    if(_customerEditor) {
+        delete _customerEditor;
+        _customerEditor = 0;
+    }
+
+    if(_supplierEditor) {
+        delete _supplierEditor;
+        _supplierEditor = 0;
+    }
+
+    if(_productEditor) {
+        delete _productEditor;
+        _productEditor = 0;
+    }
+}
+
 void View::QInvoicer::setStorageConnected(bool connected)
 {
     QString host = Persistence::Manager::readConfig("Host", "Storage/DBMS").toString();
@@ -866,6 +940,8 @@ void View::QInvoicer::setStorageConnected(bool connected)
     _loadBusinessAction -> setEnabled(connected);
     _connectStorageAction -> setEnabled(!connected);
     _disconnectStorageAction -> setEnabled(connected);
+    _importStorageAction -> setEnabled(!connected);
+    _exportStorageAction -> setEnabled(!connected);
     _manageBusinessAction -> setEnabled(connected);
     _manageCustomerAction -> setEnabled(connected);
     _manageSupplierAction -> setEnabled(connected);
@@ -902,6 +978,15 @@ void View::QInvoicer::setBusinessOpen(bool open)
 
     setWindowTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION) +
                    (open ? tr(" - Business #%1 - %2").arg(_business -> id()).arg(_business -> name()) : QString()));
+}
+
+bool View::QInvoicer::verifyImportStorage()
+{
+    return QMessageBox::warning(this, tr("Verify Import Storage"),
+                                       tr("You must know that all stored data will be removed.\n"
+                                          "are you sure you wish to import storage?"),
+                                       QMessageBox::Yes | QMessageBox::Default |
+                                       QMessageBox::No) == QMessageBox::Yes;
 }
 
 bool View::QInvoicer::verifyCreateBusiness()

@@ -78,6 +78,8 @@ namespace View
     private slots:
         void connectStorage();
         void disconnectStorage();
+        void importStorage();
+        void exportStorage();
         bool createBusiness();
         void loadBusiness();
         void closeBusiness();
@@ -123,8 +125,11 @@ namespace View
                                                        const QDate &beginDate = QDate::currentDate(),
                                                        const QDate &endDate = QDate::currentDate());
         View::Report::UnpaidsReport *createUnpaidsReport();
+        void closeAllEditors();
+        void deleteAllEditors();
         void setStorageConnected(bool connected = true);
         void setBusinessOpen(bool open = true);
+        bool verifyImportStorage();
         bool verifyCreateBusiness();
         bool verifyCloseBusiness();
         bool verifyExit();
@@ -136,6 +141,8 @@ namespace View
         QAction *_connectStorageAction;
         QAction *_disconnectStorageAction;
         QAction *_setUpBusinessAction;
+        QAction *_importStorageAction;
+        QAction *_exportStorageAction;
         QAction *_optionsAction;
         QAction *_printingAction;
         QAction *_exitAction;

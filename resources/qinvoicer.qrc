@@ -30,5 +30,7 @@
         <file>images/storageoff.png</file>
         <file>images/storageon.png</file>
         <file>translations/qinvoicer_es.qm</file>
+        <file>images/export.png</file>
+        <file>images/import.png</file>
     </qresource>
 </RCC>
