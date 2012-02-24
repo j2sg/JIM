@@ -2286,27 +2286,27 @@ Debe establecer una contraseña de acceso.</translation>
         <translation>Informe</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="870"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="880"/>
         <source>Connected to %1</source>
         <translation>Conectado a %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="870"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="880"/>
         <source>Disconnected</source>
         <translation>Desconectado</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="894"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="904"/>
         <source> - Business #%1 - %2</source>
         <translation>- Empresa #%1 - %2</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="899"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="909"/>
         <source>Verify Business Creation</source>
         <translation>Verificar Creación de Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="900"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="910"/>
         <source>Not found any business. Perhaps this is the first time that
 you execute the application or all business has been removed.
 do you want to create a new business now?</source>
@@ -2315,24 +2315,24 @@ que ejecuta la aplicación o todas las empresas han sido eliminadas.
 ¿Quiere crear una nueva empresa ahora?</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="909"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="919"/>
         <source>Verify Close Business</source>
         <translation>Verificar Cerrar Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="910"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="920"/>
         <source>There are active invoices.
 are you sure you wish to close the business?</source>
         <translation>Hay facturas activas.
 ¿Esta seguro de querer cerrar la empresa?</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="918"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="928"/>
         <source>Verify Exit</source>
         <translation>Verificar Salida</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="919"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="929"/>
         <source>are you sure you wish to exit the program?</source>
         <translation>¿Está seguro de querer abandonar la aplicación?</translation>
     </message>
@@ -2368,70 +2368,143 @@ are you sure you wish to close the business?</source>
 <context>
     <name>View::Report::UnpaidsReport</name>
     <message>
-        <location filename="../../src/view/report/unpaidsreport.cpp" line="35"/>
+        <location filename="../../src/view/report/unpaidsreport.cpp" line="37"/>
         <source>Unpaids Report</source>
         <translation>Informe de Facturas Impagadas</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/unpaidsreport.cpp" line="47"/>
+        <location filename="../../src/view/report/unpaidsreport.cpp" line="51"/>
         <source>Buy</source>
         <translation>Compra</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/unpaidsreport.cpp" line="48"/>
+        <location filename="../../src/view/report/unpaidsreport.cpp" line="52"/>
         <source>Sale</source>
         <translation>Venta</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/unpaidsreport.cpp" line="50"/>
+        <location filename="../../src/view/report/unpaidsreport.cpp" line="54"/>
         <source>&amp;Close</source>
         <translation>&amp;Cerrar</translation>
     </message>
 </context>
 <context>
+    <name>View::Report::UnpaidsReportTab</name>
+    <message>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="66"/>
+        <source>Invoices:</source>
+        <translation>Facturas:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="68"/>
+        <source>Oldest Debt:</source>
+        <translation>Deuda más antigua:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="69"/>
+        <source>days</source>
+        <translation>dias</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="70"/>
+        <source>Maximum Debt:</source>
+        <translation>Deuda Máxima:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="73"/>
+        <source>Debt Average:</source>
+        <translation>Deuda Media:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="76"/>
+        <source>Debt Total:</source>
+        <translation>Deuda Total:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="92"/>
+        <source>Statistics</source>
+        <translation>Estadísticas</translation>
+    </message>
+</context>
+<context>
     <name>View::Report::VolumeReport</name>
     <message>
-        <location filename="../../src/view/report/volumereport.cpp" line="38"/>
+        <location filename="../../src/view/report/volumereport.cpp" line="43"/>
         <source>Volume %1 Report</source>
         <translation>Informe de Volumen de %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/volumereport.cpp" line="38"/>
+        <location filename="../../src/view/report/volumereport.cpp" line="43"/>
         <source>Sale</source>
         <translation>Venta</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/volumereport.cpp" line="38"/>
+        <location filename="../../src/view/report/volumereport.cpp" line="43"/>
         <source>Buy</source>
         <translation>Compra</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/volumereport.cpp" line="53"/>
+        <location filename="../../src/view/report/volumereport.cpp" line="59"/>
         <source>By Date</source>
         <translation>Por Fecha</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/volumereport.cpp" line="54"/>
+        <location filename="../../src/view/report/volumereport.cpp" line="60"/>
         <source>By %1</source>
         <translation>Por %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/volumereport.cpp" line="54"/>
+        <location filename="../../src/view/report/volumereport.cpp" line="60"/>
         <source>Customer</source>
         <translation>Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/volumereport.cpp" line="54"/>
+        <location filename="../../src/view/report/volumereport.cpp" line="60"/>
         <source>Supplier</source>
         <translation>Proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/volumereport.cpp" line="55"/>
+        <location filename="../../src/view/report/volumereport.cpp" line="61"/>
         <source>By Product</source>
         <translation>Por Producto</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/volumereport.cpp" line="57"/>
+        <location filename="../../src/view/report/volumereport.cpp" line="63"/>
+        <source>Invoices:</source>
+        <translation>Facturas:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/volumereport.cpp" line="65"/>
+        <source>Paid:</source>
+        <translation>Pagadas:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/volumereport.cpp" line="67"/>
+        <source>Minimum Total:</source>
+        <translation>Total Mínimo:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/volumereport.cpp" line="70"/>
+        <source>Maximum Total:</source>
+        <translation>Total Máximo:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/volumereport.cpp" line="73"/>
+        <source>Daily Average:</source>
+        <translation>Promedio Diario:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/volumereport.cpp" line="76"/>
+        <source>Great Total:</source>
+        <translation>Gran Total:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/volumereport.cpp" line="94"/>
+        <source>Daily Statistics</source>
+        <translation>Estadísticas Diarias</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/volumereport.cpp" line="97"/>
         <source>&amp;Close</source>
         <translation>&amp;Cerrar</translation>
     </message>
