@@ -105,7 +105,8 @@ HEADERS += include/global.h \
            include/view/report/volumereportdialog.h \
     include/view/report/volumereportbydatemodel.h \
     include/view/report/volumereportbyentitymodel.h \
-    include/view/report/volumereportbyproductmodel.h
+    include/view/report/volumereportbyproductmodel.h \
+    include/view/invoicing/invoicedelegate.h
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
            src/persistence/sqlagent.cpp \
@@ -166,9 +167,12 @@ SOURCES += src/main.cpp \
            src/view/report/volumereportdialog.cpp \
     src/view/report/volumereportbydatemodel.cpp \
     src/view/report/volumereportbyentitymodel.cpp \
-    src/view/report/volumereportbyproductmodel.cpp
+    src/view/report/volumereportbyproductmodel.cpp \
+    src/view/invoicing/invoicedelegate.cpp
 RESOURCES += resources/qinvoicer.qrc
 TRANSLATIONS += resources/translations/qinvoicer_es.ts
+
+
 
 
 

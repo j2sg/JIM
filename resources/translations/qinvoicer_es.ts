@@ -2391,37 +2391,37 @@ are you sure you wish to close the business?</source>
 <context>
     <name>View::Report::UnpaidsReportTab</name>
     <message>
-        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="66"/>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="68"/>
         <source>Invoices:</source>
         <translation>Facturas:</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="68"/>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="70"/>
         <source>Oldest Debt:</source>
-        <translation>Deuda más antigua:</translation>
+        <translation>Antiguedad Máxima:</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="69"/>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="71"/>
         <source>days</source>
         <translation>dias</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="70"/>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="72"/>
         <source>Maximum Debt:</source>
         <translation>Deuda Máxima:</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="73"/>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="75"/>
         <source>Debt Average:</source>
         <translation>Deuda Media:</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="76"/>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="78"/>
         <source>Debt Total:</source>
         <translation>Deuda Total:</translation>
     </message>
     <message>
-        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="92"/>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="94"/>
         <source>Statistics</source>
         <translation>Estadísticas</translation>
     </message>

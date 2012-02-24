@@ -263,7 +263,7 @@ void View::OptionsDialog::createInvoicingPageWidgets()
     QGroupBox *taxesGroupBox = new QGroupBox(tr("Taxes by Default"));
     taxesGroupBox -> setLayout(taxesLayout);
 
-    _invoicingMaxDebtByCustomerLabel = new QLabel(tr("By Customer:"));
+    /*_invoicingMaxDebtByCustomerLabel = new QLabel(tr("By Customer:"));
     _invoicingMaxDebtByCustomerSpinBox = new QSpinBox;
     _invoicingMaxDebtByCustomerSpinBox -> setSuffix(tr(" CU"));
     _invoicingMaxDebtByCustomerSpinBox -> setMinimum(0);
@@ -318,11 +318,11 @@ void View::OptionsDialog::createInvoicingPageWidgets()
     unpaidLimitsLayout -> addStretch();
 
     QGroupBox *unpaidLimitsGroupBox = new QGroupBox(tr("Unpaid Limits"));
-    unpaidLimitsGroupBox -> setLayout(unpaidLimitsLayout);
+    unpaidLimitsGroupBox -> setLayout(unpaidLimitsLayout);*/
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout -> addWidget(taxesGroupBox);
-    mainLayout -> addWidget(unpaidLimitsGroupBox);
+    //mainLayout -> addWidget(unpaidLimitsGroupBox);
 
     _invoicingPage = new QWidget;
 
@@ -370,10 +370,10 @@ void View::OptionsDialog::loadOptions()
     _invoicingTaxesTaxWidget -> setTax(Model::Domain::SuperReducedES, Persistence::Manager::readConfig("SuperReducedES", "Invoicing/Tax").toDouble());
     _invoicingTaxesTaxWidget -> setTax(Model::Domain::PIT, Persistence::Manager::readConfig("PIT", "Invoicing/Tax").toDouble());
 
-    _invoicingMaxDebtByCustomerSpinBox -> setValue(Persistence::Manager::readConfig("MaxDebtByCustomer", "Invoicing/Unpaids").toInt());
-    _invoicingMaxDebtBySupplierSpinBox -> setValue(Persistence::Manager::readConfig("MaxDebtBySupplier", "Invoicing/Unpaids").toInt());
-    _invoicingMaxPaymentDelayByCustomerSpinBox -> setValue(Persistence::Manager::readConfig("MaxPaymentDelayByCustomer", "Invoicing/Unpaids").toInt());
-    _invoicingMaxPaymentDelayBySupplierSpinBox -> setValue(Persistence::Manager::readConfig("MaxPaymentDelayBySupplier", "Invoicing/Unpaids").toInt());
+    //_invoicingMaxDebtByCustomerSpinBox -> setValue(Persistence::Manager::readConfig("MaxDebtByCustomer", "Invoicing/Unpaids").toInt());
+    //_invoicingMaxDebtBySupplierSpinBox -> setValue(Persistence::Manager::readConfig("MaxDebtBySupplier", "Invoicing/Unpaids").toInt());
+    //_invoicingMaxPaymentDelayByCustomerSpinBox -> setValue(Persistence::Manager::readConfig("MaxPaymentDelayByCustomer", "Invoicing/Unpaids").toInt());
+    //_invoicingMaxPaymentDelayBySupplierSpinBox -> setValue(Persistence::Manager::readConfig("MaxPaymentDelayBySupplier", "Invoicing/Unpaids").toInt());
 }
 
 bool View::OptionsDialog::saveOptions()
@@ -411,10 +411,10 @@ bool View::OptionsDialog::saveOptions()
     Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::SuperReducedES), "SuperReducedES", "Invoicing/Tax");
     Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::PIT), "PIT", "Invoicing/Tax");
 
-    Persistence::Manager::writeConfig(_invoicingMaxDebtByCustomerSpinBox -> value(), "MaxDebtByCustomer", "Invoicing/Unpaids");
-    Persistence::Manager::writeConfig(_invoicingMaxDebtBySupplierSpinBox -> value(), "MaxDebtBySupplier", "Invoicing/Unpaids");
-    Persistence::Manager::writeConfig(_invoicingMaxPaymentDelayByCustomerSpinBox -> value(), "MaxPaymentDelayByCustomer", "Invoicing/Unpaids");
-    Persistence::Manager::writeConfig(_invoicingMaxPaymentDelayBySupplierSpinBox -> value(), "MaxPaymentDelayBySupplier", "Invoicing/Unpaids");
+    //Persistence::Manager::writeConfig(_invoicingMaxDebtByCustomerSpinBox -> value(), "MaxDebtByCustomer", "Invoicing/Unpaids");
+    //Persistence::Manager::writeConfig(_invoicingMaxDebtBySupplierSpinBox -> value(), "MaxDebtBySupplier", "Invoicing/Unpaids");
+    //Persistence::Manager::writeConfig(_invoicingMaxPaymentDelayByCustomerSpinBox -> value(), "MaxPaymentDelayByCustomer", "Invoicing/Unpaids");
+    //Persistence::Manager::writeConfig(_invoicingMaxPaymentDelayBySupplierSpinBox -> value(), "MaxPaymentDelayBySupplier", "Invoicing/Unpaids");
 
     return true;
 }

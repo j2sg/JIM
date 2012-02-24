@@ -21,6 +21,7 @@
 #include "invoicesearchresult.h"
 #include "invoice.h"
 #include "invoicemodel.h"
+#include "invoicedelegate.h"
 #include "persistencemanager.h"
 #include <QTableView>
 #include <QPushButton>
@@ -63,6 +64,7 @@ void View::Invoicing::InvoiceSearchResult::createWidgets(QList<Model::Domain::In
     _invoicesTableView = new QTableView;
     _invoiceModel = new InvoiceModel(invoices, type, Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
     _invoicesTableView -> setModel(_invoiceModel);
+    _invoicesTableView -> setItemDelegate(new InvoiceDelegate(true, QColor(Qt::darkGreen), QColor(Qt::darkRed)));
     _invoicesTableView -> setAlternatingRowColors(true);
     _invoicesTableView -> setShowGrid(false);
     _invoicesTableView -> setColumnWidth(ColumnInvoiceId, COLUMN_INVOICE_ID_WIDTH);
