@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QList>
+#include "reportmanager.h"
 #include "types.h"
 
 #define COLUMN_UNPAIDS_REPORT_ID_WIDTH 50
@@ -33,6 +34,7 @@
 
 QT_BEGIN_NAMESPACE
 class QTableView;
+class QLabel;
 QT_END_NAMESPACE
 
 namespace Model
@@ -56,13 +58,28 @@ namespace View
         {
             Q_OBJECT
         public:
-            UnpaidsReportTab(Model::Domain::InvoiceType type, QList<Model::Domain::Invoice *> *invoices, QWidget *parent = 0);
+            UnpaidsReportTab(Model::Domain::InvoiceType type,
+                             QList<Model::Domain::Invoice *> *invoices,
+                             Model::Report::UnpaidStatistics statistics,
+                             QWidget *parent = 0);
             ~UnpaidsReportTab();
         private:
-            void createWidgets(Model::Domain::InvoiceType type, QList<Model::Domain::Invoice *> *invoices);
+            void createWidgets(Model::Domain::InvoiceType type,
+                               QList<Model::Domain::Invoice *> *invoices,
+                               Model::Report::UnpaidStatistics statistics);
 
             QTableView *_invoicesTableView;
             View::Invoicing::InvoiceModel *_invoiceModel;
+            QLabel *_invoicesLabel;
+            QLabel *_invoicesLabelValue;
+            QLabel *_maxDaysDebtLabel;
+            QLabel *_maxDaysDebtLabelValue;
+            QLabel *_maxDebtLabel;
+            QLabel *_maxDebtLabelValue;
+            QLabel *_debtAvgLabel;
+            QLabel *_debtAvgLabelValue;
+            QLabel *_debtTotalLabel;
+            QLabel *_debtTotalLabelValue;
         };
     }
 }

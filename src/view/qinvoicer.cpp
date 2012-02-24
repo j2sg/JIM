@@ -828,10 +828,13 @@ View::Report::VolumeReport *View::QInvoicer::createVolumeReport(Model::Domain::I
     Model::Report::VolumeReportByDateResult *reportByDate = Model::Report::ReportManager::reportByDate(invoices);
     Model::Report::VolumeReportByEntityResult *reportByEntity = Model::Report::ReportManager::reportByEntity(invoices);
     Model::Report::VolumeReportByProductResult *reportByProduct = Model::Report::ReportManager::reportByProduct(invoices);
+    Model::Report::VolumeReportStatistics statistics = Model::Report::ReportManager::reportStatistics(reportByDate);
 
     QApplication::restoreOverrideCursor();
 
-    View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(Model::Domain::Buy, reportByDate, reportByEntity, reportByProduct);
+    View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(Model::Domain::Buy,
+                                                                              reportByDate, reportByEntity,
+                                                                              reportByProduct, statistics);
 
     delete invoices;
 
@@ -841,9 +844,16 @@ View::Report::VolumeReport *View::QInvoicer::createVolumeReport(Model::Domain::I
 
 View::Report::UnpaidsReport *View::QInvoicer::createUnpaidsReport()
 {
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
     QList<Model::Domain::Invoice *> *buyInvoices = Model::Management::InvoiceManager::unpaids(Model::Domain::Buy, _business -> id());
     QList<Model::Domain::Invoice *> *saleInvoices = Model::Management::InvoiceManager::unpaids(Model::Domain::Sale, _business -> id());
-    View::Report::UnpaidsReport *unpaidsReport = new View::Report::UnpaidsReport(buyInvoices, saleInvoices);
+    Model::Report::UnpaidStatistics buyStatistics = Model::Report::ReportManager::unpaidStatistics(buyInvoices);
+    Model::Report::UnpaidStatistics saleStatistics = Model::Report::ReportManager::unpaidStatistics(saleInvoices);
+
+    QApplication::restoreOverrideCursor();
+
+    View::Report::UnpaidsReport *unpaidsReport = new View::Report::UnpaidsReport(buyInvoices, saleInvoices, buyStatistics, saleStatistics);
 
     return unpaidsReport;
 }

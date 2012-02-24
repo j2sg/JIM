@@ -88,3 +88,70 @@ Model::Report::VolumeReportByProductResult *Model::Report::ReportManager::report
 
     return result;
 }
+
+Model::Report::VolumeReportStatistics Model::Report::ReportManager::reportStatistics(VolumeReportByDateResult *report)
+{
+    VolumeReportStatistics statistics;
+    bool init = false;
+    double min = 0.0;
+    double max = 0.0;
+
+    foreach(VolumeReportByDateEntry entry, *report) {
+        if(!init) {
+            min = max = entry._total;
+            init = true;
+        }
+
+        statistics._invoices += entry._invoices;
+        statistics._paid += entry._paid;
+
+        if(entry._total < min)
+            min = entry._total;
+        else if(entry._total > max)
+            max = entry._total;
+
+        statistics._greatTotal += entry._total;
+    }
+
+    statistics._minTotal = min;
+    statistics._maxTotal = max;
+    statistics._dailyAvg = statistics._greatTotal / (double) report -> size();
+
+    return statistics;
+}
+
+Model::Report::UnpaidStatistics Model::Report::ReportManager::unpaidStatistics(QList<Model::Domain::Invoice *> *invoices)
+{
+    UnpaidStatistics statistics;
+    bool init = false;
+    QDate current = QDate::currentDate();
+    int maxDaysDebt = 0;
+    double maxDebt = 0.0;
+
+
+    foreach(Model::Domain::Invoice *invoice, *invoices) {
+        int days = invoice -> date().daysTo(current);
+        double total = invoice -> total();
+
+        if(!init) {
+            maxDaysDebt = days;
+            maxDebt = total;
+            init = true;
+        }
+
+        if(days > maxDaysDebt)
+            maxDaysDebt = days;
+
+        if(total > maxDebt)
+            maxDebt = total;
+
+        statistics._invoices++;
+        statistics._debtTotal += invoice -> total();
+    }
+
+    statistics._maxDaysDebt = maxDaysDebt;
+    statistics._maxDebt = maxDebt;
+    statistics._debtAvg = statistics._debtTotal / (double) invoices -> size();
+
+    return statistics;
+}

@@ -25,10 +25,11 @@
 #include "reportmanager.h"
 #include "types.h"
 
-#define VOLUME_REPORT_MINIMUM_WIDTH 600
+#define VOLUME_REPORT_MINIMUM_WIDTH 650
 
 QT_BEGIN_NAMESPACE
 class QTabWidget;
+class QLabel;
 class QPushButton;
 QT_END_NAMESPACE
 
@@ -49,18 +50,32 @@ namespace View
                          Model::Report::VolumeReportByDateResult *reportByDate,
                          Model::Report::VolumeReportByEntityResult *reportByEntity,
                          Model::Report::VolumeReportByProductResult *reportByProduct,
+                         Model::Report::VolumeReportStatistics statistics,
                          QWidget *parent = 0);
         private:
             void createWidgets(Model::Domain::InvoiceType type,
                                Model::Report::VolumeReportByDateResult *reportByDate,
                                Model::Report::VolumeReportByEntityResult *reportByEntity,
-                               Model::Report::VolumeReportByProductResult *reportByProduct);
+                               Model::Report::VolumeReportByProductResult *reportByProduct,
+                               Model::Report::VolumeReportStatistics statistics);
             void createConnections();
 
             QTabWidget *_tabWidget;
             VolumeReportByDateTab *_volumeReportByDateTab;
             VolumeReportByEntityTab *_volumeReportByEntityTab;
             VolumeReportByProductTab *_volumeReportByProductTab;
+            QLabel *_invoicesLabel;
+            QLabel *_invoicesLabelValue;
+            QLabel *_paidLabel;
+            QLabel *_paidLabelValue;
+            QLabel *_minTotalLabel;
+            QLabel *_minTotalLabelValue;
+            QLabel *_maxTotalLabel;
+            QLabel *_maxTotalLabelValue;
+            QLabel *_dailyAvgLabel;
+            QLabel *_dailyAvgLabelValue;
+            QLabel *_greatTotalLabel;
+            QLabel *_greatTotalLabelValue;
             QPushButton *_closePushButton;
         };
     }

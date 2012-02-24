@@ -83,6 +83,36 @@ namespace Model
 
         typedef QMap<int, VolumeReportByProductEntry> VolumeReportByProductResult;
 
+        typedef struct VolumeReportStatistcsStruct
+        {
+            int _invoices;
+            int _paid;
+            double _minTotal;
+            double _maxTotal;
+            double _dailyAvg;
+            double _greatTotal;
+
+            VolumeReportStatistcsStruct()
+            {
+                _invoices = _paid = 0;
+                _dailyAvg = _minTotal = _maxTotal = _greatTotal = 0.0;
+            }
+        } VolumeReportStatistics;
+
+        typedef struct UnpaidStatisticsStruct
+        {
+            int _invoices;
+            int _maxDaysDebt;
+            double _maxDebt;
+            double _debtAvg;
+            double _debtTotal;
+
+            UnpaidStatisticsStruct()
+            {
+                _invoices = _maxDaysDebt = 0;
+                _maxDebt = _debtAvg = _debtTotal = 0.0;
+            }
+        } UnpaidStatistics;
 
         class ReportManager
         {
@@ -90,6 +120,8 @@ namespace Model
             static VolumeReportByDateResult *reportByDate(QList<Model::Domain::Invoice *> *invoices);
             static VolumeReportByEntityResult *reportByEntity(QList<Model::Domain::Invoice *> *invoices);
             static VolumeReportByProductResult *reportByProduct(QList<Model::Domain::Invoice *> *invoices);
+            static VolumeReportStatistics reportStatistics(VolumeReportByDateResult *report);
+            static UnpaidStatistics unpaidStatistics(QList<Model::Domain::Invoice *> *invoices);
         };
     }
 }

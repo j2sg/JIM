@@ -23,6 +23,7 @@
 
 #include <QWidget>
 #include <QList>
+#include "reportmanager.h"
 
 #define UNPAIDS_REPORT_MINIMUM_WIDTH 600
 
@@ -52,10 +53,14 @@ namespace View
         public:
             UnpaidsReport(QList<Model::Domain::Invoice *> *buyInvoices,
                           QList<Model::Domain::Invoice *> *saleInvoices,
+                          Model::Report::UnpaidStatistics buyStatistics,
+                          Model::Report::UnpaidStatistics saleStatistics,
                           QWidget *parent = 0);
         private:
             void createWidgets(QList<Model::Domain::Invoice *> *buyInvoices,
-                               QList<Model::Domain::Invoice *> *saleInvoices);
+                               QList<Model::Domain::Invoice *> *saleInvoices,
+                               Model::Report::UnpaidStatistics buyStatistics,
+                               Model::Report::UnpaidStatistics saleStatistics);
             void createConnections();
 
             QTabWidget *_tabWidget;

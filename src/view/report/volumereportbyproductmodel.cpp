@@ -102,7 +102,7 @@ QVariant View::Report::VolumeReportByProductModel::headerData(int section, Qt::O
             case ColumnVolumeReportByProductWeight:
                 return QObject::tr("Weight");
             case ColumnVolumeReportByProductTotal:
-                return QObject::tr("Total");
+                return QObject::tr("Total (no VAT)");
             }
         }
     }

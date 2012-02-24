@@ -161,7 +161,6 @@
         <location filename="../../src/view/invoicing/operationmodel.cpp" line="186"/>
         <location filename="../../src/view/report/volumereportbydatemodel.cpp" line="94"/>
         <location filename="../../src/view/report/volumereportbyentitymodel.cpp" line="101"/>
-        <location filename="../../src/view/report/volumereportbyproductmodel.cpp" line="105"/>
         <source>Total</source>
         <translation>Total</translation>
     </message>
@@ -307,6 +306,11 @@
         <location filename="../../src/view/report/volumereportbyentitymodel.cpp" line="99"/>
         <source>Invoices (Paid)</source>
         <translation>Facturas (Pagadas)</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/volumereportbyproductmodel.cpp" line="105"/>
+        <source>Total (no VAT)</source>
+        <translation>Total (sin IVA)</translation>
     </message>
 </context>
 <context>

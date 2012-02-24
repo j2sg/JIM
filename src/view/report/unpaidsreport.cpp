@@ -27,10 +27,12 @@
 
 View::Report::UnpaidsReport::UnpaidsReport(QList<Model::Domain::Invoice *> *buyInvoices,
                                            QList<Model::Domain::Invoice *> *saleInvoices,
+                                           Model::Report::UnpaidStatistics buyStatistics,
+                                           Model::Report::UnpaidStatistics saleStatistics,
                                            QWidget *parent)
     : QWidget(parent)
 {
-    createWidgets(buyInvoices,saleInvoices);
+    createWidgets(buyInvoices,saleInvoices, buyStatistics, saleStatistics);
     createConnections();
     setWindowTitle(tr("Unpaids Report"));
     setWindowIcon(QIcon(":/images/unpaid.png"));
@@ -39,11 +41,13 @@ View::Report::UnpaidsReport::UnpaidsReport(QList<Model::Domain::Invoice *> *buyI
 }
 
 void View::Report::UnpaidsReport::createWidgets(QList<Model::Domain::Invoice *> *buyInvoices,
-                                                QList<Model::Domain::Invoice *> *saleInvoices)
+                                                QList<Model::Domain::Invoice *> *saleInvoices,
+                                                Model::Report::UnpaidStatistics buyStatistics,
+                                                Model::Report::UnpaidStatistics saleStatistics)
 {
     _tabWidget = new QTabWidget;
-    _unpaidsReportBuyTab = new UnpaidsReportTab(Model::Domain::Buy, buyInvoices);
-    _unpaidsReportSaleTab = new UnpaidsReportTab(Model::Domain::Sale, saleInvoices);
+    _unpaidsReportBuyTab = new UnpaidsReportTab(Model::Domain::Buy, buyInvoices, buyStatistics);
+    _unpaidsReportSaleTab = new UnpaidsReportTab(Model::Domain::Sale, saleInvoices, saleStatistics);
     _tabWidget -> addTab(_unpaidsReportBuyTab, tr("Buy"));
     _tabWidget -> addTab(_unpaidsReportSaleTab, tr("Sale"));
 
