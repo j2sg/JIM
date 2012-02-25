@@ -172,7 +172,7 @@ void View::QInvoicer::importStorage()
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Import Storage"),
                                                     QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
-                                                    tr("All Files"));
+                                                    tr("All Files (*.*)"));
 
     if(fileName.isEmpty() || !verifyImportStorage())
         return;
@@ -194,7 +194,7 @@ void View::QInvoicer::exportStorage()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export Storage"),
                                                 QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
-                                                tr("All Files"));
+                                                tr("All Files (*.*)"));
 
     if(fileName.isEmpty())
         return;
@@ -373,10 +373,6 @@ void View::QInvoicer::searchInvoice()
         View::Invoicing::InvoiceSearchResult *result = createInvoiceSearchResult(dialog.type(), dialog.searchMode(),
                                                                                  dialog.beginDate(), dialog.endDate(), dialog.entityId(),
                                                                                  dialog.minTotal(), dialog.maxTotal(), dialog.paid());
-
-        connect(result, SIGNAL(destroyed(QObject*)), this, SLOT(updateOtherWindows(QObject*)));
-        _otherWindows.push_back(result);
-
         result -> show();
     }
 }
@@ -430,10 +426,6 @@ void View::QInvoicer::volumeBuy()
                                                                           Model::Management::SearchByDateRange :
                                                                           Model::Management::SearchByTypeOnly,
                                                                       dialog.beginDate(), dialog.endDate());
-
-        connect(volumeReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
-        _otherWindows.push_back(volumeReport);
-
         volumeReport -> show();
     }
 }
@@ -451,10 +443,6 @@ void View::QInvoicer::volumeSale()
                                                                           Model::Management::SearchByDateRange :
                                                                           Model::Management::SearchByTypeOnly,
                                                                       dialog.beginDate(), dialog.endDate());
-
-        connect(volumeReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
-        _otherWindows.push_back(volumeReport);
-
         volumeReport -> show();
     }
 }
@@ -465,9 +453,6 @@ void View::QInvoicer::unpaidInvoices()
         return;
 
     View::Report::UnpaidsReport *unpaidsReport = createUnpaidsReport();
-
-    connect(unpaidsReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
-    _otherWindows.push_back(unpaidsReport);
 
     unpaidsReport -> show();
 }
@@ -714,8 +699,8 @@ void View::QInvoicer::createMenus()
     _applicationMenu -> addAction(_exitAction);
 
     _invoicingMenu = menuBar() -> addMenu(tr("&Invoicing"));
-    _invoicingMenu -> addAction(_createSaleInvoiceAction);
     _invoicingMenu -> addAction(_createBuyInvoiceAction);
+    _invoicingMenu -> addAction(_createSaleInvoiceAction);
     _invoicingMenu -> addSeparator();
     _invoicingMenu -> addAction(_loadInvoiceAction);
     _invoicingMenu -> addAction(_searchInvoiceAction);
@@ -754,8 +739,8 @@ void View::QInvoicer::createMenus()
 void View::QInvoicer::createToolBar()
 {
     _invoicingToolBar = addToolBar(tr("Invoicing"));
-    _invoicingToolBar -> addAction(_createSaleInvoiceAction);
     _invoicingToolBar -> addAction(_createBuyInvoiceAction);
+    _invoicingToolBar -> addAction(_createSaleInvoiceAction);
     _invoicingToolBar -> addAction(_loadInvoiceAction);
     _invoicingToolBar -> addAction(_searchInvoiceAction);
     _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -873,9 +858,8 @@ View::Invoicing::InvoiceEditor *View::QInvoicer::findInvoiceEditor(Model::Domain
 {
     foreach(QMdiSubWindow *subWindow, _mdiArea -> subWindowList()) {
         View::Invoicing::InvoiceEditor *editor = qobject_cast<View::Invoicing::InvoiceEditor *>(subWindow -> widget());
-        if(editor -> id() == invoice -> id()) {
+        if(editor -> id() == invoice -> id())
             return editor;
-        }
     }
 
 
@@ -891,6 +875,8 @@ View::Invoicing::InvoiceSearchResult *View::QInvoicer::createInvoiceSearchResult
     View::Invoicing::InvoiceSearchResult *result = new View::Invoicing::InvoiceSearchResult(invoices, type);
 
     connect(result, SIGNAL(loaded(Model::Domain::Invoice*)), this, SLOT(loadInvoice(Model::Domain::Invoice*)));
+    connect(result, SIGNAL(destroyed(QObject*)), this, SLOT(updateOtherWindows(QObject*)));
+    _otherWindows.push_back(result);
 
     return result;
 }
@@ -912,6 +898,9 @@ View::Report::VolumeReport *View::QInvoicer::createVolumeReport(Model::Domain::I
     View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(type, reportByDate, reportByEntity,
                                                                               reportByProduct, statistics);
 
+    connect(volumeReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
+    _otherWindows.push_back(volumeReport);
+
     delete invoices;
 
     return volumeReport;
@@ -929,6 +918,9 @@ View::Report::UnpaidsReport *View::QInvoicer::createUnpaidsReport()
     QApplication::restoreOverrideCursor();
 
     View::Report::UnpaidsReport *unpaidsReport = new View::Report::UnpaidsReport(buyInvoices, saleInvoices, buyStatistics, saleStatistics);
+
+    connect(unpaidsReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
+    _otherWindows.push_back(unpaidsReport);
 
     return unpaidsReport;
 }

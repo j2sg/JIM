@@ -123,6 +123,8 @@ void View::Invoicing::InvoiceEditorDataTab::selectEntity()
         _entityVatinLineEdit -> setText(entity -> vatin());
         _detailEntityPushButton -> setEnabled(true);
 
+        emit dataChanged();
+
         if(selector.created())
             emit entityAdded(*_invoice);
     }
