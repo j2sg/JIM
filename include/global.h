@@ -30,7 +30,7 @@
 #define AUTHOR_NAME         "Juan Jose Salazar Garcia"
 #define AUTHOR_EMAIL        "jjslzgc@gmail.com"
 #define APPLICATION_NAME    "QInvoicer"
-#define APPLICATION_VERSION "0.1 Alpha"
+#define APPLICATION_VERSION "0.1.1"
 
 // Configuration Default Values
 #define DEFAULT_APPLICATION_CURRENCY                    "EUR"

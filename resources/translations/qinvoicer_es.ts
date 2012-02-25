@@ -2360,7 +2360,7 @@ Verifique los permisos del directorio destino.</translation>
     <message>
         <location filename="../../src/view/qinvoicer.cpp" line="991"/>
         <source> - Business #%1 - %2</source>
-        <translation>- Empresa #%1 - %2</translation>
+        <translation> - Empresa #%1 - %2</translation>
     </message>
     <message>
         <location filename="../../src/view/qinvoicer.cpp" line="996"/>

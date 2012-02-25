@@ -743,13 +743,13 @@ void View::QInvoicer::createToolBar()
     _invoicingToolBar -> addAction(_createSaleInvoiceAction);
     _invoicingToolBar -> addAction(_loadInvoiceAction);
     _invoicingToolBar -> addAction(_searchInvoiceAction);
-    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
+    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     _managementToolBar = addToolBar(tr("Management"));
     _managementToolBar -> addAction(_manageCustomerAction);
     _managementToolBar -> addAction(_manageSupplierAction);
     _managementToolBar -> addAction(_manageProductAction);
-    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
+    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     _reportToolBar = addToolBar(tr("Report"));
     _reportToolBar -> addAction(_volumeBuyAction);
@@ -1010,8 +1010,10 @@ void View::QInvoicer::setBusinessOpen(bool open)
     _reportMenu -> setEnabled(open);
     _windowMenu -> setEnabled(open);
 
-    setWindowTitle(QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION) +
-                   (open ? tr(" - Business #%1 - %2").arg(_business -> id()).arg(_business -> name()) : QString()));
+    setWindowTitle(APPLICATION_NAME + (open ? tr(" - Business #%1 - %2")
+                                              .arg(_business -> id())
+                                              .arg(_business -> name())
+                                            : QString()));
 }
 
 bool View::QInvoicer::verifyImportStorage()
