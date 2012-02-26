@@ -168,6 +168,7 @@ namespace View
         QAction *_nextAction;
         QAction *_previousAction;
         QAction *_aboutAction;
+        QAction *_aboutQtAction;
         QMenu *_applicationMenu;
         QMenu *_invoicingMenu;
         QMenu *_managementMenu;

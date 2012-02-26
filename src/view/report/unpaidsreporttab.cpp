@@ -63,7 +63,7 @@ void View::Report::UnpaidsReportTab::createWidgets(Model::Domain::InvoiceType ty
     _invoicesTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
     _invoicesTableView -> setFocusPolicy(Qt::NoFocus);
 
-    _invoicesLabel = new QLabel(tr("Invoices:"));
+    _invoicesLabel = new QLabel(tr("Unpaid Invoices:"));
     _invoicesLabelValue = new QLabel(QString::number(statistics._invoices));
     _maxDaysDebtLabel = new QLabel(tr("Oldest Debt:"));
     _maxDaysDebtLabelValue = new QLabel(QString::number(statistics._maxDaysDebt) + " " + tr("days"));

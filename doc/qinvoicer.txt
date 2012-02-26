@@ -1,10 +1,9 @@
-- Requirements Specification.
+- QInvoicer Documentation
 
-  We want to develop a software application that allow us to make those tasks related with invoicing activity
-  and business management on scope of SMBs (Small and Medium Business). Therefore, the application must
-  be able to:
+  QInvoicer is a software application that allow us to make those tasks related with invoicing activity and 
+  business management on scope of SMBs (Small and Medium Business). Therefore, the application be able to:
 
-    - Create, load and store invoices both sale and buy that involve customers or suppliers.
+    (i) Create, load and store invoices[1] both sale and buy that involve customers or suppliers.
 
       All invoices are composed by next fields:
 
@@ -23,10 +22,10 @@
             - Unitary Price, which can be two types, by quantity or by weight.
             - Total Price according to product, quantity, weight, unitary price and its type.
 
-        - Tax Payment Details, which will follow spanish fiscal system so we might specify
+        - Tax Payment Details, which will follow spanish fiscal system[2] so we might specify
           next parameters in each invoice:
 
-            - IVA : VAT (Value Added Tax). Each kind of product has its own VAT which can be:
+            - IVA : VAT (Value Added Tax)[3]. Each kind of product has its own VAT which can be:
 
                 - General :       18 %
                 - Reduced :        8 %
@@ -51,7 +50,7 @@
       
       Each invoice belongs to a business which has a set of taxes that will be used on invoicing.
 
-    - Management of products, customers and suppliers so will be able to add, modify and remove each one of these.
+    (2i) Management of products, customers and suppliers so will be able to add, modify and remove each one of these.
 
         - Products are composed by next fields:
 
@@ -78,17 +77,17 @@
          - Customers, Suppliers and Business are composed by next fields:
 
             - Unique identifier.
-            - VAT identification number a.k.a. VATIN.
+            - VAT identification number a.k.a. VATIN[4].
             - Full Address.
             - Contact Information (Telephone, email, etc).
 
-    - Show reports for invoicing volume, current stocks and unpaid invoices.
+    (3i) Show reports for invoicing volume and unpaid invoices.
 
-  Likely these requirements will be extended and/or improved on each future version.
+  Likely these features will be extended and/or improved on each future version.
 
 - References:
 
-  - http://en.wikipedia.org/wiki/Invoice
-  - http://en.wikipedia.org/wiki/Value_added_tax
-  - http://www.aeat.es/AEAT.internet/Inicio_es_ES/_Configuracion_/_top_/Ayuda/Biblioteca_Virtual/Manuales_practicos/Manuales_practicos.shtml
-  - http://en.wikipedia.org/wiki/VAT_identification_number
+[1] http://en.wikipedia.org/wiki/Invoice
+[2] http://www.aeat.es/AEAT.internet/Inicio_es_ES/_Configuracion_/_top_/Ayuda/Biblioteca_Virtual/Manuales_practicos/Manuales_practicos.shtml
+[3] http://en.wikipedia.org/wiki/Value_added_tax
+[4] http://en.wikipedia.org/wiki/VAT_identification_number

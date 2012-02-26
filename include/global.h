@@ -31,6 +31,8 @@
 #define AUTHOR_EMAIL        "jjslzgc@gmail.com"
 #define APPLICATION_NAME    "QInvoicer"
 #define APPLICATION_VERSION "0.1.1"
+#define APPLICATION_YEARS   "2011-2012"
+#define APPLICATION_WEB     "http://j2sg.wordpress.com/proyectos/qinvoicer"
 
 // Configuration Default Values
 #define DEFAULT_APPLICATION_CURRENCY                    "EUR"

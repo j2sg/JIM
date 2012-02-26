@@ -472,12 +472,15 @@ void View::QInvoicer::about()
     QMessageBox::about(this, tr("About QInvoicer"),
                        tr("<h2>%1 %2</h2>"
                           "<h3>Invoicing and Management for SMBs</h3>"
-                          "<p>Licensed under GNU General Public License version 3</p>"
-                          "<p>Developed by %3 - <a href= \"mailto:%4\" >%4</a></p>")
+                          "<p>(C) %3 %4 <a href= \"mailto:%5\" >%5</a></p>"
+                          "<p><a href= \"%6\" >%6</a></p>"
+                          "<p>Licensed under <a href=\"http://www.gnu.org/licenses/gpl.html\" >GNU General Public License version 3</a></p>")
                        .arg(APPLICATION_NAME)
                        .arg(APPLICATION_VERSION)
+                       .arg(APPLICATION_YEARS)
                        .arg(AUTHOR_NAME)
-                       .arg(AUTHOR_EMAIL));
+                       .arg(AUTHOR_EMAIL)
+                       .arg(APPLICATION_WEB));
 }
 
 void View::QInvoicer::updateWindowMenu()
@@ -642,7 +645,7 @@ void View::QInvoicer::createActions()
     _volumeSaleAction -> setIcon(QIcon(":/images/volumesale.png"));
     _volumeSaleAction -> setStatusTip(tr("Make a report about Volume Sale"));
 
-    _unpaidInvoicesAction = new QAction(tr("&Unpaid Invoice..."), this);
+    _unpaidInvoicesAction = new QAction(tr("&Unpaid Invoices..."), this);
     _unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
     _unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
 
@@ -677,6 +680,9 @@ void View::QInvoicer::createActions()
     _aboutAction = new QAction(tr("About"), this);
     _aboutAction -> setIcon(QIcon(":/images/about.png"));
     _aboutAction -> setStatusTip(tr("Show information about QInvoicer"));
+
+    _aboutQtAction = new QAction(tr("About &Qt"), this);
+    _aboutQtAction -> setStatusTip(tr("Show information about Qt library"));
 }
 
 void View::QInvoicer::createMenus()
@@ -732,6 +738,7 @@ void View::QInvoicer::createMenus()
 
     _helpMenu = menuBar() -> addMenu(tr("&Help"));
     _helpMenu -> addAction(_aboutAction);
+    _helpMenu -> addAction(_aboutQtAction);
 
     updateWindowMenu();
 }
@@ -743,13 +750,13 @@ void View::QInvoicer::createToolBar()
     _invoicingToolBar -> addAction(_createSaleInvoiceAction);
     _invoicingToolBar -> addAction(_loadInvoiceAction);
     _invoicingToolBar -> addAction(_searchInvoiceAction);
-    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
 
     _managementToolBar = addToolBar(tr("Management"));
     _managementToolBar -> addAction(_manageCustomerAction);
     _managementToolBar -> addAction(_manageSupplierAction);
     _managementToolBar -> addAction(_manageProductAction);
-    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
 
     _reportToolBar = addToolBar(tr("Report"));
     _reportToolBar -> addAction(_volumeBuyAction);
@@ -833,6 +840,8 @@ void View::QInvoicer::createConnections()
             _mdiArea, SLOT(activatePreviousSubWindow()));
     connect(_aboutAction, SIGNAL(triggered()),
             this, SLOT(about()));
+    connect(_aboutQtAction, SIGNAL(triggered()),
+            qApp, SLOT(aboutQt()));
 }
 
 View::Invoicing::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Domain::Invoice *invoice)

@@ -1,36 +1,33 @@
-QInvoicer
+- QInvoicer v0.1.1
 
-- Description. 
+   Copyright (c) 2011-2012 Juan Jose Salazar Garcia - jjslzgc@gmail.com
    
-   Invoicing Software for SMBs (Small and Medium Business). You should read doc/specification.txt
-   to get more details in depth about the domain logic for this application.
+   - Description
 
-- Implementation.
+      Invoicing Software for SMBs (Small and Medium Business). You should 
+      read doc/qinvoicer.txt to get more details in depth about the domain 
+      logic for this application.
 
-   - Developed in C++ and Qt4 framework.
-   - Data to be saved in a SQLite database.
-   - Multiplatform. Works properly on GNU/Linux and Microsoft Windows operating systems.
+   - Details.
 
-- Compilation.
+      - Developed in C++ and Qt4 framework.
+      - Data to be saved in a SQLite database (future versions will be 
+        able to work with several DBMS).
+      - Multiplatform. Works properly on GNU/Linux and Microsoft Windows 
+        (XP, Vista and 7). Likely, should works on MacOs X, however it 
+        hasn't been tested yet.
+      - Multilanguage. Available in english and spanish language.
+ 
+   - Installation.
 
-From a command prompt, type the commands below to:
-
-- Generate a platform-specific makefile:
+      You must read INSTALL file to get more details about installation or 
+      compilation.
    
-	qmake
+   - Licence
 
-- Build the application:
+      QInvoicer is licensed under the GNU General Public License version 3,
+      you should read LICENSE FILE to get more details about this.
 
-	make
 
-- Execute the application:
-
-	- On Unix:
-
-		./qinvoicer
-
-	- On Windows:
-
-		qinvoicer
-
-Enjoy the application. :-)
+For more information visit http://j2sg.wordpress.com/proyectos/qinvoicer
+and you can get latest version from https://github.com/j2sg/QInvoicer

@@ -490,107 +490,107 @@ do you want to save the changes?</source>
 <context>
     <name>View::Invoicing::InvoiceEditorDataTab</name>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="164"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="166"/>
         <source>&amp;Details</source>
         <translation>&amp;Detalles</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="180"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="182"/>
         <source>&amp;Customer</source>
         <translation>&amp;Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="180"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="182"/>
         <source>&amp;Supplier</source>
         <translation>&amp;Proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="189"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="191"/>
         <source>&amp;Operations</source>
         <translation>&amp;Operaciones</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="208"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="210"/>
         <source>&amp;Payment</source>
         <translation>&amp;Pago</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="222"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="224"/>
         <source>&amp;Id:</source>
         <translation>&amp;Id:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="227"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="229"/>
         <source>&amp;Auto</source>
         <translation>&amp;Auto</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="229"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="231"/>
         <source>D&amp;ate:</source>
         <translation>&amp;Fecha:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="234"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="236"/>
         <source>&amp;Place:</source>
         <translation>&amp;Lugar:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="241"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="243"/>
         <source>I&amp;d:</source>
         <translation>I&amp;d:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="246"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="248"/>
         <source>&amp;Name:</source>
         <translation>&amp;Nombre:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="251"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="253"/>
         <source>&amp;VATIN:</source>
         <translation>&amp;NIF:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="256"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="258"/>
         <source>&amp;Select</source>
         <translation>&amp;Seleccionar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="277"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="279"/>
         <source>Subtotal:</source>
         <translation>Subtotal:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="282"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="284"/>
         <source>Taxes:</source>
         <translation>Impuestos:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="287"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="289"/>
         <source>Deduction:</source>
         <translation>Deducción:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="292"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="294"/>
         <source>Total:</source>
         <translation>Total:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="297"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="299"/>
         <source>&amp;Paid</source>
         <translation>&amp;Pagado</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="302"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="304"/>
         <source>Cash</source>
         <translation>Metálico</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="302"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="304"/>
         <source>Card</source>
         <translation>Tarjeta</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="302"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="304"/>
         <source>Transfer</source>
         <translation>Transferencia</translation>
     </message>
@@ -1787,325 +1787,333 @@ are you sure you want to delete the category?</source>
 <context>
     <name>View::QInvoicer</name>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="88"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="99"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="103"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="107"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="89"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="100"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="104"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="108"/>
         <source>First Execution</source>
         <translation>Primera Ejecución</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="89"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="90"/>
         <source>This is the first time that you run the application.
 You must set the access password.</source>
         <translation>Esta es la primera vez que ejecuta la aplicación
 Debe establecer una contraseña de acceso.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="100"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="101"/>
         <source>Password saved. Welcome to %1.</source>
         <translation>Contraseña guardada. Bienvenido a %1.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="104"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="105"/>
         <source>Password cannot be saved. Application will be closed.</source>
         <translation>La contraseña no puede guardarse. La aplicación será cerrada.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="108"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="109"/>
         <source>Setting up password canceled. Application will be closed.</source>
         <translation>Establecimiento de contraseña cancelado. La aplicación será cerrada.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="125"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="131"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="141"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="126"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="132"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="142"/>
         <source>Authentication Failed</source>
         <translation>Fallo de Autenticación</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="126"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="127"/>
         <source>Authentication canceled. Application will be closed.</source>
         <translation>Autenticación cancelada. La aplicación será cerrada.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="132"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="133"/>
         <source>Wrong Password. You have %1 attempts more.</source>
         <translation>Contraseña Incorrecta. Tienes %1 intentos mas.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="142"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="143"/>
         <source>Max attempts number exceeded. Application will be closed.</source>
         <translation>Excedido el número máximo de intentos. La aplicación será cerrada.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="152"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="153"/>
         <source>There was an error on connection attempt.
 Check out your storage configuration.</source>
         <translation>Hubo un error durante el intento de conexión.
 Compruebe su configuración de almacenamiento.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="171"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="183"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="173"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="185"/>
         <source>Import Storage</source>
         <translation>Importar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="173"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="195"/>
         <source>All Files</source>
-        <translation>Todos los ficheros</translation>
+        <translation type="obsolete">Todos los ficheros</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="184"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="186"/>
         <source>There was errors on import.
 Verify if file exists and/or directory permissions.</source>
         <translation>Hubo errores durante la importación.
 Verifique si el fichero existe y/o los permisos del directorio.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="193"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="205"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="195"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="207"/>
         <source>Export Storage</source>
         <translation>Exportar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="206"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="208"/>
         <source>There was errors on export.
 Verify permissions of destination directory.</source>
         <translation>Hubo errores durante la exportación.
 Verifique los permisos del directorio destino.</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="210"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="212"/>
         <source>Export Completed</source>
         <translation>Exportación Completada</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="220"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="222"/>
         <source>Created Business %1</source>
         <translation>Creada Empresa %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="222"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="224"/>
         <source>Business Creation</source>
         <translation>Creación de Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="223"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="225"/>
         <source>There was an error on business creation</source>
         <translation>Hubo errores en la creación de la empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="251"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="253"/>
         <source>Loaded Business %1</source>
         <translation>Cargada Empresa %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="254"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="256"/>
         <source>Load Business</source>
         <translation>Cargar Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="255"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="257"/>
         <source>Not exists any business with that Id</source>
         <translation>No existe ninguna empresa con ese Id</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="272"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="276"/>
         <source>Closed Business %1</source>
         <translation>Cerrada Empresa %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="289"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="293"/>
         <source>Modified Business %1</source>
         <translation>Modificada Empresa %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="291"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="295"/>
         <source>Business Modification</source>
         <translation>Modificación de Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="292"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="296"/>
         <source>There was an error on business update</source>
         <translation>Hubo errores en la modificación de la empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="344"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="348"/>
         <source>Load Invoice</source>
         <translation>Cargar Factura</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="345"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="349"/>
         <source>Not exists any invoice with that Id</source>
         <translation>No existe ninguna factura con ese Id</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="469"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="472"/>
         <source>About QInvoicer</source>
         <translation>Acerca de QInvoicer</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="470"/>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;h3&gt;Invoicing and Management for SMBs&lt;/h3&gt;&lt;p&gt;Licensed under GNU General Public License version 3&lt;/p&gt;&lt;p&gt;Developed by %3 - &lt;a href= &quot;mailto:%4&quot; &gt;%4&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;h3&gt;Facturación y Gestión para PYMEs&lt;/h3&gt;&lt;p&gt;Licenciado bajo Licencia Pública General GNU version 3&lt;/p&gt;&lt;p&gt;Desarrollado por %3 - &lt;a href= &quot;mailto:%4&quot; &gt;%4&lt;/a&gt;&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;h3&gt;Facturación y Gestión para PYMEs&lt;/h3&gt;&lt;p&gt;Licenciado bajo Licencia Pública General GNU version 3&lt;/p&gt;&lt;p&gt;Desarrollado por %3 - &lt;a href= &quot;mailto:%4&quot; &gt;%4&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="494"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="500"/>
         <source>Printing %1 %2</source>
         <translation>Imprimiendo %1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="495"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="505"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="512"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="519"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="501"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="511"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="518"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="525"/>
         <source>Sale Invoice</source>
         <translation>Factura de Venta</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="495"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="505"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="512"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="519"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="501"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="511"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="518"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="525"/>
         <source>Buy Invoice</source>
         <translation>Factura de Compra</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="504"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="510"/>
         <source>%1 %2 saved</source>
         <translation>%1 %2 guardada</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="511"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="517"/>
         <source>%1 %2 deleted</source>
         <translation>%1 %2 eliminada</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="518"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="524"/>
         <source>%1 has added a new %2 %3</source>
         <translation>%1 ha añadido un nuevo %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="520"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="526"/>
         <source>Supplier</source>
         <translation>Proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="520"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="526"/>
         <source>Customer</source>
         <translation>Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="553"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="566"/>
         <source>&amp;Create Business...</source>
         <translation>&amp;Crear Empresa...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="555"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="568"/>
         <source>Create a new business</source>
         <translation>Crear una nueva empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="557"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="570"/>
         <source>&amp;Load Business...</source>
         <translation>Cargar &amp;Empresa...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="558"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="571"/>
         <source>Load a specific business</source>
         <translation>Cargar una empresa específica</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="560"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="573"/>
         <source>&amp;Close Business</source>
         <translation>C&amp;errar Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="561"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="574"/>
         <source>Close the actual business</source>
         <translation>Cierra la empresa actual</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="563"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="576"/>
         <source>&amp;Details...</source>
         <translation>&amp;Detalles...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="565"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="578"/>
         <source>Set up business details</source>
         <translation>Establece los detalles de la empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="591"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="604"/>
         <source>E&amp;xit</source>
         <translation>&amp;Salir</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="151"/>
-        <location filename="../../src/view/qinvoicer.cpp" line="567"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="152"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="580"/>
         <source>Connect Storage</source>
         <translation>Conectar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="188"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="175"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="197"/>
+        <source>All Files (*.*)</source>
+        <translation>Todos los Archivos (*.*)</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/qinvoicer.cpp" line="190"/>
         <source>Import Completed</source>
         <translation>Importación Completada</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="569"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="473"/>
+        <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;h3&gt;Invoicing and Management for SMBs&lt;/h3&gt;&lt;p&gt;(C) %3 %4 &lt;a href= &quot;mailto:%5&quot; &gt;%5&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href= &quot;%6&quot; &gt;%6&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Licensed under &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot; &gt;GNU General Public License version 3&lt;/a&gt;&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;h3&gt;Facturación y Gestión para PYMEs&lt;/h3&gt;&lt;p&gt;(C) %3 %4 &lt;a href= &quot;mailto:%5&quot; &gt;%5&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href= &quot;%6&quot; &gt;%6&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Licenciado bajo &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot; &gt;Licencia Pública General GNU versión 3&lt;/a&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/qinvoicer.cpp" line="582"/>
         <source>Establish the connection to storage media</source>
         <translation>Establece la conexión con el medio de almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="571"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="584"/>
         <source>Disconnect Storage</source>
         <translation>Desconectar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="573"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="586"/>
         <source>Finish the connection to storage media</source>
         <translation>Finaliza la conexion con el medio de almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="575"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="588"/>
         <source>&amp;Import Storage...</source>
         <translation>&amp;Importar Almacenamiento...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="577"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="590"/>
         <source>Import Storage from an existing file</source>
         <translation>Importar Almacenamiento desde un fichero existente</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="579"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="592"/>
         <source>&amp;Export Storage...</source>
         <translation>&amp;Exportar Almacenamiento...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="581"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="594"/>
         <source>Export Storage to a file</source>
         <translation>Exportar Almacenamiento a un fichero</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="583"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="596"/>
         <source>&amp;Options...</source>
         <translation>&amp;Opciones...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="585"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="598"/>
         <source>Set up application options</source>
         <translation>Establece las opciones de la aplicación</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="587"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="600"/>
         <source>&amp;Printing...</source>
         <translation>&amp;Impresión...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="589"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="602"/>
         <source>Set up printing configuration</source>
         <translation>Establece la configuración de Impresión</translation>
     </message>
@@ -2114,47 +2122,47 @@ Verifique los permisos del directorio destino.</translation>
         <translation type="obsolete">&amp;Salir</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="593"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="606"/>
         <source>Exit the application</source>
         <translation>Abandonar la aplicación</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="595"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="608"/>
         <source>Create &amp;Sale Invoice...</source>
         <translation>Crear Factura de &amp;Ventas...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="597"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="610"/>
         <source>Create a new Sale Invoice with a customer</source>
         <translation>Crear una nueva factura de ventas con un cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="599"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="612"/>
         <source>Create &amp;Buy Invoice...</source>
         <translation>Crear Factura de &amp;Compras...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="601"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="614"/>
         <source>Create a new Buy Invoice with a provider</source>
         <translation>Crear una nueva factura de compras con un proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="603"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="616"/>
         <source>&amp;Load Invoice...</source>
         <translation>&amp;Cargar Factura...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="605"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="618"/>
         <source>Load a specific Invoice</source>
         <translation>Cargar factura específica</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="607"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="620"/>
         <source>&amp;Search Invoice...</source>
         <translation>&amp;Buscar Factura...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="609"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="622"/>
         <source>Make an invoice search</source>
         <translation>Hacer una busqueda de facturas</translation>
     </message>
@@ -2163,224 +2171,238 @@ Verifique los permisos del directorio destino.</translation>
         <translation type="obsolete">Hace una búsqueda avanzada</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="611"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="624"/>
         <source>&amp;Businesses...</source>
         <translation>&amp;Empresas...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="613"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="626"/>
         <source>Business Management</source>
         <translation>Gestión de Empresas</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="615"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="628"/>
         <source>&amp;Customers...</source>
         <translation>&amp;Clientes...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="617"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="630"/>
         <source>Customer Management</source>
         <translation>Gestión de Clientes</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="619"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="632"/>
         <source>&amp;Suppliers...</source>
         <translation>&amp;Proveedores...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="621"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="634"/>
         <source>Supplier Management</source>
         <translation>Gestión de Proveedores</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="623"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="636"/>
         <source>&amp;Products...</source>
         <translation>P&amp;roductos...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="625"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="638"/>
         <source>Product Management</source>
         <translation>Gestión de Productos</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="627"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="640"/>
         <source>&amp;Volume Buy...</source>
         <translation>Volumen de &amp;Compras...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="629"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="642"/>
         <source>Make a report about Volume Buy</source>
         <translation>Hacer un informe acerca del volumen de compras</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="631"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="644"/>
         <source>&amp;Volume Sale...</source>
         <translation>Volumen de &amp;Ventas...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="633"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="646"/>
         <source>Make a report about Volume Sale</source>
         <translation>Hacer un informe acerca del volumen de ventas</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="635"/>
         <source>&amp;Unpaid Invoice...</source>
+        <translation type="obsolete">Facturas &amp;Impagadas...</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/qinvoicer.cpp" line="648"/>
+        <source>&amp;Unpaid Invoices...</source>
         <translation>Facturas &amp;Impagadas...</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="637"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="650"/>
         <source>Show all unpaid invoices</source>
         <translation>Mostrar todas las facturas impagadas</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="647"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="660"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="648"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="661"/>
         <source>Close active window</source>
         <translation>Cerrar la ventana actual</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="650"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="663"/>
         <source>Close All</source>
         <translation>Cerrar Todas</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="651"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="664"/>
         <source>Close all windows</source>
         <translation>Cerrar todas las ventanas</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="653"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="666"/>
         <source>Tile</source>
         <translation>Mosaico</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="654"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="667"/>
         <source>Tile windows</source>
         <translation>Ventanas en mosaico</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="656"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="669"/>
         <source>Cascade</source>
         <translation>Cascada</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="657"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="670"/>
         <source>Cascade windows</source>
         <translation>Ventanas en Cascada</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="659"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="672"/>
         <source>Next</source>
         <translation>Siguiente</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="661"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="674"/>
         <source>Go to next window</source>
         <translation>Ir a la siguiente ventana</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="663"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="676"/>
         <source>Previous</source>
         <translation>Anterior</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="665"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="678"/>
         <source>Go to previous window</source>
         <translation>Ir a la ventana anterior</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="667"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="680"/>
         <source>About</source>
         <translation>Acerca</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="669"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="682"/>
         <source>Show information about QInvoicer</source>
         <translation>Mostrar información acerca de QInvoicer</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="674"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="684"/>
+        <source>About &amp;Qt</source>
+        <translation>Acerca de &amp;Qt</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/qinvoicer.cpp" line="685"/>
+        <source>Show information about Qt library</source>
+        <translation>Mostrar información acerca de la biblioteca Qt</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/qinvoicer.cpp" line="690"/>
         <source>&amp;Application</source>
         <translation>&amp;Aplicación</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="691"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="707"/>
         <source>&amp;Invoicing</source>
         <translation>&amp;Facturación</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="698"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="714"/>
         <source>&amp;Management</source>
         <translation>&amp;Gestión</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="704"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="720"/>
         <source>&amp;Report</source>
         <translation>&amp;Informe</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="713"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="729"/>
         <source>&amp;Window</source>
         <translation>&amp;Ventana</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="723"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="739"/>
         <source>&amp;Help</source>
         <translation>A&amp;yuda</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="731"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="748"/>
         <source>Invoicing</source>
         <translation>Facturación</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="738"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="755"/>
         <source>Management</source>
         <translation>Gestión</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="744"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="761"/>
         <source>Report</source>
         <translation>Informe</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="967"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="999"/>
         <source>Connected to %1</source>
         <translation>Conectado a %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="967"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="999"/>
         <source>Disconnected</source>
         <translation>Desconectado</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="991"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="1022"/>
         <source> - Business #%1 - %2</source>
         <translation> - Empresa #%1 - %2</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="996"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="1030"/>
         <source>Verify Import Storage</source>
         <translation>Verificar Importar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="997"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="1031"/>
         <source>You must know that all stored data will be removed.
 are you sure you wish to import storage?</source>
         <translation>Debe saber que todos los datos almacenados serán eliminados.
 ¿Esta seguro de que desea importar el almacenamiento?</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="1005"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="1039"/>
         <source>Verify Business Creation</source>
         <translation>Verificar Creación de Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="1006"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="1040"/>
         <source>Not found any business. Perhaps this is the first time that
 you execute the application or all business has been removed.
 do you want to create a new business now?</source>
@@ -2389,24 +2411,24 @@ que ejecuta la aplicación o todas las empresas han sido eliminadas.
 ¿Quiere crear una nueva empresa ahora?</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="1015"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="1049"/>
         <source>Verify Close Business</source>
         <translation>Verificar Cerrar Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="1016"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="1050"/>
         <source>There are active invoices.
 are you sure you wish to close the business?</source>
         <translation>Hay facturas activas.
 ¿Esta seguro de querer cerrar la empresa?</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="1024"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="1058"/>
         <source>Verify Exit</source>
         <translation>Verificar Salida</translation>
     </message>
     <message>
-        <location filename="../../src/view/qinvoicer.cpp" line="1025"/>
+        <location filename="../../src/view/qinvoicer.cpp" line="1059"/>
         <source>are you sure you wish to exit the program?</source>
         <translation>¿Está seguro de querer abandonar la aplicación?</translation>
     </message>
@@ -2465,9 +2487,13 @@ are you sure you wish to close the business?</source>
 <context>
     <name>View::Report::UnpaidsReportTab</name>
     <message>
-        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="66"/>
         <source>Invoices:</source>
-        <translation>Facturas:</translation>
+        <translation type="obsolete">Facturas:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/report/unpaidsreporttab.cpp" line="66"/>
+        <source>Unpaid Invoices:</source>
+        <translation>Facturas Impagadas:</translation>
     </message>
     <message>
         <location filename="../../src/view/report/unpaidsreporttab.cpp" line="68"/>

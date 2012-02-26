@@ -1,0 +1,28 @@
+- Requirements
+
+      - Qt4 libraries with QtSql module.
+      - Qt4 headers with QtSql module header.
+      - Makefile generation tool QMake.
+        
+        You can obtain Qt at http://qt.nokia.com/ or through 
+        your package manager on unix systems.
+
+- Compilation
+
+   - Generate a platform-specific makefile:
+
+      qmake
+
+   - Build the application:
+
+      - On Unix:
+
+         make
+
+      - On Windows:
+
+         mingw32-make
+
+   
+   Now we have the qinvoicer binary ready to execute.
+
