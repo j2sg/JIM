@@ -45,7 +45,7 @@
 View::QInvoicer::QInvoicer()
 {
     createWidgets();
-    setWindowIcon(QIcon(":/images/appicon.png"));
+    setWindowIcon(QIcon(":/images/qinvoicer.png"));
     setBusinessOpen(false);
 
     _business = 0;

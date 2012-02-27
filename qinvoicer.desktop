@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=QInvoicer
+GenericName=Invoicing Application
+Version=0.1.1
+Comment=Invoicing and Management for SMBs
+Icon=/usr/share/pixmaps/qinvoicer.png
+Exec=qinvoicer
+Terminal=false
+Categories=Qt;Office;Finance;Economy;
+
+# Translations
+GenericName[es]=Aplicacion de Facturacion
+Comment[es]=Facturacion y Gestion para PYMEs

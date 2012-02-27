@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/appicon.png</file>
         <file>images/loadinvoice.png</file>
         <file>images/buyinvoice.png</file>
         <file>images/saleinvoice.png</file>
@@ -32,5 +31,6 @@
         <file>translations/qinvoicer_es.qm</file>
         <file>images/export.png</file>
         <file>images/import.png</file>
+        <file>images/qinvoicer.png</file>
     </qresource>
 </RCC>
