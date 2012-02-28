@@ -58,8 +58,8 @@ void View::Management::ProductEditor::addCategory()
 
     if(dialog.exec()) {
         if(Model::Management::CategoryManager::create(*category)) {
-            int row = _categoriesTableView -> currentIndex().row();
-            _categoryModel -> insertCategory(row + 1, category);
+            int row = _categoryModel -> rowCount(QModelIndex());
+            _categoryModel -> insertCategory(row, category);
         } else {
             QMessageBox::critical(this, tr("Critical Error"),
                                   tr("Error during the category addition"),
@@ -120,8 +120,8 @@ void View::Management::ProductEditor::addProduct()
 
     if(dialog.exec()) {
         if(Model::Management::ProductManager::create(*product)) {
-            int row = _productsTableView -> currentIndex().row();
-            _productModel -> insertProduct(row + 1, product);
+            int row = _productModel -> rowCount(QModelIndex());
+            _productModel -> insertProduct(row, product);
 
         } else {
             QMessageBox::critical(this, tr("Critical Error"),

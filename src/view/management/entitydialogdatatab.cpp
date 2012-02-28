@@ -72,7 +72,8 @@ void View::Management::EntityDialogDataTab::saveEntity()
 bool View::Management::EntityDialogDataTab::isSaveable()
 {
     return !(_idLineEdit -> text().isEmpty()) &&
-           !(_nameLineEdit -> text().isEmpty());
+           !(_nameLineEdit -> text().isEmpty()) &&
+           !(_vatinLineEdit -> text().isEmpty());
 }
 
 void View::Management::EntityDialogDataTab::stateChangedOnAutoIdCheckBox()

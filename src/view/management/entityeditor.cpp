@@ -66,8 +66,8 @@ void View::Management::EntityEditor::addEntity()
         if(((_type == Model::Domain::BusinessEntity) ?
              Model::Management::BusinessManager::create(*entity) :
              Model::Management::EntityManager::create(*entity))) {
-            int row = _entitiesTableView -> currentIndex().row();
-            _entityModel -> insertEntity(row + 1, entity);
+            int row = _entityModel -> rowCount(QModelIndex());
+            _entityModel -> insertEntity(row, entity);
         } else {
             QMessageBox::critical(this, tr("Critical Error"),
                                   tr("Error during the entity addition"),
