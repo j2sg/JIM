@@ -1,25 +1,25 @@
 /**
- *  This file is part of QInvoicer.
+ *  This file is part of TIM.
  *
- *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/TIM
  *
- *  QInvoicer is free software: you can redistribute it and/or modify
+ *  TIM is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  QInvoicer is distributed in the hope that it will be useful,
+ *  TIM is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with QInvoicer.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with TIM.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
 
 #include <QtGui>
-#include "qinvoicer.h"
+#include "mainwindow.h"
 #include "persistencemanager.h"
 #include "registerdialog.h"
 #include "authdialog.h"
@@ -42,12 +42,15 @@
 #include "printingmanager.h"
 #include "global.h"
 
-View::QInvoicer::QInvoicer()
+View::MainWindow::MainWindow()
 {
     createWidgets();
-    setWindowIcon(QIcon(":/images/qinvoicer.png"));
+    createConnections();
+    setWindowIcon(QIcon(":/images/tim.png"));
     setBusinessOpen(false);
 
+    _printer = new QPrinter;
+    
     _business = 0;
     _authorized = false;
     _connected = false;
@@ -58,7 +61,7 @@ View::QInvoicer::QInvoicer()
     connectStorage();
 }
 
-View::QInvoicer::~QInvoicer()
+View::MainWindow::~MainWindow()
 {
     disconnectStorage();
 
@@ -68,7 +71,7 @@ View::QInvoicer::~QInvoicer()
         delete _business;
 }
 
-void View::QInvoicer::closeEvent(QCloseEvent *event)
+void View::MainWindow::closeEvent(QCloseEvent *event)
 {
     if(!_authorized)
         event -> accept();
@@ -84,7 +87,7 @@ void View::QInvoicer::closeEvent(QCloseEvent *event)
         event -> ignore();
 }
 
-bool View::QInvoicer::firstExecution()
+bool View::MainWindow::firstExecution()
 {
     QMessageBox::information(this, tr("First Execution"),
                                    tr("This is the first time that you run the application.\n"
@@ -115,7 +118,7 @@ bool View::QInvoicer::firstExecution()
     return _authorized;
 }
 
-bool View::QInvoicer::login()
+bool View::MainWindow::login()
 {
     AuthDialog dialog(this);
     QString password = Persistence::Manager::readConfig("Password").toString();
@@ -146,7 +149,7 @@ bool View::QInvoicer::login()
     return _authorized;
 }
 
-void View::QInvoicer::connectStorage()
+void View::MainWindow::connectStorage()
 {
     if(!(_connected = Persistence::Manager::connectStorage()))
         QMessageBox::critical(this, tr("Connect Storage"),
@@ -157,7 +160,7 @@ void View::QInvoicer::connectStorage()
     setStorageConnected(_connected);
 }
 
-void View::QInvoicer::disconnectStorage()
+void View::MainWindow::disconnectStorage()
 {
     Persistence::Manager::disconnectStorage();
     setStorageConnected((_connected = false));
@@ -167,7 +170,7 @@ void View::QInvoicer::disconnectStorage()
     closeOtherWindows();
 }
 
-void View::QInvoicer::importStorage()
+void View::MainWindow::importStorage()
 {
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Import Storage"),
@@ -190,7 +193,7 @@ void View::QInvoicer::importStorage()
         statusBar() -> showMessage(tr("Import Completed"), 5000);
 }
 
-void View::QInvoicer::exportStorage()
+void View::MainWindow::exportStorage()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export Storage"),
                                                 QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
@@ -212,7 +215,7 @@ void View::QInvoicer::exportStorage()
         statusBar() -> showMessage(tr("Export Completed"), 5000);
 }
 
-bool View::QInvoicer::createBusiness()
+bool View::MainWindow::createBusiness()
 {
     Model::Domain::Business business;
     View::Management::EntityDialog dialog(&business, this);
@@ -231,7 +234,7 @@ bool View::QInvoicer::createBusiness()
     return true;
 }
 
-void View::QInvoicer::loadBusiness()
+void View::MainWindow::loadBusiness()
 {
     QMap<QString, int> businessNames = Model::Management::BusinessManager::getAllNames();
 
@@ -259,7 +262,7 @@ void View::QInvoicer::loadBusiness()
     }
 }
 
-void View::QInvoicer::closeBusiness()
+void View::MainWindow::closeBusiness()
 {
     if(!_business)
         return;
@@ -281,7 +284,7 @@ void View::QInvoicer::closeBusiness()
     setBusinessOpen(false);
 }
 
-void View::QInvoicer::setUpBusiness()
+void View::MainWindow::setUpBusiness()
 {
     if(!_business)
         return;
@@ -298,20 +301,20 @@ void View::QInvoicer::setUpBusiness()
     }
 }
 
-void View::QInvoicer::options()
+void View::MainWindow::options()
 {
     OptionsDialog dialog(this);
 
     dialog.exec();
 }
 
-void View::QInvoicer::printing()
+void View::MainWindow::printing()
 {
     QPrintDialog printDialog(_printer, this);
     printDialog.exec();
 }
 
-void View::QInvoicer::createSaleInvoice()
+void View::MainWindow::createSaleInvoice()
 {
     if(!_business)
         return;
@@ -321,7 +324,7 @@ void View::QInvoicer::createSaleInvoice()
     editor -> show();
 }
 
-void View::QInvoicer::createBuyInvoice()
+void View::MainWindow::createBuyInvoice()
 {
     if(!_business)
         return;
@@ -331,7 +334,7 @@ void View::QInvoicer::createBuyInvoice()
     editor -> show();
 }
 
-void View::QInvoicer::loadInvoice(Model::Domain::Invoice *invoice)
+void View::MainWindow::loadInvoice(Model::Domain::Invoice *invoice)
 {
     if(!_business)
         return;
@@ -362,7 +365,7 @@ void View::QInvoicer::loadInvoice(Model::Domain::Invoice *invoice)
     editor -> show();
 }
 
-void View::QInvoicer::searchInvoice()
+void View::MainWindow::searchInvoice()
 {
     if(!_business)
         return;
@@ -377,7 +380,7 @@ void View::QInvoicer::searchInvoice()
     }
 }
 
-void View::QInvoicer::manageBusiness()
+void View::MainWindow::manageBusiness()
 {
     if(!_businessEditor)
         _businessEditor = new View::Management::EntityEditor(Model::Domain::BusinessEntity);
@@ -386,7 +389,7 @@ void View::QInvoicer::manageBusiness()
     _businessEditor -> activateWindow();
 }
 
-void View::QInvoicer::manageCustomer()
+void View::MainWindow::manageCustomer()
 {
     if(!_customerEditor)
         _customerEditor = new View::Management::EntityEditor(Model::Domain::CustomerEntity);
@@ -395,7 +398,7 @@ void View::QInvoicer::manageCustomer()
     _customerEditor -> activateWindow();
 }
 
-void View::QInvoicer::manageSupplier()
+void View::MainWindow::manageSupplier()
 {
     if(!_supplierEditor)
         _supplierEditor = new View::Management::EntityEditor(Model::Domain::SupplierEntity);
@@ -404,7 +407,7 @@ void View::QInvoicer::manageSupplier()
     _supplierEditor -> activateWindow();
 }
 
-void View::QInvoicer::manageProduct()
+void View::MainWindow::manageProduct()
 {
     if(!_productEditor)
         _productEditor = new View::Management::ProductEditor;
@@ -413,7 +416,7 @@ void View::QInvoicer::manageProduct()
     _productEditor -> activateWindow();
 }
 
-void View::QInvoicer::volumeBuy()
+void View::MainWindow::volumeBuy()
 {
     if(!_business)
         return;
@@ -430,7 +433,7 @@ void View::QInvoicer::volumeBuy()
     }
 }
 
-void View::QInvoicer::volumeSale()
+void View::MainWindow::volumeSale()
 {
     if(!_business)
         return;
@@ -447,7 +450,7 @@ void View::QInvoicer::volumeSale()
     }
 }
 
-void View::QInvoicer::unpaidInvoices()
+void View::MainWindow::unpaidInvoices()
 {
     if(!_business)
         return;
@@ -457,25 +460,25 @@ void View::QInvoicer::unpaidInvoices()
     unpaidsReport -> show();
 }
 
-/*void View::QInvoicer::calculator()
+/*void View::MainWindow::calculator()
 {
     QMessageBox::information(this, tr("Calculator"), tr("Feature not implemented yet"), QMessageBox::Ok);
 }*/
 
-/*void View::QInvoicer::addressBook()
+/*void View::MainWindow::addressBook()
 {
     QMessageBox::information(this, tr("Address Book"), tr("Feature not implemented yet"), QMessageBox::Ok);
 }*/
 
-void View::QInvoicer::about()
+void View::MainWindow::about()
 {
-    QMessageBox::about(this, tr("About QInvoicer"),
+    QMessageBox::about(this, tr("About %1").arg(APPLICATION_NAME),
                        tr("<h2>%1 %2</h2>"
                           "<h3>Invoicing and Management for SMBs</h3>"
                           "<p>(C) %3 %4 <a href= \"mailto:%5\" >%5</a></p>"
                           "<p><a href= \"%6\" >%6</a></p>"
                           "<p>Licensed under <a href=\"http://www.gnu.org/licenses/gpl.html\" >GNU General Public License version 3</a></p>")
-                       .arg(APPLICATION_NAME)
+                       .arg(APPLICATION_NAME_LONG)
                        .arg(APPLICATION_VERSION)
                        .arg(APPLICATION_YEARS)
                        .arg(AUTHOR_NAME)
@@ -483,7 +486,7 @@ void View::QInvoicer::about()
                        .arg(APPLICATION_WEB));
 }
 
-void View::QInvoicer::updateWindowMenu()
+void View::MainWindow::updateWindowMenu()
 {
     bool hasWindowActive = _mdiArea -> activeSubWindow() != 0;
 
@@ -495,7 +498,7 @@ void View::QInvoicer::updateWindowMenu()
     _previousAction -> setEnabled(hasWindowActive);
 }
 
-void View::QInvoicer::invoicePrinted(const Model::Domain::Invoice &invoice)
+void View::MainWindow::invoicePrinted(const Model::Domain::Invoice &invoice)
 {
     statusBar() -> showMessage(tr("Printing %1 %2")
                                .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
@@ -505,21 +508,21 @@ void View::QInvoicer::invoicePrinted(const Model::Domain::Invoice &invoice)
 }
 
 
-void View::QInvoicer::invoiceSaved(const Model::Domain::Invoice &invoice)
+void View::MainWindow::invoiceSaved(const Model::Domain::Invoice &invoice)
 {
     statusBar() -> showMessage(tr("%1 %2 saved")
                                .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
                                .arg(invoice.id()), 2000);
 }
 
-void View::QInvoicer::invoiceDeleted(const Model::Domain::Invoice &invoice)
+void View::MainWindow::invoiceDeleted(const Model::Domain::Invoice &invoice)
 {
     statusBar() -> showMessage(tr("%1 %2 deleted")
                                .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
                                .arg(invoice.id()), 2000);
 }
 
-void View::QInvoicer::invoiceHasAddedNewEntity(const Model::Domain::Invoice &invoice)
+void View::MainWindow::invoiceHasAddedNewEntity(const Model::Domain::Invoice &invoice)
 {
     statusBar() -> showMessage(tr("%1 has added a new %2 %3")
                                .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
@@ -533,27 +536,23 @@ void View::QInvoicer::invoiceHasAddedNewEntity(const Model::Domain::Invoice &inv
 
 }
 
-void View::QInvoicer::updateOtherWindows(QObject *object)
+void View::MainWindow::updateOtherWindows(QObject *object)
 {
     QWidget *window = qobject_cast<QWidget *>(object);
     window -> close();
     _otherWindows.removeAll(window);
 }
 
-void View::QInvoicer::createWidgets()
+void View::MainWindow::createWidgets()
 {
     createCentralWidget();
     createActions();
     createMenus();
     createToolBar();
     createStatusBar();
-
-    _printer = new QPrinter;
-
-    createConnections();
 }
 
-void View::QInvoicer::createCentralWidget()
+void View::MainWindow::createCentralWidget()
 {
     _mdiArea = new QMdiArea;
     _mdiArea -> setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -561,7 +560,7 @@ void View::QInvoicer::createCentralWidget()
     setCentralWidget(_mdiArea);
 }
 
-void View::QInvoicer::createActions()
+void View::MainWindow::createActions()
 {
     _createBusinessAction = new QAction(tr("&Create Business..."), this);
     _createBusinessAction -> setIcon(QIcon(":/images/business.png"));
@@ -679,13 +678,13 @@ void View::QInvoicer::createActions()
 
     _aboutAction = new QAction(tr("About"), this);
     _aboutAction -> setIcon(QIcon(":/images/about.png"));
-    _aboutAction -> setStatusTip(tr("Show information about QInvoicer"));
+    _aboutAction -> setStatusTip(tr("Show information about MainWindow"));
 
     _aboutQtAction = new QAction(tr("About &Qt"), this);
     _aboutQtAction -> setStatusTip(tr("Show information about Qt library"));
 }
 
-void View::QInvoicer::createMenus()
+void View::MainWindow::createMenus()
 {
     _applicationMenu = menuBar() -> addMenu(tr("&Application"));
     _applicationMenu -> addAction(_createBusinessAction);
@@ -743,7 +742,7 @@ void View::QInvoicer::createMenus()
     updateWindowMenu();
 }
 
-void View::QInvoicer::createToolBar()
+void View::MainWindow::createToolBar()
 {
     _invoicingToolBar = addToolBar(tr("Invoicing"));
     _invoicingToolBar -> addAction(_createBuyInvoiceAction);
@@ -765,7 +764,7 @@ void View::QInvoicer::createToolBar()
     _reportToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
 }
 
-void View::QInvoicer::createStatusBar()
+void View::MainWindow::createStatusBar()
 {
     _storageIconLabel = new QLabel;
     _storageStateLabel = new QLabel;
@@ -774,7 +773,7 @@ void View::QInvoicer::createStatusBar()
     statusBar() ->addWidget(_storageStateLabel);
 }
 
-void View::QInvoicer::createConnections()
+void View::MainWindow::createConnections()
 {
     connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateWindowMenu()));
@@ -844,7 +843,7 @@ void View::QInvoicer::createConnections()
             qApp, SLOT(aboutQt()));
 }
 
-View::Invoicing::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Domain::Invoice *invoice)
+View::Invoicing::InvoiceEditor *View::MainWindow::createInvoiceEditor(Model::Domain::Invoice *invoice)
 {
     View::Invoicing::InvoiceEditor *editor = new View::Invoicing::InvoiceEditor(invoice);
 
@@ -863,7 +862,7 @@ View::Invoicing::InvoiceEditor *View::QInvoicer::createInvoiceEditor(Model::Doma
 }
 
 
-View::Invoicing::InvoiceEditor *View::QInvoicer::findInvoiceEditor(Model::Domain::Invoice *invoice)
+View::Invoicing::InvoiceEditor *View::MainWindow::findInvoiceEditor(Model::Domain::Invoice *invoice)
 {
     foreach(QMdiSubWindow *subWindow, _mdiArea -> subWindowList()) {
         View::Invoicing::InvoiceEditor *editor = qobject_cast<View::Invoicing::InvoiceEditor *>(subWindow -> widget());
@@ -875,7 +874,7 @@ View::Invoicing::InvoiceEditor *View::QInvoicer::findInvoiceEditor(Model::Domain
     return 0;
 }
 
-View::Invoicing::InvoiceSearchResult *View::QInvoicer::createInvoiceSearchResult(Model::Domain::InvoiceType type,
+View::Invoicing::InvoiceSearchResult *View::MainWindow::createInvoiceSearchResult(Model::Domain::InvoiceType type,
                                                                 Model::Management::SearchFlag mode,
                                                                 const QDate &beginDate, const QDate &endDate,
                                                                 int entityId, double minTotal, double maxTotal, bool paid)
@@ -890,7 +889,7 @@ View::Invoicing::InvoiceSearchResult *View::QInvoicer::createInvoiceSearchResult
     return result;
 }
 
-View::Report::VolumeReport *View::QInvoicer::createVolumeReport(Model::Domain::InvoiceType type,
+View::Report::VolumeReport *View::MainWindow::createVolumeReport(Model::Domain::InvoiceType type,
                                                Model::Management::SearchFlag mode,
                                                const QDate &beginDate, const QDate &endDate)
 {
@@ -915,7 +914,7 @@ View::Report::VolumeReport *View::QInvoicer::createVolumeReport(Model::Domain::I
     return volumeReport;
 }
 
-View::Report::UnpaidsReport *View::QInvoicer::createUnpaidsReport()
+View::Report::UnpaidsReport *View::MainWindow::createUnpaidsReport()
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -934,7 +933,7 @@ View::Report::UnpaidsReport *View::QInvoicer::createUnpaidsReport()
     return unpaidsReport;
 }
 
-void View::QInvoicer::closeAllEditors()
+void View::MainWindow::closeAllEditors()
 {
     if(_businessEditor)
         _businessEditor -> close();
@@ -946,13 +945,13 @@ void View::QInvoicer::closeAllEditors()
         _productEditor -> close();
 }
 
-void View::QInvoicer::closeOtherWindows()
+void View::MainWindow::closeOtherWindows()
 {
     foreach(QWidget *window, _otherWindows)
         window -> close();
 }
 
-void View::QInvoicer::deleteAllEditors()
+void View::MainWindow::deleteAllEditors()
 {
     if(_businessEditor) {
         delete _businessEditor;
@@ -975,7 +974,7 @@ void View::QInvoicer::deleteAllEditors()
     }
 }
 
-void View::QInvoicer::setStorageConnected(bool connected)
+void View::MainWindow::setStorageConnected(bool connected)
 {
     QString host = Persistence::Manager::readConfig("Host", "Storage/DBMS").toString();
 
@@ -999,7 +998,7 @@ void View::QInvoicer::setStorageConnected(bool connected)
     _storageStateLabel -> setText(connected ? tr("Connected to %1").arg(host) : tr("Disconnected"));
 }
 
-void View::QInvoicer::setBusinessOpen(bool open)
+void View::MainWindow::setBusinessOpen(bool open)
 {
     _createBusinessAction -> setEnabled(!open);
     _loadBusinessAction -> setEnabled(!open);
@@ -1019,13 +1018,13 @@ void View::QInvoicer::setBusinessOpen(bool open)
     _reportMenu -> setEnabled(open);
     _windowMenu -> setEnabled(open);
 
-    setWindowTitle(APPLICATION_NAME + (open ? tr(" - Business #%1 - %2")
-                                              .arg(_business -> id())
-                                              .arg(_business -> name())
-                                            : QString()));
+    setWindowTitle(APPLICATION_NAME_LONG + (open ? tr(" - Business #%1 - %2")
+                                                   .arg(_business -> id())
+                                                   .arg(_business -> name())
+                                                 : QString()));
 }
 
-bool View::QInvoicer::verifyImportStorage()
+bool View::MainWindow::verifyImportStorage()
 {
     return QMessageBox::warning(this, tr("Verify Import Storage"),
                                        tr("You must know that all stored data will be removed.\n"
@@ -1034,7 +1033,7 @@ bool View::QInvoicer::verifyImportStorage()
                                        QMessageBox::No) == QMessageBox::Yes;
 }
 
-bool View::QInvoicer::verifyCreateBusiness()
+bool View::MainWindow::verifyCreateBusiness()
 {
     return QMessageBox::question(this, tr("Verify Business Creation"),
                                        tr("Not found any business. Perhaps this is the first time that\n"
@@ -1044,7 +1043,7 @@ bool View::QInvoicer::verifyCreateBusiness()
                                        QMessageBox::No) == QMessageBox::Yes;
 }
 
-bool View::QInvoicer::verifyCloseBusiness()
+bool View::MainWindow::verifyCloseBusiness()
 {
     return QMessageBox::question(this, tr("Verify Close Business"),
                                  tr("There are active invoices.\n"
@@ -1053,7 +1052,7 @@ bool View::QInvoicer::verifyCloseBusiness()
                                  QMessageBox::No) == QMessageBox::Yes;
 }
 
-bool View::QInvoicer::verifyExit()
+bool View::MainWindow::verifyExit()
 {
     return QMessageBox::question(this, tr("Verify Exit"),
                                  tr("are you sure you wish to exit the program?"),

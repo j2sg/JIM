@@ -1,6 +1,7 @@
 - Requirements
 
       - Qt4 libraries with QtSql module.
+      - Qt4 SQLite 3 database driver.
       - Qt4 headers with QtSql module header.
       - Makefile generation tool QMake.
         

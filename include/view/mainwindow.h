@@ -1,25 +1,25 @@
 /**
- *  This file is part of QInvoicer.
+ *  This file is part of TIM.
  *
- *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/QInvoicer
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/TIM
  *
- *  QInvoicer is free software: you can redistribute it and/or modify
+ *  TIM is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  QInvoicer is distributed in the hope that it will be useful,
+ *  TIM is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with QInvoicer.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with TIM.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
 
-#ifndef QINVOICER_H
-#define QINVOICER_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QList>
@@ -64,12 +64,12 @@ namespace View
         class UnpaidsReport;
     }
 
-    class QInvoicer : public QMainWindow
+    class MainWindow : public QMainWindow
     {
         Q_OBJECT
     public:
-        QInvoicer();
-        ~QInvoicer();
+        MainWindow();
+        ~MainWindow();
     protected:
         void closeEvent(QCloseEvent *event);
     public slots:
@@ -195,4 +195,4 @@ namespace View
     };
 }
 
-#endif // QINVOICER_H
+#endif // MAINWINDOW_H

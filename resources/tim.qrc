@@ -28,9 +28,9 @@
         <file>images/search.png</file>
         <file>images/storageoff.png</file>
         <file>images/storageon.png</file>
-        <file>translations/qinvoicer_es.qm</file>
         <file>images/export.png</file>
         <file>images/import.png</file>
-        <file>images/qinvoicer.png</file>
+        <file>images/tim.png</file>
+        <file>translations/tim_es.qm</file>
     </qresource>
 </RCC>

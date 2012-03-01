@@ -22,14 +22,14 @@
 #include <QTranslator>
 #include <QLocale>
 #include <iostream>
-#include "qinvoicer.h"
+#include "mainwindow.h"
 #include "persistencemanager.h"
 #include "global.h"
 
 void setUpApplication(QApplication *app, QTranslator *translator);
 bool verifyConfig(bool *firstExecution);
 bool verifyStorage();
-bool initApplication(View::QInvoicer *invoicer, bool firstExecution);
+bool initApplication(View::MainWindow *mainWindow, bool firstExecution);
 
 int main(int argc, char *argv[])
 {
@@ -54,10 +54,10 @@ int main(int argc, char *argv[])
     } else
         std::cout << QObject::tr("Storage         :  OK").toStdString() << std::endl;
 
-    View::QInvoicer invoicer;
-    invoicer.show();
+    View::MainWindow mainWindow;
+    mainWindow.show();
 
-    if(!initApplication(&invoicer, firstLogin)) {
+    if(!initApplication(&mainWindow, firstLogin)) {
         std::cout << QObject::tr("Authentication  :  Error  :  Application will be closed").toStdString() << std::endl;
         return 1;
     } else
@@ -75,7 +75,7 @@ void setUpApplication(QApplication *app, QTranslator *translator)
     app -> setApplicationName(APPLICATION_NAME);
     app -> setApplicationVersion(APPLICATION_VERSION);
 
-    translator -> load("qinvoicer_" + QLocale::system().name(), ":/translations");
+    translator -> load("tim_" + QLocale::system().name(), ":/translations");
     app -> installTranslator(translator);
 }
 
@@ -97,7 +97,7 @@ bool verifyStorage()
     return true;
 }
 
-bool initApplication(View::QInvoicer *invoicer, bool firstLogin)
+bool initApplication(View::MainWindow *mainWindow, bool firstLogin)
 {
-    return firstLogin ? invoicer -> firstExecution() : invoicer -> login();
+    return firstLogin ? mainWindow -> firstExecution() : mainWindow -> login();
 }

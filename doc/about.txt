@@ -1,9 +1,10 @@
-- QInvoicer Documentation
+- About TIM Invoice Manager
 
-  QInvoicer is a software application that allow us to make those tasks related with invoicing activity and 
-  business management on scope of SMBs (Small and Medium Business). Therefore, the application be able to:
+  TIM Invoice Manager is a software application that allow us to make those tasks related with invoicing 
+  activity and business management on scope of SMBs (Small and Medium Business). Therefore, the application 
+  will be able to:
 
-    (i) Create, load and store invoices[1] both sale and buy that involve customers or suppliers.
+    (i) Create, load and store invoices both sale and buy that involve customers or suppliers.
 
       All invoices are composed by next fields:
 
@@ -22,10 +23,10 @@
             - Unitary Price, which can be two types, by quantity or by weight.
             - Total Price according to product, quantity, weight, unitary price and its type.
 
-        - Tax Payment Details, which will follow spanish fiscal system[2] so we might specify
+        - Tax Payment Details, which will follow spanish fiscal system so we might specify
           next parameters in each invoice:
 
-            - IVA : VAT (Value Added Tax)[3]. Each kind of product has its own VAT which can be:
+            - IVA : VAT (Value Added Tax). Each kind of product has its own VAT which can be:
 
                 - General :       18 %
                 - Reduced :        8 %
@@ -77,7 +78,7 @@
          - Customers, Suppliers and Business are composed by next fields:
 
             - Unique identifier.
-            - VAT identification number a.k.a. VATIN[4].
+            - VAT identification number a.k.a. VATIN.
             - Full Address.
             - Contact Information (Telephone, email, etc).
 
@@ -85,9 +86,3 @@
 
   Likely these features will be extended and/or improved on each future version.
 
-- References:
-
-[1] http://en.wikipedia.org/wiki/Invoice
-[2] http://www.aeat.es/AEAT.internet/Inicio_es_ES/_Configuracion_/_top_/Ayuda/Biblioteca_Virtual/Manuales_practicos/Manuales_practicos.shtml
-[3] http://en.wikipedia.org/wiki/Value_added_tax
-[4] http://en.wikipedia.org/wiki/VAT_identification_number
