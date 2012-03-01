@@ -1,6 +1,6 @@
-- About TIM Invoice Manager
+- About JIM Invoice Manager
 
-  TIM Invoice Manager is a software application that allow us to make those tasks related with invoicing 
+  JIM Invoice Manager is a software application that allow us to make those tasks related with invoicing 
   activity and business management on scope of SMBs (Small and Medium Business). Therefore, the application 
   will be able to:
 

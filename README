@@ -1,12 +1,12 @@
-- TIM v0.1.1
+- JIM v0.1.1
 
    Copyright (c) 2011-2012 Juan Jose Salazar Garcia - jjslzgc@gmail.com
    
    - Description
 
-      TIM (TIM Invoice Manager) is an Invoicing Software for SMBs (Small 
-      and Medium Business). You should read doc/documentation.txt to get 
-      more details in depth about the domain logic for this application.
+      JIM Invoice Manager is an Invoicing Software for SMBs (Small and 
+      Medium Business). You should read doc/about.txt to get more 
+      details in depth about the domain logic for this application.
 
    - Details.
 
@@ -24,9 +24,9 @@
    
    - Licence
 
-      TIM is licensed under the GNU General Public License version 3,
+      JIM is licensed under the GNU General Public License version 3,
       you should read LICENSE file to get more details about this.
 
 
-For more information visit http://j2sg.wordpress.com/proyectos/tim
-and you can get latest version from https://github.com/j2sg/TIM
+For more information visit http://j2sg.wordpress.com/proyectos/jim
+and you can get latest version from https://github.com/j2sg/JIM

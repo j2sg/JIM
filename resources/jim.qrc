@@ -30,7 +30,7 @@
         <file>images/storageon.png</file>
         <file>images/export.png</file>
         <file>images/import.png</file>
-        <file>images/tim.png</file>
-        <file>translations/tim_es.qm</file>
+        <file>images/jim.png</file>
+        <file>translations/jim_es.qm</file>
     </qresource>
 </RCC>

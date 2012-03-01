@@ -1,20 +1,20 @@
 /**
- *  This file is part of TIM.
+ *  This file is part of JIM.
  *
- *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com - https://github.com/j2sg/TIM
+ *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com
  *
- *  TIM is free software: you can redistribute it and/or modify
+ *  JIM is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  TIM is distributed in the hope that it will be useful,
+ *  JIM is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with TIM.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with JIM.  If not, see <http://www.gnu.org/licenses/>.
  *
  **/
 
@@ -29,11 +29,11 @@
 #define ORGANIZATION_DOMAIN   "http://j2sg.wordpress.com"
 #define AUTHOR_NAME           "Juan Jose Salazar Garcia"
 #define AUTHOR_EMAIL          "jjslzgc@gmail.com"
-#define APPLICATION_NAME      "TIM"
-#define APPLICATION_NAME_LONG "TIM Invoice Manager"
+#define APPLICATION_NAME      "JIM"
+#define APPLICATION_NAME_LONG "JIM Invoice Manager"
 #define APPLICATION_VERSION   "0.1.1"
 #define APPLICATION_YEARS     "2011-2012"
-#define APPLICATION_WEB       "http://j2sg.wordpress.com/proyectos/qinvoicer"
+#define APPLICATION_WEB       "http://j2sg.wordpress.com/proyectos/jim"
 
 // Configuration Default Values
 #define DEFAULT_APPLICATION_CURRENCY                    "EUR"

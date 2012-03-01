@@ -1,4 +1,4 @@
-- Requirements
+- JIM Requirements
 
       - Qt4 libraries with QtSql module.
       - Qt4 SQLite 3 database driver.
@@ -25,5 +25,5 @@
          mingw32-make
 
    
-   Now we have the qinvoicer binary ready to execute.
+   Now we have the JIM binary ready to execute.
 
