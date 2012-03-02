@@ -171,3 +171,18 @@ SOURCES += src/main.cpp \
            src/view/report/volumereportdialog.cpp
 RESOURCES += resources/jim.qrc
 TRANSLATIONS += resources/translations/jim_es.ts
+
+OTHER_FILES += \
+    doc/about.txt \
+    sql/sqlite.sql \
+    THANKS \
+    README \
+    LICENSE \
+    jim.desktop \
+    INSTALL \
+    COPYRIGHT \
+    CHANGELOG \
+    AUTHOR
+
+
+

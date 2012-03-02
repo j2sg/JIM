@@ -43,7 +43,7 @@
 #define DEFAULT_STORAGE_TYPE                            Persistence::SQLITE
 #define DEFAULT_STORAGE_PATH                            QDesktopServices::storageLocation(QDesktopServices::DataLocation)
 #define DEFAULT_STORAGE_DBMS_DRIVER                     "QSQLITE"
-#define DEFAULT_STORAGE_DBMS_NAME                       DEFAULT_STORAGE_PATH.append("/qinvoicer.db")
+#define DEFAULT_STORAGE_DBMS_NAME                       DEFAULT_STORAGE_PATH.append("/jim.db")
 #define DEFAULT_STORAGE_DBMS_HOST                       "localhost"
 #define DEFAULT_STORAGE_DBMS_PORT                       0
 #define DEFAULT_STORAGE_DBMS_USER                       ""

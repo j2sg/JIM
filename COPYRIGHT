@@ -1,0 +1,77 @@
+Copyright (c) 2011-2012 Juan Jose Salazar Garcia - jjslzgc@gmail.com
+
+JIM is licensed under GNU General Public License version 3,
+you should read LICENSE file to get more details about this.
+
+However, JIM has other elements such as images or icons which
+belongs to icon sets licensed under conditions bellow:
+
+   - Own theme (designed by me with inkscape and gimp)
+      - License GPL <http://www.gnu.org/copyleft/gpl.html>
+      - Files
+         resources/images/jim.png
+
+   - Crystal Clear
+      - <http://kde-look.org/content/show.php/Crystal+Clear?content=25668>
+      - License LGPL <http://www.gnu.org/licenses/lgpl.html>
+      - Files
+         resources/images/about.png
+         resources/images/add.png
+         resources/images/cancel.png
+         resources/images/delete.png
+         resources/images/entity.png
+         resources/images/exit.png
+         resources/images/ok.png
+         resources/images/printing.png
+         resources/images/save.png
+         resources/images/search.png
+
+   - Oxygen
+      - <http://www.oxygen-icons.org/>
+      - License GPL <http://www.gnu.org/copyleft/gpl.html>
+      - Files
+	 resources/images/options.png
+         resources/images/password.png
+
+   - Nuove
+      - <http://kde-look.org/content/show.php/nuoveXT+2?content=62630>
+      - License LGPL <http://www.gnu.org/licenses/lgpl.html>
+      - Files
+         resources/images/address.png
+         resources/images/modify.png
+
+   - Dark Glass
+      - <http://kde-look.org/content/show.php/Dark-Glass+reviewed?content=67902>
+      - License GPL <http://www.gnu.org/copyleft/gpl.html>
+      - Files
+         resources/images/manageproduct.png
+   
+   - Finance
+      - <http://www.visualpharm.com/finance_icon_set>
+      - License CC BY-NC 3.0  <http://creativecommons.org/licenses/by-nc/3.0>
+      - Files
+         resources/images/buyinvoice.png
+         resources/images/calc.png
+         resources/images/loadinvoice.png
+         resources/images/saleinvoice.png
+         resources/images/unpaid.png
+         resources/images/volume.png
+         resources/images/volumebuy.png
+         resources/images/volumesale.png
+
+   - Bright
+      - <http://www.iconeden.com/icon/free/get/bright-free-stock-iconset>
+      - License Free for commercial use
+      - Files
+         resources/images/export.png
+         resources/images/import.png
+         resources/images/storageoff.png
+         resources/images/storageon.png
+
+   - Free Business Desktop Icons
+      - <http://www.large-icons.com/stock-icons/free-large-business-icons.htm>
+      - License Free for commercial use
+      - Files
+         resources/images/business.png
+         resources/images/supplier.png
+

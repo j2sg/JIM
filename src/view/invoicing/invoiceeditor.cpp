@@ -114,7 +114,7 @@ void View::Invoicing::InvoiceEditor::createWidgets()
     _printButton -> setEnabled(!IS_NEW(_invoice -> id()));
 
     _saveButton = new QPushButton(tr("&Save"));
-    _saveButton -> setIcon(QIcon(":/images/ok.png"));
+    _saveButton -> setIcon(QIcon(":/images/save.png"));
     _saveButton -> setDefault(true);
     _saveButton -> setEnabled(false);
 
@@ -123,7 +123,7 @@ void View::Invoicing::InvoiceEditor::createWidgets()
     _deleteButton -> setEnabled(!IS_NEW(_invoice -> id()));
 
     _finishButton = new QPushButton(tr("&Finish"));
-    _finishButton -> setIcon(QIcon(":/images/cancel.png"));
+    _finishButton -> setIcon(QIcon(":/images/exit.png"));
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout -> addWidget(_printButton);
