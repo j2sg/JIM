@@ -3,6 +3,7 @@ v0.1.2 :
    - Updated database schema, Now, when a product is deleted all operations related to that product will delate too.
    - Added a confirmation message box to product editor when delete product.
    - Solved trouble with plugin path on win32, so installer has been updated.
+   - Fixed issue with activation/deactivation of buttons in customer/supplier/product editor.
 
 v0.1.1 : Initial release
 

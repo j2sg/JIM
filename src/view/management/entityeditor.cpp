@@ -105,6 +105,7 @@ void View::Management::EntityEditor::delEntity()
     int row = _entitiesTableView -> currentIndex().row();
     Model::Management::EntityManager::remove((_entityModel -> entities() -> at(row)) -> id(), _type);
     _entityModel -> removeEntity(row);
+    rowSelectionChanged();
 }
 
 void View::Management::EntityEditor::createWidgets()

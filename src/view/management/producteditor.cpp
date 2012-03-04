@@ -99,6 +99,7 @@ void View::Management::ProductEditor::delCategory()
     int row = _categoriesTableView -> currentIndex().row();
     Model::Management::CategoryManager::remove(_categoryModel -> categories() -> at(row) -> id());
     _categoryModel -> removeCategory(row);
+    rowSelectionChangedOnCategoriesTableView();
 
     QList<Model::Domain::Product *> *oldProducts = _productModel -> products();
     _productModel -> setProducts(Model::Management::ProductManager::getAll());
@@ -161,6 +162,7 @@ void View::Management::ProductEditor::delProduct()
     int row = _productsTableView -> currentIndex().row();
     Model::Management::ProductManager::remove(_productModel -> products() -> at(row) -> id());
     _productModel -> removeProduct(row);
+    rowSelectionChangedOnProducsTableView();
 }
 
 void View::Management::ProductEditor::createWidgets()
