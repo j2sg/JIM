@@ -26,6 +26,7 @@
 #include <QPrinter>
 #include <QTextDocument>
 #include <qmath.h>
+#include <QDebug>
 
 bool Printing::Manager::print(const Model::Domain::Invoice &invoice, QPrinter *printer)
 {
@@ -52,6 +53,7 @@ QStringList Printing::Manager::makePages(const Model::Domain::Invoice &invoice)
     QStringList pages;
     QString header = makeHeader(invoice);
     QStringList operationTables = makeOperationTables(invoice);
+
     int npages = operationTables.size();
 
     for(int page = 0; page < (npages - 1); page++)
@@ -126,14 +128,14 @@ QStringList Printing::Manager::makeOperationTables(const Model::Domain::Invoice 
 
     for(int page = 1, op = 0;page <= npages;page++) {
         QString table = QString("<table class=\"operations_table\" width=\"100%\">\n"
-                                "   <tr><th colspan=\"7\">%30</th></tr>\n"
-                                "   <tr><th>%1</th>\n"
-                                "   <th>%2</th>\n"
+                                "   <tr><th colspan=\"7\">%1</th></tr>\n"
+                                "   <tr><th>%2</th>\n"
                                 "   <th>%3</th>\n"
                                 "   <th>%4</th>\n"
                                 "   <th>%5</th>\n"
                                 "   <th>%6</th>\n"
-                                "   <th>%7</th></tr>\n")
+                                "   <th>%7</th>\n"
+                                "   <th>%8</th></tr>\n")
                                 .arg(QObject::tr("Operations"))
                                 .arg(QObject::tr("Op"))
                                 .arg(QObject::tr("ID"))
@@ -145,6 +147,9 @@ QStringList Printing::Manager::makeOperationTables(const Model::Domain::Invoice 
 
         for(;op < (page == npages ? nops : page * MAX_OPERATIONS_PER_PAGE);op++) {
             Model::Domain::Operation *operation = invoice.operations() -> at(op);
+
+            if(!operation -> isValid())
+                continue;
 
             table += QString("   <tr><td align=\"center\">%1</td>\n"
                              "   <td align=\"center\">%2</td>\n"

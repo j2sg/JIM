@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS operation (
    CONSTRAINT operation_product_fk_ct   FOREIGN KEY(product)
                                         REFERENCES product(id)
                                             ON UPDATE CASCADE
-                                            ON DELETE SET NULL,
+                                            ON DELETE CASCADE,
    CONSTRAINT operation_quantity_chk_ct CHECK(quantity>=0),
    CONSTRAINT operation_weight_chk_ct   CHECK(weight>=0.0),
    CONSTRAINT operation_price_chk_ct    CHECK(price>=0.0)

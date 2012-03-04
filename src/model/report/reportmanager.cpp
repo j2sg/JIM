@@ -75,14 +75,16 @@ Model::Report::VolumeReportByProductResult *Model::Report::ReportManager::report
 
     foreach(Model::Domain::Invoice *invoice, *invoices) {
         foreach(Model::Domain::Operation *operation, *(invoice -> operations())) {
-            VolumeReportByProductEntry entry = result -> value(operation -> product() -> id());
+            if(operation -> isValid()) {
+                VolumeReportByProductEntry entry = result -> value(operation -> product() -> id());
 
-            entry._name = operation -> product() -> name();
-            entry._quantity += operation -> quantity();
-            entry._weight += operation -> weight();
-            entry._total += operation -> total();
+                entry._name = operation -> product() -> name();
+                entry._quantity += operation -> quantity();
+                entry._weight += operation -> weight();
+                entry._total += operation -> total();
 
-            result -> insert(operation -> product() -> id(), entry);
+                result -> insert(operation -> product() -> id(), entry);
+            }
         }
     }
 

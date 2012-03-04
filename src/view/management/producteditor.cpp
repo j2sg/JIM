@@ -155,6 +155,9 @@ void View::Management::ProductEditor::modProduct()
 
 void View::Management::ProductEditor::delProduct()
 {
+    if(!verifyDeleteProduct())
+        return;
+
     int row = _productsTableView -> currentIndex().row();
     Model::Management::ProductManager::remove(_productModel -> products() -> at(row) -> id());
     _productModel -> removeProduct(row);
@@ -283,6 +286,15 @@ bool View::Management::ProductEditor::verifyDeleteCategory()
     return QMessageBox::question(this, tr("Verify Category Elimination"),
                                        tr("All products that belongs to category will be deleted.\n"
                                           "are you sure you want to delete the category?"),
+                                       QMessageBox::Yes | QMessageBox::Default |
+                                       QMessageBox::No) == QMessageBox::Yes;
+}
+
+bool View::Management::ProductEditor::verifyDeleteProduct()
+{
+    return QMessageBox::question(this, tr("Verify Product Elimination"),
+                                       tr("All invoice operation related to this product will be deleted.\n"
+                                          "are you sure you want to delete the product?"),
                                        QMessageBox::Yes | QMessageBox::Default |
                                        QMessageBox::No) == QMessageBox::Yes;
 }

@@ -298,7 +298,7 @@ bool Persistence::Manager::createSQLiteSchema()
                                      "    CONSTRAINT operation_product_fk_ct   FOREIGN KEY(product)\n"
                                      "                                         REFERENCES product(id)\n"
                                      "                                             ON UPDATE CASCADE\n"
-                                     "                                             ON DELETE SET NULL,\n"
+                                     "                                             ON DELETE CASCADE,\n"
                                      "    CONSTRAINT operation_quantity_chk_ct CHECK(quantity>=0),\n"
                                      "    CONSTRAINT operation_weight_chk_ct   CHECK(weight>=0.0),\n"
                                      "    CONSTRAINT operation_price_chk_ct    CHECK(price>=0.0)\n"

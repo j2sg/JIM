@@ -2,7 +2,7 @@
 Type=Application
 Name=JIM
 GenericName=JIM Invoice Manager
-Version=0.1.1
+Version=0.1.2
 Comment=Invoicing and Management for SMBs
 Icon=/usr/share/pixmaps/jim.png
 Exec=jim

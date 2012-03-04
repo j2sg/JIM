@@ -520,6 +520,8 @@ void View::MainWindow::invoiceDeleted(const Model::Domain::Invoice &invoice)
     statusBar() -> showMessage(tr("%1 %2 deleted")
                                .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
                                .arg(invoice.id()), 2000);
+
+    _mdiArea -> closeActiveSubWindow();
 }
 
 void View::MainWindow::invoiceHasAddedNewEntity(const Model::Domain::Invoice &invoice)

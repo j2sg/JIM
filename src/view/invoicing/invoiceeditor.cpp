@@ -91,11 +91,9 @@ bool View::Invoicing::InvoiceEditor::save()
 
 void View::Invoicing::InvoiceEditor::_delete()
 {
-    if(deleteInvoice()) {
+    if(deleteInvoice())
         emit deleted(*_invoice);
-        invoiceModified(false);
-        emit finished();
-    } else
+    else
         QMessageBox::warning(this, tr("Delete"),
                                    tr("Has been occurred an error when delete"),
                                    QMessageBox::Ok);
