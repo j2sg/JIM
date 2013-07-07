@@ -31,8 +31,6 @@ View::Invoicing::TaxViewerWidget::TaxViewerWidget(int precisionTax, int precisio
 
 void View::Invoicing::TaxViewerWidget::setTax(Model::Domain::TaxType type, double percent, double value)
 {
-
-
     switch(static_cast<int>(type)) {
     case Model::Domain::GeneralVAT:
         _taxTableWidget -> item(0, 0) -> setText(QString::number(percent, 'f', _precisionTax));

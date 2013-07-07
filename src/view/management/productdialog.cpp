@@ -46,7 +46,7 @@ void View::Management::ProductDialog::done(int result)
 
 void View::Management::ProductDialog::stateChangedOnAutoIdCheckBox()
 {
-    _idLineEdit -> setEnabled(!_autoIdCheckBox->isChecked());
+    _idLineEdit -> setEnabled(!_autoIdCheckBox -> isChecked());
 }
 
 void View::Management::ProductDialog::updateId()
@@ -162,10 +162,10 @@ void View::Management::ProductDialog::loadProduct()
     updateId();
     _idLineEdit -> setEnabled(!IS_NEW(_product -> id()));
     _autoIdCheckBox -> setChecked(IS_NEW(_product -> id()));
-    _nameLineEdit -> setText(_product->name());
-    _descriptionTextEdit -> setPlainText(_product->description());
-    _priceLineEdit -> setText(QString::number(_product->price(),'f', precisionMoney));
-    _priceTypeComboBox -> setCurrentIndex(static_cast<int>(_product->priceType()));
+    _nameLineEdit -> setText(_product -> name());
+    _descriptionTextEdit -> setPlainText(_product -> description());
+    _priceLineEdit -> setText(QString::number(_product -> price(),'f', precisionMoney));
+    _priceTypeComboBox -> setCurrentIndex(static_cast<int>(_product -> priceType()));
     productModified(false);
 }
 

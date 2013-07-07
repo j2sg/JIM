@@ -608,18 +608,22 @@ void View::MainWindow::createActions()
 
     _createSaleInvoiceAction = new QAction(tr("Create &Sale Invoice..."), this);
     _createSaleInvoiceAction -> setIcon(QIcon(":/images/saleinvoice.png"));
+    _createSaleInvoiceAction -> setIconText(tr("Sale Invoice"));
     _createSaleInvoiceAction -> setStatusTip(tr("Create a new Sale Invoice with a customer"));
 
     _createBuyInvoiceAction = new QAction(tr("Create &Buy Invoice..."), this);
     _createBuyInvoiceAction -> setIcon(QIcon(":/images/buyinvoice.png"));
+    _createBuyInvoiceAction -> setIconText(tr("Buy Invoice"));
     _createBuyInvoiceAction -> setStatusTip(tr("Create a new Buy Invoice with a provider"));
 
     _loadInvoiceAction = new QAction(tr("&Load Invoice..."), this);
     _loadInvoiceAction -> setIcon(QIcon(":/images/loadinvoice.png"));
+    _loadInvoiceAction -> setIconText(tr("Load"));
     _loadInvoiceAction -> setStatusTip(tr("Load a specific Invoice"));
 
     _searchInvoiceAction = new QAction(tr("&Search Invoice..."), this);
     _searchInvoiceAction -> setIcon(QIcon(":/images/search.png"));
+    _searchInvoiceAction -> setIconText(tr("Search"));
     _searchInvoiceAction -> setStatusTip(tr("Make an invoice search"));
 
     _manageBusinessAction = new QAction(tr("&Businesses..."), this);
@@ -680,7 +684,7 @@ void View::MainWindow::createActions()
 
     _aboutAction = new QAction(tr("About"), this);
     _aboutAction -> setIcon(QIcon(":/images/about.png"));
-    _aboutAction -> setStatusTip(tr("Show information about MainWindow"));
+    _aboutAction -> setStatusTip(tr("Show information about the application"));
 
     _aboutQtAction = new QAction(tr("About &Qt"), this);
     _aboutQtAction -> setStatusTip(tr("Show information about Qt library"));
@@ -751,19 +755,19 @@ void View::MainWindow::createToolBar()
     _invoicingToolBar -> addAction(_createSaleInvoiceAction);
     _invoicingToolBar -> addAction(_loadInvoiceAction);
     _invoicingToolBar -> addAction(_searchInvoiceAction);
-    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
+    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     _managementToolBar = addToolBar(tr("Management"));
     _managementToolBar -> addAction(_manageCustomerAction);
     _managementToolBar -> addAction(_manageSupplierAction);
     _managementToolBar -> addAction(_manageProductAction);
-    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
+    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     _reportToolBar = addToolBar(tr("Report"));
     _reportToolBar -> addAction(_volumeBuyAction);
     _reportToolBar -> addAction(_volumeSaleAction);
     _reportToolBar -> addAction(_unpaidInvoicesAction);
-    _reportToolBar -> setToolButtonStyle(Qt::ToolButtonIconOnly);
+    _reportToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 }
 
 void View::MainWindow::createStatusBar()
@@ -771,8 +775,8 @@ void View::MainWindow::createStatusBar()
     _storageIconLabel = new QLabel;
     _storageStateLabel = new QLabel;
 
-    statusBar() ->addWidget(_storageIconLabel);
-    statusBar() ->addWidget(_storageStateLabel);
+    statusBar() -> addWidget(_storageIconLabel);
+    statusBar() -> addWidget(_storageStateLabel);
 }
 
 void View::MainWindow::createConnections()
@@ -871,7 +875,6 @@ View::Invoicing::InvoiceEditor *View::MainWindow::findInvoiceEditor(Model::Domai
         if(editor -> id() == invoice -> id())
             return editor;
     }
-
 
     return 0;
 }

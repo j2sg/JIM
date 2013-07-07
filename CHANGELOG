@@ -1,10 +1,13 @@
+v0.2.0 :
+   - To Do
+
 v0.1.2 :
-   - Some fixes on printing manager.
-   - Updated database schema, Now, when a product is deleted all operations related to that product will delete too.
-   - Added a confirmation message box to product editor when delete product.
-   - Solved trouble with plugin path on win32, so installer has been updated.
-   - Fixed issue with activation/deactivation of buttons in customer/supplier/product editor.
+   - Some fixes in the printing manager.
+   - An Updated database schema, Now, when a product is deleted all, operations related to that product will be deleted too.
+   - A confirmation message box has been added to the product editor when deleting a product.
+   - Trouble with the plugin path on win32 has been fixed, so installer has been updated.
+   - This release fixes an issue with activation/deactivation of buttons in customer/supplier/product editor.
 
 v0.1.1 : Initial release
 
-
+v0.1.0 : Internal release
