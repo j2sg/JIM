@@ -1,7 +1,7 @@
 /**
  *  This file is part of JIM.
  *
- *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com
+ *  Copyright (c) 2011-2014 Juan Jose Salazar Garcia jjslzgc@gmail.com
  *
  *  JIM is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

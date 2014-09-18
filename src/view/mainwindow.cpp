@@ -1,7 +1,7 @@
 /**
  *  This file is part of JIM.
  *
- *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com
+ *  Copyright (c) 2011-2014 Juan Jose Salazar Garcia jjslzgc@gmail.com
  *
  *  JIM is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -755,19 +755,19 @@ void View::MainWindow::createToolBar()
     _invoicingToolBar -> addAction(_createSaleInvoiceAction);
     _invoicingToolBar -> addAction(_loadInvoiceAction);
     _invoicingToolBar -> addAction(_searchInvoiceAction);
-    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     _managementToolBar = addToolBar(tr("Management"));
     _managementToolBar -> addAction(_manageCustomerAction);
     _managementToolBar -> addAction(_manageSupplierAction);
     _managementToolBar -> addAction(_manageProductAction);
-    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     _reportToolBar = addToolBar(tr("Report"));
     _reportToolBar -> addAction(_volumeBuyAction);
     _reportToolBar -> addAction(_volumeSaleAction);
     _reportToolBar -> addAction(_unpaidInvoicesAction);
-    _reportToolBar -> setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _reportToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 }
 
 void View::MainWindow::createStatusBar()

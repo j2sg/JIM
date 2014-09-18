@@ -5,7 +5,7 @@
       - Qt4 headers with QtSql module header.
       - Makefile generation tool QMake.
         
-        You can obtain Qt at http://qt.nokia.com/ or through 
+        You can obtain Qt at http://www.qt.io/download/ or through
         your package manager on unix systems.
 
 - Compilation

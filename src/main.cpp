@@ -1,7 +1,7 @@
 /**
  *  This file is part of JIM.
  *
- *  Copyright (c) 2011 2012 Juan Jose Salazar Garcia jjslzgc@gmail.com
+ *  Copyright (c) 2011-2014 Juan Jose Salazar Garcia jjslzgc@gmail.com
  *
  *  JIM is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
-#include <iostream>
+#include <QDebug>
 #include "mainwindow.h"
 #include "persistencemanager.h"
 #include "global.h"
@@ -39,31 +39,31 @@ int main(int argc, char *argv[])
 
     setUpApplication(&app, &translator);
 
-    std::cout << QString("%1 %2").arg(app.applicationName()).arg(app.applicationVersion()).toStdString() << std::endl;
-    std::cout << QObject::tr("Starting ...").toStdString() << std::endl << std::endl;
+    qDebug() << QString("%1 %2").arg(app.applicationName()).arg(app.applicationVersion());
+    qDebug() << QObject::tr("Starting ...");
 
     if(!verifyConfig(&firstLogin)) {
-        std::cout << QObject::tr("Config          :  Error  :  Application will be closed").toStdString() << std::endl;
+        qDebug() << QObject::tr("Config          :  Error  :  Application will be closed");
         return 1;
     } else
-        std::cout << QObject::tr("Config          :  OK").toStdString() << std::endl;
+        qDebug() << QObject::tr("Config          :  OK");
 
     if(!verifyStorage()) {
-        std::cout << QObject::tr("Storage         :  Error  :  Application will be closed").toStdString() << std::endl;
+        qDebug() << QObject::tr("Storage         :  Error  :  Application will be closed");
         return 1;
     } else
-        std::cout << QObject::tr("Storage         :  OK").toStdString() << std::endl;
+        qDebug() << QObject::tr("Storage         :  OK");
 
     View::MainWindow mainWindow;
     mainWindow.show();
 
     if(!initApplication(&mainWindow, firstLogin)) {
-        std::cout << QObject::tr("Authentication  :  Error  :  Application will be closed").toStdString() << std::endl;
+        qDebug() << QObject::tr("Authentication  :  Error  :  Application will be closed");
         return 1;
     } else
-        std::cout << QObject::tr("Authentication  :  OK").toStdString() << std::endl;
+        qDebug() << QObject::tr("Authentication  :  OK");
 
-    std::cout << std::endl << QObject::tr("Running ...").toStdString() << std::endl;
+    qDebug() << QObject::tr("Running ...");
 
     return app.exec();
 }
