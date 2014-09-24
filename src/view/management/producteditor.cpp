@@ -44,6 +44,13 @@ View::Management::ProductEditor::~ProductEditor()
     delete _productModel;
 }
 
+void View::Management::ProductEditor::toggleOnRadioButton()
+{
+    bool isChecked = _byCategoryRadioButton -> isChecked();
+
+    _categoryComboBox->setEnabled(isChecked);
+}
+
 void View::Management::ProductEditor::rowSelectionChangedOnCategoriesTableView()
 {
     int row = _categoriesTableView -> currentIndex().row();
@@ -182,10 +189,13 @@ void View::Management::ProductEditor::createWidgets()
     createProductWidgets();
 
     QGridLayout *productLayout = new QGridLayout;
-    productLayout -> addWidget(_productsTableView, 0, 0, 1, 6);
-    productLayout -> addWidget(_addProductButton, 1, 3, 1, 1);
-    productLayout -> addWidget(_modProductButton, 1, 4, 1, 1);
-    productLayout -> addWidget(_delProductButton, 1, 5, 1, 1);
+    productLayout -> addWidget(_allRadioButton, 0, 0, 1, 1);
+    productLayout -> addWidget(_byCategoryRadioButton, 1, 0, 1, 1);
+    productLayout -> addWidget(_categoryComboBox, 1, 1, 1, 1);
+    productLayout -> addWidget(_productsTableView, 2, 0, 1, 6);
+    productLayout -> addWidget(_addProductButton, 3, 3, 1, 1);
+    productLayout -> addWidget(_modProductButton, 3, 4, 1, 1);
+    productLayout -> addWidget(_delProductButton, 3, 5, 1, 1);
 
     QGroupBox *productsGroupBox = new QGroupBox(tr("&Products List"));
     productsGroupBox -> setLayout(productLayout);
@@ -234,6 +244,14 @@ void View::Management::ProductEditor::createCategoryWidgets()
 
 void View::Management::ProductEditor::createProductWidgets()
 {
+    _allRadioButton = new QRadioButton(tr("All products"));
+    _byCategoryRadioButton = new QRadioButton(tr("By category"));
+    _allRadioButton->setChecked(true);
+
+    _categoryComboBox = new QComboBox;
+    _categoryComboBox -> addItems(Model::Management::CategoryManager::getAllNames().keys());
+    _categoryComboBox -> setEnabled(false);
+
     _productsTableView = new QTableView;
     _productModel = new ProductModel(Model::Management::ProductManager::getAll());
     _productsTableView -> setModel(_productModel);
@@ -269,6 +287,10 @@ void View::Management::ProductEditor::createConnections()
             this, SLOT(modCategory()));
     connect(_delCategoryButton, SIGNAL(clicked()),
             this, SLOT(delCategory()));
+    connect(_allRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(toggleOnRadioButton()));
+    connect(_byCategoryRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(toggleOnRadioButton()));
     connect(_productsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(rowSelectionChangedOnProducsTableView()));
     connect(_productsTableView, SIGNAL(doubleClicked(QModelIndex)),

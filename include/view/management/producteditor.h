@@ -26,15 +26,17 @@
 #define PRODUCT_EDITOR_MINIMUM_WIDTH 375
 #define CATEGORY_HEIGHT 200
 #define COLUMN_CATEGORY_ID_WIDTH 50
-#define COLUMN_CATEGORY_NAME_WIDTH 150
+#define COLUMN_CATEGORY_NAME_WIDTH 200
 #define COLUMN_CATEGORY_VAT_WIDTH 75
 #define COLUMN_PRODUCT_ID_WIDTH 50
-#define COLUMN_PRODUCT_NAME_WIDTH 150
+#define COLUMN_PRODUCT_NAME_WIDTH 200
 #define COLUMN_PRODUCT_PRICE_WIDTH 75
 
 QT_BEGIN_NAMESPACE
 class QTableView;
 class QPushButton;
+class QRadioButton;
+class QComboBox;
 QT_END_NAMESPACE
 
 namespace View
@@ -53,6 +55,7 @@ namespace View
             ProductEditor(QWidget *parent = 0);
             ~ProductEditor();
         private slots:
+            void toggleOnRadioButton();
             void rowSelectionChangedOnCategoriesTableView();
             void addCategory();
             void modCategory();
@@ -74,6 +77,9 @@ namespace View
             QPushButton *_addCategoryButton;
             QPushButton *_modCategoryButton;
             QPushButton *_delCategoryButton;
+            QRadioButton *_allRadioButton;
+            QRadioButton *_byCategoryRadioButton;
+            QComboBox *_categoryComboBox;
             QTableView *_productsTableView;
             ProductModel *_productModel;
             QPushButton *_addProductButton;
