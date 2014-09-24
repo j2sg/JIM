@@ -48,6 +48,8 @@ namespace View
 
         class ProductModel;
 
+        class ProductProxyModel;
+
         class ProductEditor : public QWidget
         {
             Q_OBJECT
@@ -56,6 +58,7 @@ namespace View
             ~ProductEditor();
         private slots:
             void toggleOnRadioButton();
+            void currentIndexChangedOnComboBox();
             void rowSelectionChangedOnCategoriesTableView();
             void addCategory();
             void modCategory();
@@ -82,6 +85,7 @@ namespace View
             QComboBox *_categoryComboBox;
             QTableView *_productsTableView;
             ProductModel *_productModel;
+            ProductProxyModel *_productProxyModel;
             QPushButton *_addProductButton;
             QPushButton *_modProductButton;
             QPushButton *_delProductButton;

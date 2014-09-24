@@ -24,6 +24,7 @@
 #include "categorydialog.h"
 #include "category.h"
 #include "productmodel.h"
+#include "productproxymodel.h"
 #include "productmanager.h"
 #include "productdialog.h"
 #include "product.h"
@@ -48,7 +49,22 @@ void View::Management::ProductEditor::toggleOnRadioButton()
 {
     bool isChecked = _byCategoryRadioButton -> isChecked();
 
-    _categoryComboBox->setEnabled(isChecked);
+    _categoryComboBox -> setEnabled(isChecked);
+
+    if(isChecked) {
+        int categoryId = Model::Management::CategoryManager::getAllNames().value(_categoryComboBox -> currentText());
+        Model::Domain::Category *category = Model::Management::CategoryManager::get(categoryId);
+        _productProxyModel -> setCategory(category);
+    } else {
+        _productProxyModel -> setCategory(0);
+    }
+}
+
+void View::Management::ProductEditor::currentIndexChangedOnComboBox()
+{
+    int categoryId = Model::Management::CategoryManager::getAllNames().value(_categoryComboBox -> currentText());
+    Model::Domain::Category *category = Model::Management::CategoryManager::get(categoryId);
+    _productProxyModel -> setCategory(category);
 }
 
 void View::Management::ProductEditor::rowSelectionChangedOnCategoriesTableView()
@@ -254,7 +270,9 @@ void View::Management::ProductEditor::createProductWidgets()
 
     _productsTableView = new QTableView;
     _productModel = new ProductModel(Model::Management::ProductManager::getAll());
-    _productsTableView -> setModel(_productModel);
+    _productProxyModel = new ProductProxyModel;
+    _productProxyModel -> setSourceModel(_productModel);
+    _productsTableView -> setModel(_productProxyModel);
     _productsTableView -> setAlternatingRowColors(true);
     _productsTableView -> setShowGrid(false);
     _productsTableView -> setColumnWidth(ColumnProductId, COLUMN_PRODUCT_ID_WIDTH);
@@ -291,6 +309,8 @@ void View::Management::ProductEditor::createConnections()
             this, SLOT(toggleOnRadioButton()));
     connect(_byCategoryRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(toggleOnRadioButton()));
+    connect(_categoryComboBox, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(currentIndexChangedOnComboBox()));
     connect(_productsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
             this, SLOT(rowSelectionChangedOnProducsTableView()));
     connect(_productsTableView, SIGNAL(doubleClicked(QModelIndex)),
