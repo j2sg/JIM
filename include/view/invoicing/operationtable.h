@@ -25,11 +25,11 @@
 #include "types.h"
 
 #define COLUMN_OPERATION_ID_WIDTH        50
-#define COLUMN_OPERATION_NAME_WIDTH     200
-#define COLUMN_OPERATION_QUANTITY_WIDTH  60
-#define COLUMN_OPERATION_WEIGHT_WIDTH    60
-#define COLUMN_OPERATION_PRICE_WIDTH     60
-#define COLUMN_OPERATION_TOTAL_WIDTH     60
+#define COLUMN_OPERATION_NAME_WIDTH     160
+#define COLUMN_OPERATION_QUANTITY_WIDTH  70
+#define COLUMN_OPERATION_WEIGHT_WIDTH    70
+#define COLUMN_OPERATION_PRICE_WIDTH     70
+#define COLUMN_OPERATION_TOTAL_WIDTH     70
 
 #define INDEX(row, column) (model() -> index(row, column))
 #define IS_EDITABLE(index) (model() -> flags(index) & Qt::ItemIsEditable)

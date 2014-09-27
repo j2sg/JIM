@@ -19,6 +19,7 @@
  **/
 
 #include <QKeyEvent>
+#include <QHeaderView>
 #include "operationtable.h"
 #include "operationmodel.h"
 
@@ -116,4 +117,7 @@ void View::Invoicing::OperationTable::setColumnsWidth()
     setColumnWidth(ColumnOperationWeight,   COLUMN_OPERATION_WEIGHT_WIDTH);
     setColumnWidth(ColumnOperationPrice,    COLUMN_OPERATION_PRICE_WIDTH);
     setColumnWidth(ColumnOperationTotal,    COLUMN_OPERATION_TOTAL_WIDTH);
+
+    horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+    horizontalHeader() -> setResizeMode(1, QHeaderView::Stretch);
 }
