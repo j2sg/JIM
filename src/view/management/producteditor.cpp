@@ -240,13 +240,15 @@ void View::Management::ProductEditor::createCategoryWidgets()
     _categoriesTableView -> setModel(_categoryModel);
     _categoriesTableView -> setAlternatingRowColors(true);
     _categoriesTableView -> setShowGrid(false);
-    _categoriesTableView -> setColumnWidth(ColumnCategoryId, COLUMN_CATEGORY_ID_WIDTH);
-    _categoriesTableView -> setColumnWidth(ColumnCategoryName, COLUMN_CATEGORY_NAME_WIDTH);
-    _categoriesTableView -> setColumnWidth(ColumnCategoryVat, COLUMN_CATEGORY_VAT_WIDTH);
     _categoriesTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
     _categoriesTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _categoriesTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
     _categoriesTableView -> setFocusPolicy(Qt::NoFocus);
+    _categoriesTableView -> setColumnWidth(ColumnCategoryId, COLUMN_CATEGORY_ID_WIDTH);
+    _categoriesTableView -> setColumnWidth(ColumnCategoryName, COLUMN_CATEGORY_NAME_WIDTH);
+    _categoriesTableView -> setColumnWidth(ColumnCategoryVat, COLUMN_CATEGORY_VAT_WIDTH);
+    _categoriesTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+    _categoriesTableView -> horizontalHeader() -> setResizeMode(1, QHeaderView::Stretch);
 
     _addCategoryButton = new QPushButton(tr("&Add"));
     _addCategoryButton -> setIcon(QIcon(":/images/add.png"));
@@ -274,14 +276,16 @@ void View::Management::ProductEditor::createProductWidgets()
     _productProxyModel -> setSourceModel(_productModel);
     _productsTableView -> setModel(_productProxyModel);
     _productsTableView -> setAlternatingRowColors(true);
-    _productsTableView -> setShowGrid(false);
-    _productsTableView -> setColumnWidth(ColumnProductId, COLUMN_PRODUCT_ID_WIDTH);
-    _productsTableView -> setColumnWidth(ColumnProductName, COLUMN_PRODUCT_NAME_WIDTH);
-    _productsTableView -> setColumnWidth(ColumnProductPrice, COLUMN_PRODUCT_PRICE_WIDTH);
+    _productsTableView -> setShowGrid(false);    
     _productsTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
     _productsTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _productsTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
     _productsTableView -> setFocusPolicy(Qt::NoFocus);
+    _productsTableView -> setColumnWidth(ColumnProductId, COLUMN_PRODUCT_ID_WIDTH);
+    _productsTableView -> setColumnWidth(ColumnProductName, COLUMN_PRODUCT_NAME_WIDTH);
+    _productsTableView -> setColumnWidth(ColumnProductPrice, COLUMN_PRODUCT_PRICE_WIDTH);
+    _productsTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+    _productsTableView -> horizontalHeader() -> setResizeMode(1, QHeaderView::Stretch);
 
     _addProductButton = new QPushButton(tr("&Add"));
     _addProductButton -> setIcon(QIcon(":/images/add.png"));
