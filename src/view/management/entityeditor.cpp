@@ -116,13 +116,15 @@ void View::Management::EntityEditor::createWidgets()
                                        Model::Management::EntityManager::getAllByType(_type));
     _entitiesTableView -> setModel(_entityModel);
     _entitiesTableView -> setAlternatingRowColors(true);
-    _entitiesTableView -> setShowGrid(false);
-    _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_ID_WIDTH);
-    _entitiesTableView -> setColumnWidth(ColumnEntityName, COLUMN_ENTITY_NAME_WIDTH);
+    _entitiesTableView -> setShowGrid(false);    
     _entitiesTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
     _entitiesTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _entitiesTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
     _entitiesTableView -> setFocusPolicy(Qt::NoFocus);
+    _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_ID_WIDTH);
+    _entitiesTableView -> setColumnWidth(ColumnEntityName, COLUMN_ENTITY_NAME_WIDTH);
+    _entitiesTableView -> horizontalHeader()-> setResizeMode(QHeaderView::Fixed);
+    _entitiesTableView -> horizontalHeader()-> setResizeMode(1, QHeaderView::Stretch);
 
     _addEntityButton = new QPushButton(tr("&Add"));
     _addEntityButton -> setIcon(QIcon(":/images/add.png"));
