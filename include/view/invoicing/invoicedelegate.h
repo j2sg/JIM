@@ -18,11 +18,11 @@
  *
  **/
 
-#include <QItemDelegate>
-#include <QColor>
-
 #ifndef INVOICEDELEGATE_H
 #define INVOICEDELEGATE_H
+
+#include <QItemDelegate>
+#include <QColor>
 
 namespace View
 {

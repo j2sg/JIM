@@ -124,7 +124,7 @@ void View::Management::EntityEditor::createWidgets()
     _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_ID_WIDTH);
     _entitiesTableView -> setColumnWidth(ColumnEntityName, COLUMN_ENTITY_NAME_WIDTH);
     _entitiesTableView -> horizontalHeader()-> setResizeMode(QHeaderView::Fixed);
-    _entitiesTableView -> horizontalHeader()-> setResizeMode(1, QHeaderView::Stretch);
+    _entitiesTableView -> horizontalHeader()-> setResizeMode(ColumnEntityName, QHeaderView::Stretch);
 
     _addEntityButton = new QPushButton(tr("&Add"));
     _addEntityButton -> setIcon(QIcon(":/images/add.png"));

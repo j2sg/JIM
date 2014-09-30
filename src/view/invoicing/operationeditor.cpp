@@ -26,6 +26,7 @@
 #include "operationeditor.h"
 #include "operationtable.h"
 #include "operationmodel.h"
+#include "operationdelegate.h"
 #include "operation.h"
 #include "types.h"
 
@@ -91,6 +92,7 @@ void View::Invoicing::OperationEditor::createWidgets(QList<Model::Domain::Operat
     _operationsTable = new OperationTable;
     _operationModel = new OperationModel(operations, _precisionWeight, _precisionMoney);
     _operationsTable -> setModel(_operationModel);
+    _operationsTable -> setItemDelegate(new OperationDelegate);
 
     _addOperationButton = new QPushButton(tr("Add"));
     _addOperationButton -> setIcon(QIcon(":/images/add.png"));

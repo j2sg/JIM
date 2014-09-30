@@ -29,10 +29,31 @@ View::Invoicing::OperationEditorIdWidget::OperationEditorIdWidget(QWidget *paren
     createConnections();
 }
 
+void View::Invoicing::OperationEditorIdWidget::setId(int id)
+{
+    _lineEdit -> setText(QString::number(id));
+}
+
+int View::Invoicing::OperationEditorIdWidget::id() const
+{
+    return _lineEdit -> text().toInt();
+}
+
+void View::Invoicing::OperationEditorIdWidget::lineEditEditingFinished()
+{
+
+}
+
+void View::Invoicing::OperationEditorIdWidget::toolButtonClicked()
+{
+}
+
 void View::Invoicing::OperationEditorIdWidget::createWidgets()
 {
     _lineEdit = new QLineEdit;
     _toolButton = new QToolButton;
+    _toolButton -> setIcon(QIcon(":/images/manageproduct.png"));
+    _toolButton -> setStatusTip(tr("Choose product"));
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
 
@@ -44,5 +65,8 @@ void View::Invoicing::OperationEditorIdWidget::createWidgets()
 
 void View::Invoicing::OperationEditorIdWidget::createConnections()
 {
-
+    connect(_lineEdit, SIGNAL(editingFinished()),
+            this, SIGNAL(editingFinished()));
+    connect(_toolButton, SIGNAL(clicked()),
+            this, SLOT(toolButtonClicked()));
 }

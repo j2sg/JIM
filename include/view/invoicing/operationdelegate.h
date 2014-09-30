@@ -18,40 +18,27 @@
  *
  **/
 
-#ifndef OPERATIONEDITORIDWIDGET_H
-#define OPERATIONEDITORIDWIDGET_H
+#ifndef OPERATIONDELEGATE_H
+#define OPERATIONDELEGATE_H
 
-#include <QWidget>
-
-QT_BEGIN_NAMESPACE
-class QLineEdit;
-class QToolButton;
-QT_END_NAMESPACE
+#include <QItemDelegate>
 
 namespace View
 {
     namespace Invoicing
     {
-        class OperationEditorIdWidget : public QWidget
+        class OperationDelegate : public QItemDelegate
         {
             Q_OBJECT
         public:
-            OperationEditorIdWidget(QWidget *parent = 0);
-            void setId(int id);
-            int id() const;
-        signals:
-            void editingFinished();
+            OperationDelegate(QObject *parent = 0) : QItemDelegate(parent) {}
+            QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+            void setEditorData(QWidget *editor, const QModelIndex &index) const;
+            void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
         private slots:
-            void lineEditEditingFinished();
-            void toolButtonClicked();
-        private:
-            void createWidgets();
-            void createConnections();
-
-            QLineEdit *_lineEdit;
-            QToolButton *_toolButton;
+            void commitAndCloseEditor();
         };
     }
 }
 
-#endif // OPERATIONEDITORIDWIDGET_H
+#endif // OPERATIONDELEGATE_H
