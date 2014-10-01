@@ -24,7 +24,7 @@
 #include <QTableView>
 #include "types.h"
 
-#define COLUMN_OPERATION_ID_WIDTH        50
+#define COLUMN_OPERATION_ID_WIDTH       120
 #define COLUMN_OPERATION_NAME_WIDTH     160
 #define COLUMN_OPERATION_QUANTITY_WIDTH  70
 #define COLUMN_OPERATION_WEIGHT_WIDTH    70

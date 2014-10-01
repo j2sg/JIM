@@ -42,7 +42,6 @@ namespace View
         signals:
             void editingFinished();
         private slots:
-            void lineEditEditingFinished();
             void toolButtonClicked();
         private:
             void createWidgets();

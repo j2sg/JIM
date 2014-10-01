@@ -22,10 +22,24 @@
 #include "operationeditoridwidget.h"
 #include "types.h"
 
+void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    if(index.column() == ColumnOperationId) {
+        int id = index.model() -> data(index, Qt::DisplayRole).toInt();
+        QString text = QString::number(id).rightJustified(4, '0');
+        QStyleOptionViewItem myOption = option;
+        myOption.displayAlignment = Qt::AlignHCenter | Qt::AlignVCenter;
+        drawDisplay(painter, myOption, myOption.rect, text);
+        drawFocus(painter, myOption, myOption.rect);
+    } else {
+        QItemDelegate::paint(painter, option, index);
+    }
+}
+
 QWidget *View::Invoicing::OperationDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if(index.column() == ColumnOperationId) {
-        OperationEditorIdWidget *operationEditorIdWidget = new OperationEditorIdWidget;
+        OperationEditorIdWidget *operationEditorIdWidget = new OperationEditorIdWidget(parent);
         connect(operationEditorIdWidget, SIGNAL(editingFinished()), this, SLOT(commitAndCloseEditor()));
 
         return operationEditorIdWidget;

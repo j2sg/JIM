@@ -22,6 +22,7 @@
 #include <QLineEdit>
 #include <QToolButton>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
 View::Invoicing::OperationEditorIdWidget::OperationEditorIdWidget(QWidget *parent) : QWidget(parent)
 {
@@ -39,13 +40,9 @@ int View::Invoicing::OperationEditorIdWidget::id() const
     return _lineEdit -> text().toInt();
 }
 
-void View::Invoicing::OperationEditorIdWidget::lineEditEditingFinished()
-{
-
-}
-
 void View::Invoicing::OperationEditorIdWidget::toolButtonClicked()
 {
+    QMessageBox::information(this, "Product Selection", "Select an existing product", QMessageBox::Ok);
 }
 
 void View::Invoicing::OperationEditorIdWidget::createWidgets()
