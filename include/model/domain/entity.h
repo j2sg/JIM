@@ -39,6 +39,7 @@ namespace Model
                    const QString &name = QString());
             bool operator==(const Entity &entity) const;
             bool operator!=(const Entity &entity) const;
+            virtual ~Entity() {}
             void setId(int id);
             int id() const;
             void setType(EntityType type);
