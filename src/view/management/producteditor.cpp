@@ -72,6 +72,7 @@ void View::Management::ProductEditor::rowSelectionChangedOnCategoriesTableView()
     int row = _categoriesTableView -> currentIndex().row();
     _modCategoryButton -> setEnabled(row != -1);
     _delCategoryButton -> setEnabled(row != -1);
+    _addProductButton -> setEnabled(!_categoryModel -> categories() -> isEmpty());
 }
 
 void View::Management::ProductEditor::addCategory()
@@ -295,6 +296,7 @@ void View::Management::ProductEditor::createProductWidgets()
 
     _addProductButton = new QPushButton(tr("&Add"));
     _addProductButton -> setIcon(QIcon(":/images/add.png"));
+    _addProductButton -> setEnabled(!_categoryModel -> categories() -> isEmpty());
     _modProductButton = new QPushButton(tr("&Modify"));
     _modProductButton -> setIcon(QIcon(":/images/modify.png"));
     _modProductButton -> setEnabled(false);
