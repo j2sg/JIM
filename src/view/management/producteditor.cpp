@@ -83,6 +83,7 @@ void View::Management::ProductEditor::addCategory()
         if(Model::Management::CategoryManager::create(*category)) {
             int row = _categoryModel -> rowCount(QModelIndex());
             _categoryModel -> insertCategory(row, category);
+            _categoryComboBox -> addItem(category -> name());
         } else {
             QMessageBox::critical(this, tr("Critical Error"),
                                   tr("Error during the category addition"),
@@ -102,9 +103,11 @@ void View::Management::ProductEditor::modCategory()
     CategoryDialog dialog(category, this);
 
     if(dialog.exec()) {
-        if(Model::Management::CategoryManager::modify(*category))
+        if(Model::Management::CategoryManager::modify(*category)) {
             _categoryModel -> modifyCategory(row);
-        else
+            _categoryComboBox -> clear();
+            _categoryComboBox -> addItems(Model::Management::CategoryManager::getAllNames().keys());
+        } else
             QMessageBox::critical(this, tr("Critical Error"),
                                   tr("Error during the category modification"),
                                   QMessageBox::Ok);
@@ -127,6 +130,9 @@ void View::Management::ProductEditor::delCategory()
     QList<Model::Domain::Product *> *oldProducts = _productModel -> products();
     _productModel -> setProducts(Model::Management::ProductManager::getAll());
     delete oldProducts;
+
+    _categoryComboBox -> clear();
+    _categoryComboBox -> addItems(Model::Management::CategoryManager::getAllNames().keys());
 }
 
 
@@ -264,7 +270,7 @@ void View::Management::ProductEditor::createProductWidgets()
 {
     _allRadioButton = new QRadioButton(tr("All products"));
     _byCategoryRadioButton = new QRadioButton(tr("By category"));
-    _allRadioButton->setChecked(true);
+    _allRadioButton -> setChecked(true);
 
     _categoryComboBox = new QComboBox;
     _categoryComboBox -> addItems(Model::Management::CategoryManager::getAllNames().keys());
