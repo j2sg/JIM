@@ -163,7 +163,10 @@ void View::Management::ProductDialog::loadProduct()
     _idLineEdit -> setEnabled(!IS_NEW(_product -> id()));
     _autoIdCheckBox -> setChecked(IS_NEW(_product -> id()));
     _nameLineEdit -> setText(_product -> name());
-    _categoryComboBox -> setCurrentIndex(_categoryComboBox->findText(_product -> category() -> name()));
+
+    if(_product->category())
+        _categoryComboBox -> setCurrentIndex(_categoryComboBox -> findText(_product -> category() -> name()));
+
     _descriptionTextEdit -> setPlainText(_product -> description());
     _priceLineEdit -> setText(QString::number(_product -> price(),'f', precisionMoney));
     _priceTypeComboBox -> setCurrentIndex(static_cast<int>(_product -> priceType()));
