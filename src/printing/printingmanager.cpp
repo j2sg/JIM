@@ -26,7 +26,6 @@
 #include <QPrinter>
 #include <QTextDocument>
 #include <qmath.h>
-#include <QDebug>
 
 bool Printing::Manager::print(const Model::Domain::Invoice &invoice, QPrinter *printer)
 {

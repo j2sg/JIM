@@ -44,8 +44,6 @@ Model::Domain::Category *View::Management::ProductProxyModel::category()
     return _category;
 }
 
-#include <QDebug>
-
 bool View::Management::ProductProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     Q_UNUSED(source_parent);
