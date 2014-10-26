@@ -31,16 +31,14 @@ void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOp
         myOption.displayAlignment = Qt::AlignHCenter | Qt::AlignVCenter;
         drawDisplay(painter, myOption, myOption.rect, text);
         drawFocus(painter, myOption, myOption.rect);
-    } else {
+    } else
         QItemDelegate::paint(painter, option, index);
-    }
 }
 
 QWidget *View::Invoicing::OperationDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if(index.column() == ColumnOperationId) {
         OperationEditorIdWidget *operationEditorIdWidget = new OperationEditorIdWidget(parent);
-        connect(operationEditorIdWidget, SIGNAL(editingFinished()), this, SLOT(commitAndCloseEditor()));
 
         return operationEditorIdWidget;
     } else

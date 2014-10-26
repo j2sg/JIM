@@ -21,10 +21,9 @@
 #ifndef OPERATIONEDITORIDWIDGET_H
 #define OPERATIONEDITORIDWIDGET_H
 
-#include <QWidget>
+#include <QLineEdit>
 
 QT_BEGIN_NAMESPACE
-class QLineEdit;
 class QToolButton;
 QT_END_NAMESPACE
 
@@ -32,22 +31,21 @@ namespace View
 {
     namespace Invoicing
     {
-        class OperationEditorIdWidget : public QWidget
+        class OperationEditorIdWidget : public QLineEdit
         {
             Q_OBJECT
         public:
             OperationEditorIdWidget(QWidget *parent = 0);
             void setId(int id);
             int id() const;
-        signals:
-            void editingFinished();
+        protected:
+            void showEvent(QShowEvent *event);
         private slots:
             void toolButtonClicked();
         private:
             void createWidgets();
             void createConnections();
 
-            QLineEdit *_lineEdit;
             QToolButton *_toolButton;
         };
     }

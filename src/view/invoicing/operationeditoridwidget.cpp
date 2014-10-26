@@ -19,25 +19,37 @@
  **/
 
 #include "operationeditoridwidget.h"
-#include <QLineEdit>
 #include <QToolButton>
-#include <QHBoxLayout>
 #include <QMessageBox>
+#include <QKeyEvent>
+#include <QStyle>
 
-View::Invoicing::OperationEditorIdWidget::OperationEditorIdWidget(QWidget *parent) : QWidget(parent)
+View::Invoicing::OperationEditorIdWidget::OperationEditorIdWidget(QWidget *parent) : QLineEdit(parent)
 {
     createWidgets();
     createConnections();
+
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void View::Invoicing::OperationEditorIdWidget::setId(int id)
 {
-    _lineEdit -> setText(QString::number(id));
+    setText(QString::number(id));
 }
 
 int View::Invoicing::OperationEditorIdWidget::id() const
 {
-    return _lineEdit -> text().toInt();
+    return text().toInt();
+}
+
+void View::Invoicing::OperationEditorIdWidget::showEvent(QShowEvent *event)
+{
+    Q_UNUSED(event);
+
+    QSize buttonSize = _toolButton -> size();
+    int frameWidth = style() -> pixelMetric(QStyle::PM_DefaultFrameWidth);
+
+    _toolButton -> move(rect().right() - frameWidth - buttonSize.width(), (rect().bottom() - buttonSize.height() + 1) / 2);
 }
 
 void View::Invoicing::OperationEditorIdWidget::toolButtonClicked()
@@ -47,23 +59,14 @@ void View::Invoicing::OperationEditorIdWidget::toolButtonClicked()
 
 void View::Invoicing::OperationEditorIdWidget::createWidgets()
 {
-    _lineEdit = new QLineEdit;
-    _toolButton = new QToolButton;
+    _toolButton = new QToolButton(this);
     _toolButton -> setIcon(QIcon(":/images/manageproduct.png"));
+    _toolButton -> setCursor(Qt::ArrowCursor);
+    _toolButton -> setStyleSheet("border: 0px; padding: 0px;");
     _toolButton -> setStatusTip(tr("Choose product"));
-
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-
-    mainLayout -> addWidget(_lineEdit);
-    mainLayout -> addWidget(_toolButton);
-
-    setLayout(mainLayout);
 }
 
 void View::Invoicing::OperationEditorIdWidget::createConnections()
 {
-    connect(_lineEdit, SIGNAL(editingFinished()),
-            this, SIGNAL(editingFinished()));
-    connect(_toolButton, SIGNAL(clicked()),
-            this, SLOT(toolButtonClicked()));
+    connect(_toolButton, SIGNAL(clicked()), this, SLOT(toolButtonClicked()));
 }

@@ -18,7 +18,6 @@
  *
  **/
 
-#include <QTableView>
 #include <QModelIndex>
 #include <QPushButton>
 #include <QGridLayout>
@@ -93,6 +92,7 @@ void View::Invoicing::OperationEditor::createWidgets(QList<Model::Domain::Operat
     _operationModel = new OperationModel(operations, _precisionWeight, _precisionMoney);
     _operationsTable -> setModel(_operationModel);
     _operationsTable -> setItemDelegate(new OperationDelegate);
+    _operationsTable -> setColumnsWidth();
 
     _addOperationButton = new QPushButton(tr("Add"));
     _addOperationButton -> setIcon(QIcon(":/images/add.png"));
