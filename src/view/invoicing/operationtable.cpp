@@ -33,10 +33,17 @@ View::Invoicing::OperationTable::OperationTable(QWidget *parent)
     setEditTriggers(QAbstractItemView::AnyKeyPressed | QAbstractItemView::DoubleClicked);
 }
 
-void View::Invoicing::OperationTable::setModel(View::Invoicing::OperationModel *model)
+void View::Invoicing::OperationTable::setColumnsWidth()
 {
-    QTableView::setModel(model);
-    setColumnsWidth();
+    setColumnWidth(ColumnOperationId,       COLUMN_OPERATION_ID_WIDTH);
+    setColumnWidth(ColumnOperationName,     COLUMN_OPERATION_NAME_WIDTH);
+    setColumnWidth(ColumnOperationQuantity, COLUMN_OPERATION_QUANTITY_WIDTH);
+    setColumnWidth(ColumnOperationWeight,   COLUMN_OPERATION_WEIGHT_WIDTH);
+    setColumnWidth(ColumnOperationPrice,    COLUMN_OPERATION_PRICE_WIDTH);
+    setColumnWidth(ColumnOperationTotal,    COLUMN_OPERATION_TOTAL_WIDTH);
+
+    horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+    horizontalHeader() -> setResizeMode(ColumnOperationName, QHeaderView::Stretch);
 }
 
 void View::Invoicing::OperationTable::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)
@@ -59,7 +66,6 @@ void View::Invoicing::OperationTable::closeEditor(QWidget *editor, QAbstractItem
             QTableView::closeEditor(editor, QAbstractItemDelegate::RevertModelCache);
             emit productNotFound();
             edit(currentIndex());
-
         } else {
             QModelIndex index = firstEditableIndex((hint == QAbstractItemDelegate::EditPreviousItem) ? Backward : Forward);
             QTableView::closeEditor(editor, QAbstractItemDelegate::NoHint);
@@ -107,17 +113,4 @@ QModelIndex View::Invoicing::OperationTable::firstEditableIndex(View::Invoicing:
     }
 
     return index;
-}
-
-void View::Invoicing::OperationTable::setColumnsWidth()
-{
-    setColumnWidth(ColumnOperationId,       COLUMN_OPERATION_ID_WIDTH);
-    setColumnWidth(ColumnOperationName,     COLUMN_OPERATION_NAME_WIDTH);
-    setColumnWidth(ColumnOperationQuantity, COLUMN_OPERATION_QUANTITY_WIDTH);
-    setColumnWidth(ColumnOperationWeight,   COLUMN_OPERATION_WEIGHT_WIDTH);
-    setColumnWidth(ColumnOperationPrice,    COLUMN_OPERATION_PRICE_WIDTH);
-    setColumnWidth(ColumnOperationTotal,    COLUMN_OPERATION_TOTAL_WIDTH);
-
-    horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
-    horizontalHeader() -> setResizeMode(1, QHeaderView::Stretch);
 }

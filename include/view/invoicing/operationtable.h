@@ -48,7 +48,7 @@ namespace View
             Q_OBJECT
         public:
             OperationTable(QWidget *parent = 0);
-            void setModel(OperationModel *model);
+            void setColumnsWidth();
         signals:
             void productNotFound();
         protected slots:
@@ -57,7 +57,6 @@ namespace View
             void keyPressEvent(QKeyEvent *event);
         private:
             QModelIndex firstEditableIndex(DirectionEditing direction);
-            void setColumnsWidth();
         };
     }
 }
