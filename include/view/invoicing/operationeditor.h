@@ -43,6 +43,7 @@ namespace View
 
         class OperationTable;
         class OperationModel;
+        class OperationDelegate;
 
         class OperationEditor : public QWidget
         {
@@ -67,6 +68,7 @@ namespace View
 
             OperationTable *_operationsTable;
             OperationModel *_operationModel;
+            OperationDelegate *_operationDelegate;
             QPushButton *_addOperationButton;
             QPushButton *_modOperationButton;
             QPushButton *_delOperationButton;

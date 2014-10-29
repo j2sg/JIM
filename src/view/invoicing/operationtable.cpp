@@ -22,6 +22,8 @@
 #include <QHeaderView>
 #include "operationtable.h"
 #include "operationmodel.h"
+#include "productselector.h"
+#include "product.h"
 
 View::Invoicing::OperationTable::OperationTable(QWidget *parent)
     : QTableView(parent)
@@ -46,13 +48,36 @@ void View::Invoicing::OperationTable::setColumnsWidth()
     horizontalHeader() -> setResizeMode(ColumnOperationName, QHeaderView::Stretch);
 }
 
+void View::Invoicing::OperationTable::selectOperationProduct()
+{
+    View::Management::ProductSelector selector(this);
+
+    bool voidOperation = model() -> data(currentIndex()).toString().isEmpty();
+
+    if(selector.exec()) {
+        int row = currentIndex().row();
+        int id = selector.product() -> id();
+        QModelIndex index = currentIndex();
+
+        if(voidOperation) {
+            model() -> insertRows(row + 1, 1);
+            index = INDEX(row + 1, ColumnOperationId);
+        }
+
+        model() -> setData(index, QString::number(id));
+        edit(index);
+    }
+}
+
 void View::Invoicing::OperationTable::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)
 {
+    bool voidOperation = model() -> data(currentIndex()).toString().isEmpty();
+
     switch(hint) {
     case QAbstractItemDelegate::NoHint:
     case QAbstractItemDelegate::RevertModelCache:
     {
-        if(currentIndex().column() == ColumnOperationId && (model() -> data(currentIndex())).toString().isEmpty()) {
+        if(currentIndex().column() == ColumnOperationId && voidOperation) {
             QTableView::closeEditor(editor, QAbstractItemDelegate::RevertModelCache);
             model() -> removeRows(currentIndex().row(), 1);
         } else
@@ -62,7 +87,7 @@ void View::Invoicing::OperationTable::closeEditor(QWidget *editor, QAbstractItem
     case QAbstractItemDelegate::EditPreviousItem:
     case QAbstractItemDelegate::SubmitModelCache:
     {
-        if(currentIndex().column() == ColumnOperationId && (model() -> data(currentIndex())).toString().isEmpty()) {
+        if(currentIndex().column() == ColumnOperationId && voidOperation) {
             QTableView::closeEditor(editor, QAbstractItemDelegate::RevertModelCache);
             emit productNotFound();
             edit(currentIndex());
@@ -83,6 +108,7 @@ void View::Invoicing::OperationTable::closeEditor(QWidget *editor, QAbstractItem
 void View::Invoicing::OperationTable::keyPressEvent(QKeyEvent *event)
 {
     int key = event -> key();
+
     if(state() != QAbstractItemView::EditingState) {
         if(key == Qt::Key_Enter || key == Qt::Key_Return) {
             edit(currentIndex());

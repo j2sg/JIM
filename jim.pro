@@ -109,7 +109,8 @@ HEADERS += include/global.h \
            include/view/report/volumereportdialog.h \
     include/view/management/productproxymodel.h \
     include/view/invoicing/operationeditoridwidget.h \
-    include/view/invoicing/operationdelegate.h
+    include/view/invoicing/operationdelegate.h \
+    include/view/management/productselector.h
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
            src/persistence/sqlagent.cpp \
@@ -174,7 +175,8 @@ SOURCES += src/main.cpp \
            src/view/report/volumereportdialog.cpp \
     src/view/management/productproxymodel.cpp \
     src/view/invoicing/operationeditoridwidget.cpp \
-    src/view/invoicing/operationdelegate.cpp
+    src/view/invoicing/operationdelegate.cpp \
+    src/view/management/productselector.cpp
 RESOURCES += resources/jim.qrc
 TRANSLATIONS += resources/translations/jim_es.ts
 

@@ -36,6 +36,7 @@ View::Management::ProductEditor::ProductEditor(QWidget *parent)
     createWidgets();
     createConnections();
     setWindowTitle(tr("Product Editor"));
+    setWindowIcon(QIcon(":/images/manageproduct.png"));
     setMinimumWidth(PRODUCT_EDITOR_MINIMUM_WIDTH);
 }
 
@@ -237,7 +238,6 @@ void View::Management::ProductEditor::createWidgets()
     mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
-    setWindowIcon(QIcon(":/images/manageproduct.png"));
 }
 
 void View::Management::ProductEditor::createCategoryWidgets()

@@ -51,6 +51,8 @@ namespace View
             void setColumnsWidth();
         signals:
             void productNotFound();
+        public slots:
+            void selectOperationProduct();
         protected slots:
             void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint);
         protected:

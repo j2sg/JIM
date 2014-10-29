@@ -39,7 +39,7 @@ QWidget *View::Invoicing::OperationDelegate::createEditor(QWidget *parent, const
 {
     if(index.column() == ColumnOperationId) {
         OperationEditorIdWidget *operationEditorIdWidget = new OperationEditorIdWidget(parent);
-
+        connect(operationEditorIdWidget, SIGNAL(productSelectionRequested()), this, SIGNAL(productRequested()));
         return operationEditorIdWidget;
     } else
         return QItemDelegate::createEditor(parent, option, index);

@@ -40,8 +40,8 @@ namespace View
             int id() const;
         protected:
             void showEvent(QShowEvent *event);
-        private slots:
-            void toolButtonClicked();
+        signals:
+            void productSelectionRequested();
         private:
             void createWidgets();
             void createConnections();

@@ -90,8 +90,9 @@ void View::Invoicing::OperationEditor::createWidgets(QList<Model::Domain::Operat
 {
     _operationsTable = new OperationTable;
     _operationModel = new OperationModel(operations, _precisionWeight, _precisionMoney);
+    _operationDelegate = new OperationDelegate;
     _operationsTable -> setModel(_operationModel);
-    _operationsTable -> setItemDelegate(new OperationDelegate);
+    _operationsTable -> setItemDelegate(_operationDelegate);
     _operationsTable -> setColumnsWidth();
 
     _addOperationButton = new QPushButton(tr("Add"));
@@ -119,6 +120,8 @@ void View::Invoicing::OperationEditor::createConnections()
             this, SLOT(productNotFound()));
     connect(_operationModel, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
             this, SIGNAL(dataChanged()));
+    connect(_operationDelegate, SIGNAL(productRequested()),
+            _operationsTable, SLOT(selectOperationProduct()));
     connect(_addOperationButton, SIGNAL(clicked()),
             this, SLOT(addOperation()));
     connect(_modOperationButton, SIGNAL(clicked()),

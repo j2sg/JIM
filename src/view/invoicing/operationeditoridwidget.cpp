@@ -20,7 +20,6 @@
 
 #include "operationeditoridwidget.h"
 #include <QToolButton>
-#include <QMessageBox>
 #include <QKeyEvent>
 #include <QStyle>
 
@@ -52,21 +51,17 @@ void View::Invoicing::OperationEditorIdWidget::showEvent(QShowEvent *event)
     _toolButton -> move(rect().right() - frameWidth - buttonSize.width(), (rect().bottom() - buttonSize.height() + 1) / 2);
 }
 
-void View::Invoicing::OperationEditorIdWidget::toolButtonClicked()
-{
-    QMessageBox::information(this, "Product Selection", "Select an existing product", QMessageBox::Ok);
-}
-
 void View::Invoicing::OperationEditorIdWidget::createWidgets()
 {
     _toolButton = new QToolButton(this);
     _toolButton -> setIcon(QIcon(":/images/manageproduct.png"));
-    _toolButton -> setCursor(Qt::ArrowCursor);
     _toolButton -> setStyleSheet("border: 0px; padding: 0px;");
-    _toolButton -> setStatusTip(tr("Choose product"));
+    _toolButton -> setCursor(Qt::ArrowCursor);
+    _toolButton -> setStatusTip(tr("Select a product"));
 }
 
 void View::Invoicing::OperationEditorIdWidget::createConnections()
 {
-    connect(_toolButton, SIGNAL(clicked()), this, SLOT(toolButtonClicked()));
+    connect(_toolButton, SIGNAL(clicked()),
+            this, SIGNAL(productSelectionRequested()));
 }
