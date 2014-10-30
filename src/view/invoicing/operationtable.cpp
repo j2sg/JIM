@@ -57,15 +57,19 @@ void View::Invoicing::OperationTable::selectOperationProduct()
     if(selector.exec()) {
         int row = currentIndex().row();
         int id = selector.product() -> id();
-        QModelIndex index = currentIndex();
+        QModelIndex curIndex = currentIndex();
 
         if(voidOperation) {
             model() -> insertRows(row + 1, 1);
-            index = INDEX(row + 1, ColumnOperationId);
+            curIndex = INDEX(row + 1, ColumnOperationId);
         }
 
-        model() -> setData(index, QString::number(id));
-        edit(index);
+        model() -> setData(curIndex, QString::number(id));
+
+        QModelIndex nextIndex = INDEX(row + 1, ColumnOperationQuantity);
+
+        setCurrentIndex(nextIndex);
+        edit(nextIndex);
     }
 }
 
