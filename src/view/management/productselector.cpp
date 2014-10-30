@@ -57,6 +57,28 @@ Model::Domain::Product *View::Management::ProductSelector::product() const
     return _product;
 }
 
+void View::Management::ProductSelector::toggleOnRadioButton()
+{
+    bool isChecked = _byCategoryRadioButton -> isChecked();
+
+    _categoryComboBox -> setEnabled(isChecked);
+
+    if(isChecked) {
+        int categoryId = Model::Management::CategoryManager::getAllNames().value(_categoryComboBox -> currentText());
+        Model::Domain::Category *category = Model::Management::CategoryManager::get(categoryId);
+        _productProxyModel -> setCategory(category);
+    } else {
+        _productProxyModel -> setCategory(0);
+    }
+}
+
+void View::Management::ProductSelector::currentIndexChangedOnComboBox()
+{
+    int categoryId = Model::Management::CategoryManager::getAllNames().value(_categoryComboBox -> currentText());
+    Model::Domain::Category *category = Model::Management::CategoryManager::get(categoryId);
+    _productProxyModel -> setCategory(category);
+}
+
 void View::Management::ProductSelector::rowSelectionChanged()
 {
     int row = _productsTableView -> currentIndex().row();
@@ -121,6 +143,12 @@ void View::Management::ProductSelector::createWidgets()
 
 void View::Management::ProductSelector::createConnections()
 {
+    connect(_allRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(toggleOnRadioButton()));
+    connect(_byCategoryRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(toggleOnRadioButton()));
+    connect(_categoryComboBox, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(currentIndexChangedOnComboBox()));
     connect(_productsTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(rowSelectionChanged()));
     connect(_productsTableView, SIGNAL(doubleClicked(QModelIndex)),

@@ -61,6 +61,8 @@ namespace View
             void done(int result);
             Model::Domain::Product *product() const;
         private slots:
+            void toggleOnRadioButton();
+            void currentIndexChangedOnComboBox();
             void rowSelectionChanged();
         private:
             void createWidgets();
