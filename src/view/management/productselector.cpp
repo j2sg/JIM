@@ -45,7 +45,8 @@ View::Management::ProductSelector::~ProductSelector()
 void View::Management::ProductSelector::done(int result)
 {
     if(result) {
-        int row = _productsTableView -> currentIndex().row();
+        int row = _productProxyModel -> mapToSource(_productsTableView -> currentIndex()).row();
+
         _product = new Model::Domain::Product(*(_productModel -> products() -> at(row)));
     }
 

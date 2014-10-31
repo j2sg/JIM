@@ -169,7 +169,7 @@ void View::Management::ProductEditor::addProduct()
 
 void View::Management::ProductEditor::modProduct()
 {
-    int row = _productsTableView -> currentIndex().row();
+    int row = _productProxyModel -> mapToSource(_productsTableView -> currentIndex()).row();
     Model::Domain::Product *product = _productModel -> products() -> at(row);
     ProductDialog dialog(product, this);
 
@@ -190,7 +190,7 @@ void View::Management::ProductEditor::delProduct()
     if(!verifyDeleteProduct())
         return;
 
-    int row = _productsTableView -> currentIndex().row();
+    int row = _productProxyModel -> mapToSource(_productsTableView -> currentIndex()).row();
     Model::Management::ProductManager::remove(_productModel -> products() -> at(row) -> id());
     _productModel -> removeProduct(row);
     rowSelectionChangedOnProducsTableView();
