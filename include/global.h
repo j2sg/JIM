@@ -1,7 +1,7 @@
 /**
  *  This file is part of JIM.
  *
- *  Copyright (c) 2011-2014 Juan Jose Salazar Garcia jjslzgc@gmail.com
+ *  Copyright (c) 2011-2015 Juan Jose Salazar Garcia jjslzgc@gmail.com
  *
  *  JIM is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 #define APPLICATION_NAME      "JIM"
 #define APPLICATION_NAME_LONG "JIM Invoice Manager"
 #define APPLICATION_VERSION   "0.2.0"
-#define APPLICATION_YEARS     "2011-2014"
+#define APPLICATION_YEARS     "2011-2015"
 #define APPLICATION_WEB       "http://j2sg.wordpress.com/proyectos/jim"
 
 // Configuration Default Values
