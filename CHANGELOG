@@ -1,5 +1,9 @@
 v0.2.0 :
-   - To Do
+   - Added category filter at product editor.
+   - Added a custom editor to product ID at invoice editor. It allows either write product ID or open product selection dialog.
+   - Visual enhancements on all editors.
+   - Fixed segfault on product dialog when the product hasn't category.
+   - Fixed behavior of "add product" button at product editor when not exists any category.
 
 v0.1.2 :
    - Some fixes in the printing manager.
