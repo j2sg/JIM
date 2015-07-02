@@ -40,7 +40,7 @@ bool Persistence::Manager::createConfig(bool overwrite)
     QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
 
     setting.setValue("Executed",                  true);
-    setting.setValue("Password",                  "");
+    setting.setValue("Password",                  QByteArray());
     setting.setValue("DefaultBusiness",           "");
     setting.beginGroup("Application");
     setting.setValue("Currency",                  DEFAULT_APPLICATION_CURRENCY);

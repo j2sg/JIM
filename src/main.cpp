@@ -84,7 +84,7 @@ bool verifyConfig(bool *firstLogin)
     if(!Persistence::Manager::existsConfig() && !Persistence::Manager::createConfig())
             return false;
 
-    *firstLogin = Persistence::Manager::readConfig("Password").toString().isEmpty();
+    *firstLogin = Persistence::Manager::readConfig("Password").toByteArray().isEmpty();
 
     return true;
 }

@@ -19,6 +19,7 @@
  **/
 
 #include <QtGui>
+#include <QCryptographicHash>
 #include "mainwindow.h"
 #include "persistencemanager.h"
 #include "registerdialog.h"
@@ -97,7 +98,7 @@ bool View::MainWindow::firstExecution()
     RegisterDialog dialog(this);
 
     if(dialog.exec()) {
-        QString password = dialog.password();
+        QByteArray password = QCryptographicHash::hash(dialog.password().toAscii(), QCryptographicHash::Sha1);
 
         if((_authorized = Persistence::Manager::writeConfig(password, "Password")))
             QMessageBox::information(this, tr("First Execution"),
@@ -121,7 +122,7 @@ bool View::MainWindow::firstExecution()
 bool View::MainWindow::login()
 {
     AuthDialog dialog(this);
-    QString password = Persistence::Manager::readConfig("Password").toString();
+    QByteArray password = Persistence::Manager::readConfig("Password").toByteArray();
     int attempts = 0;
 
     do {
@@ -130,7 +131,7 @@ bool View::MainWindow::login()
                                        tr("Authentication canceled. Application will be closed."),
                                        QMessageBox::Ok);
             return false;
-        } else if(dialog.password() != password) {
+        } else if(QCryptographicHash::hash(dialog.password().toAscii(), QCryptographicHash::Sha1) != password) {
             if(attempts < MAX_AUTH_ATTEMPTS - 1)
                 QMessageBox::warning(this, tr("Authentication Failed"),
                                            tr("Wrong Password. You have %1 attempts more.")
