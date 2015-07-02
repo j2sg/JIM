@@ -4,6 +4,7 @@ v0.2.0 :
    - Visual enhancements on all editors.
    - Fixed segfault on product dialog when the product hasn't category.
    - Fixed behavior of "add product" button at product editor when not exists any category.
+   - Password storage based on SHA1 hash sum.
 
 v0.1.2 :
    - Some fixes in the printing manager.
