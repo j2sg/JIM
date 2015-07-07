@@ -43,9 +43,13 @@ void View::Invoicing::OperationTable::setColumnsWidth()
     setColumnWidth(ColumnOperationWeight,   COLUMN_OPERATION_WEIGHT_WIDTH);
     setColumnWidth(ColumnOperationPrice,    COLUMN_OPERATION_PRICE_WIDTH);
     setColumnWidth(ColumnOperationTotal,    COLUMN_OPERATION_TOTAL_WIDTH);
-
-    horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
-    horizontalHeader() -> setResizeMode(ColumnOperationName, QHeaderView::Stretch);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+        horizontalHeader() -> setResizeMode(ColumnOperationName, QHeaderView::Stretch);
+    #else
+        horizontalHeader() -> setSectionResizeMode(QHeaderView::Fixed);
+        horizontalHeader() -> setSectionResizeMode(ColumnOperationName, QHeaderView::Stretch);
+    #endif
 }
 
 void View::Invoicing::OperationTable::selectOperationProduct()

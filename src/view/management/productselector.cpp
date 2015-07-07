@@ -118,8 +118,13 @@ void View::Management::ProductSelector::createWidgets()
     _productsTableView -> setColumnWidth(ColumnProductId, COLUMN_PRODUCT_ID_WIDTH);
     _productsTableView -> setColumnWidth(ColumnProductName, COLUMN_PRODUCT_NAME_WIDTH);
     _productsTableView -> setColumnWidth(ColumnProductPrice, COLUMN_PRODUCT_PRICE_WIDTH);
-    _productsTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
-    _productsTableView -> horizontalHeader() -> setResizeMode(ColumnProductName, QHeaderView::Stretch);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        _productsTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+        _productsTableView -> horizontalHeader() -> setResizeMode(ColumnProductName, QHeaderView::Stretch);
+    #else
+        _productsTableView -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Fixed);
+        _productsTableView -> horizontalHeader() -> setSectionResizeMode(ColumnProductName, QHeaderView::Stretch);
+    #endif
 
     QGridLayout *productLayout = new QGridLayout;
     productLayout -> addWidget(_allRadioButton, 0, 0, 1, 1);

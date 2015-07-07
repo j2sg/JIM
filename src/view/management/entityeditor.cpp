@@ -130,8 +130,13 @@ void View::Management::EntityEditor::createWidgets()
     _entitiesTableView -> setFocusPolicy(Qt::NoFocus);
     _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_ID_WIDTH);
     _entitiesTableView -> setColumnWidth(ColumnEntityName, COLUMN_ENTITY_NAME_WIDTH);
-    _entitiesTableView -> horizontalHeader()-> setResizeMode(QHeaderView::Fixed);
-    _entitiesTableView -> horizontalHeader()-> setResizeMode(ColumnEntityName, QHeaderView::Stretch);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        _entitiesTableView -> horizontalHeader()-> setResizeMode(QHeaderView::Fixed);
+        _entitiesTableView -> horizontalHeader()-> setResizeMode(ColumnEntityName, QHeaderView::Stretch);
+    #else
+        _entitiesTableView -> horizontalHeader()-> setSectionResizeMode(QHeaderView::Fixed);
+        _entitiesTableView -> horizontalHeader()-> setSectionResizeMode(ColumnEntityName, QHeaderView::Stretch);
+    #endif
 
     _addEntityButton = new QPushButton(tr("&Add"));
     _addEntityButton -> setIcon(QIcon(":/images/add.png"));

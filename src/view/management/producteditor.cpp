@@ -263,8 +263,13 @@ void View::Management::ProductEditor::createCategoryWidgets()
     _categoriesTableView -> setColumnWidth(ColumnCategoryId, COLUMN_CATEGORY_ID_WIDTH);
     _categoriesTableView -> setColumnWidth(ColumnCategoryName, COLUMN_CATEGORY_NAME_WIDTH);
     _categoriesTableView -> setColumnWidth(ColumnCategoryVat, COLUMN_CATEGORY_VAT_WIDTH);
-    _categoriesTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
-    _categoriesTableView -> horizontalHeader() -> setResizeMode(ColumnCategoryName, QHeaderView::Stretch);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        _categoriesTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+        _categoriesTableView -> horizontalHeader() -> setResizeMode(ColumnCategoryName, QHeaderView::Stretch);
+    #else
+        _categoriesTableView -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Fixed);
+        _categoriesTableView -> horizontalHeader() -> setSectionResizeMode(ColumnCategoryName, QHeaderView::Stretch);
+    #endif
 
     _addCategoryButton = new QPushButton(tr("&Add"));
     _addCategoryButton -> setIcon(QIcon(":/images/add.png"));
@@ -300,8 +305,13 @@ void View::Management::ProductEditor::createProductWidgets()
     _productsTableView -> setColumnWidth(ColumnProductId, COLUMN_PRODUCT_ID_WIDTH);
     _productsTableView -> setColumnWidth(ColumnProductName, COLUMN_PRODUCT_NAME_WIDTH);
     _productsTableView -> setColumnWidth(ColumnProductPrice, COLUMN_PRODUCT_PRICE_WIDTH);
-    _productsTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
-    _productsTableView -> horizontalHeader() -> setResizeMode(ColumnProductName, QHeaderView::Stretch);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        _productsTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+        _productsTableView -> horizontalHeader() -> setResizeMode(ColumnProductName, QHeaderView::Stretch);
+    #else
+        _productsTableView -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Fixed);
+        _productsTableView -> horizontalHeader() -> setSectionResizeMode(ColumnProductName, QHeaderView::Stretch);
+    #endif
 
     _addProductButton = new QPushButton(tr("&Add"));
     _addProductButton -> setIcon(QIcon(":/images/add.png"));
