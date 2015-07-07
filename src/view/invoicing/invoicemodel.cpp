@@ -39,8 +39,10 @@ QList<Model::Domain::Invoice *> *View::Invoicing::InvoiceModel::invoices()
 
 void View::Invoicing::InvoiceModel::setInvoices(QList<Model::Domain::Invoice *> *invoices)
 {
+    beginResetModel();
     _invoices = invoices;
-    reset();
+    endResetModel();
+
 }
 
 bool View::Invoicing::InvoiceModel::insertInvoice(int k, Model::Domain::Invoice *invoice)
@@ -48,8 +50,9 @@ bool View::Invoicing::InvoiceModel::insertInvoice(int k, Model::Domain::Invoice 
     if(k < 0  || k > _invoices -> size())
         return false;
 
+    beginResetModel();
     _invoices -> insert(k, invoice);
-    reset();
+    endResetModel();
 
     return true;
 }
@@ -59,7 +62,8 @@ bool View::Invoicing::InvoiceModel::modifyInvoice(int k)
     if(k < 0  || k > _invoices -> size())
         return false;
 
-    reset();
+    beginResetModel();
+    endResetModel();
 
     return true;
 }
@@ -69,9 +73,10 @@ bool View::Invoicing::InvoiceModel::removeInvoice(int k)
     if(k < 0  || k > _invoices -> size())
         return false;
 
+    beginResetModel();
     delete _invoices -> at(k);
     _invoices -> removeAt(k);
-    reset();
+    endResetModel();
 
     return true;
 }

@@ -35,8 +35,9 @@ Model::Report::VolumeReportByProductResult *View::Report::VolumeReportByProductM
 
 void View::Report::VolumeReportByProductModel::setReport(Model::Report::VolumeReportByProductResult *report)
 {
+    beginResetModel();
     _report = report;
-    reset();
+    endResetModel();
 }
 
 int View::Report::VolumeReportByProductModel::rowCount(const QModelIndex &parent) const

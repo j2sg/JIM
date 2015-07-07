@@ -35,8 +35,9 @@ Model::Report::VolumeReportByEntityResult *View::Report::VolumeReportByEntityMod
 
 void View::Report::VolumeReportByEntityModel::setReport(Model::Report::VolumeReportByEntityResult *report)
 {
+    beginResetModel();
     _report = report;
-    reset();
+    endResetModel();
 }
 
 int View::Report::VolumeReportByEntityModel::rowCount(const QModelIndex &parent) const

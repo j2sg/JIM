@@ -38,8 +38,9 @@ QList<Model::Domain::Entity *> *View::Management::EntityModel::entities()
 
 void View::Management::EntityModel::setEntities(QList<Model::Domain::Entity *> *entities)
 {
+    beginResetModel();
     _entities = entities;
-    reset();
+    endResetModel();
 }
 
 bool View::Management::EntityModel::insertEntity(int k, Model::Domain::Entity *entity)
@@ -47,8 +48,9 @@ bool View::Management::EntityModel::insertEntity(int k, Model::Domain::Entity *e
     if(k < 0  || k > _entities -> size())
         return false;
 
+    beginResetModel();
     _entities -> insert(k, entity);
-    reset();
+    endResetModel();
 
     return true;
 }
@@ -58,7 +60,8 @@ bool View::Management::EntityModel::modifyEntity(int k)
     if(k < 0  || k > _entities -> size())
         return false;
 
-    reset();
+    beginResetModel();
+    endResetModel();
 
     return true;
 }
@@ -68,9 +71,10 @@ bool View::Management::EntityModel::removeEntity(int k)
     if(k < 0  || k > _entities -> size())
         return false;
 
+    beginResetModel();
     delete _entities -> at(k);
     _entities -> removeAt(k);
-    reset();
+    endResetModel();
 
     return true;
 }

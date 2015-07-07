@@ -34,8 +34,9 @@ Model::Report::VolumeReportByDateResult *View::Report::VolumeReportByDateModel::
 
 void View::Report::VolumeReportByDateModel::setReport(Model::Report::VolumeReportByDateResult *report)
 {
+    beginResetModel();
     _report = report;
-    reset();
+    endResetModel();
 }
 
 int View::Report::VolumeReportByDateModel::rowCount(const QModelIndex &parent) const

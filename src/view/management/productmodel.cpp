@@ -40,8 +40,9 @@ QList<Model::Domain::Product *> *View::Management::ProductModel::products()
 
 void View::Management::ProductModel::setProducts(QList<Model::Domain::Product *> *products)
 {
+    beginResetModel();
     _products = products;
-    reset();
+    endResetModel();
 }
 
 bool View::Management::ProductModel::insertProduct(int k, Model::Domain::Product *product)
@@ -49,8 +50,9 @@ bool View::Management::ProductModel::insertProduct(int k, Model::Domain::Product
     if(k < 0  || k > _products -> size())
         return false;
 
+    beginResetModel();
     _products -> insert(k, product);
-    reset();
+    endResetModel();
 
     return true;
 }
@@ -60,7 +62,8 @@ bool View::Management::ProductModel::modifyProduct(int k)
     if(k < 0  || k > _products -> size())
         return false;
 
-    reset();
+    beginResetModel();
+    endResetModel();
 
     return true;
 }
@@ -70,9 +73,10 @@ bool View::Management::ProductModel::removeProduct(int k)
     if(k < 0  || k > _products -> size())
         return false;
 
+    beginResetModel();
     delete _products -> at(k);
     _products -> removeAt(k);
-    reset();
+    endResetModel();
 
     return true;
 }

@@ -37,8 +37,9 @@ QList<Model::Domain::Operation *> *View::Invoicing::OperationModel::operations()
 
 void View::Invoicing::OperationModel::setOperations(QList<Model::Domain::Operation *> *operations)
 {
+    beginResetModel();
     _operations = operations;
-    reset();
+    endResetModel();
 }
 
 int View::Invoicing::OperationModel::rowCount(const QModelIndex &parent) const

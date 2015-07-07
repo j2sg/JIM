@@ -38,8 +38,9 @@ QList<Model::Domain::Category *> *View::Management::CategoryModel::categories()
 
 void View::Management::CategoryModel::setCategories(QList<Model::Domain::Category *> *categories)
 {
+    beginResetModel();
     _categories = categories;
-    reset();
+    endResetModel();
 }
 
 bool View::Management::CategoryModel::insertCategory(int k, Model::Domain::Category *category)
@@ -47,8 +48,9 @@ bool View::Management::CategoryModel::insertCategory(int k, Model::Domain::Categ
     if(k < 0  || k > _categories -> size())
         return false;
 
+    beginResetModel();
     _categories -> insert(k, category);
-    reset();
+    endResetModel();
 
     return true;
 }
@@ -58,7 +60,8 @@ bool View::Management::CategoryModel::modifyCategory(int k)
     if(k < 0  || k > _categories -> size())
         return false;
 
-    reset();
+    beginResetModel();
+    endResetModel();
 
     return true;
 }
@@ -68,9 +71,11 @@ bool View::Management::CategoryModel::removeCategory(int k)
     if(k < 0  || k > _categories -> size())
         return false;
 
+    beginResetModel();
     delete _categories -> at(k);
     _categories -> removeAt(k);
-    reset();
+    endResetModel();
+
 
     return true;
 }

@@ -31,12 +31,14 @@ View::Management::ProductProxyModel::~ProductProxyModel()
 
 void View::Management::ProductProxyModel::setCategory(Model::Domain::Category *category)
 {
+    beginResetModel();
+
     if(_category)
         delete _category;
 
     _category = category;
 
-    reset();
+    endResetModel();
 }
 
 Model::Domain::Category *View::Management::ProductProxyModel::category()
