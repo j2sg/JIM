@@ -22,7 +22,11 @@
 #define GLOBAL_H
 
 #include "types.h"
-#include <QDesktopServices>
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+    #include <QDesktopServices>
+#else
+    #include <QStandardPaths>
+#endif
 
 // Application Properties
 #define ORGANIZATION_NAME     "j2sg_software"
@@ -41,7 +45,11 @@
 #define DEFAULT_APPLICATION_TAX_PRECISION               MAX_TAX_PRECISION
 #define DEFAULT_APPLICATION_WEIGHT_PRECISION            MAX_WEIGHT_PRECISION
 #define DEFAULT_STORAGE_TYPE                            Persistence::SQLITE
-#define DEFAULT_STORAGE_PATH                            QDesktopServices::storageLocation(QDesktopServices::DataLocation)
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+    #define DEFAULT_STORAGE_PATH                            QDesktopServices::storageLocation(QDesktopServices::DataLocation)
+#else
+    #define DEFAULT_STORAGE_PATH                            QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()
+#endif
 #define DEFAULT_STORAGE_DBMS_DRIVER                     "QSQLITE"
 #define DEFAULT_STORAGE_DBMS_NAME                       DEFAULT_STORAGE_PATH.append("/jim.db")
 #define DEFAULT_STORAGE_DBMS_HOST                       "localhost"
