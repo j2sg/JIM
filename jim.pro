@@ -8,6 +8,11 @@ OBJECTS_DIR = build
 MOC_DIR = build
 RCC_DIR = build
 QT += sql
+
+greaterThan(QT_MAJOR_VERSION, 4) {
+   QT += widgets printsupport
+}
+
 DEPENDPATH += . \
               include \
               resources \
@@ -31,6 +36,7 @@ DEPENDPATH += . \
               src/view/invoicing \
               src/view/management \
               src/view/report
+
 INCLUDEPATH += . \
                include/view \
                include \
@@ -111,6 +117,7 @@ HEADERS += include/global.h \
     include/view/invoicing/operationeditoridwidget.h \
     include/view/invoicing/operationdelegate.h \
     include/view/management/productselector.h
+
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
            src/persistence/sqlagent.cpp \
@@ -177,7 +184,9 @@ SOURCES += src/main.cpp \
     src/view/invoicing/operationeditoridwidget.cpp \
     src/view/invoicing/operationdelegate.cpp \
     src/view/management/productselector.cpp
+
 RESOURCES += resources/jim.qrc
+
 TRANSLATIONS += resources/translations/jim_es.ts
 
 OTHER_FILES += \
@@ -192,5 +201,4 @@ OTHER_FILES += \
     CHANGELOG \
     AUTHOR
 
-
-
+message("Qt Version: $$QT_VERSION")
