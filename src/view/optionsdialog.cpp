@@ -71,7 +71,7 @@ void View::OptionsDialog::setDefaultValues()
     QString currentPass = Persistence::Manager::readConfig("Password").toString();
 
     Persistence::Manager::createConfig(true);
-    Persistence::Manager::writeConfig(currentPass.toAscii(), "Password");
+    Persistence::Manager::writeConfig(currentPass.toLatin1(), "Password");
 
     loadOptions();
 }
@@ -400,7 +400,7 @@ bool View::OptionsDialog::saveOptions()
         Persistence::Manager::writeConfig(_storageHostLineEdit -> text(), "Host", "Storage/DBMS");
         Persistence::Manager::writeConfig(_storagePortSpinBox -> value(), "Port", "Storage/DBMS");
         Persistence::Manager::writeConfig(_storageUserLineEdit -> text(), "User", "Storage/DBMS");
-        Persistence::Manager::writeConfig(_storagePassLineEdit -> text().toAscii(), "Pass", "Storage/DBMS");
+        Persistence::Manager::writeConfig(_storagePassLineEdit -> text().toLatin1(), "Pass", "Storage/DBMS");
     }
 
     Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::GeneralVAT), "GeneralVAT", "Invoicing/Tax");
