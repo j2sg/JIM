@@ -111,7 +111,7 @@ bool View::MainWindow::firstExecution()
     RegisterDialog dialog(this);
 
     if(dialog.exec()) {
-        QByteArray password = QCryptographicHash::hash(dialog.password().toAscii(), QCryptographicHash::Sha1);
+        QByteArray password = QCryptographicHash::hash(dialog.password().toLatin1(), QCryptographicHash::Sha1);
 
         if((_authorized = Persistence::Manager::writeConfig(password, "Password")))
             QMessageBox::information(this, tr("First Execution"),
@@ -144,7 +144,7 @@ bool View::MainWindow::login()
                                        tr("Authentication canceled. Application will be closed."),
                                        QMessageBox::Ok);
             return false;
-        } else if(QCryptographicHash::hash(dialog.password().toAscii(), QCryptographicHash::Sha1) != password) {
+        } else if(QCryptographicHash::hash(dialog.password().toLatin1(), QCryptographicHash::Sha1) != password) {
             if(attempts < MAX_AUTH_ATTEMPTS - 1)
                 QMessageBox::warning(this, tr("Authentication Failed"),
                                            tr("Wrong Password. You have %1 attempts more.")
@@ -186,10 +186,7 @@ void View::MainWindow::disconnectStorage()
 
 void View::MainWindow::importStorage()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
-                                                    tr("Import Storage"),
-                                                    QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
-                                                    tr("All Files (*.*)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Import Storage"), DEFAULT_STORAGE_PATH, tr("All Files (*.*)"));
 
     if(fileName.isEmpty() || !verifyImportStorage())
         return;
@@ -209,9 +206,7 @@ void View::MainWindow::importStorage()
 
 void View::MainWindow::exportStorage()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Export Storage"),
-                                                QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
-                                                tr("All Files (*.*)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export Storage"), DEFAULT_STORAGE_PATH, tr("All Files (*.*)"));
 
     if(fileName.isEmpty())
         return;
