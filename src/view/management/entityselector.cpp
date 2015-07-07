@@ -23,7 +23,12 @@
 #include "entitymanager.h"
 #include "entitydialog.h"
 #include "entity.h"
-#include <QtGui>
+#include <QTableView>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QMessageBox>
 
 View::Management::EntitySelector::EntitySelector(Model::Domain::EntityType type,
                                                  SelectorBehavior behavior,

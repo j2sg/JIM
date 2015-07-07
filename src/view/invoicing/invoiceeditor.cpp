@@ -25,7 +25,13 @@
 #include "invoicemanager.h"
 #include "business.h"
 #include "types.h"
-#include <QtGui>
+#include <QTabWidget>
+#include <QPushButton>
+#include <QCloseEvent>
+#include <QApplication>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QMessageBox>
 
 View::Invoicing::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *parent)
     : QWidget(parent), _invoice(invoice)

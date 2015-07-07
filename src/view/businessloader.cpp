@@ -19,7 +19,14 @@
  **/
 
 #include "businessloader.h"
-#include <QtGui>
+#include <QLabel>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
 
 View::BusinessLoader::BusinessLoader(const QStringList &businessNames,
                                      const QString &def,

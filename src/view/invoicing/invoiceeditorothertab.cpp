@@ -22,7 +22,10 @@
 #include "taxapplyingwidget.h"
 #include "taxwidget.h"
 #include "invoice.h"
-#include <QtGui>
+#include <QTextEdit>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
 
 View::Invoicing::InvoiceEditorOtherTab::InvoiceEditorOtherTab(Model::Domain::Invoice *invoice, QWidget *parent)
     : QWidget(parent), _invoice(invoice)

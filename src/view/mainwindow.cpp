@@ -18,8 +18,6 @@
  *
  **/
 
-#include <QtGui>
-#include <QCryptographicHash>
 #include "mainwindow.h"
 #include "persistencemanager.h"
 #include "registerdialog.h"
@@ -42,6 +40,21 @@
 #include "reportmanager.h"
 #include "printingmanager.h"
 #include "global.h"
+#include <QMdiArea>
+#include <QMdiSubWindow>
+#include <QAction>
+#include <QMenu>
+#include <QMenuBar>
+#include <QToolBar>
+#include <QStatusBar>
+#include <QLabel>
+#include <QCloseEvent>
+#include <QApplication>
+#include <QPrinter>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QPrintDialog>
+#include <QCryptographicHash>
 
 View::MainWindow::MainWindow()
 {

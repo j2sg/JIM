@@ -20,7 +20,10 @@
 
 #include "taxwidget.h"
 #include "persistencemanager.h"
-#include <QtGui>
+#include <QLabel>
+#include <QDoubleSpinBox>
+#include <QGridLayout>
+#include <QGroupBox>
 
 View::Management::TaxWidget::TaxWidget(Model::Domain::Tax *tax,
                                        Qt::Orientation orientation,

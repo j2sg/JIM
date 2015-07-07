@@ -27,7 +27,10 @@
 #include "entity.h"
 #include "business.h"
 #include "types.h"
-#include <QtGui>
+#include <QTabWidget>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 View::Management::EntityDialog::EntityDialog(Model::Domain::Entity *entity, QWidget *parent)
     : QDialog(parent), _entity(entity)

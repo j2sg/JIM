@@ -28,7 +28,16 @@
 #include "productmanager.h"
 #include "productdialog.h"
 #include "product.h"
-#include <QtGui>
+#include <QTableView>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QComboBox>
+#include <QHeaderView>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QMessageBox>
 
 View::Management::ProductEditor::ProductEditor(QWidget *parent)
     : QWidget(parent)

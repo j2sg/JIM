@@ -20,7 +20,10 @@
 
 #include "entitydialogothertab.h"
 #include "entity.h"
-#include <QtGui>
+#include <QTextEdit>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
 
 View::Management::EntityDialogOtherTab::EntityDialogOtherTab(Model::Domain::Entity *entity, QWidget *parent)
     : QWidget(parent), _entity(entity)

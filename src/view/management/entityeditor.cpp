@@ -25,7 +25,14 @@
 #include "businessmanager.h"
 #include "entity.h"
 #include "business.h"
-#include <QtGui>
+#include <QTableView>
+#include <QPushButton>
+#include <QHeaderView>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QMessageBox>
 
 View::Management::EntityEditor::EntityEditor(Model::Domain::EntityType type, QWidget *parent)
     : QWidget(parent), _type(type)

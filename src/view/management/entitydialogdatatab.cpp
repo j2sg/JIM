@@ -24,7 +24,13 @@
 #include "entitymanager.h"
 #include "businessmanager.h"
 #include "types.h"
-#include <QtGui>
+#include <QLabel>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QRegExpValidator>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
 
 View::Management::EntityDialogDataTab::EntityDialogDataTab(Model::Domain::Entity *entity, QWidget *parent)
     : QWidget(parent), _entity(entity)

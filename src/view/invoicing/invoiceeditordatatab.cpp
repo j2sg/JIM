@@ -28,7 +28,16 @@
 #include "operationeditor.h"
 #include "taxviewerwidget.h"
 #include "persistencemanager.h"
-#include <QtGui>
+#include <QLabel>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QDateEdit>
+#include <QComboBox>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
 
 View::Invoicing::InvoiceEditorDataTab::InvoiceEditorDataTab(Model::Domain::Invoice *invoice, QWidget *parent)
     : QWidget(parent), _invoice(invoice)

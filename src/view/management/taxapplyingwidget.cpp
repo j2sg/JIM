@@ -19,7 +19,9 @@
  **/
 
 #include "taxapplyingwidget.h"
-#include <QtGui>
+#include <QRadioButton>
+#include <QCheckBox>
+#include <QGridLayout>
 
 View::Management::TaxApplyingWidget::TaxApplyingWidget(Model::Domain::TaxFlag taxApplying,
                                                        QWidget *parent)

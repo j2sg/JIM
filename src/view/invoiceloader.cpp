@@ -19,7 +19,15 @@
  **/
 
 #include "invoiceloader.h"
-#include <QtGui>
+#include <QLabel>
+#include <QLineEdit>
+#include <QRadioButton>
+#include <QPushButton>
+#include <QRegExpValidator>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
 
 View::InvoiceLoader::InvoiceLoader(QWidget *parent) : QDialog(parent)
 {

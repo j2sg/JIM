@@ -24,7 +24,15 @@
 #include "categorymanager.h"
 #include "persistencemanager.h"
 #include "types.h"
-#include <QtGui>
+#include <QLabel>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QTextEdit>
+#include <QComboBox>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 View::Management::ProductDialog::ProductDialog(Model::Domain::Product *product, QWidget *parent)
     : QDialog(parent), _product(product)

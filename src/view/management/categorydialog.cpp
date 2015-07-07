@@ -22,7 +22,15 @@
 #include "category.h"
 #include "categorymanager.h"
 #include "types.h"
-#include <QtGui>
+#include <QLabel>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QTextEdit>
+#include <QComboBox>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 View::Management::CategoryDialog::CategoryDialog(Model::Domain::Category *category, QWidget *parent)
     : QDialog(parent), _category(category)

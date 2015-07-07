@@ -24,7 +24,15 @@
 #include "productproxymodel.h"
 #include "productmanager.h"
 #include "product.h"
-#include <QtGui>
+#include <QTableView>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QComboBox>
+#include <QHeaderView>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGroupBox>
 
 View::Management::ProductSelector::ProductSelector(QWidget *parent) : QDialog(parent)
 {

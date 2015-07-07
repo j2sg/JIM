@@ -23,7 +23,8 @@
 #include "taxwidget.h"
 #include "business.h"
 #include "persistencemanager.h"
-#include <QtGui>
+#include <QVBoxLayout>
+#include <QGroupBox>
 
 View::Management::EntityDialogTaxesTab::EntityDialogTaxesTab(Model::Domain::Entity *entity, QWidget *parent)
     : QWidget(parent), _entity(entity)
