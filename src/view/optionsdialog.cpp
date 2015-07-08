@@ -33,6 +33,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QCryptographicHash>
 
 View::OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent)
 {
@@ -378,16 +379,16 @@ void View::OptionsDialog::loadOptions()
 
 bool View::OptionsDialog::saveOptions()
 {
-    QString storePass = Persistence::Manager::readConfig("Password").toString();
-    QString currPass = _authenticationCurrentPassLineEdit -> text();
-    QString newPass = _authenticationNewPassLineEdit -> text();
-    QString reNewPass = _authenticationReNewPassLineEdit -> text();
+    QByteArray storePass = Persistence::Manager::readConfig("Password").toByteArray();
+    QByteArray currPass = QCryptographicHash::hash(_authenticationCurrentPassLineEdit -> text().toLatin1(), QCryptographicHash::Sha1);
+    QByteArray newPass = QCryptographicHash::hash(_authenticationNewPassLineEdit -> text().toLatin1(), QCryptographicHash::Sha1);
+    QByteArray reNewPass = QCryptographicHash::hash(_authenticationReNewPassLineEdit -> text().toLatin1(), QCryptographicHash::Sha1);
 
     if(!currPass.isEmpty() || !newPass.isEmpty() || !reNewPass.isEmpty()) {
         if(storePass != currPass || newPass != reNewPass)
             return false;
         else
-            Persistence::Manager::writeConfig(_authenticationNewPassLineEdit -> text(), "Password");
+            Persistence::Manager::writeConfig(newPass, "Password");
     }
 
     Persistence::Manager::writeConfig(_precisionMoneySpinBox -> value(), "Money", "Application/Precision");
