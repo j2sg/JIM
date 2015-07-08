@@ -10,7 +10,7 @@
 
    - Details.
 
-      - Developed in C++ and Qt4 framework.
+      - Developed in C++ and Qt5 framework.
       - Data to be saved in a SQLite database (future versions will be 
         able to work with several DBMS).
       - Multiplatform. Works properly on GNU/Linux and Microsoft Windows 
