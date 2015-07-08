@@ -1,4 +1,5 @@
 v0.2.0 :
+   - Transition from Qt4 to Qt5
    - Added category filter at product editor.
    - Added a custom editor to product ID at invoice editor. It allows either write product ID or open product selection dialog.
    - Visual enhancements on all editors.
