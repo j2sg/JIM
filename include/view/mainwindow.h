@@ -163,8 +163,6 @@ namespace View
         //QAction *_addressBookAction;
         QAction *_closeAction;
         QAction *_closeAllAction;
-        QAction *_tileAction;
-        QAction *_cascadeAction;
         QAction *_nextAction;
         QAction *_previousAction;
         QAction *_aboutAction;

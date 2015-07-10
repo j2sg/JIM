@@ -501,8 +501,6 @@ void View::MainWindow::updateWindowMenu()
 
     _closeAction -> setEnabled(hasWindowActive);
     _closeAllAction -> setEnabled(hasWindowActive);
-    _tileAction -> setEnabled(hasWindowActive);
-    _cascadeAction -> setEnabled(hasWindowActive);
     _nextAction -> setEnabled(hasWindowActive);
     _previousAction -> setEnabled(hasWindowActive);
 }
@@ -566,6 +564,9 @@ void View::MainWindow::createWidgets()
 void View::MainWindow::createCentralWidget()
 {
     _mdiArea = new QMdiArea;
+    _mdiArea -> setViewMode(QMdiArea::TabbedView);
+    _mdiArea -> setTabsClosable(true);
+    _mdiArea -> setTabsMovable(true);
     _mdiArea -> setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     _mdiArea -> setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setCentralWidget(_mdiArea);
@@ -677,12 +678,6 @@ void View::MainWindow::createActions()
     _closeAllAction = new QAction(tr("Close All"), this);
     _closeAllAction -> setStatusTip(tr("Close all windows"));
 
-    _tileAction = new QAction(tr("Tile"), this);
-    _tileAction -> setStatusTip(tr("Tile windows"));
-
-    _cascadeAction = new QAction(tr("Cascade"), this);
-    _cascadeAction -> setStatusTip(tr("Cascade windows"));
-
     _nextAction = new QAction(tr("Next"), this);
     _nextAction -> setShortcuts(QKeySequence::NextChild);
     _nextAction -> setStatusTip(tr("Go to next window"));
@@ -743,9 +738,6 @@ void View::MainWindow::createMenus()
     _windowMenu = menuBar() -> addMenu(tr("&Window"));
     _windowMenu -> addAction(_closeAction);
     _windowMenu -> addAction(_closeAllAction);
-    _windowMenu -> addSeparator();
-    _windowMenu -> addAction(_tileAction);
-    _windowMenu -> addAction(_cascadeAction);
     _windowMenu -> addSeparator();
     _windowMenu -> addAction(_nextAction);
     _windowMenu -> addAction(_previousAction);
@@ -844,10 +836,6 @@ void View::MainWindow::createConnections()
             _mdiArea, SLOT(closeActiveSubWindow()));
     connect(_closeAllAction, SIGNAL(triggered()),
             _mdiArea, SLOT(closeAllSubWindows()));
-    connect(_tileAction, SIGNAL(triggered()),
-            _mdiArea, SLOT(tileSubWindows()));
-    connect(_cascadeAction, SIGNAL(triggered()),
-            _mdiArea, SLOT(cascadeSubWindows()));
     connect(_nextAction, SIGNAL(triggered()),
             _mdiArea, SLOT(activateNextSubWindow()));
     connect(_previousAction, SIGNAL(triggered()),
