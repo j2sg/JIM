@@ -31,11 +31,11 @@ namespace Model
         class TaxManager
         {
         public:
-            static bool create(const Model::Domain::Tax &tax, int businessId);
-            static bool modify(const Model::Domain::Tax &tax, int businessId);
-            static bool remove(Model::Domain::TaxType type, int businessId);
-            static Model::Domain::Tax *get(Model::Domain::TaxType type, int businessId);
-            static QList<Model::Domain::Tax *> *getAllByBusiness(int businessId);
+            static bool create(const Model::Domain::Tax &tax, int companyId);
+            static bool modify(const Model::Domain::Tax &tax, int companyId);
+            static bool remove(Model::Domain::TaxType type, int companyId);
+            static Model::Domain::Tax *get(Model::Domain::TaxType type, int companyId);
+            static QList<Model::Domain::Tax *> *getAllByCompany(int companyId);
         };
     }
 }

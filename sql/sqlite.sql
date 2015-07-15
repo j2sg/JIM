@@ -44,8 +44,8 @@ CREATE TABLE IF NOT EXISTS entity (
 CREATE TABLE IF NOT EXISTS invoice (
    id              INTEGER,
    type            INTEGER,
-   businessId      INTEGER,
-   businessType    INTEGER CONSTRAINT invoice_business_type_def_ct DEFAULT 2,
+   companyId      INTEGER,
+   companyType    INTEGER CONSTRAINT invoice_company_type_def_ct DEFAULT 2,
    entityId        INTEGER CONSTRAINT invoice_entity_id_nn_ct NOT NULL,
    entityType      INTEGER CONSTRAINT invoice_entity_type_nn_ct NOT NULL,
    date            TEXT    CONSTRAINT invoice_date_nn_ct NOT NULL,
@@ -61,9 +61,9 @@ CREATE TABLE IF NOT EXISTS invoice (
    paid            INTEGER CONSTRAINT invoice_paid_nn_ct NOT NULL,
    payment         INTEGER CONSTRAINT invoice_payment_nn_ct NOT NULL,
    notes           TEXT,
-   CONSTRAINT invoice_pk_ct                    PRIMARY KEY(id, type, businessId, businessType),
+   CONSTRAINT invoice_pk_ct                    PRIMARY KEY(id, type, companyId, companyType),
    CONSTRAINT invoice_type_chk_ct              CHECK(type=0 OR type=1),
-   CONSTRAINT invoice_business_fk_ct           FOREIGN KEY(businessId, businessType)
+   CONSTRAINT invoice_company_fk_ct           FOREIGN KEY(companyId, companyType)
                                                REFERENCES entity(id, type)
                                                    ON UPDATE CASCADE
                                                    ON DELETE CASCADE,
@@ -84,11 +84,11 @@ CREATE TABLE IF NOT EXISTS invoice (
 
 CREATE TABLE IF NOT EXISTS tax (
    type         INTEGER,
-   businessId   INTEGER,
-   businessType INTEGER CONSTRAINT tax_business_type_def_ct DEFAULT 2,
+   companyId   INTEGER,
+   companyType INTEGER CONSTRAINT tax_company_type_def_ct DEFAULT 2,
    value        REAL    CONSTRAINT tax_value_nn_ct NOT NULL,
-   CONSTRAINT tax_pk_ct          PRIMARY KEY(type, businessId, businessType),
-   CONSTRAINT tax_business_fk_ct FOREIGN KEY(businessId, businessType)
+   CONSTRAINT tax_pk_ct          PRIMARY KEY(type, companyId, companyType),
+   CONSTRAINT tax_company_fk_ct FOREIGN KEY(companyId, companyType)
                                  REFERENCES entity(id, type)
                                      ON UPDATE CASCADE
                                      ON DELETE CASCADE,
@@ -125,15 +125,15 @@ CREATE TABLE IF NOT EXISTS operation (
    id           INTEGER,
    invoiceId    INTEGER,
    invoiceType  INTEGER,
-   businessId   INTEGER,
-   businessType INTEGER CONSTRAINT operation_business_type_def_ct DEFAULT 2,
+   companyId   INTEGER,
+   companyType INTEGER CONSTRAINT operation_company_type_def_ct DEFAULT 2,
    product      INTEGER,
    quantity     INTEGER,
    weight       REAL,
    price        REAL    CONSTRAINT operation_price_nn_ct NOT NULL,
-   CONSTRAINT operation_pk_ct           PRIMARY KEY(id, invoiceId, invoiceType, businessId, businessType),
-   CONSTRAINT operation_invoice_fk_ct   FOREIGN KEY(invoiceId, invoiceType, businessId, businessType)
-                                        REFERENCES invoice(id, type, businessId, businessType)
+   CONSTRAINT operation_pk_ct           PRIMARY KEY(id, invoiceId, invoiceType, companyId, companyType),
+   CONSTRAINT operation_invoice_fk_ct   FOREIGN KEY(invoiceId, invoiceType, companyId, companyType)
+                                        REFERENCES invoice(id, type, companyId, companyType)
                                             ON UPDATE CASCADE
                                             ON DELETE CASCADE,
    CONSTRAINT operation_product_fk_ct   FOREIGN KEY(product)

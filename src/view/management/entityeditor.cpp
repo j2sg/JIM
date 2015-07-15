@@ -22,9 +22,9 @@
 #include "entitydialog.h"
 #include "entitymodel.h"
 #include "entitymanager.h"
-#include "businessmanager.h"
+#include "companymanager.h"
 #include "entity.h"
-#include "business.h"
+#include "company.h"
 #include <QTableView>
 #include <QPushButton>
 #include <QHeaderView>
@@ -64,14 +64,14 @@ void View::Management::EntityEditor::rowSelectionChanged()
 
 void View::Management::EntityEditor::addEntity()
 {
-    Model::Domain::Entity *entity = (_type == Model::Domain::BusinessEntity ?
-                                         new Model::Domain::Business :
+    Model::Domain::Entity *entity = (_type == Model::Domain::CompanyEntity ?
+                                         new Model::Domain::Company :
                                          new Model::Domain::Entity(NO_ID, _type));
     EntityDialog dialog(entity, this);
 
     if(dialog.exec()) {
-        if(((_type == Model::Domain::BusinessEntity) ?
-             Model::Management::BusinessManager::create(*entity) :
+        if(((_type == Model::Domain::CompanyEntity) ?
+             Model::Management::CompanyManager::create(*entity) :
              Model::Management::EntityManager::create(*entity))) {
             int row = _entityModel -> rowCount(QModelIndex());
             _entityModel -> insertEntity(row, entity);
@@ -94,8 +94,8 @@ void View::Management::EntityEditor::modEntity()
     EntityDialog dialog(entity, this);
 
     if(dialog.exec()) {
-        if(((_type == Model::Domain::BusinessEntity) ?
-             Model::Management::BusinessManager::modify(*entity) :
+        if(((_type == Model::Domain::CompanyEntity) ?
+             Model::Management::CompanyManager::modify(*entity) :
              Model::Management::EntityManager::modify(*entity)))
             _entityModel -> modifyEntity(row);
         else
@@ -118,8 +118,8 @@ void View::Management::EntityEditor::delEntity()
 void View::Management::EntityEditor::createWidgets()
 {
     _entitiesTableView = new QTableView;
-    _entityModel = new EntityModel(_type == Model::Domain::BusinessEntity ?
-                                       Model::Management::BusinessManager::getAll() :
+    _entityModel = new EntityModel(_type == Model::Domain::CompanyEntity ?
+                                       Model::Management::CompanyManager::getAll() :
                                        Model::Management::EntityManager::getAllByType(_type));
     _entitiesTableView -> setModel(_entityModel);
     _entitiesTableView -> setAlternatingRowColors(true);
@@ -181,8 +181,8 @@ void View::Management::EntityEditor::setTitle()
     case Model::Domain::SupplierEntity:
         entityType = tr("Supplier");
         break;
-    case Model::Domain::BusinessEntity:
-        entityType = tr("Business");
+    case Model::Domain::CompanyEntity:
+        entityType = tr("Company");
         break;
     default:
         entityType = tr("Unknown");
@@ -196,8 +196,8 @@ void View::Management::EntityEditor::setIcon()
     QIcon icon;
 
     switch(static_cast<int>(_type)) {
-    case Model::Domain::BusinessEntity:
-        icon = QIcon(":/images/business.png");
+    case Model::Domain::CompanyEntity:
+        icon = QIcon(":/images/company.png");
         break;
     case Model::Domain::CustomerEntity:
         icon = QIcon(":/images/entity.png");

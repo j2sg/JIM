@@ -20,21 +20,21 @@
 
 #include "invoice.h"
 #include "entity.h"
-#include "business.h"
+#include "company.h"
 #include "operation.h"
 #include "product.h"
 #include "category.h"
 
-Model::Domain::Invoice::Invoice(Entity *business, int id, InvoiceType type)
-    : _id(id), _type(type), _business(business)
+Model::Domain::Invoice::Invoice(Entity *company, int id, InvoiceType type)
+    : _id(id), _type(type), _company(company)
 {
     _entity = 0;
     _date = QDate::currentDate();
     _place = _notes = QString();
     _operations = new QList<Operation *>;
-    _taxOnInvoice = (_business ? (_type == Sale ? _business -> taxOnSale() : _business -> taxOnBuy()) : ApplyAllTax);
+    _taxOnInvoice = (_company ? (_type == Sale ? _company -> taxOnSale() : _company -> taxOnBuy()) : ApplyAllTax);
     for(int k = 0;k < TaxTypeCount;++k)
-        _tax[k] = (_business ? (_business -> tax())[k] : Tax(static_cast<TaxType>(k)));
+        _tax[k] = (_company ? (_company -> tax())[k] : Tax(static_cast<TaxType>(k)));
     _paid = false;
     _payment = Cash;
 }
@@ -59,7 +59,7 @@ Model::Domain::Invoice &Model::Domain::Invoice::operator=(const Invoice &invoice
 {
     _id         = invoice._id;
     _type       = invoice._type;
-    _business   = (invoice._business) ? new Business(dynamic_cast<const Business &>(*invoice._business)) : 0;
+    _company   = (invoice._company) ? new Company(dynamic_cast<const Company &>(*invoice._company)) : 0;
     _entity     = (invoice._entity) ? new Entity(*invoice._entity) : 0;
     _date       = invoice._date;
     _place      = invoice._place;
@@ -78,7 +78,7 @@ Model::Domain::Invoice &Model::Domain::Invoice::operator=(const Invoice &invoice
 
 bool Model::Domain::Invoice::operator==(const Invoice &invoice) const
 {
-    return *_business == *invoice._business &&
+    return *_company == *invoice._company &&
             _id == invoice._id &&
             _type == invoice._type;
 }
@@ -108,21 +108,21 @@ Model::Domain::InvoiceType Model::Domain::Invoice::type() const
     return _type;
 }
 
-void Model::Domain::Invoice::setBusiness(Entity *business)
+void Model::Domain::Invoice::setCompany(Entity *company)
 {
-    if(_business)
-        delete _business;
+    if(_company)
+        delete _company;
 
-    _business = business;
+    _company = company;
 
-    _taxOnInvoice = (_business ? (_type == Sale ? _business -> taxOnSale() : _business -> taxOnBuy()) : ApplyAllTax);
+    _taxOnInvoice = (_company ? (_type == Sale ? _company -> taxOnSale() : _company -> taxOnBuy()) : ApplyAllTax);
     for(int k = 0;k < TaxTypeCount;++k)
-        _tax[k] = (_business ? (business -> tax())[k] : Tax(static_cast<TaxType>(k)));
+        _tax[k] = (_company ? (company -> tax())[k] : Tax(static_cast<TaxType>(k)));
 }
 
-Model::Domain::Entity *Model::Domain::Invoice::business() const
+Model::Domain::Entity *Model::Domain::Invoice::company() const
 {
-    return _business;
+    return _company;
 }
 
 void Model::Domain::Invoice::setEntity(Entity *entity)

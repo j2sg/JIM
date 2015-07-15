@@ -19,7 +19,7 @@
  **/
 
 #include "invoicemanager.h"
-#include "businessmanager.h"
+#include "companymanager.h"
 #include "entitymanager.h"
 #include "operationmanager.h"
 #include "persistencemanager.h"
@@ -35,8 +35,8 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
                           "'%8', %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, '%19')")
                       .arg(invoice.id())
                       .arg(static_cast<int>(invoice.type()))
-                      .arg(invoice.business() -> id())
-                      .arg(static_cast<int>(invoice.business() -> type()))
+                      .arg(invoice.company() -> id())
+                      .arg(static_cast<int>(invoice.company() -> type()))
                       .arg(invoice.entity() -> id())
                       .arg(static_cast<int>(invoice.entity() -> type()))
                       .arg(invoice.date().toString(DATE_FORMAT))
@@ -57,7 +57,7 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
 
     bool operationsCreated = OperationManager::createAll(invoice.operations(), invoice.id(),
                                                          invoice.type(),
-                                                         invoice.business() -> id());
+                                                         invoice.company() -> id());
 
     return invoiceInserted && operationsCreated;
 }
@@ -68,10 +68,10 @@ bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &inv
     QString sql = QString("UPDATE invoice SET entityId=%4, entityType=%5, date='%6', place='%7', "
                           "taxOnInvoice=%8, generalVat=%9, reducedVat=%10, superReducedVat=%11, "
                           "generalEs=%12, reducedEs=%13, superReducedEs=%14, pit=%15, paid=%16, "
-                          "payment=%17, notes='%18' WHERE id=%1 AND type=%2 AND businessId=%3")
+                          "payment=%17, notes='%18' WHERE id=%1 AND type=%2 AND companyId=%3")
                       .arg(invoice.id())
                       .arg(static_cast<int>(invoice.type()))
-                      .arg(invoice.business() -> id())
+                      .arg(invoice.company() -> id())
                       .arg(invoice.entity() -> id())
                       .arg(static_cast<int>(invoice.entity() -> type()))
                       .arg(invoice.date().toString(DATE_FORMAT))
@@ -90,36 +90,36 @@ bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &inv
 
     bool invoiceUpdated = agent -> update(sql);
 
-    bool operationsRemoved = OperationManager::removeAll(invoice.id(), invoice.type(), invoice.business() -> id());
+    bool operationsRemoved = OperationManager::removeAll(invoice.id(), invoice.type(), invoice.company() -> id());
 
-    bool operationsCreated = OperationManager::createAll(invoice.operations(), invoice.id(), invoice.type(), invoice.business() -> id());
+    bool operationsCreated = OperationManager::createAll(invoice.operations(), invoice.id(), invoice.type(), invoice.company() -> id());
 
     return invoiceUpdated && operationsRemoved && operationsCreated;
 }
 
-bool Model::Management::InvoiceManager::remove(int id, Model::Domain::InvoiceType type, int businessId)
+bool Model::Management::InvoiceManager::remove(int id, Model::Domain::InvoiceType type, int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("DELETE FROM invoice WHERE id=%1 AND type=%2 AND businessId=%3")
+    QString sql = QString("DELETE FROM invoice WHERE id=%1 AND type=%2 AND companyId=%3")
                       .arg(id)
                       .arg(static_cast<int>(type))
-                      .arg(businessId);
+                      .arg(companyId);
 
     return agent -> _delete(sql);
 }
 
-Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Domain::InvoiceType type, int businessId)
+Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Domain::InvoiceType type, int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("SELECT * FROM invoice WHERE id=%1 AND type=%2 AND businessId=%3")
+    QString sql = QString("SELECT * FROM invoice WHERE id=%1 AND type=%2 AND companyId=%3")
                       .arg(id)
                       .arg(static_cast<int>(type))
-                      .arg(businessId);
+                      .arg(companyId);
     QVector<QVector<QVariant> > *result = agent -> select(sql);
     Model::Domain::Invoice *invoice = 0;
 
     if(!(result -> isEmpty())) {
-        Model::Domain::Entity *business   = BusinessManager::get(businessId);
+        Model::Domain::Entity *company   = CompanyManager::get(companyId);
         Model::Domain::Entity *entity       = EntityManager::get((result -> at(0)).at(4).toInt(),
                                                                  static_cast<Model::Domain::EntityType>(
                                                                      (result -> at(0)).at(5).toInt()));
@@ -139,11 +139,11 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Do
                                                  (result -> at(0)).at(17).toInt());
         QString notes                       = (result -> at(0)).at(18).toString();
 
-        invoice = new Model::Domain::Invoice(business, id, type);
+        invoice = new Model::Domain::Invoice(company, id, type);
         invoice -> setEntity(entity);
         invoice -> setDate(date);
         invoice -> setPlace(place);
-        invoice -> setOperations(OperationManager::getAllByInvoice(id, type, businessId));
+        invoice -> setOperations(OperationManager::getAllByInvoice(id, type, companyId));
         invoice -> setTaxOnInvoice(taxOnInvoice);
         invoice -> setTax(Model::Domain::Tax(Model::Domain::GeneralVAT, generalVat));
         invoice -> setTax(Model::Domain::Tax(Model::Domain::ReducedVAT, reducedVat));
@@ -162,18 +162,18 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Do
     return invoice;
 }
 
-QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType(Model::Domain::InvoiceType type, int businessId)
+QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType(Model::Domain::InvoiceType type, int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("SELECT * FROM invoice WHERE type=%1 AND businessId=%2")
+    QString sql = QString("SELECT * FROM invoice WHERE type=%1 AND companyId=%2")
                      .arg(static_cast<int>(type))
-                     .arg(businessId);
+                     .arg(companyId);
     QVector<QVector<QVariant> > *result = agent -> select(sql);
     QList<Model::Domain::Invoice *> *invoices = new QList<Model::Domain::Invoice *>;
 
     foreach(QVector<QVariant> row, *result) {
         int id                              = row.at(0).toInt();
-        Model::Domain::Entity *business     = BusinessManager::get(businessId);
+        Model::Domain::Entity *company     = CompanyManager::get(companyId);
         Model::Domain::Entity *entity       = EntityManager::get(row.at(4).toInt(),
                                                                  static_cast<Model::Domain::EntityType>(
                                                                      row.at(5).toInt()));
@@ -191,11 +191,11 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
         Model::Domain::PaymentType payment  = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
         QString notes                       = row.at(18).toString();
 
-        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(business, id, type);
+        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, id, type);
         invoice -> setEntity(entity);
         invoice -> setDate(date);
         invoice -> setPlace(place);
-        invoice -> setOperations(OperationManager::getAllByInvoice(id, type, businessId));
+        invoice -> setOperations(OperationManager::getAllByInvoice(id, type, companyId));
         invoice -> setTaxOnInvoice(taxOnInvoice);
         invoice -> setTax(Model::Domain::Tax(Model::Domain::GeneralVAT, generalVat));
         invoice -> setTax(Model::Domain::Tax(Model::Domain::ReducedVAT, reducedVat));
@@ -216,24 +216,24 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
     return invoices;
 }
 
-QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAll(int businessId)
+QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAll(int companyId)
 {
-    QList<Model::Domain::Invoice *> *invoices = getAllByType(Model::Domain::Buy, businessId);
-    invoices -> append(*getAllByType(Model::Domain::Sale, businessId));
+    QList<Model::Domain::Invoice *> *invoices = getAllByType(Model::Domain::Buy, companyId);
+    invoices -> append(*getAllByType(Model::Domain::Sale, companyId));
 
     return invoices;
 }
 
-QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model::Domain::InvoiceType type, int businessId,
+QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model::Domain::InvoiceType type, int companyId,
                                                                            Model::Management::SearchFlag mode,
                                                                            const QDate &beginDate, const QDate &endDate,
                                                                            int entityId, double minTotal, double maxTotal,
                                                                            bool paid)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("SELECT * FROM invoice WHERE type=%1 AND businessId=%2")
+    QString sql = QString("SELECT * FROM invoice WHERE type=%1 AND companyId=%2")
                   .arg(type)
-                  .arg(businessId);
+                  .arg(companyId);
 
     if(mode & SearchByDateRange)
         sql.append(QString(" AND date>='%1' AND date<='%2'")
@@ -255,7 +255,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
 
     foreach(QVector<QVariant> row, *result) {
         int id                              = row.at(0).toInt();
-        Model::Domain::Entity *business     = BusinessManager::get(businessId);
+        Model::Domain::Entity *company     = CompanyManager::get(companyId);
         Model::Domain::Entity *entity       = EntityManager::get(row.at(4).toInt(),
                                                                  static_cast<Model::Domain::EntityType>(
                                                                      row.at(5).toInt()));
@@ -273,11 +273,11 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
         Model::Domain::PaymentType payment  = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
         QString notes                       = row.at(18).toString();
 
-        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(business, id, type);
+        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, id, type);
         invoice -> setEntity(entity);
         invoice -> setDate(date);
         invoice -> setPlace(place);
-        invoice -> setOperations(OperationManager::getAllByInvoice(id, type, businessId));
+        invoice -> setOperations(OperationManager::getAllByInvoice(id, type, companyId));
         invoice -> setTaxOnInvoice(taxOnInvoice);
         invoice -> setTax(Model::Domain::Tax(Model::Domain::GeneralVAT, generalVat));
         invoice -> setTax(Model::Domain::Tax(Model::Domain::ReducedVAT, reducedVat));
@@ -310,17 +310,17 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
     return invoices;
 }
 
-QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::unpaids(Model::Domain::InvoiceType type, int businessId)
+QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::unpaids(Model::Domain::InvoiceType type, int companyId)
 {
-    return search(type,businessId,Model::Management::SearchByState, QDate(), QDate(), NO_ID, 0.0, 0.0, false);
+    return search(type,companyId,Model::Management::SearchByState, QDate(), QDate(), NO_ID, 0.0, 0.0, false);
 }
 
-int Model::Management::InvoiceManager::getId(Model::Domain::InvoiceType type, int businessId)
+int Model::Management::InvoiceManager::getId(Model::Domain::InvoiceType type, int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("SELECT count(*) FROM invoice WHERE type=%1 AND businessId=%2")
+    QString sql = QString("SELECT count(*) FROM invoice WHERE type=%1 AND companyId=%2")
                       .arg(static_cast<int>(type))
-                      .arg(businessId);
+                      .arg(companyId);
     QVector<QVector<QVariant> > *result = agent -> select(sql);
 
     if(!(result -> isEmpty())) {
@@ -329,9 +329,9 @@ int Model::Management::InvoiceManager::getId(Model::Domain::InvoiceType type, in
         if(count == 0)
             return 1;
         else {
-            sql = QString("SELECT max(id) FROM invoice WHERE type=%1 AND businessId=%2")
+            sql = QString("SELECT max(id) FROM invoice WHERE type=%1 AND companyId=%2")
                       .arg(static_cast<int>(type))
-                      .arg(businessId);
+                      .arg(companyId);
             result = agent -> select(sql);
             int id = (result -> at(0)).at(0).toInt();
             delete result;

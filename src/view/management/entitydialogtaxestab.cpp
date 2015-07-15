@@ -21,7 +21,7 @@
 #include "entitydialogtaxestab.h"
 #include "taxapplyingwidget.h"
 #include "taxwidget.h"
-#include "business.h"
+#include "company.h"
 #include "persistencemanager.h"
 #include <QVBoxLayout>
 #include <QGroupBox>

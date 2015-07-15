@@ -23,7 +23,7 @@
 #include "invoiceeditorothertab.h"
 #include "invoice.h"
 #include "invoicemanager.h"
-#include "business.h"
+#include "company.h"
 #include "types.h"
 #include <QTabWidget>
 #include <QPushButton>
@@ -200,7 +200,7 @@ bool View::Invoicing::InvoiceEditor::deleteInvoice()
 {
     return Model::Management::InvoiceManager::remove(_invoice -> id(),
                                                      _invoice -> type(),
-                                                     _invoice -> business() -> id());
+                                                     _invoice -> company() -> id());
 }
 
 bool View::Invoicing::InvoiceEditor::isSaveable()

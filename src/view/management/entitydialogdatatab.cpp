@@ -20,9 +20,9 @@
 
 #include "entitydialogdatatab.h"
 #include "entity.h"
-#include "business.h"
+#include "company.h"
 #include "entitymanager.h"
-#include "businessmanager.h"
+#include "companymanager.h"
 #include "types.h"
 #include <QLabel>
 #include <QLineEdit>
@@ -89,8 +89,8 @@ void View::Management::EntityDialogDataTab::stateChangedOnAutoIdCheckBox()
 
 void View::Management::EntityDialogDataTab::updateId()
 {
-    int autoId = (_entity -> type() == Model::Domain::BusinessEntity) ?
-                Model::Management::BusinessManager::getId() :
+    int autoId = (_entity -> type() == Model::Domain::CompanyEntity) ?
+                Model::Management::CompanyManager::getId() :
                 Model::Management::EntityManager::getId(_entity -> type());
     int id = (_autoIdCheckBox -> isChecked()) ? autoId : _entity -> id();
     _idLineEdit -> setText((!IS_NEW(id) ? QString::number(id) : ""));

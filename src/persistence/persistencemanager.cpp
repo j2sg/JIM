@@ -41,7 +41,7 @@ bool Persistence::Manager::createConfig(bool overwrite)
 
     setting.setValue("Executed",                  true);
     setting.setValue("Password",                  QByteArray());
-    setting.setValue("DefaultBusiness",           "");
+    setting.setValue("DefaultCompany",           "");
     setting.beginGroup("Application");
     setting.setValue("Currency",                  DEFAULT_APPLICATION_CURRENCY);
     setting.beginGroup("Precision");
@@ -203,8 +203,8 @@ bool Persistence::Manager::createSQLiteSchema()
     bool invoice = agent -> create("CREATE TABLE IF NOT EXISTS invoice (\n"
                                    "    id              INTEGER,\n"
                                    "    type            INTEGER,\n"
-                                   "    businessId      INTEGER,\n"
-                                   "    businessType    INTEGER CONSTRAINT invoice_business_type_def_ct DEFAULT 2,\n"
+                                   "    companyId      INTEGER,\n"
+                                   "    companyType    INTEGER CONSTRAINT invoice_company_type_def_ct DEFAULT 2,\n"
                                    "    entityId        INTEGER CONSTRAINT invoice_entity_id_nn_ct NOT NULL,\n"
                                    "    entityType      INTEGER CONSTRAINT invoice_entity_type_nn_ct NOT NULL,\n"
                                    "    date            TEXT    CONSTRAINT invoice_date_nn_ct NOT NULL,\n"
@@ -220,9 +220,9 @@ bool Persistence::Manager::createSQLiteSchema()
                                    "    paid            INTEGER CONSTRAINT invoice_paid_nn_ct NOT NULL,\n"
                                    "    payment         INTEGER CONSTRAINT invoice_payment_nn_ct NOT NULL,\n"
                                    "    notes           TEXT,\n"
-                                   "    CONSTRAINT invoice_pk_ct                    PRIMARY KEY(id, type, businessId, businessType),\n"
+                                   "    CONSTRAINT invoice_pk_ct                    PRIMARY KEY(id, type, companyId, companyType),\n"
                                    "    CONSTRAINT invoice_type_chk_ct              CHECK(type=0 OR type=1),\n"
-                                   "    CONSTRAINT invoice_business_fk_ct           FOREIGN KEY(businessId, businessType)\n"
+                                   "    CONSTRAINT invoice_company_fk_ct           FOREIGN KEY(companyId, companyType)\n"
                                    "                                                REFERENCES entity(id, type)\n"
                                    "                                                    ON UPDATE CASCADE\n"
                                    "                                                    ON DELETE CASCADE,\n"
@@ -243,11 +243,11 @@ bool Persistence::Manager::createSQLiteSchema()
 
     bool tax = agent -> create("CREATE TABLE IF NOT EXISTS tax (\n"
                                "    type         INTEGER,\n"
-                               "    businessId   INTEGER,\n"
-                               "    businessType INTEGER CONSTRAINT tax_business_type_def_ct DEFAULT 2,\n"
+                               "    companyId   INTEGER,\n"
+                               "    companyType INTEGER CONSTRAINT tax_company_type_def_ct DEFAULT 2,\n"
                                "    value        REAL    CONSTRAINT tax_value_nn_ct NOT NULL,\n"
-                               "    CONSTRAINT tax_pk_ct          PRIMARY KEY(type, businessId, businessType),\n"
-                               "    CONSTRAINT tax_business_fk_ct FOREIGN KEY(businessId, businessType)\n"
+                               "    CONSTRAINT tax_pk_ct          PRIMARY KEY(type, companyId, companyType),\n"
+                               "    CONSTRAINT tax_company_fk_ct FOREIGN KEY(companyId, companyType)\n"
                                "                                  REFERENCES entity(id, type)\n"
                                "                                      ON UPDATE CASCADE\n"
                                "                                      ON DELETE CASCADE,\n"
@@ -284,15 +284,15 @@ bool Persistence::Manager::createSQLiteSchema()
                                      "    id           INTEGER,\n"
                                      "    invoiceId    INTEGER,\n"
                                      "    invoiceType  INTEGER,\n"
-                                     "    businessId   INTEGER,\n"
-                                     "    businessType INTEGER CONSTRAINT operation_business_type_def_ct DEFAULT 2,\n"
+                                     "    companyId   INTEGER,\n"
+                                     "    companyType INTEGER CONSTRAINT operation_company_type_def_ct DEFAULT 2,\n"
                                      "    product      INTEGER,\n"
                                      "    quantity     INTEGER,\n"
                                      "    weight       REAL,\n"
                                      "    price        REAL    CONSTRAINT operation_price_nn_ct NOT NULL,\n"
-                                     "    CONSTRAINT operation_pk_ct           PRIMARY KEY(id, invoiceId, invoiceType, businessId, businessType),\n"
-                                     "    CONSTRAINT operation_invoice_fk_ct   FOREIGN KEY(invoiceId, invoiceType, businessId, businessType)\n"
-                                     "                                         REFERENCES invoice(id, type, businessId, businessType)\n"
+                                     "    CONSTRAINT operation_pk_ct           PRIMARY KEY(id, invoiceId, invoiceType, companyId, companyType),\n"
+                                     "    CONSTRAINT operation_invoice_fk_ct   FOREIGN KEY(invoiceId, invoiceType, companyId, companyType)\n"
+                                     "                                         REFERENCES invoice(id, type, companyId, companyType)\n"
                                      "                                             ON UPDATE CASCADE\n"
                                      "                                             ON DELETE CASCADE,\n"
                                      "    CONSTRAINT operation_product_fk_ct   FOREIGN KEY(product)\n"

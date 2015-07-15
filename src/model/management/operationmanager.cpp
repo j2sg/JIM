@@ -23,7 +23,7 @@
 #include "sqlagent.h"
 
 bool Model::Management::OperationManager::createAll(QList<Model::Domain::Operation *> *operations, int invoiceId,
-                                                    Model::Domain::InvoiceType invoiceType, int businessId)
+                                                    Model::Domain::InvoiceType invoiceType, int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
 
@@ -32,8 +32,8 @@ bool Model::Management::OperationManager::createAll(QList<Model::Domain::Operati
                   .arg(operation -> id())
                   .arg(invoiceId)
                   .arg(static_cast<int>(invoiceType))
-                  .arg(businessId)
-                  .arg(static_cast<int>(Model::Domain::BusinessEntity))
+                  .arg(companyId)
+                  .arg(static_cast<int>(Model::Domain::CompanyEntity))
                   .arg(operation -> product() -> id())
                   .arg(operation -> quantity())
                   .arg(operation -> weight())
@@ -48,28 +48,28 @@ bool Model::Management::OperationManager::createAll(QList<Model::Domain::Operati
 
 bool Model::Management::OperationManager::removeAll(int invoiceId,
                                                     Model::Domain::InvoiceType invoiceType,
-                                                    int businessId)
+                                                    int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("DELETE FROM operation WHERE invoiceId=%1 AND invoiceType=%2 AND businessId=%3")
+    QString sql = QString("DELETE FROM operation WHERE invoiceId=%1 AND invoiceType=%2 AND companyId=%3")
                       .arg(invoiceId)
                       .arg(invoiceType)
-                      .arg(businessId);
+                      .arg(companyId);
 
     return agent -> _delete(sql);
 }
 
 QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllByInvoice(int invoiceId,
                                                                                       Model::Domain::InvoiceType invoiceType,
-                                                                                      int businessId)
+                                                                                      int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("SELECT id, product, quantity, weight, price\n"
                               "FROM operation\n"
-                              "WHERE invoiceId=%1 AND invoiceType=%2 AND businessId=%3")
+                              "WHERE invoiceId=%1 AND invoiceType=%2 AND companyId=%3")
                       .arg(invoiceId)
                       .arg(invoiceType)
-                      .arg(businessId);
+                      .arg(companyId);
     QVector<QVector<QVariant> > *result = agent -> select(sql);
     QList<Model::Domain::Operation *> *operations = new QList<Model::Domain::Operation *>;
 

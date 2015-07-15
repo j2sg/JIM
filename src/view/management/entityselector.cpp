@@ -154,8 +154,8 @@ void View::Management::EntitySelector::setTitle()
     case Model::Domain::SupplierEntity:
         entityType = tr("Supplier");
         break;
-    case Model::Domain::BusinessEntity:
-        entityType = tr("Business");
+    case Model::Domain::CompanyEntity:
+        entityType = tr("Company");
         break;
     }
 
@@ -167,8 +167,8 @@ void View::Management::EntitySelector::setIcon()
     QIcon icon;
 
     switch(static_cast<int>(_type)) {
-    case Model::Domain::BusinessEntity:
-        icon = QIcon(":/images/business.png");
+    case Model::Domain::CompanyEntity:
+        icon = QIcon(":/images/company.png");
         break;
     case Model::Domain::CustomerEntity:
         icon = QIcon(":/images/entity.png");

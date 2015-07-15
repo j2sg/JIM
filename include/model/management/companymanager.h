@@ -18,22 +18,22 @@
  *
  **/
 
-#ifndef BUSINESSMANAGER_H
-#define BUSINESSMANAGER_H
+#ifndef COMPANYMANAGER_H
+#define COMPANYMANAGER_H
 
 #include <QList>
 #include <QMap>
-#include "business.h"
+#include "company.h"
 
 namespace Model
 {
     namespace Management
     {
-        class BusinessManager
+        class CompanyManager
         {
         public:
-            static bool create(const Model::Domain::Entity &business);
-            static bool modify(const Model::Domain::Entity &business);
+            static bool create(const Model::Domain::Entity &company);
+            static bool modify(const Model::Domain::Entity &company);
             static bool remove(int id);
             static Model::Domain::Entity *get(int id);
             static QMap<QString, int> getAllNames();
@@ -43,4 +43,4 @@ namespace Model
     }
 }
 
-#endif // BUSINESSMANAGER_H
+#endif // COMPANYMANAGER_H

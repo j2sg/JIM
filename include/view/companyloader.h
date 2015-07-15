@@ -18,8 +18,8 @@
  *
  **/
 
-#ifndef BUSINESSLOADER_H
-#define BUSINESSLOADER_H
+#ifndef COMPANYLOADER_H
+#define COMPANYLOADER_H
 
 #include <QDialog>
 #include <QStringList>
@@ -33,27 +33,27 @@ QT_END_NAMESPACE
 
 namespace View
 {
-    class BusinessLoader : public QDialog
+    class CompanyLoader : public QDialog
     {
         Q_OBJECT
     public:
-        BusinessLoader(const QStringList &businessNames,
+        CompanyLoader(const QStringList &companyNames,
                        const QString &def = QString(),
                        QWidget *parent = 0);
-        QString selectedBusiness() const;
-        bool defaultBusiness() const;
+        QString selectedCompany() const;
+        bool defaultCompany() const;
     private slots:
-        void stateChangedOnBusinessComboBox();
+        void stateChangedOnCompanyComboBox();
     private:
-        void createWidgets(const QStringList &businessNames, const QString &def);
+        void createWidgets(const QStringList &companyNames, const QString &def);
         void createConnections();
 
-        QLabel *_businessLabel;
-        QComboBox *_businessComboBox;
+        QLabel *_companyLabel;
+        QComboBox *_companyComboBox;
         QCheckBox *_defaultCheckBox;
         QPushButton *_loadButton;
         QPushButton *_cancelButton;
     };
 }
 
-#endif // BUSINESSLOADER_H
+#endif // COMPANYLOADER_H

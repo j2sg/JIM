@@ -63,7 +63,7 @@ std::ostream &Model::Domain::operator<<(std::ostream &os, const Invoice &invoice
 {
     os << invoice._id                            << std::endl
        << invoice._type                          << std::endl
-       << *invoice._business                     << std::endl
+       << *invoice._company                     << std::endl
        << *invoice._entity                       << std::endl
        << invoice._date.toString().toStdString() << std::endl
        << invoice._place.toStdString()           << std::endl;

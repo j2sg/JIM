@@ -23,9 +23,9 @@
 #include "entitydialogtaxestab.h"
 #include "entitydialogothertab.h"
 #include "entitymanager.h"
-#include "businessmanager.h"
+#include "companymanager.h"
 #include "entity.h"
-#include "business.h"
+#include "company.h"
 #include "types.h"
 #include <QTabWidget>
 #include <QPushButton>
@@ -60,7 +60,7 @@ void View::Management::EntityDialog::createWidgets()
 {
     _tabWidget = new QTabWidget;
     _dataTab = new EntityDialogDataTab(_entity);
-    _taxesTab  = (_entity -> type() == Model::Domain::BusinessEntity ?
+    _taxesTab  = (_entity -> type() == Model::Domain::CompanyEntity ?
                       new EntityDialogTaxesTab(_entity) : 0);
     _otherTab = new EntityDialogOtherTab(_entity);
     _tabWidget -> addTab(_dataTab, tr("&Data"));
@@ -114,8 +114,8 @@ void View::Management::EntityDialog::setTitle()
     case Model::Domain::SupplierEntity:
         entityType = tr("Supplier");
         break;
-    case Model::Domain::BusinessEntity:
-        entityType = tr("Business");
+    case Model::Domain::CompanyEntity:
+        entityType = tr("Company");
         break;
         entityType = tr("Unknown");
     }

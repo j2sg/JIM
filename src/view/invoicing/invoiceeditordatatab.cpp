@@ -20,7 +20,7 @@
 
 #include "invoiceeditordatatab.h"
 #include "invoice.h"
-#include "business.h"
+#include "company.h"
 #include "invoicemanager.h"
 #include "entitymanager.h"
 #include "entityselector.h"
@@ -111,7 +111,7 @@ void View::Invoicing::InvoiceEditorDataTab::stateChangedOnPaidCheckBox()
 void View::Invoicing::InvoiceEditorDataTab::updateId()
 {
     int id = (_autoIdCheckBox -> isChecked() ?
-                  Model::Management::InvoiceManager::getId(_invoice -> type(), _invoice -> business() -> id()) :
+                  Model::Management::InvoiceManager::getId(_invoice -> type(), _invoice -> company() -> id()) :
                   _invoice -> id());
 
     _idLineEdit -> setText((!IS_NEW(id) ? QString::number(id) : ""));

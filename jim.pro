@@ -56,12 +56,10 @@ HEADERS += include/global.h \
            include/persistence/sqlagent.h \
            include/printing/printingmanager.h \
            include/view/authdialog.h \
-           include/view/businessloader.h \
            include/view/invoiceloader.h \
            include/view/mainwindow.h \
            include/view/optionsdialog.h \
            include/view/registerdialog.h \
-           include/model/domain/business.h \
            include/model/domain/category.h \
            include/model/domain/entity.h \
            include/model/domain/invoice.h \
@@ -69,7 +67,6 @@ HEADERS += include/global.h \
            include/model/domain/ostream.h \
            include/model/domain/product.h \
            include/model/domain/tax.h \
-           include/model/management/businessmanager.h \
            include/model/management/categorymanager.h \
            include/model/management/entitymanager.h \
            include/model/management/invoicemanager.h \
@@ -116,19 +113,20 @@ HEADERS += include/global.h \
     include/view/management/productproxymodel.h \
     include/view/invoicing/operationeditoridwidget.h \
     include/view/invoicing/operationdelegate.h \
-    include/view/management/productselector.h
+    include/view/management/productselector.h \
+    include/model/domain/company.h \
+    include/model/management/companymanager.h \
+    include/view/companyloader.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
            src/persistence/sqlagent.cpp \
            src/printing/printingmanager.cpp \
            src/view/authdialog.cpp \
-           src/view/businessloader.cpp \
            src/view/invoiceloader.cpp \
            src/view/mainwindow.cpp \
            src/view/optionsdialog.cpp \
            src/view/registerdialog.cpp \
-           src/model/domain/business.cpp \
            src/model/domain/category.cpp \
            src/model/domain/entity.cpp \
            src/model/domain/invoice.cpp \
@@ -136,7 +134,6 @@ SOURCES += src/main.cpp \
            src/model/domain/ostream.cpp \
            src/model/domain/product.cpp \
            src/model/domain/tax.cpp \
-           src/model/management/businessmanager.cpp \
            src/model/management/categorymanager.cpp \
            src/model/management/entitymanager.cpp \
            src/model/management/invoicemanager.cpp \
@@ -183,7 +180,10 @@ SOURCES += src/main.cpp \
     src/view/management/productproxymodel.cpp \
     src/view/invoicing/operationeditoridwidget.cpp \
     src/view/invoicing/operationdelegate.cpp \
-    src/view/management/productselector.cpp
+    src/view/management/productselector.cpp \
+    src/model/domain/company.cpp \
+    src/model/management/companymanager.cpp \
+    src/view/companyloader.cpp
 
 RESOURCES += resources/jim.qrc
 

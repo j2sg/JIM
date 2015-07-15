@@ -80,17 +80,17 @@ namespace View
         void disconnectStorage();
         void importStorage();
         void exportStorage();
-        bool createBusiness();
-        void loadBusiness();
-        void closeBusiness();
-        void setUpBusiness();
+        bool createCompany();
+        void loadCompany();
+        void closeCompany();
+        void setUpCompany();
         void options();
         void printing();
         void createSaleInvoice();
         void createBuyInvoice();
         void loadInvoice(Model::Domain::Invoice *invoice = 0);
         void searchInvoice();
-        void manageBusiness();
+        void manageCompany();
         void manageCustomer();
         void manageSupplier();
         void manageProduct();
@@ -130,19 +130,19 @@ namespace View
         void closeOtherWindows();
         void deleteAllEditors();
         void setStorageConnected(bool connected = true);
-        void setBusinessOpen(bool open = true);
+        void setCompanyOpen(bool open = true);
         bool verifyImportStorage();
-        bool verifyCreateBusiness();
-        bool verifyCloseBusiness();
+        bool verifyCreateCompany();
+        bool verifyCloseCompany();
         bool verifyExit();
 
         QMdiArea *_mdiArea;
-        QAction *_createBusinessAction;
-        QAction *_loadBusinessAction;
-        QAction *_closeBusinessAction;
+        QAction *_createCompanyAction;
+        QAction *_loadCompanyAction;
+        QAction *_closeCompanyAction;
         QAction *_connectStorageAction;
         QAction *_disconnectStorageAction;
-        QAction *_setUpBusinessAction;
+        QAction *_setUpCompanyAction;
         QAction *_importStorageAction;
         QAction *_exportStorageAction;
         QAction *_optionsAction;
@@ -152,7 +152,7 @@ namespace View
         QAction *_createBuyInvoiceAction;
         QAction *_loadInvoiceAction;
         QAction *_searchInvoiceAction;
-        QAction *_manageBusinessAction;
+        QAction *_manageCompanyAction;
         QAction *_manageCustomerAction;
         QAction *_manageSupplierAction;
         QAction *_manageProductAction;
@@ -181,11 +181,10 @@ namespace View
         QLabel *_storageStateLabel;
         QPrinter *_printer;
 
-        Model::Domain::Entity *_business;
+        Model::Domain::Entity *_company;
         bool _authorized;
         bool _connected;
 
-        View::Management::EntityEditor *_businessEditor;
         View::Management::EntityEditor *_customerEditor;
         View::Management::EntityEditor *_supplierEditor;
         View::Management::ProductEditor *_productEditor;

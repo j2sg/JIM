@@ -66,8 +66,8 @@ QStringList Printing::Manager::makePages(const Model::Domain::Invoice &invoice)
 
 QString Printing::Manager::makeHeader(const Model::Domain::Invoice &invoice)
 {
-    return QString("<table id=\"business_table\" width=\"70%\">\n"
-                   "   <tr><td id=\"business_name\">%1</td></tr>\n"
+    return QString("<table id=\"company_table\" width=\"70%\">\n"
+                   "   <tr><td id=\"company_name\">%1</td></tr>\n"
                    "   <tr><td><i>%2</i></td></tr>\n"
                    "   <tr><td><i>%3 %4, %5, %6, %7</i></td></tr>\n"
                    "   <tr><td><b>%8:</b> <i>%9</i></td></tr>\n"
@@ -86,23 +86,23 @@ QString Printing::Manager::makeHeader(const Model::Domain::Invoice &invoice)
                    "   <tr><td width=\"20%\"><b>%26:</b></td><td width=\"80%\"><i>%27</i></td></tr>\n"
                    "   <tr><td width=\"20%\"><b>%28:</b></td><td width=\"80%\"><i>%29</i></td></tr>\n"
                    "</table>\n")
-                   .arg(invoice.business() -> name())
-                   .arg(invoice.business() -> address())
+                   .arg(invoice.company() -> name())
+                   .arg(invoice.company() -> address())
                    .arg(QObject::tr("Postal Code"))
-                   .arg(invoice.business() -> pc())
-                   .arg(invoice.business() -> city())
-                   .arg(invoice.business() -> province())
-                   .arg(invoice.business() -> country())
+                   .arg(invoice.company() -> pc())
+                   .arg(invoice.company() -> city())
+                   .arg(invoice.company() -> province())
+                   .arg(invoice.company() -> country())
                    .arg(QObject::tr("Telephone"))
-                   .arg(invoice.business() -> telephone() ? QString::number(invoice.business() -> telephone()) : "")
+                   .arg(invoice.company() -> telephone() ? QString::number(invoice.company() -> telephone()) : "")
                    .arg(QObject::tr("Mobile"))
-                   .arg(invoice.business() -> mobile() ? QString::number(invoice.business() -> mobile()) : "")
+                   .arg(invoice.company() -> mobile() ? QString::number(invoice.company() -> mobile()) : "")
                    .arg(QObject::tr("Fax"))
-                   .arg(invoice.business() -> fax() ? QString::number(invoice.business() -> fax()) : "")
+                   .arg(invoice.company() -> fax() ? QString::number(invoice.company() -> fax()) : "")
                    .arg(QObject::tr("Email"))
-                   .arg(invoice.business() -> email())
+                   .arg(invoice.company() -> email())
                    .arg(QObject::tr("Web"))
-                   .arg(invoice.business() -> web())
+                   .arg(invoice.company() -> web())
                    .arg(invoice.type() ? QObject::tr("Sale Invoice") : QObject::tr("Buy Invoice"))
                    .arg("#" + QString::number(invoice.id()))
                    .arg(QObject::tr("Date"))
@@ -257,8 +257,8 @@ QString Printing::Manager::makeNotesTable(const Model::Domain::Invoice &invoice)
 }
 
 const QString Printing::Manager::_css = "body { color: black; background-color: white; }\n"
-                                        "#business_table { float: left; background-color: white; font-size: 7px; }\n"
-                                        "#business_name { font-size: 30px; font-style: italic; font-weight: bold; }\n"
+                                        "#company_table { float: left; background-color: white; font-size: 7px; }\n"
+                                        "#company_name { font-size: 30px; font-style: italic; font-weight: bold; }\n"
                                         "#details_table { float: right; background-color: #EAEAEA; color: black; font-size: 9px; }\n"
                                         ".operations_table { float: left; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"
                                         "#breakdown_table { float: left; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"

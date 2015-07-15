@@ -147,7 +147,7 @@ namespace Model
         {
             CustomerEntity,
             SupplierEntity,
-            BusinessEntity
+            CompanyEntity
         } EntityType;
 
         typedef enum InvoiceTypeEnum

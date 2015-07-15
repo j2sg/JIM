@@ -22,44 +22,44 @@
 #include "sqlagent.h"
 #include "types.h"
 
-bool Model::Management::TaxManager::create(const Model::Domain::Tax &tax, int businessId)
+bool Model::Management::TaxManager::create(const Model::Domain::Tax &tax, int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("INSERT INTO tax (type, businessId, value) VALUES(%1, %2, %3)")
+    QString sql = QString("INSERT INTO tax (type, companyId, value) VALUES(%1, %2, %3)")
                       .arg(static_cast<int>(tax.type()))
-                      .arg(businessId)
+                      .arg(companyId)
                       .arg(tax.value());
 
     return agent -> insert(sql);
 }
 
-bool Model::Management::TaxManager::modify(const Model::Domain::Tax &tax, int businessId)
+bool Model::Management::TaxManager::modify(const Model::Domain::Tax &tax, int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("UPDATE tax SET value=%3 WHERE type=%1 AND businessId=%2")
+    QString sql = QString("UPDATE tax SET value=%3 WHERE type=%1 AND companyId=%2")
                       .arg(static_cast<int>(tax.type()))
-                      .arg(businessId)
+                      .arg(companyId)
                       .arg(tax.value());
 
     return agent -> update(sql);
 }
 
-bool Model::Management::TaxManager::remove(Model::Domain::TaxType type, int businessId)
+bool Model::Management::TaxManager::remove(Model::Domain::TaxType type, int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("DELETE FROM tax WHERE type=%1 AND businessId=%2)")
+    QString sql = QString("DELETE FROM tax WHERE type=%1 AND companyId=%2)")
                       .arg(static_cast<int>(type))
-                      .arg(businessId);
+                      .arg(companyId);
 
     return agent -> _delete(sql);
 }
 
-Model::Domain::Tax *Model::Management::TaxManager::get(Model::Domain::TaxType type, int businessId)
+Model::Domain::Tax *Model::Management::TaxManager::get(Model::Domain::TaxType type, int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("SELECT value FROM tax WHERE type=%1 AND businessId=%2")
+    QString sql = QString("SELECT value FROM tax WHERE type=%1 AND companyId=%2")
                       .arg(static_cast<int>(type))
-                      .arg(businessId);
+                      .arg(companyId);
     QVector<QVector<QVariant> > *result = agent -> select(sql);
     Model::Domain::Tax *tax = 0;
 
@@ -73,11 +73,11 @@ Model::Domain::Tax *Model::Management::TaxManager::get(Model::Domain::TaxType ty
     return tax;
 }
 
-QList<Model::Domain::Tax *> *Model::Management::TaxManager::getAllByBusiness(int businessId)
+QList<Model::Domain::Tax *> *Model::Management::TaxManager::getAllByCompany(int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("SELECT type, value FROM tax WHERE businessId=%1")
-                      .arg(businessId);
+    QString sql = QString("SELECT type, value FROM tax WHERE companyId=%1")
+                      .arg(companyId);
     QVector<QVector<QVariant> > *result = agent -> select(sql);
     QList<Model::Domain::Tax *> *taxes = new QList<Model::Domain::Tax *>;
 

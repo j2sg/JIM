@@ -18,85 +18,85 @@
  *
  **/
 
-#include "businessmanager.h"
+#include "companymanager.h"
 #include "entitymanager.h"
 #include "taxmanager.h"
 #include "sqlagent.h"
 
-bool Model::Management::BusinessManager::create(const Model::Domain::Entity &business)
+bool Model::Management::CompanyManager::create(const Model::Domain::Entity &company)
 {
-    if(!EntityManager::create(business))
+    if(!EntityManager::create(company))
         return false;
 
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("UPDATE entity SET taxOnSale=%3, taxOnBuy=%4 WHERE id=%1 AND type=%2")
-                      .arg(business.id())
-                      .arg(business.type())
-                      .arg(business.taxOnSale())
-                      .arg(business.taxOnBuy());
+                      .arg(company.id())
+                      .arg(company.type())
+                      .arg(company.taxOnSale())
+                      .arg(company.taxOnBuy());
 
     bool entityUpdated = agent -> update(sql);
 
     bool taxCreated = true;
 
     for(int i = 0;i < Model::Domain::TaxTypeCount && taxCreated;++i)
-        if(!TaxManager::create(const_cast<Model::Domain::Entity &>(business).tax()[i], business.id()))
+        if(!TaxManager::create(const_cast<Model::Domain::Entity &>(company).tax()[i], company.id()))
             taxCreated = false;
 
     return entityUpdated && taxCreated;
 }
 
-bool Model::Management::BusinessManager::modify(const Model::Domain::Entity &business)
+bool Model::Management::CompanyManager::modify(const Model::Domain::Entity &company)
 {
-    if(!EntityManager::modify(business))
+    if(!EntityManager::modify(company))
         return false;
 
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("UPDATE entity SET taxOnSale=%3, taxOnBuy=%4 WHERE id=%1 AND type=%2")
-                      .arg(business.id())
-                      .arg(business.type())
-                      .arg(business.taxOnSale())
-                      .arg(business.taxOnBuy());
+                      .arg(company.id())
+                      .arg(company.type())
+                      .arg(company.taxOnSale())
+                      .arg(company.taxOnBuy());
 
     bool entityUpdated = agent -> update(sql);
 
     bool taxModified = true;
 
     for(int i = 0;i < Model::Domain::TaxTypeCount;++i)
-        if(!TaxManager::modify(const_cast<Model::Domain::Entity &>(business).tax()[i], business.id()))
+        if(!TaxManager::modify(const_cast<Model::Domain::Entity &>(company).tax()[i], company.id()))
             taxModified = false;
 
     return entityUpdated && taxModified;
 }
 
-bool Model::Management::BusinessManager::remove(int id)
+bool Model::Management::CompanyManager::remove(int id)
 {
-    return EntityManager::remove(id, Model::Domain::BusinessEntity);
+    return EntityManager::remove(id, Model::Domain::CompanyEntity);
 }
 
-Model::Domain::Entity *Model::Management::BusinessManager::get(int id)
+Model::Domain::Entity *Model::Management::CompanyManager::get(int id)
 {
-    Model::Domain::Entity *business = EntityManager::get(id, Model::Domain::BusinessEntity);
+    Model::Domain::Entity *company = EntityManager::get(id, Model::Domain::CompanyEntity);
 
-    if(!business)
+    if(!company)
         return 0;
 
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("SELECT taxOnSale, taxOnBuy FROM entity WHERE id=%1 AND type=%2")
                       .arg(id).
-                       arg(static_cast<int>(Model::Domain::BusinessEntity));
+                       arg(static_cast<int>(Model::Domain::CompanyEntity));
     QVector<QVector<QVariant> > *result = agent -> select(sql);
 
     if(!(result -> isEmpty())) {
         Model::Domain::TaxFlag taxOnSale = static_cast<Model::Domain::TaxFlag>((result -> at(0)).at(0).toInt());
         Model::Domain::TaxFlag taxOnBuy = static_cast<Model::Domain::TaxFlag>((result -> at(0)).at(1).toInt());
-        QList<Model::Domain::Tax *> *taxes = TaxManager::getAllByBusiness(id);
+        QList<Model::Domain::Tax *> *taxes = TaxManager::getAllByCompany(id);
 
-        business -> setTaxOnSale(taxOnSale);
-        business -> setTaxOnBuy(taxOnBuy);
+        company -> setTaxOnSale(taxOnSale);
+        company -> setTaxOnBuy(taxOnBuy);
 
         for(int i = 0;i < Model::Domain::TaxTypeCount; ++i)
-            (business -> tax())[i] = *(taxes -> at(i));
+            (company -> tax())[i] = *(taxes -> at(i));
 
         foreach(Model::Domain::Tax *tax, *taxes)
             delete tax;
@@ -106,37 +106,37 @@ Model::Domain::Entity *Model::Management::BusinessManager::get(int id)
 
     delete result;
 
-    return business;
+    return company;
 }
 
-QMap<QString, int> Model::Management::BusinessManager::getAllNames()
+QMap<QString, int> Model::Management::CompanyManager::getAllNames()
 {
-    return EntityManager::getAllNames(Model::Domain::BusinessEntity);
+    return EntityManager::getAllNames(Model::Domain::CompanyEntity);
 }
 
-QList<Model::Domain::Entity *> *Model::Management::BusinessManager::getAll()
+QList<Model::Domain::Entity *> *Model::Management::CompanyManager::getAll()
 {
-    QList<Model::Domain::Entity *> *businesses = EntityManager::getAllByType(Model::Domain::BusinessEntity);
+    QList<Model::Domain::Entity *> *companies = EntityManager::getAllByType(Model::Domain::CompanyEntity);
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
 
-    foreach(Model::Domain::Entity *business, *businesses) {
+    foreach(Model::Domain::Entity *company, *companies) {
         QString sql = QString("SELECT taxOnSale, taxOnBuy FROM entity WHERE id=%1 AND type=%2")
-                                  .arg(business -> id()).
-                                   arg(static_cast<int>(Model::Domain::BusinessEntity));
+                                  .arg(company -> id()).
+                                   arg(static_cast<int>(Model::Domain::CompanyEntity));
         QVector<QVector<QVariant> > *result = agent -> select(sql);
 
         if(!(result -> isEmpty())) {
             Model::Domain::TaxFlag taxOnSale = static_cast<Model::Domain::TaxFlag>((result -> at(0)).at(0).toInt());
             Model::Domain::TaxFlag taxOnBuy = static_cast<Model::Domain::TaxFlag>((result -> at(0)).at(1).toInt());
 
-            business -> setTaxOnSale(taxOnSale);
-            business -> setTaxOnBuy(taxOnBuy);
+            company -> setTaxOnSale(taxOnSale);
+            company -> setTaxOnBuy(taxOnBuy);
         }
 
-        QList<Model::Domain::Tax *> *taxes = TaxManager::getAllByBusiness(business -> id());
+        QList<Model::Domain::Tax *> *taxes = TaxManager::getAllByCompany(company -> id());
 
         for(int i = 0;i < Model::Domain::TaxTypeCount; ++i)
-            (business -> tax())[i] = *(taxes -> at(i));
+            (company -> tax())[i] = *(taxes -> at(i));
 
         foreach(Model::Domain::Tax *tax, *taxes)
             delete tax;
@@ -145,10 +145,10 @@ QList<Model::Domain::Entity *> *Model::Management::BusinessManager::getAll()
         delete result;
     }
 
-    return businesses;
+    return companies;
 }
 
-int Model::Management::BusinessManager::getId()
+int Model::Management::CompanyManager::getId()
 {
-    return EntityManager::getId(Model::Domain::BusinessEntity);
+    return EntityManager::getId(Model::Domain::CompanyEntity);
 }

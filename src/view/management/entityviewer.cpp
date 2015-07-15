@@ -171,8 +171,8 @@ void View::Management::EntityViewer::setTitle()
     case Model::Domain::SupplierEntity:
         entityType = tr("Supplier");
         break;
-    case Model::Domain::BusinessEntity:
-        entityType = tr("Business");
+    case Model::Domain::CompanyEntity:
+        entityType = tr("Company");
         break;
     }
 

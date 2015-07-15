@@ -40,7 +40,7 @@ namespace Model
         {
             friend std::ostream &operator<<(std::ostream &os, const Invoice &invoice);
         public:
-            Invoice(Entity *business, int id = NO_ID, InvoiceType type = Buy);
+            Invoice(Entity *company, int id = NO_ID, InvoiceType type = Buy);
             Invoice(const Invoice &invoice);
             ~Invoice();
             Invoice &operator=(const Invoice &invoice);
@@ -50,8 +50,8 @@ namespace Model
             int id() const;
             void setType(InvoiceType type);
             InvoiceType type() const;
-            void setBusiness(Entity *business);
-            Entity *business() const;
+            void setCompany(Entity *company);
+            Entity *company() const;
             void setEntity(Entity *entity);
             Entity *entity() const;
             void setDate(const QDate &date);
@@ -80,7 +80,7 @@ namespace Model
         private:
             int _id;
             InvoiceType _type;
-            Entity *_business;
+            Entity *_company;
             Entity *_entity;
             QDate _date;
             QString _place;

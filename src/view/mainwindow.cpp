@@ -22,7 +22,7 @@
 #include "persistencemanager.h"
 #include "registerdialog.h"
 #include "authdialog.h"
-#include "businessloader.h"
+#include "companyloader.h"
 #include "optionsdialog.h"
 #include "invoiceloader.h"
 #include "invoiceeditor.h"
@@ -31,8 +31,8 @@
 #include "producteditor.h"
 #include "entityeditor.h"
 #include "entitydialog.h"
-#include "business.h"
-#include "businessmanager.h"
+#include "company.h"
+#include "companymanager.h"
 #include "invoicemanager.h"
 #include "volumereportdialog.h"
 #include "volumereport.h"
@@ -61,15 +61,15 @@ View::MainWindow::MainWindow()
     createWidgets();
     createConnections();
     setWindowIcon(QIcon(":/images/jim.png"));
-    setBusinessOpen(false);
+    setCompanyOpen(false);
 
     _printer = new QPrinter;
     
-    _business = 0;
+    _company = 0;
     _authorized = false;
     _connected = false;
 
-    _businessEditor = _customerEditor = _supplierEditor = 0;
+    _customerEditor = _supplierEditor = 0;
     _productEditor = 0;
 
     connectStorage();
@@ -81,8 +81,8 @@ View::MainWindow::~MainWindow()
 
     delete _printer;
 
-    if(_business)
-        delete _business;
+    if(_company)
+        delete _company;
 }
 
 void View::MainWindow::closeEvent(QCloseEvent *event)
@@ -224,17 +224,17 @@ void View::MainWindow::exportStorage()
         statusBar() -> showMessage(tr("Export Completed"), 5000);
 }
 
-bool View::MainWindow::createBusiness()
+bool View::MainWindow::createCompany()
 {
-    Model::Domain::Business business;
-    View::Management::EntityDialog dialog(&business, this);
+    Model::Domain::Company company;
+    View::Management::EntityDialog dialog(&company, this);
 
     if(dialog.exec()) {
-        if(Model::Management::BusinessManager::create(business))
-            statusBar() -> showMessage(tr("Created Business %1").arg(business.id()), 5000);
+        if(Model::Management::CompanyManager::create(company))
+            statusBar() -> showMessage(tr("Created Company %1").arg(company.id()), 5000);
         else {
-            QMessageBox::warning(this, tr("Business Creation"),
-                                  tr("There was an error on business creation"),
+            QMessageBox::warning(this, tr("Company Creation"),
+                                  tr("There was an error on company creation"),
                                   QMessageBox::Ok);
             return false;
         }
@@ -243,41 +243,41 @@ bool View::MainWindow::createBusiness()
     return true;
 }
 
-void View::MainWindow::loadBusiness()
+void View::MainWindow::loadCompany()
 {
-    QMap<QString, int> businessNames = Model::Management::BusinessManager::getAllNames();
+    QMap<QString, int> companyNames = Model::Management::CompanyManager::getAllNames();
 
-    if(businessNames.isEmpty() && verifyCreateBusiness()) {
-        if(!createBusiness())
+    if(companyNames.isEmpty() && verifyCreateCompany()) {
+        if(!createCompany())
             return;
 
-        businessNames = Model::Management::BusinessManager::getAllNames();
+        companyNames = Model::Management::CompanyManager::getAllNames();
     }
 
-    BusinessLoader loader(businessNames.keys(), Persistence::Manager::readConfig("DefaultBusiness").toString());
+    CompanyLoader loader(companyNames.keys(), Persistence::Manager::readConfig("DefaultCompany").toString());
 
     if(loader.exec()) {
-        _business = Model::Management::BusinessManager::get(businessNames.value(loader.selectedBusiness()));
-        if(_business) {
-            if(loader.defaultBusiness())
-                Persistence::Manager::writeConfig(loader.selectedBusiness(), "DefaultBusiness");
+        _company = Model::Management::CompanyManager::get(companyNames.value(loader.selectedCompany()));
+        if(_company) {
+            if(loader.defaultCompany())
+                Persistence::Manager::writeConfig(loader.selectedCompany(), "DefaultCompany");
 
-            statusBar() -> showMessage(tr("Loaded Business %1").arg(_business -> name()), 5000);
-            setBusinessOpen(true);
+            statusBar() -> showMessage(tr("Loaded Company %1").arg(_company -> name()), 5000);
+            setCompanyOpen(true);
         } else
-            QMessageBox::warning(this, tr("Load Business"),
-                                  tr("Not exists any business with that Id"),
+            QMessageBox::warning(this, tr("Load Company"),
+                                  tr("Not exists any company with that Id"),
                                   QMessageBox::Ok);
     }
 }
 
-void View::MainWindow::closeBusiness()
+void View::MainWindow::closeCompany()
 {
-    if(!_business)
+    if(!_company)
         return;
 
     if(_mdiArea -> activeSubWindow() != 0) {
-        if(verifyCloseBusiness())
+        if(verifyCloseCompany())
             _mdiArea -> closeAllSubWindows();
         else
             return;
@@ -285,27 +285,27 @@ void View::MainWindow::closeBusiness()
 
     closeOtherWindows();
 
-    statusBar() -> showMessage(tr("Closed Business %1").arg(_business -> name()), 5000);
+    statusBar() -> showMessage(tr("Closed Company %1").arg(_company -> name()), 5000);
 
-    delete _business;
-    _business = 0;
+    delete _company;
+    _company = 0;
 
-    setBusinessOpen(false);
+    setCompanyOpen(false);
 }
 
-void View::MainWindow::setUpBusiness()
+void View::MainWindow::setUpCompany()
 {
-    if(!_business)
+    if(!_company)
         return;
 
-    View::Management::EntityDialog dialog(_business, this);
+    View::Management::EntityDialog dialog(_company, this);
 
     if(dialog.exec()) {
-        if(Model::Management::BusinessManager::modify(*_business))
-            statusBar() -> showMessage(tr("Modified Business %1").arg(_business -> name()), 5000);
+        if(Model::Management::CompanyManager::modify(*_company))
+            statusBar() -> showMessage(tr("Modified Company %1").arg(_company -> name()), 5000);
         else
-            QMessageBox::warning(this, tr("Business Modification"),
-                                  tr("There was an error on business update"),
+            QMessageBox::warning(this, tr("Company Modification"),
+                                  tr("There was an error on company update"),
                                   QMessageBox::Ok);
     }
 }
@@ -325,27 +325,27 @@ void View::MainWindow::printing()
 
 void View::MainWindow::createSaleInvoice()
 {
-    if(!_business)
+    if(!_company)
         return;
 
-    View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(_business, NO_ID, Model::Domain::Sale));
+    View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(_company, NO_ID, Model::Domain::Sale));
     _mdiArea -> addSubWindow(editor);
     editor -> show();
 }
 
 void View::MainWindow::createBuyInvoice()
 {
-    if(!_business)
+    if(!_company)
         return;
 
-    View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(_business, NO_ID, Model::Domain::Buy));
+    View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(_company, NO_ID, Model::Domain::Buy));
     _mdiArea -> addSubWindow(editor);
     editor -> show();
 }
 
 void View::MainWindow::loadInvoice(Model::Domain::Invoice *invoice)
 {
-    if(!_business)
+    if(!_company)
         return;
 
     if(!invoice) {
@@ -354,7 +354,7 @@ void View::MainWindow::loadInvoice(Model::Domain::Invoice *invoice)
         if(!loader.exec())
             return;
 
-        invoice = Model::Management::InvoiceManager::get(loader.id(), loader.type(), _business -> id());
+        invoice = Model::Management::InvoiceManager::get(loader.id(), loader.type(), _company -> id());
 
         if(!invoice) {
             QMessageBox::warning(this, tr("Load Invoice"),
@@ -376,7 +376,7 @@ void View::MainWindow::loadInvoice(Model::Domain::Invoice *invoice)
 
 void View::MainWindow::searchInvoice()
 {
-    if(!_business)
+    if(!_company)
         return;
 
     View::Invoicing::InvoiceSearch dialog(this);
@@ -389,13 +389,8 @@ void View::MainWindow::searchInvoice()
     }
 }
 
-void View::MainWindow::manageBusiness()
+void View::MainWindow::manageCompany()
 {
-    if(!_businessEditor)
-        _businessEditor = new View::Management::EntityEditor(Model::Domain::BusinessEntity);
-
-    _businessEditor -> show();
-    _businessEditor -> activateWindow();
 }
 
 void View::MainWindow::manageCustomer()
@@ -427,7 +422,7 @@ void View::MainWindow::manageProduct()
 
 void View::MainWindow::volumeBuy()
 {
-    if(!_business)
+    if(!_company)
         return;
 
     View::Report::VolumeReportDialog dialog(this);
@@ -444,7 +439,7 @@ void View::MainWindow::volumeBuy()
 
 void View::MainWindow::volumeSale()
 {
-    if(!_business)
+    if(!_company)
         return;
 
     View::Report::VolumeReportDialog dialog(this);
@@ -461,7 +456,7 @@ void View::MainWindow::volumeSale()
 
 void View::MainWindow::unpaidInvoices()
 {
-    if(!_business)
+    if(!_company)
         return;
 
     View::Report::UnpaidsReport *unpaidsReport = createUnpaidsReport();
@@ -574,19 +569,19 @@ void View::MainWindow::createCentralWidget()
 
 void View::MainWindow::createActions()
 {
-    _createBusinessAction = new QAction(tr("&Create Business..."), this);
-    _createBusinessAction -> setIcon(QIcon(":/images/business.png"));
-    _createBusinessAction -> setStatusTip(tr("Create a new business"));
+    _createCompanyAction = new QAction(tr("&Create Company..."), this);
+    _createCompanyAction -> setIcon(QIcon(":/images/company.png"));
+    _createCompanyAction -> setStatusTip(tr("Create a new company"));
 
-    _loadBusinessAction = new QAction(tr("&Load Business..."), this);
-    _loadBusinessAction -> setStatusTip(tr("Load a specific business"));
+    _loadCompanyAction = new QAction(tr("&Load Company..."), this);
+    _loadCompanyAction -> setStatusTip(tr("Load a specific company"));
 
-    _closeBusinessAction = new QAction(tr("&Close Business"), this);
-    _closeBusinessAction -> setStatusTip(tr("Close the actual business"));
+    _closeCompanyAction = new QAction(tr("&Close Company"), this);
+    _closeCompanyAction -> setStatusTip(tr("Close the actual company"));
 
-    _setUpBusinessAction = new QAction(tr("&Details..."), this);
-    _setUpBusinessAction -> setIcon(QIcon(":/images/about.png"));
-    _setUpBusinessAction -> setStatusTip(tr("Set up business details"));
+    _setUpCompanyAction = new QAction(tr("&Details..."), this);
+    _setUpCompanyAction -> setIcon(QIcon(":/images/about.png"));
+    _setUpCompanyAction -> setStatusTip(tr("Set up company details"));
 
     _connectStorageAction = new QAction(tr("Connect Storage"), this);
     _connectStorageAction -> setIcon(QIcon(":/images/storageon.png"));
@@ -636,9 +631,9 @@ void View::MainWindow::createActions()
     _searchInvoiceAction -> setIconText(tr("Search"));
     _searchInvoiceAction -> setStatusTip(tr("Make an invoice search"));
 
-    _manageBusinessAction = new QAction(tr("&Businesses..."), this);
-    _manageBusinessAction -> setIcon(QIcon(":/images/business.png"));
-    _manageBusinessAction -> setStatusTip(tr("Business Management"));
+    _manageCompanyAction = new QAction(tr("&Companies..."), this);
+    _manageCompanyAction -> setIcon(QIcon(":/images/company.png"));
+    _manageCompanyAction -> setStatusTip(tr("Company Management"));
 
     _manageCustomerAction = new QAction(tr("&Customers..."), this);
     _manageCustomerAction -> setIcon(QIcon(":/images/entity.png"));
@@ -697,10 +692,10 @@ void View::MainWindow::createActions()
 void View::MainWindow::createMenus()
 {
     _applicationMenu = menuBar() -> addMenu(tr("&Application"));
-    _applicationMenu -> addAction(_createBusinessAction);
-    _applicationMenu -> addAction(_loadBusinessAction);
-    _applicationMenu -> addAction(_closeBusinessAction);
-    _applicationMenu -> addAction(_setUpBusinessAction);
+    _applicationMenu -> addAction(_createCompanyAction);
+    _applicationMenu -> addAction(_loadCompanyAction);
+    _applicationMenu -> addAction(_closeCompanyAction);
+    _applicationMenu -> addAction(_setUpCompanyAction);
     _applicationMenu -> addSeparator();
     _applicationMenu -> addAction(_connectStorageAction);
     _applicationMenu -> addAction(_disconnectStorageAction);
@@ -721,7 +716,7 @@ void View::MainWindow::createMenus()
     _invoicingMenu -> addAction(_searchInvoiceAction);
 
     _managementMenu = menuBar() -> addMenu(tr("&Management"));
-    _managementMenu -> addAction(_manageBusinessAction);
+    _managementMenu -> addAction(_manageCompanyAction);
     _managementMenu -> addAction(_manageCustomerAction);
     _managementMenu -> addAction(_manageSupplierAction);
     _managementMenu -> addAction(_manageProductAction);
@@ -784,14 +779,14 @@ void View::MainWindow::createConnections()
 {
     connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateWindowMenu()));
-    connect(_createBusinessAction, SIGNAL(triggered()),
-            this, SLOT(createBusiness()));
-    connect(_loadBusinessAction, SIGNAL(triggered()),
-            this, SLOT(loadBusiness()));
-    connect(_closeBusinessAction, SIGNAL(triggered()),
-            this, SLOT(closeBusiness()));
-    connect(_setUpBusinessAction, SIGNAL(triggered()),
-            this, SLOT(setUpBusiness()));
+    connect(_createCompanyAction, SIGNAL(triggered()),
+            this, SLOT(createCompany()));
+    connect(_loadCompanyAction, SIGNAL(triggered()),
+            this, SLOT(loadCompany()));
+    connect(_closeCompanyAction, SIGNAL(triggered()),
+            this, SLOT(closeCompany()));
+    connect(_setUpCompanyAction, SIGNAL(triggered()),
+            this, SLOT(setUpCompany()));
     connect(_connectStorageAction, SIGNAL(triggered()),
             this, SLOT(connectStorage()));
     connect(_disconnectStorageAction, SIGNAL(triggered()),
@@ -814,8 +809,8 @@ void View::MainWindow::createConnections()
             this, SLOT(loadInvoice()));
     connect(_searchInvoiceAction, SIGNAL(triggered()),
             this, SLOT(searchInvoice()));
-    connect(_manageBusinessAction, SIGNAL(triggered()),
-            this, SLOT(manageBusiness()));
+    connect(_manageCompanyAction, SIGNAL(triggered()),
+            this, SLOT(manageCompany()));
     connect(_manageCustomerAction, SIGNAL(triggered()),
             this, SLOT(manageCustomer()));
     connect(_manageSupplierAction, SIGNAL(triggered()),
@@ -881,7 +876,7 @@ View::Invoicing::InvoiceSearchResult *View::MainWindow::createInvoiceSearchResul
                                                                 const QDate &beginDate, const QDate &endDate,
                                                                 int entityId, double minTotal, double maxTotal, bool paid)
 {
-    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _business -> id(), mode, beginDate, endDate, entityId, minTotal, maxTotal, paid);
+    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _company -> id(), mode, beginDate, endDate, entityId, minTotal, maxTotal, paid);
     View::Invoicing::InvoiceSearchResult *result = new View::Invoicing::InvoiceSearchResult(invoices, type);
 
     connect(result, SIGNAL(loaded(Model::Domain::Invoice*)), this, SLOT(loadInvoice(Model::Domain::Invoice*)));
@@ -897,7 +892,7 @@ View::Report::VolumeReport *View::MainWindow::createVolumeReport(Model::Domain::
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _business -> id(), mode, beginDate, endDate);
+    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _company -> id(), mode, beginDate, endDate);
     Model::Report::VolumeReportByDateResult *reportByDate = Model::Report::ReportManager::reportByDate(invoices);
     Model::Report::VolumeReportByEntityResult *reportByEntity = Model::Report::ReportManager::reportByEntity(invoices);
     Model::Report::VolumeReportByProductResult *reportByProduct = Model::Report::ReportManager::reportByProduct(invoices);
@@ -920,8 +915,8 @@ View::Report::UnpaidsReport *View::MainWindow::createUnpaidsReport()
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    QList<Model::Domain::Invoice *> *buyInvoices = Model::Management::InvoiceManager::unpaids(Model::Domain::Buy, _business -> id());
-    QList<Model::Domain::Invoice *> *saleInvoices = Model::Management::InvoiceManager::unpaids(Model::Domain::Sale, _business -> id());
+    QList<Model::Domain::Invoice *> *buyInvoices = Model::Management::InvoiceManager::unpaids(Model::Domain::Buy, _company -> id());
+    QList<Model::Domain::Invoice *> *saleInvoices = Model::Management::InvoiceManager::unpaids(Model::Domain::Sale, _company -> id());
     Model::Report::UnpaidStatistics buyStatistics = Model::Report::ReportManager::unpaidStatistics(buyInvoices);
     Model::Report::UnpaidStatistics saleStatistics = Model::Report::ReportManager::unpaidStatistics(saleInvoices);
 
@@ -937,8 +932,6 @@ View::Report::UnpaidsReport *View::MainWindow::createUnpaidsReport()
 
 void View::MainWindow::closeAllEditors()
 {
-    if(_businessEditor)
-        _businessEditor -> close();
     if(_customerEditor)
         _customerEditor -> close();
     if(_supplierEditor)
@@ -955,11 +948,6 @@ void View::MainWindow::closeOtherWindows()
 
 void View::MainWindow::deleteAllEditors()
 {
-    if(_businessEditor) {
-        delete _businessEditor;
-        _businessEditor = 0;
-    }
-
     if(_customerEditor) {
         delete _customerEditor;
         _customerEditor = 0;
@@ -980,13 +968,13 @@ void View::MainWindow::setStorageConnected(bool connected)
 {
     QString host = Persistence::Manager::readConfig("Host", "Storage/DBMS").toString();
 
-    _createBusinessAction -> setEnabled(connected);
-    _loadBusinessAction -> setEnabled(connected);
+    _createCompanyAction -> setEnabled(connected);
+    _loadCompanyAction -> setEnabled(connected);
     _connectStorageAction -> setEnabled(!connected);
     _disconnectStorageAction -> setEnabled(connected);
     _importStorageAction -> setEnabled(!connected);
     _exportStorageAction -> setEnabled(!connected);
-    _manageBusinessAction -> setEnabled(connected);
+    _manageCompanyAction -> setEnabled(connected);
     _manageCustomerAction -> setEnabled(connected);
     _manageSupplierAction -> setEnabled(connected);
     _manageProductAction -> setEnabled(connected);
@@ -1000,18 +988,18 @@ void View::MainWindow::setStorageConnected(bool connected)
     _storageStateLabel -> setText(connected ? tr("Connected to %1").arg(host) : tr("Disconnected"));
 }
 
-void View::MainWindow::setBusinessOpen(bool open)
+void View::MainWindow::setCompanyOpen(bool open)
 {
-    _createBusinessAction -> setEnabled(!open);
-    _loadBusinessAction -> setEnabled(!open);
-    _closeBusinessAction -> setEnabled(open);
-    _setUpBusinessAction -> setEnabled(open);
+    _createCompanyAction -> setEnabled(!open);
+    _loadCompanyAction -> setEnabled(!open);
+    _closeCompanyAction -> setEnabled(open);
+    _setUpCompanyAction -> setEnabled(open);
     _disconnectStorageAction -> setEnabled(!open);
     _createSaleInvoiceAction -> setEnabled(open);
     _createBuyInvoiceAction -> setEnabled(open);
     _loadInvoiceAction -> setEnabled(open);
     _searchInvoiceAction -> setEnabled(open);
-    _manageBusinessAction -> setEnabled(!open);
+    _manageCompanyAction -> setEnabled(!open);
     _volumeBuyAction -> setEnabled(open);
     _volumeSaleAction -> setEnabled(open);
     _unpaidInvoicesAction -> setEnabled(open);
@@ -1020,9 +1008,9 @@ void View::MainWindow::setBusinessOpen(bool open)
     _reportMenu -> setEnabled(open);
     _windowMenu -> setEnabled(open);
 
-    setWindowTitle(APPLICATION_NAME_LONG + (open ? tr(" - Business #%1 - %2")
-                                                   .arg(_business -> id())
-                                                   .arg(_business -> name())
+    setWindowTitle(APPLICATION_NAME_LONG + (open ? tr(" - Company #%1 - %2")
+                                                   .arg(_company -> id())
+                                                   .arg(_company -> name())
                                                  : QString()));
 }
 
@@ -1035,21 +1023,21 @@ bool View::MainWindow::verifyImportStorage()
                                        QMessageBox::No) == QMessageBox::Yes;
 }
 
-bool View::MainWindow::verifyCreateBusiness()
+bool View::MainWindow::verifyCreateCompany()
 {
-    return QMessageBox::question(this, tr("Verify Business Creation"),
-                                       tr("Not found any business. Perhaps this is the first time that\n"
-                                          "you execute the application or all business has been removed.\n"
-                                          "do you want to create a new business now?"),
+    return QMessageBox::question(this, tr("Verify Company Creation"),
+                                       tr("Not found any company. Perhaps this is the first time that\n"
+                                          "you execute the application or all company has been removed.\n"
+                                          "do you want to create a new company now?"),
                                        QMessageBox::Yes | QMessageBox::Default | 
                                        QMessageBox::No) == QMessageBox::Yes;
 }
 
-bool View::MainWindow::verifyCloseBusiness()
+bool View::MainWindow::verifyCloseCompany()
 {
-    return QMessageBox::question(this, tr("Verify Close Business"),
+    return QMessageBox::question(this, tr("Verify Close Company"),
                                  tr("There are active invoices.\n"
-                                    "are you sure you wish to close the business?"),
+                                    "are you sure you wish to close the company?"),
                                  QMessageBox::Yes | QMessageBox::Default |
                                  QMessageBox::No) == QMessageBox::Yes;
 }

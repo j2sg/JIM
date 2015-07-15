@@ -34,16 +34,16 @@ namespace Model
         public:
             static bool create(const Model::Domain::Invoice &invoice);
             static bool modify(const Model::Domain::Invoice &invoice);
-            static bool remove(int id, Model::Domain::InvoiceType type, int businessId);
-            static Model::Domain::Invoice *get(int id, Model::Domain::InvoiceType type, int businessId);
-            static QList<Model::Domain::Invoice *> *getAllByType(Model::Domain::InvoiceType type, int businessId);
-            static QList<Model::Domain::Invoice *> *getAll(int businessId);
-            static QList<Model::Domain::Invoice *> *search(Model::Domain::InvoiceType type, int businessId,
+            static bool remove(int id, Model::Domain::InvoiceType type, int companyId);
+            static Model::Domain::Invoice *get(int id, Model::Domain::InvoiceType type, int companyId);
+            static QList<Model::Domain::Invoice *> *getAllByType(Model::Domain::InvoiceType type, int companyId);
+            static QList<Model::Domain::Invoice *> *getAll(int companyId);
+            static QList<Model::Domain::Invoice *> *search(Model::Domain::InvoiceType type, int companyId,
                                                            Model::Management::SearchFlag mode = Model::Management::SearchByTypeOnly,
                                                            const QDate &beginDate = QDate::currentDate(), const QDate &endDate = QDate::currentDate(),
                                                            int entityId = NO_ID, double minTotal = 0.0, double maxTotal = 0.0, bool paid = true);
-            static QList<Model::Domain::Invoice *> *unpaids(Model::Domain::InvoiceType type, int businessId);
-            static int getId(Model::Domain::InvoiceType type, int businessId);            
+            static QList<Model::Domain::Invoice *> *unpaids(Model::Domain::InvoiceType type, int companyId);
+            static int getId(Model::Domain::InvoiceType type, int companyId);
         };
     }
 }

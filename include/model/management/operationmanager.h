@@ -33,12 +33,12 @@ namespace Model
         {
         public:
             static bool createAll(QList<Model::Domain::Operation *> *operations, int invoiceId,
-                                  Model::Domain::InvoiceType invoiceType, int businessId);
+                                  Model::Domain::InvoiceType invoiceType, int companyId);
             static bool removeAll(int invoiceId, Model::Domain::InvoiceType invoiceType,
-                                  int businessId);
+                                  int companyId);
             static QList<Model::Domain::Operation *> *getAllByInvoice(int invoiceId,
                                                                     Model::Domain::InvoiceType invoiceType,
-                                                                    int businessId);
+                                                                    int companyId);
             static QList<Model::Domain::Operation *> *getAllByProduct(int productId);
         };
     }

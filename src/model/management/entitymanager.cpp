@@ -19,7 +19,7 @@
  **/
 
 #include "entitymanager.h"
-#include "business.h"
+#include "company.h"
 #include "sqlagent.h"
 #include "types.h"
 
@@ -107,8 +107,8 @@ Model::Domain::Entity *Model::Management::EntityManager::get(int id, Model::Doma
         QString web      = (result -> at(0)).at(13).toString();
         QString notes    = (result -> at(0)).at(14).toString();
 
-        entity = (type == Model::Domain::BusinessEntity ?
-                      new Model::Domain::Business(id, vatin, name) :
+        entity = (type == Model::Domain::CompanyEntity ?
+                      new Model::Domain::Company(id, vatin, name) :
                       new Model::Domain::Entity(id, type, vatin, name));
         entity -> setCountry(country);
         entity -> setProvince(province);
@@ -167,8 +167,8 @@ QList<Model::Domain::Entity *> *Model::Management::EntityManager::getAllByType(M
         QString web      = row.at(13).toString();
         QString notes    = row.at(14).toString();
 
-        Model::Domain::Entity *entity = (type == Model::Domain::BusinessEntity ?
-                                             new Model::Domain::Business(id, vatin, name) :
+        Model::Domain::Entity *entity = (type == Model::Domain::CompanyEntity ?
+                                             new Model::Domain::Company(id, vatin, name) :
                                              new Model::Domain::Entity(id, type, vatin, name));
         entity -> setCountry(country);
         entity -> setProvince(province);

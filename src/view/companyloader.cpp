@@ -18,7 +18,7 @@
  *
  **/
 
-#include "businessloader.h"
+#include "companyloader.h"
 #include <QLabel>
 #include <QComboBox>
 #include <QCheckBox>
@@ -28,57 +28,57 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 
-View::BusinessLoader::BusinessLoader(const QStringList &businessNames,
+View::CompanyLoader::CompanyLoader(const QStringList &companyNames,
                                      const QString &def,
                                      QWidget *parent)
     : QDialog(parent)
 {
-    createWidgets(businessNames, def);
+    createWidgets(companyNames, def);
     createConnections();
-    setWindowTitle(tr("Load Business"));
-    setWindowIcon(QIcon(":/images/business.png"));
+    setWindowTitle(tr("Load Company"));
+    setWindowIcon(QIcon(":/images/company.png"));
     setFixedSize(sizeHint());
 }
 
-QString View::BusinessLoader::selectedBusiness() const
+QString View::CompanyLoader::selectedCompany() const
 {
-    return _businessComboBox -> currentText();
+    return _companyComboBox -> currentText();
 }
 
-bool View::BusinessLoader::defaultBusiness() const
+bool View::CompanyLoader::defaultCompany() const
 {
     return _defaultCheckBox -> isChecked();
 }
 
-void View::BusinessLoader::stateChangedOnBusinessComboBox()
+void View::CompanyLoader::stateChangedOnCompanyComboBox()
 {
-    _loadButton -> setEnabled(_businessComboBox -> currentIndex() != -1);
+    _loadButton -> setEnabled(_companyComboBox -> currentIndex() != -1);
 }
 
-void View::BusinessLoader::createWidgets(const QStringList &businessNames, const QString &def)
+void View::CompanyLoader::createWidgets(const QStringList &companyNames, const QString &def)
 {
-    _businessLabel = new QLabel(tr("&Name:"));
+    _companyLabel = new QLabel(tr("&Name:"));
 
-    _businessComboBox = new QComboBox;
-    _businessComboBox -> addItems(businessNames);
-    _businessComboBox -> setCurrentIndex((!def.isEmpty() ? (businessNames.contains(def) ? businessNames.indexOf(def) : -1) : -1));
-    _businessLabel -> setBuddy(_businessComboBox);
+    _companyComboBox = new QComboBox;
+    _companyComboBox -> addItems(companyNames);
+    _companyComboBox -> setCurrentIndex((!def.isEmpty() ? (companyNames.contains(def) ? companyNames.indexOf(def) : -1) : -1));
+    _companyLabel -> setBuddy(_companyComboBox);
 
-    _defaultCheckBox = new QCheckBox(tr("Set as business by &Default"));
-    _defaultCheckBox -> setChecked(!def.isEmpty() && businessNames.contains(def));
+    _defaultCheckBox = new QCheckBox(tr("Set as company by &Default"));
+    _defaultCheckBox -> setChecked(!def.isEmpty() && companyNames.contains(def));
 
     QGridLayout *topLayout = new QGridLayout;
-    topLayout -> addWidget(_businessLabel, 0, 0, 1, 1);
-    topLayout -> addWidget(_businessComboBox, 0, 1, 1, 3);
+    topLayout -> addWidget(_companyLabel, 0, 0, 1, 1);
+    topLayout -> addWidget(_companyComboBox, 0, 1, 1, 3);
     topLayout -> addWidget(_defaultCheckBox, 1, 1, 1, 3);
 
-    QGroupBox *businessGroupBox = new QGroupBox(tr("Business"));
-    businessGroupBox -> setLayout(topLayout);
+    QGroupBox *companyGroupBox = new QGroupBox(tr("Company"));
+    companyGroupBox -> setLayout(topLayout);
 
     _loadButton = new QPushButton(tr("&Load"));
     _loadButton -> setIcon(QIcon(":/images/ok.png"));
     _loadButton -> setDefault(true);
-    _loadButton -> setEnabled(_businessComboBox -> currentIndex() != -1);
+    _loadButton -> setEnabled(_companyComboBox -> currentIndex() != -1);
     _cancelButton = new QPushButton(tr("&Cancel"));
     _cancelButton -> setIcon(QIcon(":/images/cancel.png"));
 
@@ -89,16 +89,16 @@ void View::BusinessLoader::createWidgets(const QStringList &businessNames, const
     bottomLayout -> addStretch();
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addWidget(businessGroupBox);
+    mainLayout -> addWidget(companyGroupBox);
     mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
 }
 
-void View::BusinessLoader::createConnections()
+void View::CompanyLoader::createConnections()
 {
-    connect(_businessComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(stateChangedOnBusinessComboBox()));
+    connect(_companyComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(stateChangedOnCompanyComboBox()));
     connect(_loadButton, SIGNAL(clicked()),
             this, SLOT(accept()));
     connect(_cancelButton, SIGNAL(clicked()),
