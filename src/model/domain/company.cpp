@@ -37,10 +37,10 @@ Model::Domain::Company::Company(const Company &company)
 Model::Domain::Company &Model::Domain::Company::operator=(const Company &company)
 {
     Entity::operator=(company);
-    _taxOnSale = Company._taxOnSale;
-    _taxOnBuy = Company._taxOnBuy;
+    _taxOnSale = company._taxOnSale;
+    _taxOnBuy = company._taxOnBuy;
     for(int k = 0;k < TaxTypeCount;++k)
-        _tax[k] = Company._tax[k];
+        _tax[k] = company._tax[k];
 
     return *this;
 }
