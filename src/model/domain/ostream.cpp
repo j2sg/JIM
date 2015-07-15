@@ -20,13 +20,13 @@
 
 #include "ostream.h"
 
-std::ostream &Model::Domain::operator<<(std::ostream &os, const Business &business)
+std::ostream &Model::Domain::operator<<(std::ostream &os, const Company &company)
 {
-    os << static_cast<Entity>(business) << std::endl
-       << business._taxOnSale           << std::endl
-       << business._taxOnBuy            << std::endl;
+    os << static_cast<Entity>(company) << std::endl
+       << company._taxOnSale           << std::endl
+       << company._taxOnBuy            << std::endl;
     for(int k = 0;k < TaxTypeCount;++k)
-        os << business._tax[k] << std::endl;
+        os << company._tax[k] << std::endl;
 
     return os;
 }

@@ -18,8 +18,8 @@
  *
  **/
 
-#ifndef BUSINESS_H
-#define BUSINESS_H
+#ifndef COMPANY_H
+#define COMPANY_H
 
 #include <QString>
 #include <iostream>
@@ -31,16 +31,16 @@ namespace Model
 {
     namespace Domain
     {
-        class Business : public Entity
+        class Company : public Entity
         {
-            friend std::ostream &operator<<(std::ostream &os, const Business &business);
+            friend std::ostream &operator<<(std::ostream &os, const Company &company);
         public:
-            Business(int id = NO_ID, const QString &vatin = QString(),
+            Company(int id = NO_ID, const QString &vatin = QString(),
                      const QString &name = QString(),
                      TaxFlag taxOnSale = ApplyAllTax,
                      TaxFlag taxOnBuy = ApplyAllTax);
-            Business(const Business &business);
-            Business &operator=(const Business &business);
+            Company(const Company &company);
+            Company &operator=(const Company &company);
             void setTaxOnSale(TaxFlag taxOnSale);
             TaxFlag taxOnSale() const;
             void setTaxOnBuy(TaxFlag taxOnBuy);
@@ -54,4 +54,4 @@ namespace Model
     }
 }
 
-#endif // BUSINESS_H
+#endif // COMPANY_H

@@ -22,7 +22,7 @@
 #define OSTREAM_H
 
 #include <iostream>
-#include "business.h"
+#include "company.h"
 #include "category.h"
 #include "entity.h"
 #include "invoice.h"
@@ -34,7 +34,7 @@ namespace Model
 {
     namespace Domain
     {
-        std::ostream &operator<<(std::ostream &os, const Business &business);
+        std::ostream &operator<<(std::ostream &os, const Company &company);
         std::ostream &operator<<(std::ostream &os, const Category &category);
         std::ostream &operator<<(std::ostream &os, const Entity &entity);
         std::ostream &operator<<(std::ostream &os, const Invoice &invoice);

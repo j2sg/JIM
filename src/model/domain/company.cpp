@@ -18,54 +18,54 @@
  *
  **/
 
-#include "business.h"
+#include "company.h"
 
-Model::Domain::Business::Business(int id, const QString &vatin, const QString &name,
+Model::Domain::Company::Company(int id, const QString &vatin, const QString &name,
                                   TaxFlag taxOnSale, TaxFlag taxOnBuy)
-    : Entity(id, BusinessEntity, vatin, name), _taxOnSale(taxOnSale), _taxOnBuy(taxOnBuy)
+    : Entity(id, CompanyEntity, vatin, name), _taxOnSale(taxOnSale), _taxOnBuy(taxOnBuy)
 {
     for(int k = 0;k < TaxTypeCount;++k)
         _tax[k].setType(static_cast<TaxType>(k));
 }
 
-Model::Domain::Business::Business(const Business &business)
-    : Entity(business)
+Model::Domain::Company::Company(const Company &company)
+    : Entity(company)
 {
-    *this = business;
+    *this = company;
 }
 
-Model::Domain::Business &Model::Domain::Business::operator=(const Business &business)
+Model::Domain::Company &Model::Domain::Company::operator=(const Company &company)
 {
-    Entity::operator=(business);
-    _taxOnSale = business._taxOnSale;
-    _taxOnBuy = business._taxOnBuy;
+    Entity::operator=(company);
+    _taxOnSale = Company._taxOnSale;
+    _taxOnBuy = Company._taxOnBuy;
     for(int k = 0;k < TaxTypeCount;++k)
-        _tax[k] = business._tax[k];
+        _tax[k] = Company._tax[k];
 
     return *this;
 }
 
-void Model::Domain::Business::setTaxOnSale(TaxFlag taxOnSale)
+void Model::Domain::Company::setTaxOnSale(TaxFlag taxOnSale)
 {
     _taxOnSale = taxOnSale;
 }
 
-Model::Domain::TaxFlag Model::Domain::Business::taxOnSale() const
+Model::Domain::TaxFlag Model::Domain::Company::taxOnSale() const
 {
     return _taxOnSale;
 }
 
-void Model::Domain::Business::setTaxOnBuy(TaxFlag taxOnBuy)
+void Model::Domain::Company::setTaxOnBuy(TaxFlag taxOnBuy)
 {
     _taxOnBuy = taxOnBuy;
 }
 
-Model::Domain::TaxFlag Model::Domain::Business::taxOnBuy() const
+Model::Domain::TaxFlag Model::Domain::Company::taxOnBuy() const
 {
     return _taxOnBuy;
 }
 
-Model::Domain::Tax *Model::Domain::Business::tax()
+Model::Domain::Tax *Model::Domain::Company::tax()
 {
     return _tax;
 }
