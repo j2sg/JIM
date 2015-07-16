@@ -43,9 +43,9 @@ void View::Management::BusinessEditor::createWidgets()
     _supplierEditor = new EntityEditor(Model::Domain::SupplierEntity);
     _productEditor = new ProductEditor;
 
-    _tabWidget -> addTab(_customerEditor, tr("C&ustomers"));
-    _tabWidget -> addTab(_supplierEditor, tr("&Suppliers"));
-    _tabWidget -> addTab(_productEditor, tr("&Products"));
+    _tabWidget -> addTab(_customerEditor, QIcon(":/images/entity.png"), tr("C&ustomers"));
+    _tabWidget -> addTab(_supplierEditor, QIcon(":/images/supplier.png"), tr("&Suppliers"));
+    _tabWidget -> addTab(_productEditor, QIcon(":/images/manageproduct.png"), tr("&Products"));
 
     _closeButton = new QPushButton(tr("&Close"));
     _closeButton -> setIcon(QIcon(":/images/ok.png"));
