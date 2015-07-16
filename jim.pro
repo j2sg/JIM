@@ -116,7 +116,8 @@ HEADERS += include/global.h \
     include/view/management/productselector.h \
     include/model/domain/company.h \
     include/model/management/companymanager.h \
-    include/view/companyloader.h
+    include/view/companyloader.h \
+    include/view/management/businesseditor.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
@@ -183,7 +184,8 @@ SOURCES += src/main.cpp \
     src/view/management/productselector.cpp \
     src/model/domain/company.cpp \
     src/model/management/companymanager.cpp \
-    src/view/companyloader.cpp
+    src/view/companyloader.cpp \
+    src/view/management/businesseditor.cpp
 
 RESOURCES += resources/jim.qrc
 
