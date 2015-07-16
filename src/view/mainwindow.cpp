@@ -28,7 +28,7 @@
 #include "invoiceeditor.h"
 #include "invoicesearch.h"
 #include "invoicesearchresult.h"
-#include "producteditor.h"
+#include "businesseditor.h"
 #include "entityeditor.h"
 #include "entitydialog.h"
 #include "company.h"
@@ -69,8 +69,7 @@ View::MainWindow::MainWindow()
     _authorized = false;
     _connected = false;
 
-    _customerEditor = _supplierEditor = 0;
-    _productEditor = 0;
+    _businessEditor = 0;
 
     connectStorage();
 }
@@ -395,29 +394,29 @@ void View::MainWindow::manageCompany()
 
 void View::MainWindow::manageCustomer()
 {
-    if(!_customerEditor)
-        _customerEditor = new View::Management::EntityEditor(Model::Domain::CustomerEntity);
+    if(!_businessEditor)
+        _businessEditor = new View::Management::BusinessEditor;
 
-    _customerEditor -> show();
-    _customerEditor -> activateWindow();
+    _businessEditor -> show();
+    _businessEditor -> activateWindow();
 }
 
 void View::MainWindow::manageSupplier()
 {
-    if(!_supplierEditor)
-        _supplierEditor = new View::Management::EntityEditor(Model::Domain::SupplierEntity);
+    if(!_businessEditor)
+        _businessEditor = new View::Management::BusinessEditor;
 
-    _supplierEditor -> show();
-    _supplierEditor -> activateWindow();
+    _businessEditor -> show();
+    _businessEditor -> activateWindow();
 }
 
 void View::MainWindow::manageProduct()
 {
-    if(!_productEditor)
-        _productEditor = new View::Management::ProductEditor;
+    if(!_businessEditor)
+        _businessEditor = new View::Management::BusinessEditor;
 
-    _productEditor -> show();
-    _productEditor -> activateWindow();
+    _businessEditor -> show();
+    _businessEditor -> activateWindow();
 }
 
 void View::MainWindow::volumeBuy()
@@ -533,10 +532,10 @@ void View::MainWindow::invoiceHasAddedNewEntity(const Model::Domain::Invoice &in
                                .arg(invoice.entity() -> type() ? tr("Supplier") : tr("Customer"))
                                .arg(invoice.entity() -> id()), 2000);
 
-    if(_supplierEditor && invoice.entity() -> type() == Model::Domain::SupplierEntity)
-        _supplierEditor -> addEntityFromInvoice(*(invoice.entity()));
-    else if(_customerEditor && invoice.entity() -> type() == Model::Domain::CustomerEntity)
-        _customerEditor -> addEntityFromInvoice(*(invoice.entity()));
+    //if(_supplierEditor && invoice.entity() -> type() == Model::Domain::SupplierEntity)
+    //    _supplierEditor -> addEntityFromInvoice(*(invoice.entity()));
+    //else if(_customerEditor && invoice.entity() -> type() == Model::Domain::CustomerEntity)
+    //    _customerEditor -> addEntityFromInvoice(*(invoice.entity()));
 
 }
 
@@ -932,12 +931,8 @@ View::Report::UnpaidsReport *View::MainWindow::createUnpaidsReport()
 
 void View::MainWindow::closeAllEditors()
 {
-    if(_customerEditor)
-        _customerEditor -> close();
-    if(_supplierEditor)
-        _supplierEditor -> close();
-    if(_productEditor)
-        _productEditor -> close();
+    if(_businessEditor)
+        _businessEditor -> close();
 }
 
 void View::MainWindow::closeOtherWindows()
@@ -948,19 +943,9 @@ void View::MainWindow::closeOtherWindows()
 
 void View::MainWindow::deleteAllEditors()
 {
-    if(_customerEditor) {
-        delete _customerEditor;
-        _customerEditor = 0;
-    }
-
-    if(_supplierEditor) {
-        delete _supplierEditor;
-        _supplierEditor = 0;
-    }
-
-    if(_productEditor) {
-        delete _productEditor;
-        _productEditor = 0;
+    if(_businessEditor) {
+        delete _businessEditor;
+        _businessEditor = 0;
     }
 }
 
