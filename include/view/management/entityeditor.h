@@ -24,7 +24,6 @@
 #include <QWidget>
 #include "types.h"
 
-#define ENTITY_EDITOR_MINIMUM_WIDTH 375
 #define COLUMN_ENTITY_ID_WIDTH 50
 #define COLUMN_ENTITY_NAME_WIDTH 250
 
@@ -63,8 +62,6 @@ namespace View
             void delEntity();
         private:
             void createWidgets();
-            void setTitle();
-            void setIcon();
             void createConnections();
 
             QTableView *_entitiesTableView;
@@ -72,7 +69,6 @@ namespace View
             QPushButton *_addEntityButton;
             QPushButton *_modEntityButton;
             QPushButton *_delEntityButton;
-            QPushButton *_closeButton;
             Model::Domain::EntityType _type;
         };
     }

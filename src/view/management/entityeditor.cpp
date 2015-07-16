@@ -29,7 +29,6 @@
 #include <QPushButton>
 #include <QHeaderView>
 #include <QGridLayout>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QMessageBox>
@@ -39,9 +38,6 @@ View::Management::EntityEditor::EntityEditor(Model::Domain::EntityType type, QWi
 {
     createWidgets();
     createConnections();
-    setTitle();
-    setIcon();
-    setMinimumWidth(ENTITY_EDITOR_MINIMUM_WIDTH);
 }
 
 View::Management::EntityEditor::~EntityEditor()
@@ -156,58 +152,10 @@ void View::Management::EntityEditor::createWidgets()
     QGroupBox *entitiesGroupBox = new QGroupBox(tr("List"));
     entitiesGroupBox -> setLayout(topLayout);
 
-    _closeButton = new QPushButton(tr("&Close"));
-    _closeButton -> setIcon(QIcon(":/images/ok.png"));
-    _closeButton -> setFixedSize(_closeButton -> sizeHint());
-
-    QHBoxLayout *bottomLayout = new QHBoxLayout;
-    bottomLayout -> addStretch();
-    bottomLayout -> addWidget(_closeButton);
-
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(entitiesGroupBox);
-    mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
-}
-
-void View::Management::EntityEditor::setTitle()
-{
-    QString entityType;
-    switch(static_cast<int>(_type)) {
-    case Model::Domain::CustomerEntity:
-        entityType = tr("Customer");
-        break;
-    case Model::Domain::SupplierEntity:
-        entityType = tr("Supplier");
-        break;
-    case Model::Domain::CompanyEntity:
-        entityType = tr("Company");
-        break;
-    default:
-        entityType = tr("Unknown");
-    }
-
-    setWindowTitle(tr("%1 Editor").arg(entityType));
-}
-
-void View::Management::EntityEditor::setIcon()
-{
-    QIcon icon;
-
-    switch(static_cast<int>(_type)) {
-    case Model::Domain::CompanyEntity:
-        icon = QIcon(":/images/company.png");
-        break;
-    case Model::Domain::CustomerEntity:
-        icon = QIcon(":/images/entity.png");
-        break;
-    case Model::Domain::SupplierEntity:
-        icon = QIcon(":/images/supplier.png");
-        break;
-    }
-
-    setWindowIcon(icon);
 }
 
 void View::Management::EntityEditor::createConnections()
@@ -222,6 +170,4 @@ void View::Management::EntityEditor::createConnections()
             this, SLOT(modEntity()));
     connect(_delEntityButton, SIGNAL(clicked()),
             this, SLOT(delEntity()));
-    connect(_closeButton, SIGNAL(clicked()),
-            this, SLOT(close()));
 }

@@ -34,7 +34,6 @@
 #include <QComboBox>
 #include <QHeaderView>
 #include <QGridLayout>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QMessageBox>
@@ -44,9 +43,6 @@ View::Management::ProductEditor::ProductEditor(QWidget *parent)
 {
     createWidgets();
     createConnections();
-    setWindowTitle(tr("Product Editor"));
-    setWindowIcon(QIcon(":/images/manageproduct.png"));
-    setMinimumWidth(PRODUCT_EDITOR_MINIMUM_WIDTH);
 }
 
 View::Management::ProductEditor::~ProductEditor()
@@ -233,18 +229,9 @@ void View::Management::ProductEditor::createWidgets()
     QGroupBox *productsGroupBox = new QGroupBox(tr("&Products List"));
     productsGroupBox -> setLayout(productLayout);
 
-    _closeButton = new QPushButton(tr("&Close"));
-    _closeButton -> setIcon(QIcon(":/images/ok.png"));
-    _closeButton -> setFixedSize(_closeButton -> sizeHint());
-
-    QHBoxLayout *bottomLayout = new QHBoxLayout;
-    bottomLayout -> addStretch();
-    bottomLayout -> addWidget(_closeButton);
-
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(categoriesGroupBox);
     mainLayout -> addWidget(productsGroupBox);
-    mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
 }
@@ -352,8 +339,6 @@ void View::Management::ProductEditor::createConnections()
             this, SLOT(modProduct()));
     connect(_delProductButton, SIGNAL(clicked()),
             this, SLOT(delProduct()));
-    connect(_closeButton, SIGNAL(clicked()),
-            this, SLOT(close()));
 }
 
 bool View::Management::ProductEditor::verifyDeleteCategory()

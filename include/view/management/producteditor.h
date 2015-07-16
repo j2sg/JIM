@@ -23,7 +23,6 @@
 
 #include <QWidget>
 
-#define PRODUCT_EDITOR_MINIMUM_WIDTH 375
 #define CATEGORY_HEIGHT 200
 #define COLUMN_CATEGORY_ID_WIDTH 50
 #define COLUMN_CATEGORY_NAME_WIDTH 200
@@ -89,7 +88,6 @@ namespace View
             QPushButton *_addProductButton;
             QPushButton *_modProductButton;
             QPushButton *_delProductButton;
-            QPushButton *_closeButton;
         };
     }
 }
