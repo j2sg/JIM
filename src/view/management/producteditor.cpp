@@ -218,9 +218,9 @@ void View::Management::ProductEditor::createWidgets()
     createProductWidgets();
 
     QGridLayout *productLayout = new QGridLayout;
-    productLayout -> addWidget(_allRadioButton, 0, 0, 1, 1);
-    productLayout -> addWidget(_byCategoryRadioButton, 1, 0, 1, 1);
-    productLayout -> addWidget(_categoryComboBox, 1, 1, 1, 1);
+    productLayout -> addWidget(_allRadioButton, 0, 0, 1, 2);
+    productLayout -> addWidget(_byCategoryRadioButton, 1, 0, 1, 2);
+    productLayout -> addWidget(_categoryComboBox, 1, 2, 1, 2);
     productLayout -> addWidget(_productsTableView, 2, 0, 1, 6);
     productLayout -> addWidget(_addProductButton, 3, 3, 1, 1);
     productLayout -> addWidget(_modProductButton, 3, 4, 1, 1);
