@@ -69,6 +69,7 @@ View::MainWindow::MainWindow()
     _authorized = false;
     _connected = false;
 
+    _companyEditor = 0;
     _businessEditor = 0;
 
     connectStorage();
@@ -390,6 +391,11 @@ void View::MainWindow::searchInvoice()
 
 void View::MainWindow::manageCompany()
 {
+    if(!_companyEditor)
+        _companyEditor = new View::Management::EntityEditor(Model::Domain::CompanyEntity);
+
+    _companyEditor -> show();
+    _companyEditor -> activateWindow();
 }
 
 void View::MainWindow::manageCustomer()
@@ -931,6 +937,9 @@ View::Report::UnpaidsReport *View::MainWindow::createUnpaidsReport()
 
 void View::MainWindow::closeAllEditors()
 {
+    if(_companyEditor)
+        _companyEditor -> close();
+
     if(_businessEditor)
         _businessEditor -> close();
 }
@@ -943,6 +952,11 @@ void View::MainWindow::closeOtherWindows()
 
 void View::MainWindow::deleteAllEditors()
 {
+    if(_companyEditor) {
+        delete _companyEditor;
+        _companyEditor = 0;
+    }
+
     if(_businessEditor) {
         delete _businessEditor;
         _businessEditor = 0;

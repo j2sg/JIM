@@ -54,6 +54,7 @@ namespace View
 
     namespace Management
     {
+        class EntityEditor;
         class BusinessEditor;
     }
 
@@ -184,6 +185,7 @@ namespace View
         bool _authorized;
         bool _connected;
 
+        View::Management::EntityEditor *_companyEditor;
         View::Management::BusinessEditor *_businessEditor;
         QList<QWidget *> _otherWindows;
     };
