@@ -94,6 +94,7 @@ namespace View
         void manageCustomer();
         void manageSupplier();
         void manageProduct();
+        void setFullScreen(bool fullScreen);
         void volumeBuy();
         void volumeSale();
         void unpaidInvoices();
@@ -161,6 +162,7 @@ namespace View
         QAction *_unpaidInvoicesAction;
         //QAction *_calculatorAction;
         //QAction *_addressBookAction;
+        QAction *_fullScreenAction;
         QAction *_closeAction;
         QAction *_closeAllAction;
         QAction *_nextAction;

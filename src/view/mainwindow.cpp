@@ -428,6 +428,14 @@ void View::MainWindow::manageProduct()
     _businessEditor -> activateWindow();
 }
 
+void View::MainWindow::setFullScreen(bool fullScreen)
+{
+    if(fullScreen)
+        showFullScreen();
+    else
+        showNormal();
+}
+
 void View::MainWindow::volumeBuy()
 {
     if(!_company)
@@ -675,6 +683,11 @@ void View::MainWindow::createActions()
     //_addressBookAction -> setIcon(QIcon(":/images/address.png"));
     //_addressBookAction -> setStatusTip(tr("Open Address Book"));
 
+    _fullScreenAction = new QAction(tr("Full Screen"), this);
+    _fullScreenAction -> setCheckable(true);
+    _fullScreenAction -> setChecked(false);
+    _fullScreenAction -> setStatusTip(tr("Show full screen mode"));
+
     _closeAction = new QAction(tr("Close"), this);
     _closeAction -> setStatusTip(tr("Close active window"));
 
@@ -739,6 +752,8 @@ void View::MainWindow::createMenus()
     //_toolsMenu -> addAction(_addressBookAction);
 
     _windowMenu = menuBar() -> addMenu(tr("&Window"));
+    _windowMenu -> addAction(_fullScreenAction);
+    _windowMenu -> addSeparator();
     _windowMenu -> addAction(_closeAction);
     _windowMenu -> addAction(_closeAllAction);
     _windowMenu -> addSeparator();
@@ -835,6 +850,8 @@ void View::MainWindow::createConnections()
     //        this, SLOT(calculator()));
     //connect(_addressBookAction, SIGNAL(triggered()),
     //        this, SLOT(addressBook()));
+    connect(_fullScreenAction, SIGNAL(toggled(bool)),
+            this, SLOT(setFullScreen(bool)));
     connect(_closeAction, SIGNAL(triggered()),
             _mdiArea, SLOT(closeActiveSubWindow()));
     connect(_closeAllAction, SIGNAL(triggered()),
@@ -1008,7 +1025,6 @@ void View::MainWindow::setCompanyOpen(bool open)
 
     _invoicingMenu -> setEnabled(open);
     _reportMenu -> setEnabled(open);
-    _windowMenu -> setEnabled(open);
 
     setWindowTitle(APPLICATION_NAME_LONG + (open ? tr(" - Company #%1 - %2")
                                                    .arg(_company -> id())
