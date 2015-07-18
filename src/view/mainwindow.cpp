@@ -403,6 +403,7 @@ void View::MainWindow::manageCustomer()
     if(!_businessEditor)
         _businessEditor = new View::Management::BusinessEditor;
 
+    _businessEditor -> setCurrentTab(0);
     _businessEditor -> show();
     _businessEditor -> activateWindow();
 }
@@ -412,6 +413,7 @@ void View::MainWindow::manageSupplier()
     if(!_businessEditor)
         _businessEditor = new View::Management::BusinessEditor;
 
+    _businessEditor -> setCurrentTab(1);
     _businessEditor -> show();
     _businessEditor -> activateWindow();
 }
@@ -421,6 +423,7 @@ void View::MainWindow::manageProduct()
     if(!_businessEditor)
         _businessEditor = new View::Management::BusinessEditor;
 
+    _businessEditor -> setCurrentTab(2);
     _businessEditor -> show();
     _businessEditor -> activateWindow();
 }

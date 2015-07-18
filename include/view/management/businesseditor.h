@@ -42,6 +42,8 @@ namespace View
             Q_OBJECT
         public:
             BusinessEditor(QWidget *parent = 0);
+        public slots:
+            void setCurrentTab(int index);
         private:
             void createWidgets();
             void createConnections();

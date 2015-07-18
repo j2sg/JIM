@@ -35,6 +35,11 @@ View::Management::BusinessEditor::BusinessEditor(QWidget *parent) : QWidget(pare
     setMinimumWidth(BUSINESS_EDITOR_MINIMUM_WIDTH);
 }
 
+void View::Management::BusinessEditor::setCurrentTab(int index)
+{
+    _tabWidget -> setCurrentIndex(index);
+}
+
 void View::Management::BusinessEditor::createWidgets()
 {
     _tabWidget = new QTabWidget;
