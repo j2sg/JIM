@@ -60,14 +60,16 @@ void View::InvoiceLoader::createWidgets()
     _invoiceLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
     _invoiceLabel -> setBuddy(_invoiceLineEdit);
 
+    _typeLabel = new QLabel(tr("Type:"));
     _buyRadioButton = new QRadioButton(tr("&Buy"));
     _saleRadioButton = new QRadioButton(tr("&Sale"));
     _buyRadioButton -> setChecked(true);
 
     QGridLayout *topLayout = new QGridLayout;
     topLayout -> addWidget(_invoiceLabel, 0, 0, 1, 1);
-    topLayout -> addWidget(_invoiceLineEdit, 0, 1, 1, 1);
-    topLayout -> addWidget(_buyRadioButton, 0, 2, 1, 1);
+    topLayout -> addWidget(_invoiceLineEdit, 0, 1, 1, 2);
+    topLayout -> addWidget(_typeLabel, 1, 0, 1, 1);
+    topLayout -> addWidget(_buyRadioButton, 1, 1, 1, 1);
     topLayout -> addWidget(_saleRadioButton, 1, 2, 1, 1);
 
     QGroupBox *invoiceGroupBox = new QGroupBox(tr("Invoice"));

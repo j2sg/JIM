@@ -48,6 +48,7 @@ namespace View
 
         QLabel *_invoiceLabel;
         QLineEdit *_invoiceLineEdit;
+        QLabel *_typeLabel;
         QRadioButton *_buyRadioButton;
         QRadioButton *_saleRadioButton;
         QPushButton *_loadButton;
