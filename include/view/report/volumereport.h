@@ -30,7 +30,6 @@
 QT_BEGIN_NAMESPACE
 class QTabWidget;
 class QLabel;
-class QPushButton;
 QT_END_NAMESPACE
 
 namespace View
@@ -58,7 +57,6 @@ namespace View
                                Model::Report::VolumeReportByEntityResult *reportByEntity,
                                Model::Report::VolumeReportByProductResult *reportByProduct,
                                Model::Report::VolumeReportStatistics statistics);
-            void createConnections();
 
             QTabWidget *_tabWidget;
             VolumeReportByDateTab *_volumeReportByDateTab;
@@ -76,7 +74,6 @@ namespace View
             QLabel *_dailyAvgLabelValue;
             QLabel *_greatTotalLabel;
             QLabel *_greatTotalLabelValue;
-            QPushButton *_closePushButton;
         };
     }
 }

@@ -39,7 +39,6 @@ View::Report::VolumeReport::VolumeReport(Model::Domain::InvoiceType type,
     : QWidget(parent)
 {
     createWidgets(type, reportByDate, reportByEntity, reportByProduct, statistics);
-    createConnections();
     setWindowTitle(tr("Volume %1 Report").arg(type ? tr("Sale") : tr("Buy")));
     setWindowIcon(QIcon(type ? ":/images/volumesale.png" : ":/images/volumebuy.png"));
     setMinimumWidth(VOLUME_REPORT_MINIMUM_WIDTH);
@@ -94,20 +93,9 @@ void View::Report::VolumeReport::createWidgets(Model::Domain::InvoiceType type,
     QGroupBox *statisticsGroupBox = new QGroupBox(tr("Daily Statistics"));
     statisticsGroupBox -> setLayout(statisticsLayout);
 
-    _closePushButton = new QPushButton(tr("&Close"));
-    _closePushButton -> setIcon(QIcon(":/images/ok.png"));
-    _closePushButton -> setFixedSize(_closePushButton -> sizeHint());
-
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(_tabWidget);
     mainLayout -> addWidget(statisticsGroupBox);
-    mainLayout -> addWidget(_closePushButton, 0, Qt::AlignRight);
 
     setLayout(mainLayout);
-}
-
-void View::Report::VolumeReport::createConnections()
-{
-    connect(_closePushButton, SIGNAL(clicked()),
-            this, SLOT(close()));
 }

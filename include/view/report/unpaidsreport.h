@@ -29,7 +29,6 @@
 
 QT_BEGIN_NAMESPACE
 class QTabWidget;
-class QPushButton;
 QT_END_NAMESPACE
 
 namespace Model
@@ -61,12 +60,10 @@ namespace View
                                QList<Model::Domain::Invoice *> *saleInvoices,
                                Model::Report::UnpaidStatistics buyStatistics,
                                Model::Report::UnpaidStatistics saleStatistics);
-            void createConnections();
 
             QTabWidget *_tabWidget;
             UnpaidsReportTab *_unpaidsReportBuyTab;
             UnpaidsReportTab *_unpaidsReportSaleTab;
-            QPushButton *_closePushButton;
         };
     }
 }

@@ -90,13 +90,8 @@ void View::Invoicing::InvoiceSearchResult::createWidgets(QList<Model::Domain::In
     QGroupBox *topGroupBox = new QGroupBox(type ? tr("Sale Invoices") : tr("Buy Invoices"));
     topGroupBox -> setLayout(topLayout);
 
-    _closePushButton = new QPushButton(tr("&Close"));
-    _closePushButton -> setIcon(QIcon(":/images/ok.png"));
-    _closePushButton -> setFixedSize(_closePushButton -> sizeHint());
-
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(topGroupBox);
-    mainLayout -> addWidget(_closePushButton, 0, Qt::AlignRight);
 
     setLayout(mainLayout);
 }
@@ -109,6 +104,4 @@ void View::Invoicing::InvoiceSearchResult::createConnections()
             this, SLOT(load()));
     connect(_loadPushButton, SIGNAL(clicked()),
             this, SLOT(load()));
-    connect(_closePushButton, SIGNAL(clicked()),
-            this, SLOT(close()));
 }

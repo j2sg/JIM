@@ -871,8 +871,6 @@ View::Invoicing::InvoiceEditor *View::MainWindow::createInvoiceEditor(Model::Dom
             this, SLOT(invoiceDeleted(const Model::Domain::Invoice &)));
     connect(editor, SIGNAL(entityAdded(const Model::Domain::Invoice &)),
             this, SLOT(invoiceHasAddedNewEntity(const Model::Domain::Invoice &)));
-    connect(editor, SIGNAL(finished()),
-            _mdiArea, SLOT(closeActiveSubWindow()));
 
     return editor;
 }

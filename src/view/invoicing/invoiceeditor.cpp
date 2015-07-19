@@ -126,15 +126,11 @@ void View::Invoicing::InvoiceEditor::createWidgets()
     _deleteButton -> setIcon(QIcon(":/images/delete.png"));
     _deleteButton -> setEnabled(!IS_NEW(_invoice -> id()));
 
-    _finishButton = new QPushButton(tr("&Finish"));
-    _finishButton -> setIcon(QIcon(":/images/exit.png"));
-
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout -> addWidget(_printButton);
     bottomLayout -> addStretch();
-    bottomLayout -> addWidget(_saveButton);
     bottomLayout -> addWidget(_deleteButton);
-    bottomLayout -> addWidget(_finishButton);
+    bottomLayout -> addWidget(_saveButton);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(_tabWidget);
@@ -161,8 +157,6 @@ void View::Invoicing::InvoiceEditor::createConnections()
             this, SLOT(save()));
     connect(_deleteButton, SIGNAL(clicked()),
             this, SLOT(_delete()));
-    connect(_finishButton, SIGNAL(clicked()),
-            this, SIGNAL(finished()));
 }
 
 void View::Invoicing::InvoiceEditor::setTitle()

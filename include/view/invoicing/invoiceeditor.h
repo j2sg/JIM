@@ -61,7 +61,6 @@ namespace View
             void saved(const Model::Domain::Invoice &invoice);
             void deleted(const Model::Domain::Invoice &invoice);
             void entityAdded(const Model::Domain::Invoice &invoice);
-            void finished();
         private slots:
             void invoiceModified(bool modified = true);
             void print();
@@ -83,7 +82,6 @@ namespace View
             QPushButton *_printButton;
             QPushButton *_saveButton;
             QPushButton *_deleteButton;
-            QPushButton *_finishButton;
             Model::Domain::Invoice *_invoice;
             int _id;
         };

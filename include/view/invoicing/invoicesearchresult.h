@@ -72,7 +72,6 @@ namespace View
             QTableView *_invoicesTableView;
             InvoiceModel *_invoiceModel;
             QPushButton *_loadPushButton;
-            QPushButton *_closePushButton;
         };
     }
 }

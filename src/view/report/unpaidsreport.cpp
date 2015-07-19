@@ -33,7 +33,6 @@ View::Report::UnpaidsReport::UnpaidsReport(QList<Model::Domain::Invoice *> *buyI
     : QWidget(parent)
 {
     createWidgets(buyInvoices,saleInvoices, buyStatistics, saleStatistics);
-    createConnections();
     setWindowTitle(tr("Unpaids Report"));
     setWindowIcon(QIcon(":/images/unpaid.png"));
     setMinimumWidth(UNPAIDS_REPORT_MINIMUM_WIDTH);
@@ -51,19 +50,9 @@ void View::Report::UnpaidsReport::createWidgets(QList<Model::Domain::Invoice *> 
     _tabWidget -> addTab(_unpaidsReportBuyTab, tr("Buy"));
     _tabWidget -> addTab(_unpaidsReportSaleTab, tr("Sale"));
 
-    _closePushButton = new QPushButton(tr("&Close"));
-    _closePushButton -> setIcon(QIcon(":/images/ok.png"));
-    _closePushButton -> setFixedSize(_closePushButton -> sizeHint());
-
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(_tabWidget);
-    mainLayout -> addWidget(_closePushButton, 0, Qt::AlignRight);
 
     setLayout(mainLayout);
 }
 
-void View::Report::UnpaidsReport::createConnections()
-{
-    connect(_closePushButton, SIGNAL(clicked()),
-            this, SLOT(close()));
-}
