@@ -22,7 +22,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QList>
 #include <QDate>
 #include "types.h"
 
@@ -106,7 +105,6 @@ namespace View
         void invoiceSaved(const Model::Domain::Invoice &invoice);
         void invoiceDeleted(const Model::Domain::Invoice &invoice);
         void invoiceHasAddedNewEntity(const Model::Domain::Invoice &invoice);
-        void updateOtherWindows(QObject *object);
     private:
         void createWidgets();
         void createCentralWidget();
@@ -128,7 +126,6 @@ namespace View
                                                        const QDate &endDate = QDate::currentDate());
         View::Report::UnpaidsReport *createUnpaidsReport();
         void closeAllEditors();
-        void closeOtherWindows();
         void deleteAllEditors();
         void setStorageConnected(bool connected = true);
         void setCompanyOpen(bool open = true);
@@ -189,7 +186,6 @@ namespace View
 
         View::Management::EntityEditor *_companyEditor;
         View::Management::BusinessEditor *_businessEditor;
-        QList<QWidget *> _otherWindows;
     };
 }
 

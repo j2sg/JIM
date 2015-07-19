@@ -91,7 +91,6 @@ void View::MainWindow::closeEvent(QCloseEvent *event)
         event -> accept();
     else if(verifyExit()) {
         closeAllEditors();
-        closeOtherWindows();
         _mdiArea -> closeAllSubWindows();
         if(!_mdiArea -> currentSubWindow())
             event -> accept();
@@ -181,7 +180,6 @@ void View::MainWindow::disconnectStorage()
 
     closeAllEditors();
     deleteAllEditors();
-    closeOtherWindows();
 }
 
 void View::MainWindow::importStorage()
@@ -283,8 +281,6 @@ void View::MainWindow::closeCompany()
             return;
     }
 
-    closeOtherWindows();
-
     statusBar() -> showMessage(tr("Closed Company %1").arg(_company -> name()), 5000);
 
     delete _company;
@@ -385,6 +381,7 @@ void View::MainWindow::searchInvoice()
         View::Invoicing::InvoiceSearchResult *result = createInvoiceSearchResult(dialog.type(), dialog.searchMode(),
                                                                                  dialog.beginDate(), dialog.endDate(), dialog.entityId(),
                                                                                  dialog.minTotal(), dialog.maxTotal(), dialog.paid());
+        _mdiArea -> addSubWindow(result);
         result -> show();
     }
 }
@@ -449,6 +446,7 @@ void View::MainWindow::volumeBuy()
                                                                           Model::Management::SearchByDateRange :
                                                                           Model::Management::SearchByTypeOnly,
                                                                       dialog.beginDate(), dialog.endDate());
+        _mdiArea -> addSubWindow(volumeReport);
         volumeReport -> show();
     }
 }
@@ -466,6 +464,7 @@ void View::MainWindow::volumeSale()
                                                                           Model::Management::SearchByDateRange :
                                                                           Model::Management::SearchByTypeOnly,
                                                                       dialog.beginDate(), dialog.endDate());
+        _mdiArea -> addSubWindow(volumeReport);
         volumeReport -> show();
     }
 }
@@ -477,6 +476,7 @@ void View::MainWindow::unpaidInvoices()
 
     View::Report::UnpaidsReport *unpaidsReport = createUnpaidsReport();
 
+    _mdiArea -> addSubWindow(unpaidsReport);
     unpaidsReport -> show();
 }
 
@@ -554,13 +554,6 @@ void View::MainWindow::invoiceHasAddedNewEntity(const Model::Domain::Invoice &in
     //else if(_customerEditor && invoice.entity() -> type() == Model::Domain::CustomerEntity)
     //    _customerEditor -> addEntityFromInvoice(*(invoice.entity()));
 
-}
-
-void View::MainWindow::updateOtherWindows(QObject *object)
-{
-    QWidget *window = qobject_cast<QWidget *>(object);
-    window -> close();
-    _otherWindows.removeAll(window);
 }
 
 void View::MainWindow::createWidgets()
@@ -889,7 +882,7 @@ View::Invoicing::InvoiceEditor *View::MainWindow::findInvoiceEditor(Model::Domai
 {
     foreach(QMdiSubWindow *subWindow, _mdiArea -> subWindowList()) {
         View::Invoicing::InvoiceEditor *editor = qobject_cast<View::Invoicing::InvoiceEditor *>(subWindow -> widget());
-        if(editor -> id() == invoice -> id())
+        if(editor && editor -> id() == invoice -> id())
             return editor;
     }
 
@@ -905,8 +898,6 @@ View::Invoicing::InvoiceSearchResult *View::MainWindow::createInvoiceSearchResul
     View::Invoicing::InvoiceSearchResult *result = new View::Invoicing::InvoiceSearchResult(invoices, type);
 
     connect(result, SIGNAL(loaded(Model::Domain::Invoice*)), this, SLOT(loadInvoice(Model::Domain::Invoice*)));
-    connect(result, SIGNAL(destroyed(QObject*)), this, SLOT(updateOtherWindows(QObject*)));
-    _otherWindows.push_back(result);
 
     return result;
 }
@@ -928,9 +919,6 @@ View::Report::VolumeReport *View::MainWindow::createVolumeReport(Model::Domain::
     View::Report::VolumeReport *volumeReport = new View::Report::VolumeReport(type, reportByDate, reportByEntity,
                                                                               reportByProduct, statistics);
 
-    connect(volumeReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
-    _otherWindows.push_back(volumeReport);
-
     delete invoices;
 
     return volumeReport;
@@ -949,9 +937,6 @@ View::Report::UnpaidsReport *View::MainWindow::createUnpaidsReport()
 
     View::Report::UnpaidsReport *unpaidsReport = new View::Report::UnpaidsReport(buyInvoices, saleInvoices, buyStatistics, saleStatistics);
 
-    connect(unpaidsReport, SIGNAL(destroyed(QObject *)), this, SLOT(updateOtherWindows(QObject *)));
-    _otherWindows.push_back(unpaidsReport);
-
     return unpaidsReport;
 }
 
@@ -962,12 +947,6 @@ void View::MainWindow::closeAllEditors()
 
     if(_businessEditor)
         _businessEditor -> close();
-}
-
-void View::MainWindow::closeOtherWindows()
-{
-    foreach(QWidget *window, _otherWindows)
-        window -> close();
 }
 
 void View::MainWindow::deleteAllEditors()
