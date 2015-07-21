@@ -2,7 +2,10 @@ v0.2.0 :
    - Transition from Qt4 to Qt5
    - Added category filter at product editor.
    - Added a custom editor to product ID at invoice editor. It allows either write product ID or open product selection dialog.
+   - Merged customer, supplier and product/category editors in a simple and multi-tabbed window.
    - Visual enhancements on all editors.
+   - Changed central widget of main window from MDI(Multiple Document Interface) to TDI(Tabbed Document Interface) model.
+   - Invoices, search results and reports belongs to multi-tabbed main window. 
    - Fixed segfault on product dialog when the product hasn't category.
    - Fixed behavior of "add product" button at product editor when not exists any category.
    - Password storage based on SHA1 hash sum.
