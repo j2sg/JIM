@@ -25,6 +25,7 @@
 #include "entity.h"
 #include <QTableView>
 #include <QPushButton>
+#include <QHeaderView>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -106,12 +107,19 @@ void View::Management::EntitySelector::createWidgets()
     _entitiesTableView -> setModel(_entityModel);
     _entitiesTableView -> setAlternatingRowColors(true);
     _entitiesTableView -> setShowGrid(false);
-    _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_ID_WIDTH);
-    _entitiesTableView -> setColumnWidth(ColumnEntityName, COLUMN_ENTITY_NAME_WIDTH);
     _entitiesTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
     _entitiesTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _entitiesTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
     _entitiesTableView -> setFocusPolicy(Qt::NoFocus);
+    _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_ID_WIDTH);
+    _entitiesTableView -> setColumnWidth(ColumnEntityName, COLUMN_ENTITY_NAME_WIDTH);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        _entitiesTableView -> horizontalHeader()-> setResizeMode(QHeaderView::Fixed);
+        _entitiesTableView -> horizontalHeader()-> setResizeMode(ColumnEntityName, QHeaderView::Stretch);
+    #else
+        _entitiesTableView -> horizontalHeader()-> setSectionResizeMode(QHeaderView::Fixed);
+        _entitiesTableView -> horizontalHeader()-> setSectionResizeMode(ColumnEntityName, QHeaderView::Stretch);
+    #endif
 
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout -> addWidget(_entitiesTableView);
