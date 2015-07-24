@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es_ES">
+<TS version="2.1" language="es_ES">
 <context>
     <name>QObject</name>
     <message>
@@ -2027,12 +2027,12 @@ are you sure you wish to close the business?</source>
 <context>
     <name>View::Management::EntitySelector</name>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="93"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="126"/>
         <source>Critical Error</source>
         <translation>Error Crítico</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="94"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="127"/>
         <source>Error during the entity addition</source>
         <translation>Error durante el registro de la entidad</translation>
     </message>
@@ -2041,37 +2041,57 @@ are you sure you wish to close the business?</source>
         <translation type="obsolete">Lista de %1s</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="155"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="213"/>
         <source>Supplier</source>
         <translation>Proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="152"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="210"/>
         <source>Customer</source>
         <translation>Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="119"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="137"/>
+        <source>All</source>
+        <translation>Todos</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/entityselector.cpp" line="138"/>
+        <source>Filter by</source>
+        <translation>Filtrar por</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/entityselector.cpp" line="142"/>
+        <source>name</source>
+        <translation>nombre</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/entityselector.cpp" line="143"/>
+        <source>VATIN</source>
+        <translation>NIF</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/entityselector.cpp" line="177"/>
         <source>List</source>
         <translation>Lista</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="122"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="180"/>
         <source>Create</source>
         <translation>Crear</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="126"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="184"/>
         <source>&amp;Select</source>
         <translation>&amp;Seleccionar</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="131"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="189"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Cancelar</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="158"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="216"/>
         <source>Company</source>
         <translation>Empresa</translation>
     </message>
@@ -2080,7 +2100,7 @@ are you sure you wish to close the business?</source>
         <translation type="obsolete">Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/entityselector.cpp" line="162"/>
+        <location filename="../../src/view/management/entityselector.cpp" line="220"/>
         <source>%1 Selection</source>
         <translation>Selección de %1</translation>
     </message>
