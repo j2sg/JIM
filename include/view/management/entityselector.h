@@ -51,6 +51,8 @@ namespace View
 
         class EntityModel;
 
+        class EntityProxyModel;
+
         class EntitySelector : public QDialog
         {
             Q_OBJECT
@@ -80,6 +82,7 @@ namespace View
             QLineEdit *_lineEdit;
             QTableView *_entitiesTableView;
             EntityModel *_entityModel;
+            EntityProxyModel *_entityProxyModel;
             QPushButton *_createButton;
             QPushButton *_selectButton;
             QPushButton *_cancelButton;

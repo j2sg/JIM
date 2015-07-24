@@ -20,6 +20,7 @@
 
 #include "entityselector.h"
 #include "entitymodel.h"
+#include "entityproxymodel.h"
 #include "entitymanager.h"
 #include "entitydialog.h"
 #include "entity.h"
@@ -82,16 +83,24 @@ void View::Management::EntitySelector::toggleOnRadioButton()
 
     _comboBox -> setEnabled(isChecked);
     _lineEdit -> setEnabled(isChecked);
+
+    if(isChecked)
+        _entityProxyModel -> setFilter(_lineEdit -> text(),
+                                       static_cast<Model::Management::FilterEntityMode>(_comboBox -> itemData(_comboBox -> currentIndex()).toInt()));
+    else
+        _entityProxyModel -> setFilter("");
 }
 
 void View::Management::EntitySelector::currentIndexChangedOnComboBox()
 {
-
+    _entityProxyModel -> setFilter(_lineEdit -> text(),
+                                   static_cast<Model::Management::FilterEntityMode>(_comboBox -> itemData(_comboBox -> currentIndex()).toInt()));
 }
 
 void View::Management::EntitySelector::textChangedOnLineEdit(const QString& text)
 {
-
+    _entityProxyModel -> setFilter(text,
+                                   static_cast<Model::Management::FilterEntityMode>(_comboBox -> itemData(_comboBox -> currentIndex()).toInt()));
 }
 
 void View::Management::EntitySelector::rowSelectionChanged()
@@ -139,7 +148,9 @@ void View::Management::EntitySelector::createWidgets()
 
     _entitiesTableView = new QTableView;
     _entityModel = new EntityModel(Model::Management::EntityManager::getAllByType(_type));
-    _entitiesTableView -> setModel(_entityModel);
+    _entityProxyModel = new EntityProxyModel;
+    _entityProxyModel -> setSourceModel(_entityModel);
+    _entitiesTableView -> setModel(_entityProxyModel);
     _entitiesTableView -> setAlternatingRowColors(true);
     _entitiesTableView -> setShowGrid(false);
     _entitiesTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
