@@ -22,11 +22,12 @@
 #include "entitymodel.h"
 #include "entity.h"
 
-void View::Management::EntityProxyModel::setFilter(const QString& filter)
+void View::Management::EntityProxyModel::setFilter(const QString& filter, Model::Management::FilterEntityMode mode)
 {
     beginResetModel();
 
     _filter = filter;
+    _mode = mode;
 
     endResetModel();
 }
@@ -34,15 +35,6 @@ void View::Management::EntityProxyModel::setFilter(const QString& filter)
 const QString &View::Management::EntityProxyModel::filter()
 {
     return _filter;
-}
-
-void View::Management::EntityProxyModel::setMode(Model::Management::FilterEntityMode mode)
-{
-    beginResetModel();
-
-    _mode = mode;
-
-    endResetModel();
 }
 
 Model::Management::FilterEntityMode View::Management::EntityProxyModel::mode()
@@ -58,8 +50,8 @@ bool View::Management::EntityProxyModel::filterAcceptsRow(int source_row, const 
         return true;
 
     EntityModel *entityModel = dynamic_cast<EntityModel *>(sourceModel());
-    Model::Domain::Entity *entityFilter = entityModel->entities()->at(source_row);
+    Model::Domain::Entity *entityFilter = entityModel -> entities() -> at(source_row);
 
     return (_mode == Model::Management::FilterEntityByName && entityFilter -> name().contains(_filter, Qt::CaseInsensitive)) ||
-           (_mode == Model::Management::FilterEntityByVATIN && entityFilter -> vatin().contains(_filter, Qt::CaseInsensitive));
+           (_mode == Model::Management::FilterEntityByVATIN && entityFilter -> vatin() == _filter);
 }

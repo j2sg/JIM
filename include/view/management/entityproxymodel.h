@@ -37,9 +37,8 @@ namespace View
                              Model::Management::FilterEntityMode mode = Model::Management::FilterEntityByName,
                              QObject *parent = 0)
                 : QSortFilterProxyModel(parent), _filter(filter), _mode(mode) {}
-            void setFilter(const QString& filter);
+            void setFilter(const QString& filter, Model::Management::FilterEntityMode mode = Model::Management::FilterEntityByName);
             const QString &filter();
-            void setMode(Model::Management::FilterEntityMode mode);
             Model::Management::FilterEntityMode mode();
         protected:
             bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;

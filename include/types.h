@@ -209,8 +209,8 @@ namespace Model
     {
         typedef enum FilterEntityModeEnum
         {
-        FilterEntityByName = 0x00,
-        FilterEntityByVATIN = 0x01
+            FilterEntityByName = 0x00,
+            FilterEntityByVATIN = 0x01
         } FilterEntityMode;
 
 
