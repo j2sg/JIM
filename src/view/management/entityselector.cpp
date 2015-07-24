@@ -23,9 +23,14 @@
 #include "entitymanager.h"
 #include "entitydialog.h"
 #include "entity.h"
+#include "types.h"
+#include <QRadioButton>
+#include <QComboBox>
+#include <QLineEdit>
 #include <QTableView>
 #include <QPushButton>
 #include <QHeaderView>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -71,6 +76,24 @@ bool View::Management::EntitySelector::created() const
     return _created;
 }
 
+void View::Management::EntitySelector::toggleOnRadioButton()
+{
+    bool isChecked = _filterByRadioButton -> isChecked();
+
+    _comboBox -> setEnabled(isChecked);
+    _lineEdit -> setEnabled(isChecked);
+}
+
+void View::Management::EntitySelector::currentIndexChangedOnComboBox()
+{
+
+}
+
+void View::Management::EntitySelector::textChangedOnLineEdit(const QString& text)
+{
+
+}
+
 void View::Management::EntitySelector::rowSelectionChanged()
 {
     int row = _entitiesTableView -> currentIndex().row();
@@ -102,6 +125,18 @@ void View::Management::EntitySelector::createEntity()
 
 void View::Management::EntitySelector::createWidgets()
 {
+    _allRadioButton = new QRadioButton(tr("All"));
+    _filterByRadioButton = new QRadioButton(tr("Filter by"));
+    _allRadioButton -> setChecked(true);
+
+    _comboBox = new QComboBox;
+    _comboBox -> addItem(tr("name"), Model::Management::FilterEntityByName);
+    _comboBox -> addItem(tr("VATIN"), Model::Management::FilterEntityByVATIN);
+    _comboBox -> setEnabled(false);
+
+    _lineEdit = new QLineEdit;
+    _lineEdit -> setEnabled(false);
+
     _entitiesTableView = new QTableView;
     _entityModel = new EntityModel(Model::Management::EntityManager::getAllByType(_type));
     _entitiesTableView -> setModel(_entityModel);
@@ -121,8 +156,12 @@ void View::Management::EntitySelector::createWidgets()
         _entitiesTableView -> horizontalHeader()-> setSectionResizeMode(ColumnEntityName, QHeaderView::Stretch);
     #endif
 
-    QHBoxLayout *topLayout = new QHBoxLayout;
-    topLayout -> addWidget(_entitiesTableView);
+    QGridLayout *topLayout = new QGridLayout;
+    topLayout -> addWidget(_allRadioButton, 0, 0, 1, 2);
+    topLayout -> addWidget(_filterByRadioButton, 1, 0, 1, 2);
+    topLayout -> addWidget(_comboBox, 1, 2, 1, 1);
+    topLayout -> addWidget(_lineEdit, 1, 3, 1, 3);
+    topLayout -> addWidget(_entitiesTableView, 2, 0, 1, 6);
 
     QGroupBox *entitiesGroupBox = new QGroupBox(tr("List"));
     entitiesGroupBox -> setLayout(topLayout);
@@ -191,6 +230,14 @@ void View::Management::EntitySelector::setIcon()
 
 void View::Management::EntitySelector::createConnections()
 {
+    connect(_allRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(toggleOnRadioButton()));
+    connect(_filterByRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(toggleOnRadioButton()));
+    connect(_comboBox, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(currentIndexChangedOnComboBox()));
+    connect(_lineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(textChangedOnLineEdit(QString)));
     connect(_entitiesTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(rowSelectionChanged()));
     connect(_entitiesTableView, SIGNAL(doubleClicked(QModelIndex)),

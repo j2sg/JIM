@@ -29,6 +29,9 @@
 #define COLUMN_ENTITY_NAME_WIDTH 250
 
 QT_BEGIN_NAMESPACE
+class QRadioButton;
+class QComboBox;
+class QLineEdit;
 class QTableView;
 class QPushButton;
 QT_END_NAMESPACE
@@ -60,6 +63,9 @@ namespace View
             Model::Domain::Entity *entity() const;
             bool created() const;
         private slots:
+            void toggleOnRadioButton();
+            void currentIndexChangedOnComboBox();
+            void textChangedOnLineEdit(const QString& text);
             void rowSelectionChanged();
             void createEntity();
         private:
@@ -68,6 +74,10 @@ namespace View
             void setIcon();
             void createConnections();
 
+            QRadioButton *_allRadioButton;
+            QRadioButton *_filterByRadioButton;
+            QComboBox *_comboBox;
+            QLineEdit *_lineEdit;
             QTableView *_entitiesTableView;
             EntityModel *_entityModel;
             QPushButton *_createButton;
