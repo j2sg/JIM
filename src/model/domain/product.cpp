@@ -115,6 +115,27 @@ Model::Domain::PriceType Model::Domain::Product::priceType() const
     return _priceType;
 }
 
+void Model::Domain::Product::setDiscount(double discount)
+{
+    _discount = discount;
+}
+
+double Model::Domain::Product::discount() const
+{
+    return _discount;
+}
+
+void Model::Domain::Product::setDiscountType(DiscountType discountType)
+{
+    _discountType = discountType;
+}
+
+Model::Domain::DiscountType Model::Domain::Product::discountType() const
+{
+    return _discountType;
+}
+
+
 void Model::Domain::Product::setDescription(const QString &description)
 {
     _description = description;

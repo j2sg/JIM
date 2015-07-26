@@ -54,6 +54,10 @@ namespace Model
             double price() const;
             void setPriceType(PriceType priceType);
             PriceType priceType() const;
+            void setDiscount(double discount);
+            double discount() const;
+            void setDiscountType(DiscountType discountType);
+            DiscountType discountType() const;
             void setDescription(const QString &description);
             const QString &description() const;
         private:
@@ -62,6 +66,8 @@ namespace Model
             Category *_category;
             double _price;
             PriceType _priceType;
+            double _discount;
+            DiscountType _discountType;
             QString _description;
         };
     }

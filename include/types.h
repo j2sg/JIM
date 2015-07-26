@@ -162,6 +162,12 @@ namespace Model
             Weight
         } PriceType;
 
+        typedef enum DiscountTypeEnum
+        {
+            Percent,
+            Amount
+        } DiscountType;
+
         typedef enum PaymentTypeEnum
         {
             Cash,
