@@ -36,9 +36,9 @@ namespace Model
         {
             friend std::ostream &operator<<(std::ostream &os, const Product &product);
         public:
-            Product(int id = NO_ID, const QString &name = QString(),
-                    Category *category = 0, double price = 0.0,
-                    PriceType priceType = Units);
+            Product(int id = NO_ID, const QString &name = QString(), Category *category = 0,
+                    double price = 0.0, PriceType priceType = Units,
+                    double discount = 0.0, DiscountType discountType = Amount);
             Product(const Product &product);
             ~Product();
             Product &operator=(const Product &product);

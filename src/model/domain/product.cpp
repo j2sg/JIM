@@ -21,10 +21,11 @@
 #include "product.h"
 #include "category.h"
 
-Model::Domain::Product::Product(int id, const QString &name,
-                                Category *category, double price,
-                                PriceType priceType)
-    : _id(id), _name(name), _category(category), _price(price), _priceType(priceType)
+Model::Domain::Product::Product(int id, const QString &name, Category *category,
+                                double price, PriceType priceType,
+                                double discount, DiscountType discountType)
+    : _id(id), _name(name), _category(category), _price(price), _priceType(priceType),
+      _discount(discount), _discountType(discountType)
 {
     _description = QString();
 }
@@ -47,6 +48,8 @@ Model::Domain::Product &Model::Domain::Product::operator=(const Product &product
     _category = (product._category) ? new Category(*product._category) : 0;
     _price = product._price;
     _priceType = product._priceType;
+    _discount = product._discount;
+    _discountType = product._discountType;
     _description = product._description;
 
     return *this;
