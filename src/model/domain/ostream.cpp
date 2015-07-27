@@ -78,6 +78,8 @@ std::ostream &Model::Domain::operator<<(std::ostream &os, const Invoice &invoice
 
     os << invoice._paid                << std::endl
        << invoice._payment             << std::endl
+       << invoice._discount            << std::endl
+       << invoice._discountType        << std::endl
        << invoice._notes.toStdString() << std::endl;
 
     return os;
@@ -85,11 +87,13 @@ std::ostream &Model::Domain::operator<<(std::ostream &os, const Invoice &invoice
 
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Operation &operation)
 {
-    return os << operation._id       << std::endl
-              << *operation._product << std::endl
-              << operation._quantity << std::endl
-              << operation._weight   << std::endl
-              << operation._price    << std::endl;
+    return os << operation._id           << std::endl
+              << *operation._product     << std::endl
+              << operation._quantity     << std::endl
+              << operation._weight       << std::endl
+              << operation._price        << std::endl
+              << operation._discount     << std::endl
+              << operation._discountType << std::endl;
 }
 
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Product &product)
@@ -99,6 +103,8 @@ std::ostream &Model::Domain::operator<<(std::ostream &os, const Product &product
               << *product._category                 << std::endl
               << product._price                     << std::endl
               << product._priceType                 << std::endl
+              << product._discount                  << std::endl
+              << product._discountType              << std::endl
               << product._description.toStdString() << std::endl;
 }
 
