@@ -36,7 +36,8 @@ namespace Model
             friend std::ostream &operator<<(std::ostream &os, const Operation &operation);
         public:
             Operation(int id = NO_ID, Product *product = 0, int quantity = 0,
-                      double weight = 0.0, double price = 0.0);
+                      double weight = 0.0, double price = 0.0,
+                      double discount = 0.0, DiscountType discountType = Amount);
             Operation(const Operation &operation);
             ~Operation();
             Operation &operator=(const Operation &operation);
@@ -52,6 +53,10 @@ namespace Model
             double weight() const;
             void setPrice(double price);
             double price() const;
+            void setDiscount(double discount);
+            double discount() const;
+            void setDiscountType(DiscountType discountType);
+            DiscountType discountType() const;
             double total() const;
             bool isValid() const;
         private:
@@ -60,6 +65,8 @@ namespace Model
             int _quantity;
             double _weight;
             double _price;
+            double _discount;
+            DiscountType _discountType;
         };
     }
 }

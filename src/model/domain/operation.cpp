@@ -21,11 +21,14 @@
 #include "operation.h"
 #include "product.h"
 
-Model::Domain::Operation::Operation(int id, Product *product, int quantity, double weight, double price)
-    : _id(id), _product(product), _quantity(quantity), _weight(weight), _price(price)
+Model::Domain::Operation::Operation(int id, Product *product, int quantity, double weight, double price, double discount, DiscountType discountType)
+    : _id(id), _product(product), _quantity(quantity), _weight(weight), _price(price), _discount(discount), _discountType(discountType)
 {
-    if(_product)
+    if(_product) {
         _price = _product -> price();
+        _discount = _product -> discount();
+        _discountType = _product -> discountType();
+    }
 }
 
 Model::Domain::Operation::Operation(const Operation &operation)
@@ -46,6 +49,8 @@ Model::Domain::Operation &Model::Domain::Operation::operator=(const Operation &o
     _quantity = operation._quantity;
     _weight = operation._weight;
     _price = operation._price;
+    _discount = operation._discount;
+    _discountType = operation._discountType;
 
     return *this;
 }
@@ -116,12 +121,39 @@ double Model::Domain::Operation::price() const
     return _price;
 }
 
+void Model::Domain::Operation::setDiscount(double discount)
+{
+    _discount = discount;
+}
+
+double Model::Domain::Operation::discount() const
+{
+    return _discount;
+}
+
+void Model::Domain::Operation::setDiscountType(DiscountType discountType)
+{
+    _discountType = discountType;
+}
+
+Model::Domain::DiscountType Model::Domain::Operation::discountType() const
+{
+    return _discountType;
+}
+
 double Model::Domain::Operation::total() const
 {
     if(!isValid())
         return 0.0;
 
-    return ((_product -> priceType() == Units) ? _quantity : _weight) * _price;
+    double res = ((_product -> priceType() == Units) ? _quantity : _weight) * _price;
+
+    if(_discountType == Amount)
+        res -= _discount;
+    else
+        res *= (1 - _discount / 100.0);
+
+    return res;
 }
 
 bool Model::Domain::Operation::isValid() const
