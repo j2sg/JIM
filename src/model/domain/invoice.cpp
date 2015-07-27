@@ -239,7 +239,7 @@ void Model::Domain::Invoice::setDiscountType(DiscountType discountType)
     _discountType = discountType;
 }
 
-DiscountType Model::Domain::Invoice::discountType() const
+Model::Domain::DiscountType Model::Domain::Invoice::discountType() const
 {
     return _discountType;
 }
