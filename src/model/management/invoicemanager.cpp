@@ -32,7 +32,7 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("INSERT INTO invoice VALUES(%1, %2, %3, %4, %5, %6, '%7',"
-                          "'%8', %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, '%19')")
+                          "'%8', %9, %10, %11, %12, %13, %14, %15, %16, %17, %18, %19, %20, '%21')")
                       .arg(invoice.id())
                       .arg(static_cast<int>(invoice.type()))
                       .arg(invoice.company() -> id())
@@ -51,6 +51,8 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
                       .arg(invoice.tax(Model::Domain::PIT).value())
                       .arg(invoice.paid())
                       .arg(static_cast<int>(invoice.payment()))
+                      .arg(invoice.discount())
+                      .arg(static_cast<int>(invoice.discountType()))
                       .arg(invoice.notes());
 
     bool invoiceInserted = agent -> insert(sql);
@@ -68,7 +70,7 @@ bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &inv
     QString sql = QString("UPDATE invoice SET entityId=%4, entityType=%5, date='%6', place='%7', "
                           "taxOnInvoice=%8, generalVat=%9, reducedVat=%10, superReducedVat=%11, "
                           "generalEs=%12, reducedEs=%13, superReducedEs=%14, pit=%15, paid=%16, "
-                          "payment=%17, notes='%18' WHERE id=%1 AND type=%2 AND companyId=%3")
+                          "payment=%17, discount=%18, discountType=%19, notes='%20' WHERE id=%1 AND type=%2 AND companyId=%3")
                       .arg(invoice.id())
                       .arg(static_cast<int>(invoice.type()))
                       .arg(invoice.company() -> id())
@@ -86,6 +88,8 @@ bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &inv
                       .arg(invoice.tax(Model::Domain::PIT).value())
                       .arg(invoice.paid())
                       .arg(static_cast<int>(invoice.payment()))
+                      .arg(invoice.discount())
+                      .arg(static_cast<int>(invoice.discountType()))
                       .arg(invoice.notes());
 
     bool invoiceUpdated = agent -> update(sql);
@@ -119,25 +123,28 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Do
     Model::Domain::Invoice *invoice = 0;
 
     if(!(result -> isEmpty())) {
-        Model::Domain::Entity *company   = CompanyManager::get(companyId);
-        Model::Domain::Entity *entity       = EntityManager::get((result -> at(0)).at(4).toInt(),
-                                                                 static_cast<Model::Domain::EntityType>(
-                                                                     (result -> at(0)).at(5).toInt()));
-        QDate date                          = QDate::fromString((result -> at(0)).at(6).toString(), DATE_FORMAT);
-        QString place                       = (result -> at(0)).at(7).toString();
-        Model::Domain::TaxFlag taxOnInvoice = static_cast<Model::Domain::TaxFlag>(
-                                                 (result -> at(0)).at(8).toInt());
-        double generalVat                   = (result -> at(0)).at(9).toDouble();
-        double reducedVat                   = (result -> at(0)).at(10).toDouble();
-        double superReducedVat              = (result -> at(0)).at(11).toDouble();
-        double generalEs                    = (result -> at(0)).at(12).toDouble();
-        double reducedEs                    = (result -> at(0)).at(13).toDouble();
-        double superReducedEs               = (result -> at(0)).at(14).toDouble();
-        double pit                          = (result -> at(0)).at(15).toDouble();
-        bool paid                           = (result -> at(0)).at(16).toBool();
-        Model::Domain::PaymentType payment  = static_cast<Model::Domain::PaymentType>(
-                                                 (result -> at(0)).at(17).toInt());
-        QString notes                       = (result -> at(0)).at(18).toString();
+        Model::Domain::Entity *company           = CompanyManager::get(companyId);
+        Model::Domain::Entity *entity            = EntityManager::get((result -> at(0)).at(4).toInt(),
+                                                                       static_cast<Model::Domain::EntityType>(
+                                                                           (result -> at(0)).at(5).toInt()));
+        QDate date                               = QDate::fromString((result -> at(0)).at(6).toString(), DATE_FORMAT);
+        QString place                            = (result -> at(0)).at(7).toString();
+        Model::Domain::TaxFlag taxOnInvoice      = static_cast<Model::Domain::TaxFlag>(
+                                                       (result -> at(0)).at(8).toInt());
+        double generalVat                        = (result -> at(0)).at(9).toDouble();
+        double reducedVat                        = (result -> at(0)).at(10).toDouble();
+        double superReducedVat                   = (result -> at(0)).at(11).toDouble();
+        double generalEs                         = (result -> at(0)).at(12).toDouble();
+        double reducedEs                         = (result -> at(0)).at(13).toDouble();
+        double superReducedEs                    = (result -> at(0)).at(14).toDouble();
+        double pit                               = (result -> at(0)).at(15).toDouble();
+        bool paid                                = (result -> at(0)).at(16).toBool();
+        Model::Domain::PaymentType payment       = static_cast<Model::Domain::PaymentType>(
+                                                       (result -> at(0)).at(17).toInt());
+        double discount                          = (result -> at(0)).at(18).toDouble();
+        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(
+                                                       (result -> at(0)).at(19).toInt());
+        QString notes                            = (result -> at(0)).at(20).toString();
 
         invoice = new Model::Domain::Invoice(company, id, type);
         invoice -> setEntity(entity);
@@ -154,6 +161,8 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Do
         invoice -> setTax(Model::Domain::Tax(Model::Domain::PIT, pit));
         invoice -> setPaid(paid);
         invoice -> setPayment(payment);
+        invoice -> setDiscount(discount);
+        invoice -> setDiscountType(discountType);
         invoice -> setNotes(notes);
     }
 
@@ -172,24 +181,27 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
     QList<Model::Domain::Invoice *> *invoices = new QList<Model::Domain::Invoice *>;
 
     foreach(QVector<QVariant> row, *result) {
-        int id                              = row.at(0).toInt();
-        Model::Domain::Entity *company     = CompanyManager::get(companyId);
-        Model::Domain::Entity *entity       = EntityManager::get(row.at(4).toInt(),
-                                                                 static_cast<Model::Domain::EntityType>(
-                                                                     row.at(5).toInt()));
-        QDate date                          = QDate::fromString(row.at(6).toString(), DATE_FORMAT);
-        QString place                       = row.at(7).toString();
-        Model::Domain::TaxFlag taxOnInvoice = static_cast<Model::Domain::TaxFlag>(row.at(8).toInt());
-        double generalVat                   = row.at(9).toDouble();
-        double reducedVat                   = row.at(10).toDouble();
-        double superReducedVat              = row.at(11).toDouble();
-        double generalEs                    = row.at(12).toDouble();
-        double reducedEs                    = row.at(13).toDouble();
-        double superReducedEs               = row.at(14).toDouble();
-        double pit                          = row.at(15).toDouble();
-        bool paid                           = row.at(16).toBool();
-        Model::Domain::PaymentType payment  = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
-        QString notes                       = row.at(18).toString();
+        int id                                   = row.at(0).toInt();
+        Model::Domain::Entity *company           = CompanyManager::get(companyId);
+        Model::Domain::Entity *entity            = EntityManager::get(row.at(4).toInt(),
+                                                                      static_cast<Model::Domain::EntityType>(
+                                                                          row.at(5).toInt()));
+        QDate date                               = QDate::fromString(row.at(6).toString(), DATE_FORMAT);
+        QString place                            = row.at(7).toString();
+        Model::Domain::TaxFlag taxOnInvoice      = static_cast<Model::Domain::TaxFlag>(row.at(8).toInt());
+        double generalVat                        = row.at(9).toDouble();
+        double reducedVat                        = row.at(10).toDouble();
+        double superReducedVat                   = row.at(11).toDouble();
+        double generalEs                         = row.at(12).toDouble();
+        double reducedEs                         = row.at(13).toDouble();
+        double superReducedEs                    = row.at(14).toDouble();
+        double pit                               = row.at(15).toDouble();
+        bool paid                                = row.at(16).toBool();
+        Model::Domain::PaymentType payment       = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
+        double discount                          = (result -> at(0)).at(18).toDouble();
+        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(
+                                                       (result -> at(0)).at(19).toInt());
+        QString notes                            = row.at(20).toString();
 
         Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, id, type);
         invoice -> setEntity(entity);
@@ -206,6 +218,8 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
         invoice -> setTax(Model::Domain::Tax(Model::Domain::PIT, pit));
         invoice -> setPaid(paid);
         invoice -> setPayment(payment);
+        invoice -> setDiscount(discount);
+        invoice -> setDiscountType(discountType);
         invoice -> setNotes(notes);
 
         invoices -> push_back(invoice);
@@ -254,24 +268,27 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
     QList<Model::Domain::Invoice *> *invoices = new QList<Model::Domain::Invoice *>;
 
     foreach(QVector<QVariant> row, *result) {
-        int id                              = row.at(0).toInt();
-        Model::Domain::Entity *company     = CompanyManager::get(companyId);
-        Model::Domain::Entity *entity       = EntityManager::get(row.at(4).toInt(),
-                                                                 static_cast<Model::Domain::EntityType>(
-                                                                     row.at(5).toInt()));
-        QDate date                          = QDate::fromString(row.at(6).toString(), DATE_FORMAT);
-        QString place                       = row.at(7).toString();
-        Model::Domain::TaxFlag taxOnInvoice = static_cast<Model::Domain::TaxFlag>(row.at(8).toInt());
-        double generalVat                   = row.at(9).toDouble();
-        double reducedVat                   = row.at(10).toDouble();
-        double superReducedVat              = row.at(11).toDouble();
-        double generalEs                    = row.at(12).toDouble();
-        double reducedEs                    = row.at(13).toDouble();
-        double superReducedEs               = row.at(14).toDouble();
-        double pit                          = row.at(15).toDouble();
-        bool paid                           = row.at(16).toBool();
-        Model::Domain::PaymentType payment  = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
-        QString notes                       = row.at(18).toString();
+        int id                                   = row.at(0).toInt();
+        Model::Domain::Entity *company           = CompanyManager::get(companyId);
+        Model::Domain::Entity *entity            = EntityManager::get(row.at(4).toInt(),
+                                                                      static_cast<Model::Domain::EntityType>(
+                                                                          row.at(5).toInt()));
+        QDate date                               = QDate::fromString(row.at(6).toString(), DATE_FORMAT);
+        QString place                            = row.at(7).toString();
+        Model::Domain::TaxFlag taxOnInvoice      = static_cast<Model::Domain::TaxFlag>(row.at(8).toInt());
+        double generalVat                        = row.at(9).toDouble();
+        double reducedVat                        = row.at(10).toDouble();
+        double superReducedVat                   = row.at(11).toDouble();
+        double generalEs                         = row.at(12).toDouble();
+        double reducedEs                         = row.at(13).toDouble();
+        double superReducedEs                    = row.at(14).toDouble();
+        double pit                               = row.at(15).toDouble();
+        bool paid                                = row.at(16).toBool();
+        Model::Domain::PaymentType payment       = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
+        double discount                          = (result -> at(0)).at(18).toDouble();
+        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(
+                                                       (result -> at(0)).at(19).toInt());
+        QString notes                            = row.at(20).toString();
 
         Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, id, type);
         invoice -> setEntity(entity);
@@ -288,6 +305,8 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
         invoice -> setTax(Model::Domain::Tax(Model::Domain::PIT, pit));
         invoice -> setPaid(paid);
         invoice -> setPayment(payment);
+        invoice -> setDiscount(discount);
+        invoice -> setDiscountType(discountType);
         invoice -> setNotes(notes);
 
         bool correct = true;
