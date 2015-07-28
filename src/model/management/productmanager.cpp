@@ -26,13 +26,15 @@
 bool Model::Management::ProductManager::create(const Model::Domain::Product &product)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("INSERT INTO product VALUES(%1, '%2', '%3', %4, %5, %6)")
+    QString sql = QString("INSERT INTO product VALUES(%1, '%2', '%3', %4, %5, %6, %7, %8)")
                       .arg(product.id())
                       .arg(product.name())
                       .arg(product.description())
                       .arg(product.category() -> id())
                       .arg(product.price())
-                      .arg(static_cast<int>(product.priceType()));
+                      .arg(static_cast<int>(product.priceType()))
+                      .arg(product.discount())
+                      .arg(static_cast<int>(product.discountType()));
 
     return agent -> insert(sql);
 }
@@ -41,13 +43,15 @@ bool Model::Management::ProductManager::modify(const Model::Domain::Product &pro
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("UPDATE product SET name='%2', description='%3', category=%4, "
-                          "price=%5, pricetype=%6 WHERE id=%1")
+                          "price=%5, pricetype=%6, discount=%7, discountType=%8 WHERE id=%1")
                       .arg(product.id())
                       .arg(product.name())
                       .arg(product.description())
                       .arg(product.category() -> id())
                       .arg(product.price())
-                      .arg(static_cast<int>(product.priceType()));
+                      .arg(static_cast<int>(product.priceType()))
+                      .arg(product.discount())
+                      .arg(static_cast<int>(product.discountType()));
 
     return agent -> update(sql);
 }
@@ -68,14 +72,17 @@ Model::Domain::Product *Model::Management::ProductManager::get(int id)
     Model::Domain::Product *product = 0;
 
     if(!(result -> isEmpty())) {
-        QString name                       = (result -> at(0)).at(1).toString();
-        QString description                = (result -> at(0)).at(2).toString();
-        Model::Domain::Category *category  = CategoryManager::get((result -> at(0)).at(3).toInt());
-        double price                       = (result -> at(0)).at(4).toDouble();
-        Model::Domain::PriceType priceType = static_cast<Model::Domain::PriceType>(
-                                                 (result -> at(0)).at(5).toInt());
+        QString name                             = (result -> at(0)).at(1).toString();
+        QString description                      = (result -> at(0)).at(2).toString();
+        Model::Domain::Category *category        = CategoryManager::get((result -> at(0)).at(3).toInt());
+        double price                             = (result -> at(0)).at(4).toDouble();
+        Model::Domain::PriceType priceType       = static_cast<Model::Domain::PriceType>(
+                                                       (result -> at(0)).at(5).toInt());
+        double discount                          = (result -> at(0)).at(6).toDouble();
+        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(
+                                                       (result -> at(0)).at(7).toInt());
 
-        product = new Model::Domain::Product(id, name, category, price, priceType);
+        product = new Model::Domain::Product(id, name, category, price, priceType, discount, discountType);
         product -> setDescription(description);
     }
 
@@ -92,14 +99,16 @@ QList<Model::Domain::Product *> *Model::Management::ProductManager::getAll()
     QList<Model::Domain::Product *> *products = new QList<Model::Domain::Product *>;
 
     foreach(QVector<QVariant> row, *result) {
-        int id                             = row.at(0).toInt();
-        QString name                       = row.at(1).toString();
-        QString description                = row.at(2).toString();
-        Model::Domain::Category *category  = CategoryManager::get(row.at(3).toInt());
-        double price                       = row.at(4).toDouble();
-        Model::Domain::PriceType priceType = static_cast<Model::Domain::PriceType>(row.at(5).toInt());
+        int id                                   = row.at(0).toInt();
+        QString name                             = row.at(1).toString();
+        QString description                      = row.at(2).toString();
+        Model::Domain::Category *category        = CategoryManager::get(row.at(3).toInt());
+        double price                             = row.at(4).toDouble();
+        Model::Domain::PriceType priceType       = static_cast<Model::Domain::PriceType>(row.at(5).toInt());
+        double discount                          = (result -> at(0)).at(6).toDouble();
+        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>((result -> at(0)).at(7).toInt());
 
-        Model::Domain::Product *product = new Model::Domain::Product(id, name, category, price, priceType);
+        Model::Domain::Product *product = new Model::Domain::Product(id, name, category, price, priceType, discount, discountType);
         product -> setDescription(description);
 
         products -> push_back(product);
