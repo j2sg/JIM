@@ -60,6 +60,8 @@ CREATE TABLE IF NOT EXISTS invoice (
    pit             REAL    CONSTRAINT invoice_general_pit_def_ct DEFAULT 0.0,
    paid            INTEGER CONSTRAINT invoice_paid_nn_ct NOT NULL,
    payment         INTEGER CONSTRAINT invoice_payment_nn_ct NOT NULL,
+   discount        REAL,
+   discountType    INTEGER CONSTRAINT invoice_discount_type_def_ct DEFAULT 0,
    notes           TEXT,
    CONSTRAINT invoice_pk_ct                    PRIMARY KEY(id, type, companyId, companyType),
    CONSTRAINT invoice_type_chk_ct              CHECK(type=0 OR type=1),
@@ -79,7 +81,9 @@ CREATE TABLE IF NOT EXISTS invoice (
    CONSTRAINT invoice_super_reduced_es_chk_ct  CHECK(superReducedEs>=0.0 AND superReducedEs<=100.0),
    CONSTRAINT invoice_pit_chk_ct               CHECK(pit>=0.0 AND pit<=100.0),
    CONSTRAINT invoice_paid_chk_ct              CHECK(paid=0 OR paid=1),
-   CONSTRAINT invoice_payment_chk_ct           CHECK(payment=0 OR payment=1 OR payment=2)
+   CONSTRAINT invoice_payment_chk_ct           CHECK(payment=0 OR payment=1 OR payment=2),
+   CONSTRAINT invoice_discount_chk_ct          CHECK(discount>=0.0),
+   CONSTRAINT invoice_discount_type_chk_ct     CHECK(discountType=0 OR discountType=1)
 );
 
 CREATE TABLE IF NOT EXISTS tax (
@@ -106,31 +110,37 @@ CREATE TABLE IF NOT EXISTS category (
 );
 
 CREATE TABLE IF NOT EXISTS product (
-   id          INTEGER,
-   name        TEXT    CONSTRAINT product_name_nn_ct NOT NULL,
-   description TEXT,
-   category    INTEGER CONSTRAINT product_category_nn_ct NOT NULL,
-   price       REAL    CONSTRAINT product_price_nn_ct NOT NULL,
-   priceType   INTEGER CONSTRAINT product_price_type_nn_ct NOT NULL,
+   id           INTEGER,
+   name         TEXT    CONSTRAINT product_name_nn_ct NOT NULL,
+   description  TEXT,
+   category     INTEGER CONSTRAINT product_category_nn_ct NOT NULL,
+   price        REAL    CONSTRAINT product_price_nn_ct NOT NULL,
+   priceType    INTEGER CONSTRAINT product_price_type_nn_ct NOT NULL,
+   discount     REAL,
+   discountType INTEGER CONSTRAINT product_discount_type_def_ct DEFAULT 0,
    CONSTRAINT product_pk_ct             PRIMARY KEY(id),
    CONSTRAINT product_category_fk_ct    FOREIGN KEY(category)
                                         REFERENCES category(id)
                                             ON UPDATE CASCADE
                                             ON DELETE CASCADE,
    CONSTRAINT product_price_chk_ct      CHECK(price>=0.0),
-   CONSTRAINT product_price_type_chk_ct CHECK(priceType=0 OR priceType=1)
+   CONSTRAINT product_price_type_chk_ct CHECK(priceType=0 OR priceType=1),
+   CONSTRAINT product_discount_chk_ct      CHECK(discount>=0.0),
+   CONSTRAINT product_discount_type_chk_ct CHECK(discountType=0 OR discountType=1)
 );
 
 CREATE TABLE IF NOT EXISTS operation (
    id           INTEGER,
    invoiceId    INTEGER,
    invoiceType  INTEGER,
-   companyId   INTEGER,
-   companyType INTEGER CONSTRAINT operation_company_type_def_ct DEFAULT 2,
+   companyId    INTEGER,
+   companyType  INTEGER CONSTRAINT operation_company_type_def_ct DEFAULT 2,
    product      INTEGER,
    quantity     INTEGER,
    weight       REAL,
    price        REAL    CONSTRAINT operation_price_nn_ct NOT NULL,
+   discount     REAL,
+   discountType INTEGER CONSTRAINT operation_discount_type_def_ct DEFAULT 0,
    CONSTRAINT operation_pk_ct           PRIMARY KEY(id, invoiceId, invoiceType, companyId, companyType),
    CONSTRAINT operation_invoice_fk_ct   FOREIGN KEY(invoiceId, invoiceType, companyId, companyType)
                                         REFERENCES invoice(id, type, companyId, companyType)
@@ -142,7 +152,9 @@ CREATE TABLE IF NOT EXISTS operation (
                                             ON DELETE CASCADE,
    CONSTRAINT operation_quantity_chk_ct CHECK(quantity>=0),
    CONSTRAINT operation_weight_chk_ct   CHECK(weight>=0.0),
-   CONSTRAINT operation_price_chk_ct    CHECK(price>=0.0)
+   CONSTRAINT operation_price_chk_ct    CHECK(price>=0.0),
+   CONSTRAINT operation_discount_chk_ct      CHECK(discount>=0.0),
+   CONSTRAINT operation_discount_type_chk_ct CHECK(discountType=0 OR discountType=1)
 );
 
 CREATE VIEW IF NOT EXISTS unpaids AS
