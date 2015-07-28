@@ -28,7 +28,7 @@ bool Model::Management::OperationManager::createAll(QList<Model::Domain::Operati
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
 
     foreach(Model::Domain::Operation *operation, *operations) {
-        QString sql = QString("INSERT INTO operation VALUES(%1, %2, %3, %4, %5, %6, %7, %8, %9)")
+        QString sql = QString("INSERT INTO operation VALUES(%1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11)")
                   .arg(operation -> id())
                   .arg(invoiceId)
                   .arg(static_cast<int>(invoiceType))
@@ -37,7 +37,9 @@ bool Model::Management::OperationManager::createAll(QList<Model::Domain::Operati
                   .arg(operation -> product() -> id())
                   .arg(operation -> quantity())
                   .arg(operation -> weight())
-                  .arg(operation -> price());
+                  .arg(operation -> price())
+                  .arg(operation -> discount())
+                  .arg(static_cast<int>(operation -> discountType()));
 
         if(!(agent -> insert(sql)))
             return false;
@@ -64,7 +66,7 @@ QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllBy
                                                                                       int companyId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("SELECT id, product, quantity, weight, price\n"
+    QString sql = QString("SELECT id, product, quantity, weight, price, discount, discountType\n"
                               "FROM operation\n"
                               "WHERE invoiceId=%1 AND invoiceType=%2 AND companyId=%3")
                       .arg(invoiceId)
@@ -74,13 +76,15 @@ QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllBy
     QList<Model::Domain::Operation *> *operations = new QList<Model::Domain::Operation *>;
 
     foreach(QVector<QVariant> row, *result) {
-        int id                          = row.at(0).toInt();
-        Model::Domain::Product *product = ProductManager::get(row.at(1).toInt());
-        int quantity                    = row.at(2).toInt();
-        double weight                   = row.at(3).toDouble();
-        double price                    = row.at(4).toDouble();
+        int id                                   = row.at(0).toInt();
+        Model::Domain::Product *product          = ProductManager::get(row.at(1).toInt());
+        int quantity                             = row.at(2).toInt();
+        double weight                            = row.at(3).toDouble();
+        double price                             = row.at(4).toDouble();
+        double discount                          = row.at(5).toDouble();
+        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(row.at(6).toInt());
 
-        operations -> push_back(new Model::Domain::Operation(id, product, quantity, weight, price));
+        operations -> push_back(new Model::Domain::Operation(id, product, quantity, weight, price, discount, discountType));
     }
 
     delete result;
@@ -91,7 +95,7 @@ QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllBy
 QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllByProduct(int productId)
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
-    QString sql = QString("SELECT id, quantity, weight, price\n"
+    QString sql = QString("SELECT id, quantity, weight, price, discount, discountType\n"
                               "FROM operation\n"
                               "WHERE product=%1").arg(productId);
     QVector<QVector<QVariant> > *result = agent -> select(sql);
@@ -99,12 +103,14 @@ QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllBy
     Model::Domain::Product *product = ProductManager::get(productId);
 
     foreach(QVector<QVariant> row, *result) {
-        int id        = row.at(0).toInt();
-        int quantity  = row.at(1).toInt();
-        double weight = row.at(2).toDouble();
-        double price  = row.at(3).toDouble();
+        int id                                   = row.at(0).toInt();
+        int quantity                             = row.at(1).toInt();
+        double weight                            = row.at(2).toDouble();
+        double price                             = row.at(3).toDouble();
+        double discount                          = row.at(4).toDouble();
+        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(row.at(5).toInt());
 
-        operations -> push_back(new Model::Domain::Operation(id, new Model::Domain::Product(*product), quantity, weight, price));
+        operations -> push_back(new Model::Domain::Operation(id, new Model::Domain::Product(*product), quantity, weight, price, discount, discountType));
     }
 
     delete result;
