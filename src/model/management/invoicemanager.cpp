@@ -198,9 +198,9 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
         double pit                               = row.at(15).toDouble();
         bool paid                                = row.at(16).toBool();
         Model::Domain::PaymentType payment       = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
-        double discount                          = (result -> at(0)).at(18).toDouble();
+        double discount                          = row.at(18).toDouble();
         Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(
-                                                       (result -> at(0)).at(19).toInt());
+                                                       row.at(19).toInt());
         QString notes                            = row.at(20).toString();
 
         Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, id, type);
@@ -285,9 +285,9 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
         double pit                               = row.at(15).toDouble();
         bool paid                                = row.at(16).toBool();
         Model::Domain::PaymentType payment       = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
-        double discount                          = (result -> at(0)).at(18).toDouble();
+        double discount                          = row.at(18).toDouble();
         Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(
-                                                       (result -> at(0)).at(19).toInt());
+                                                       row.at(19).toInt());
         QString notes                            = row.at(20).toString();
 
         Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, id, type);
