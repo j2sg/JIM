@@ -134,7 +134,8 @@ void View::Management::ProductDialog::createWidgets()
 
     _priceTypeLabel = new QLabel(tr("&Type:"));
     _priceTypeComboBox = new QComboBox;
-    _priceTypeComboBox -> addItems(QStringList() << tr("Units") << tr("Weight"));
+    _priceTypeComboBox -> addItem(tr("Units"), Model::Domain::Units);
+    _priceTypeComboBox -> addItem(tr("Weight"), Model::Domain::Weight);
     _priceTypeLabel -> setBuddy(_priceTypeComboBox);
 
     _discountLabel = new QLabel(tr("&Discount:"));
@@ -247,8 +248,8 @@ void View::Management::ProductDialog::saveProduct()
     _product -> setCategory(Model::Management::CategoryManager::get(Model::Management::CategoryManager::getAllNames().value(_categoryComboBox -> currentText())));
     _product -> setDescription(_descriptionTextEdit -> toPlainText());
     _product -> setPrice(_priceLineEdit -> text().toDouble());
-    _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> currentIndex()));
-    _product -> setDiscount(_discountDoubleSpinBox->value());
+    _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> currentData().toInt()));
+    _product -> setDiscount(_discountDoubleSpinBox -> value());
     _product -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt()));
 }
 
