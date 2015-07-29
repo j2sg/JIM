@@ -1,0 +1,2 @@
+CREATE VIEW IF NOT EXISTS unpaids AS
+   SELECT * FROM invoice WHERE paid=0;

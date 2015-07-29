@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS entity (
+   id        INTEGER,
+   type      INTEGER,
+   vatin     TEXT,
+   name      TEXT    CONSTRAINT entity_name_nn_ct NOT NULL,
+   country   TEXT,
+   province  TEXT,
+   city      TEXT,
+   address   TEXT,
+   pc        TEXT,
+   telephone INTEGER,
+   mobile    INTEGER,
+   fax       INTEGER,
+   email     TEXT,
+   web       TEXT,
+   notes     TEXT,
+   taxOnSale INTEGER CONSTRAINT entity_tax_on_sale_def_ct DEFAULT 7,
+   taxOnBuy  INTEGER CONSTRAINT entity_tax_on_buy_def_ct DEFAULT 7,
+   CONSTRAINT entity_pk_ct  PRIMARY KEY(id, type),
+   CONSTRAINT entity_chk_ct CHECK(type=0 OR type=1 OR type=2),
+   CONSTRAINT entity_unq_ct UNIQUE(vatin)
+);

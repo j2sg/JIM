@@ -195,7 +195,6 @@ TRANSLATIONS += resources/translations/jim_es.ts
 
 OTHER_FILES += \
     doc/about.txt \
-    sql/sqlite.sql \
     THANKS \
     README \
     LICENSE \

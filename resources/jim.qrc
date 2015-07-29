@@ -30,6 +30,14 @@
         <file>images/export.png</file>
         <file>images/import.png</file>
         <file>images/jim.png</file>
+        <file>sql/sqlite/category.sql</file>
+        <file>sql/sqlite/config.sql</file>
+        <file>sql/sqlite/entity.sql</file>
+        <file>sql/sqlite/invoice.sql</file>
+        <file>sql/sqlite/operation.sql</file>
+        <file>sql/sqlite/product.sql</file>
+        <file>sql/sqlite/tax.sql</file>
+        <file>sql/sqlite/views.sql</file>
         <file>translations/jim_es.qm</file>
     </qresource>
 </RCC>
