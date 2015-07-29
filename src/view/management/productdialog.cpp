@@ -29,6 +29,7 @@
 #include <QCheckBox>
 #include <QTextEdit>
 #include <QComboBox>
+#include <QDoubleSpinBox>
 #include <QPushButton>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -71,6 +72,39 @@ void View::Management::ProductDialog::productModified(bool modified)
     _saveButton -> setEnabled(isSaveable() && modified);
 }
 
+void View::Management::ProductDialog::textChangedOnPriceLineEdit(const QString text)
+{
+    bool priceOK = !text.isEmpty() && text.toDouble() != 0;
+
+    _discountDoubleSpinBox -> setEnabled(priceOK);
+    _discountTypeComboBox -> setEnabled(priceOK);
+
+    if(priceOK) {
+        Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
+
+        if(type == Model::Domain::Amount) {
+            _discountDoubleSpinBox -> setMaximum(text.toDouble());
+            _discountDoubleSpinBox -> setSuffix(" €");
+        } else {
+            _discountDoubleSpinBox -> setMaximum(100.0);
+            _discountDoubleSpinBox -> setSuffix(" %");
+        }
+    }
+}
+
+void View::Management::ProductDialog::currentIndexChangedOnDiscountTypeComboBox()
+{
+    Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox->currentData().toInt());
+
+    if(type == Model::Domain::Amount) {
+        _discountDoubleSpinBox -> setMaximum(_priceLineEdit -> text().toDouble());
+        _discountDoubleSpinBox -> setSuffix(" €");
+    } else {
+        _discountDoubleSpinBox -> setMaximum(100.0);
+        _discountDoubleSpinBox -> setSuffix(" %");
+    }
+}
+
 void View::Management::ProductDialog::createWidgets()
 {
     _idLabel = new QLabel(tr("&Id:"));
@@ -103,6 +137,19 @@ void View::Management::ProductDialog::createWidgets()
     _priceTypeComboBox -> addItems(QStringList() << tr("Units") << tr("Weight"));
     _priceTypeLabel -> setBuddy(_priceTypeComboBox);
 
+    _discountLabel = new QLabel(tr("&Discount:"));
+    _discountDoubleSpinBox = new QDoubleSpinBox;
+    _discountDoubleSpinBox -> setSuffix(" €");
+    _discountDoubleSpinBox -> setEnabled(false);
+    _discountLabel -> setBuddy(_discountDoubleSpinBox);
+
+    _discountTypeLabel = new QLabel(tr("T&ype:"));
+    _discountTypeComboBox = new QComboBox;
+    _discountTypeComboBox -> addItem(tr("Amount"), Model::Domain::Amount);
+    _discountTypeComboBox -> addItem(tr("Percent"), Model::Domain::Percent);
+    _discountTypeComboBox -> setEnabled(false);
+    _discountTypeLabel -> setBuddy(_discountTypeComboBox);
+
     QGridLayout *topLayout = new QGridLayout;
     topLayout -> addWidget(_idLabel, 0, 0, 1, 1);
     topLayout -> addWidget(_idLineEdit, 0, 1, 1, 1);
@@ -117,6 +164,10 @@ void View::Management::ProductDialog::createWidgets()
     topLayout -> addWidget(_priceLineEdit, 5, 1, 1, 1);
     topLayout -> addWidget(_priceTypeLabel, 5, 2, 1, 1);
     topLayout -> addWidget(_priceTypeComboBox, 5, 3, 1, 1);
+    topLayout -> addWidget(_discountLabel, 6, 0, 1, 1);
+    topLayout -> addWidget(_discountDoubleSpinBox, 6, 1, 1, 1);
+    topLayout -> addWidget(_discountTypeLabel, 6, 2, 1, 1);
+    topLayout -> addWidget(_discountTypeComboBox, 6, 3, 1, 1);
 
     _saveButton = new QPushButton(tr("&Save"));
     _saveButton -> setIcon(QIcon(":/images/save.png"));
@@ -155,8 +206,12 @@ void View::Management::ProductDialog::createConnections()
             this, SLOT(productModified()));
     connect(_priceLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(productModified()));
+    connect(_priceLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(textChangedOnPriceLineEdit(QString)));
     connect(_priceTypeComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(productModified()));
+    connect(_discountTypeComboBox, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(currentIndexChangedOnDiscountTypeComboBox()));
     connect(_saveButton, SIGNAL(clicked()),
             this, SLOT(accept()));
     connect(_cancelButton, SIGNAL(clicked()),
@@ -178,6 +233,10 @@ void View::Management::ProductDialog::loadProduct()
     _descriptionTextEdit -> setPlainText(_product -> description());
     _priceLineEdit -> setText(QString::number(_product -> price(),'f', precisionMoney));
     _priceTypeComboBox -> setCurrentIndex(static_cast<int>(_product -> priceType()));
+    _discountDoubleSpinBox -> setValue(_product -> discount());
+    _discountDoubleSpinBox -> setEnabled(_product -> price() != 0);
+    _discountTypeComboBox -> setCurrentIndex(static_cast<int>(_product -> discountType()));
+    _discountTypeComboBox -> setEnabled(_product -> price() != 0);
     productModified(false);
 }
 
@@ -189,6 +248,8 @@ void View::Management::ProductDialog::saveProduct()
     _product -> setDescription(_descriptionTextEdit -> toPlainText());
     _product -> setPrice(_priceLineEdit -> text().toDouble());
     _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> currentIndex()));
+    _product -> setDiscount(_discountDoubleSpinBox->value());
+    _product -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt()));
 }
 
 bool View::Management::ProductDialog::isSaveable()

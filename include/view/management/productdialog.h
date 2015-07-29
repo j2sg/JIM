@@ -29,6 +29,7 @@ class QLineEdit;
 class QCheckBox;
 class QTextEdit;
 class QComboBox;
+class QDoubleSpinBox;
 class QPushButton;
 QT_END_NAMESPACE
 
@@ -54,6 +55,8 @@ namespace View
             void stateChangedOnAutoIdCheckBox();
             void updateId();
             void productModified(bool modified = true);
+            void textChangedOnPriceLineEdit(const QString text);
+            void currentIndexChangedOnDiscountTypeComboBox();
         private:
             void createWidgets();
             void createConnections();
@@ -74,6 +77,10 @@ namespace View
             QLineEdit *_priceLineEdit;
             QLabel *_priceTypeLabel;
             QComboBox *_priceTypeComboBox;
+            QLabel *_discountLabel;
+            QDoubleSpinBox *_discountDoubleSpinBox;
+            QLabel *_discountTypeLabel;
+            QComboBox *_discountTypeComboBox;
             QPushButton *_saveButton;
             QPushButton *_cancelButton;
             Model::Domain::Product *_product;
