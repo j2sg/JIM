@@ -24,6 +24,7 @@
 #include <QSettings>
 #include <QFile>
 #include <QDir>
+#include <QTextStream>
 
 bool Persistence::Manager::existsConfig()
 {
@@ -174,142 +175,58 @@ bool Persistence::Manager::createSQLiteSchema()
 {
     SQLAgent *agent = SQLAgent::instance();
 
+    QFile entityFile(":/sql/sqlite/entity.sql");
+    QFile invoiceFile(":/sql/sqlite/invoice.sql");
+    QFile taxFile(":/sql/sqlite/tax.sql");
+    QFile categoryFile(":/sql/sqlite/category.sql");
+    QFile productFile(":/sql/sqlite/product.sql");
+    QFile operationFile(":/sql/sqlite/operation.sql");
+    QFile viewsFile(":/sql/sqlite/views.sql");
+
     if(!agent -> connect())
         return false;
 
-    bool entity = agent -> create("CREATE TABLE IF NOT EXISTS entity (\n"
-                                  "    id        INTEGER,\n"
-                                  "    type      INTEGER,\n"
-                                  "    vatin     TEXT,\n"
-                                  "    name      TEXT    CONSTRAINT entity_name_nn_ct NOT NULL,\n"
-                                  "    country   TEXT,\n"
-                                  "    province  TEXT,\n"
-                                  "    city      TEXT,\n"
-                                  "    address   TEXT,\n"
-                                  "    pc        TEXT,\n"
-                                  "    telephone INTEGER,\n"
-                                  "    mobile    INTEGER,\n"
-                                  "    fax       INTEGER,\n"
-                                  "    email     TEXT,\n"
-                                  "    web       TEXT,\n"
-                                  "    notes     TEXT,\n"
-                                  "    taxOnSale INTEGER CONSTRAINT entity_tax_on_sale_def_ct DEFAULT 7,\n"
-                                  "    taxOnBuy  INTEGER CONSTRAINT entity_tax_on_buy_def_ct DEFAULT 7,\n"
-                                  "    CONSTRAINT entity_pk_ct  PRIMARY KEY(id, type),\n"
-                                  "    CONSTRAINT entity_chk_ct CHECK(type=0 OR type=1 OR type=2),\n"
-                                  "    CONSTRAINT entity_unq_ct UNIQUE(vatin)\n"
-                                  ")");
+    if(!entityFile.open(QIODevice::ReadOnly))
+        return false;
 
-    bool invoice = agent -> create("CREATE TABLE IF NOT EXISTS invoice (\n"
-                                   "    id              INTEGER,\n"
-                                   "    type            INTEGER,\n"
-                                   "    companyId      INTEGER,\n"
-                                   "    companyType    INTEGER CONSTRAINT invoice_company_type_def_ct DEFAULT 2,\n"
-                                   "    entityId        INTEGER CONSTRAINT invoice_entity_id_nn_ct NOT NULL,\n"
-                                   "    entityType      INTEGER CONSTRAINT invoice_entity_type_nn_ct NOT NULL,\n"
-                                   "    date            TEXT    CONSTRAINT invoice_date_nn_ct NOT NULL,\n"
-                                   "    place           TEXT,\n"
-                                   "    taxOnInvoice    INTEGER CONSTRAINT invoice_tax_on_invoice_nn_ct NOT NULL,\n"
-                                   "    generalVat      REAL    CONSTRAINT invoice_general_vat_def_ct DEFAULT 0.0,\n"
-                                   "    reducedVat      REAL    CONSTRAINT invoice_reduced_vat_def_ct DEFAULT 0.0,\n"
-                                   "    superReducedVat REAL    CONSTRAINT invoice_super_reduced_vat_def_ct DEFAULT 0.0,\n"
-                                   "    generalEs       REAL    CONSTRAINT invoice_general_es_def_ct DEFAULT 0.0,\n"
-                                   "    reducedEs       REAL    CONSTRAINT invoice_reduced_es_def_ct DEFAULT 0.0,\n"
-                                   "    superReducedEs  REAL    CONSTRAINT invoice_super_reduced_es_def_ct DEFAULT 0.0,\n"
-                                   "    pit             REAL    CONSTRAINT invoice_general_pit_def_ct DEFAULT 0.0,\n"
-                                   "    paid            INTEGER CONSTRAINT invoice_paid_nn_ct NOT NULL,\n"
-                                   "    payment         INTEGER CONSTRAINT invoice_payment_nn_ct NOT NULL,\n"
-                                   "    notes           TEXT,\n"
-                                   "    CONSTRAINT invoice_pk_ct                    PRIMARY KEY(id, type, companyId, companyType),\n"
-                                   "    CONSTRAINT invoice_type_chk_ct              CHECK(type=0 OR type=1),\n"
-                                   "    CONSTRAINT invoice_company_fk_ct           FOREIGN KEY(companyId, companyType)\n"
-                                   "                                                REFERENCES entity(id, type)\n"
-                                   "                                                    ON UPDATE CASCADE\n"
-                                   "                                                    ON DELETE CASCADE,\n"
-                                   "    CONSTRAINT invoice_entity_fk_ct             FOREIGN KEY(entityId, entityType)\n"
-                                   "                                                REFERENCES entity(id, type)\n"
-                                   "                                                    ON UPDATE CASCADE\n"
-                                   "                                                    ON DELETE CASCADE,\n"
-                                   "    CONSTRAINT invoice_general_vat_chk_ct       CHECK(generalVat>=0.0 AND generalVat<=100.0),\n"
-                                   "    CONSTRAINT invoice_reduced_vat_chk_ct       CHECK(reducedVat>=0.0 AND reducedVat<=100.0),\n"
-                                   "    CONSTRAINT invoice_super_reduced_vat_chk_ct CHECK(superReducedVat>=0.0 AND superReducedVat<=100.0),\n"
-                                   "    CONSTRAINT invoice_general_es_chk_ct        CHECK(generalEs>=0.0 AND generalEs<=100.0),\n"
-                                   "    CONSTRAINT invoice_reduced_es_chk_ct        CHECK(reducedEs>=0.0 AND reducedEs<=100.0),\n"
-                                   "    CONSTRAINT invoice_super_reduced_es_chk_ct  CHECK(superReducedEs>=0.0 AND superReducedEs<=100.0),\n"
-                                   "    CONSTRAINT invoice_pit_chk_ct               CHECK(pit>=0.0 AND pit<=100.0),\n"
-                                   "    CONSTRAINT invoice_paid_chk_ct              CHECK(paid=0 OR paid=1),\n"
-                                   "    CONSTRAINT invoice_payment_chk_ct           CHECK(payment=0 OR payment=1 OR payment=2)\n"
-                                   ")");
+    if(!invoiceFile.open(QIODevice::ReadOnly))
+        return false;
 
-    bool tax = agent -> create("CREATE TABLE IF NOT EXISTS tax (\n"
-                               "    type         INTEGER,\n"
-                               "    companyId   INTEGER,\n"
-                               "    companyType INTEGER CONSTRAINT tax_company_type_def_ct DEFAULT 2,\n"
-                               "    value        REAL    CONSTRAINT tax_value_nn_ct NOT NULL,\n"
-                               "    CONSTRAINT tax_pk_ct          PRIMARY KEY(type, companyId, companyType),\n"
-                               "    CONSTRAINT tax_company_fk_ct FOREIGN KEY(companyId, companyType)\n"
-                               "                                  REFERENCES entity(id, type)\n"
-                               "                                      ON UPDATE CASCADE\n"
-                               "                                      ON DELETE CASCADE,\n"
-                               "    CONSTRAINT tax_type_chk_ct    CHECK(type=0 OR type=1 OR type=2 OR type=3 OR type=4 OR type=5 OR type=6),\n"
-                               "    CONSTRAINT tax_value_chk_ct   CHECK(value>=0.0 AND value<=100.0)"
-                               ")");
+    if(!taxFile.open(QIODevice::ReadOnly))
+        return false;
 
-    bool category = agent -> create("CREATE TABLE IF NOT EXISTS category (\n"
-                                    "    id          INTEGER,\n"
-                                    "    name        TEXT    CONSTRAINT category_name_nn_ct NOT NULL,\n"
-                                    "    vatType     INTEGER CONSTRAINT category_vat_type_nn_ct NOT NULL,\n"
-                                    "    description TEXT,\n"
-                                    "    CONSTRAINT category_pk_ct           PRIMARY KEY(id),\n"
-                                    "    CONSTRAINT category_vat_type_chk_ct CHECK(vatType=0 OR vatType=1 OR vatType=2)\n"
-                                    ")");
+    if(!categoryFile.open(QIODevice::ReadOnly))
+        return false;
 
-    bool product = agent -> create("CREATE TABLE IF NOT EXISTS product (\n"
-                                   "    id          INTEGER,\n"
-                                   "    name        TEXT    CONSTRAINT product_name_nn_ct NOT NULL,\n"
-                                   "    description TEXT,\n"
-                                   "    category    INTEGER CONSTRAINT product_category_nn_ct NOT NULL,\n"
-                                   "    price       REAL    CONSTRAINT product_price_nn_ct NOT NULL,\n"
-                                   "    priceType   INTEGER CONSTRAINT product_price_type_nn_ct NOT NULL,\n"
-                                   "    CONSTRAINT product_pk_ct             PRIMARY KEY(id),\n"
-                                   "    CONSTRAINT product_category_fk_ct    FOREIGN KEY(category)\n"
-                                   "                                         REFERENCES category(id)\n"
-                                   "                                             ON UPDATE CASCADE\n"
-                                   "                                             ON DELETE CASCADE,\n"
-                                   "    CONSTRAINT product_price_chk_ct      CHECK(price>=0.0),\n"
-                                   "    CONSTRAINT product_price_type_chk_ct CHECK(priceType=0 OR priceType=1)\n"
-                                   ")");
+    if(!productFile.open(QIODevice::ReadOnly))
+        return false;
 
-    bool operation = agent -> create("CREATE TABLE IF NOT EXISTS operation (\n"
-                                     "    id           INTEGER,\n"
-                                     "    invoiceId    INTEGER,\n"
-                                     "    invoiceType  INTEGER,\n"
-                                     "    companyId   INTEGER,\n"
-                                     "    companyType INTEGER CONSTRAINT operation_company_type_def_ct DEFAULT 2,\n"
-                                     "    product      INTEGER,\n"
-                                     "    quantity     INTEGER,\n"
-                                     "    weight       REAL,\n"
-                                     "    price        REAL    CONSTRAINT operation_price_nn_ct NOT NULL,\n"
-                                     "    CONSTRAINT operation_pk_ct           PRIMARY KEY(id, invoiceId, invoiceType, companyId, companyType),\n"
-                                     "    CONSTRAINT operation_invoice_fk_ct   FOREIGN KEY(invoiceId, invoiceType, companyId, companyType)\n"
-                                     "                                         REFERENCES invoice(id, type, companyId, companyType)\n"
-                                     "                                             ON UPDATE CASCADE\n"
-                                     "                                             ON DELETE CASCADE,\n"
-                                     "    CONSTRAINT operation_product_fk_ct   FOREIGN KEY(product)\n"
-                                     "                                         REFERENCES product(id)\n"
-                                     "                                             ON UPDATE CASCADE\n"
-                                     "                                             ON DELETE CASCADE,\n"
-                                     "    CONSTRAINT operation_quantity_chk_ct CHECK(quantity>=0),\n"
-                                     "    CONSTRAINT operation_weight_chk_ct   CHECK(weight>=0.0),\n"
-                                     "    CONSTRAINT operation_price_chk_ct    CHECK(price>=0.0)\n"
-                                     ")");
+    if(!operationFile.open(QIODevice::ReadOnly))
+        return false;
 
-    bool unpaids = agent -> create("CREATE VIEW IF NOT EXISTS unpaids AS\n"
-                                   "    SELECT * FROM invoice WHERE paid=0");
+    if(!viewsFile.open(QIODevice::ReadOnly))
+        return false;
+
+    QTextStream entityStream(&entityFile);
+    QTextStream invoiceStream(&invoiceFile);
+    QTextStream taxStream(&taxFile);
+    QTextStream categoryStream(&categoryFile);
+    QTextStream productStream(&productFile);
+    QTextStream operationStream(&operationFile);
+    QTextStream viewsStream(&viewsFile);
+
+    bool createTableEntity = agent -> create(entityStream.readAll());
+    bool createTableInvoice = agent -> create(invoiceStream.readAll());
+    bool createTableTax = agent -> create(taxStream.readAll());
+    bool createTableCategory = agent -> create(categoryStream.readAll());
+    bool createTableProduct = agent -> create(productStream.readAll());
+    bool createTableOperation = agent -> create(operationStream.readAll());
+    bool createViews = agent -> create(viewsStream.readAll());
 
     agent -> disconnect();
 
-    return entity && invoice && tax && category && product && operation && unpaids;
+    return createTableEntity && createTableInvoice && createTableTax && createTableCategory &&
+           createTableProduct && createTableOperation && createViews;
 }
 
 bool Persistence::Manager::connectStorage()
@@ -318,9 +235,17 @@ bool Persistence::Manager::connectStorage()
 
     try {
         Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+
         switch(static_cast<DBMSType>(readConfig("Type", "Storage").toInt())) {
         case SQLITE:
-            ok = agent -> connect() && agent -> create("PRAGMA foreign_keys=ON;");
+            QFile configFile(":/sql/sqlite/config.sql");
+
+            if(!configFile.open(QIODevice::ReadOnly))
+                return false;
+
+            QTextStream configStream(&configFile);
+
+            ok = agent -> connect() && agent -> create(configStream.readAll());
             break;
         }
     } catch(Persistence::SQLAgentException sqlException) {}
