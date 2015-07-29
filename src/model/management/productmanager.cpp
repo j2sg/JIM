@@ -105,8 +105,8 @@ QList<Model::Domain::Product *> *Model::Management::ProductManager::getAll()
         Model::Domain::Category *category        = CategoryManager::get(row.at(3).toInt());
         double price                             = row.at(4).toDouble();
         Model::Domain::PriceType priceType       = static_cast<Model::Domain::PriceType>(row.at(5).toInt());
-        double discount                          = (result -> at(0)).at(6).toDouble();
-        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>((result -> at(0)).at(7).toInt());
+        double discount                          = row.at(6).toDouble();
+        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(row.at(7).toInt());
 
         Model::Domain::Product *product = new Model::Domain::Product(id, name, category, price, priceType, discount, discountType);
         product -> setDescription(description);
