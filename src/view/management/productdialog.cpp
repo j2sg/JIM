@@ -146,8 +146,8 @@ void View::Management::ProductDialog::createWidgets()
 
     _discountTypeLabel = new QLabel(tr("T&ype:"));
     _discountTypeComboBox = new QComboBox;
-    _discountTypeComboBox -> addItem(tr("Amount"), Model::Domain::Amount);
     _discountTypeComboBox -> addItem(tr("Percent"), Model::Domain::Percent);
+    _discountTypeComboBox -> addItem(tr("Amount"), Model::Domain::Amount);
     _discountTypeComboBox -> setEnabled(false);
     _discountTypeLabel -> setBuddy(_discountTypeComboBox);
 
