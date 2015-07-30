@@ -146,8 +146,9 @@ void View::Management::CategoryDialog::createConnections()
 void View::Management::CategoryDialog::loadCategory()
 {
     updateId();
-    _idLineEdit -> setEnabled(!IS_NEW(_category -> id()));
+    _idLineEdit -> setEnabled(IS_NEW(_category -> id()));
     _autoIdCheckBox -> setChecked(IS_NEW(_category -> id()));
+    _autoIdCheckBox -> setEnabled(IS_NEW(_category -> id()));
     _nameLineEdit -> setText(_category -> name());
     _descriptionTextEdit -> setPlainText(_category -> description());
     _vatTypeComboBox -> setCurrentIndex(static_cast<int>(_category -> vatType()));

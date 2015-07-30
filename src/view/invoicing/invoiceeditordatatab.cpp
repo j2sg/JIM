@@ -53,9 +53,10 @@ View::Invoicing::InvoiceEditorDataTab::InvoiceEditorDataTab(Model::Domain::Invoi
 
 void View::Invoicing::InvoiceEditorDataTab::loadInvoice()
 {
-    _idLineEdit -> setEnabled(!IS_NEW(_invoice -> id()));
-    _autoIdCheckBox -> setChecked(IS_NEW(_invoice -> id()));
     updateId();
+    _idLineEdit -> setEnabled(IS_NEW(_invoice -> id()));
+    _autoIdCheckBox -> setChecked(IS_NEW(_invoice -> id()));
+    _autoIdCheckBox -> setEnabled(IS_NEW(_invoice -> id()));
     _dateDateEdit -> setDate(_invoice -> date());
     _placeLineEdit -> setText(_invoice -> place());
     _entityIdLineEdit -> setText((_invoice -> entity() ? QString::number(_invoice -> entity() -> id()) : ""));

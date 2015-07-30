@@ -228,8 +228,9 @@ void View::Management::ProductDialog::loadProduct()
     int precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
 
     updateId();
-    _idLineEdit -> setEnabled(!IS_NEW(_product -> id()));
+    _idLineEdit -> setEnabled(IS_NEW(_product -> id()));
     _autoIdCheckBox -> setChecked(IS_NEW(_product -> id()));
+    _autoIdCheckBox -> setEnabled(IS_NEW(_product -> id()));
     _nameLineEdit -> setText(_product -> name());
 
     if(_product->category())
