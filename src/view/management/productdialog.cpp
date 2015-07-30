@@ -125,7 +125,7 @@ void View::Management::ProductDialog::createWidgets()
     _descriptionLabel = new QLabel(tr("&Description:"));
     _descriptionTextEdit = new QTextEdit;
     _descriptionLabel -> setBuddy(_descriptionTextEdit);
-    _descriptionTextEdit->setMaximumHeight(50);
+    _descriptionTextEdit -> setMaximumHeight(50);
 
     _priceLabel = new QLabel(tr("&Price:"));
     _priceLineEdit = new QLineEdit;
@@ -210,6 +210,10 @@ void View::Management::ProductDialog::createConnections()
     connect(_priceLineEdit, SIGNAL(textChanged(QString)),
             this, SLOT(textChangedOnPriceLineEdit(QString)));
     connect(_priceTypeComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(productModified()));
+    connect(_discountDoubleSpinBox, SIGNAL(valueChanged(double)),
+            this, SLOT(productModified()));
+    connect(_discountTypeComboBox, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(productModified()));
     connect(_discountTypeComboBox, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(currentIndexChangedOnDiscountTypeComboBox()));
