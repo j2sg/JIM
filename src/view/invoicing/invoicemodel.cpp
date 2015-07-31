@@ -111,13 +111,13 @@ QVariant View::Invoicing::InvoiceModel::data(const QModelIndex &index, int role)
             Model::Domain::Invoice *invoice = _invoices -> at(index.row());
             switch(index.column()) {
             case ColumnInvoiceId:
-                return QString::number(invoice -> id());
+                return invoice -> id();
             case ColumnInvoiceDate:
                 return invoice -> date().toString(DATE_FORMAT);
             case ColumnInvoiceEntityName:
                 return invoice -> entity() -> name();
             case ColumnInvoiceOperations:
-                return QString::number(invoice -> operations() -> size());
+                return invoice -> operations() -> size();
             case ColumnInvoiceTotal:
                 return QString::number(invoice -> total(), 'f', _precision);
             case ColumnInvoiceState:
