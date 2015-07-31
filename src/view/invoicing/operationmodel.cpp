@@ -73,17 +73,17 @@ QVariant View::Invoicing::OperationModel::data(const QModelIndex &index, int rol
             Model::Domain::Product *product = operation -> product();
             switch(index.column()) {
             case ColumnOperationId:
-                return product ? QString::number(product -> id()) : "";
+                return product ? product -> id() : QVariant();
             case ColumnOperationName:
-                return product ? product -> name() : "";
+                return product ? product -> name() : QVariant();
             case ColumnOperationQuantity:
-                return QString::number(operation -> quantity());
+                return operation -> quantity();
             case ColumnOperationWeight:
                 return QString::number(operation -> weight(), 'f', _precisionWeight);
             case ColumnOperationPrice:
                 return QString::number(operation -> price(), 'f', _precisionMoney);
             case ColumnOperationDiscountType:
-                return QString::number(static_cast<int>(operation -> discountType()));
+                return static_cast<int>(operation -> discountType());
             case ColumnOperationDiscount:
                 return QString::number(operation -> discount(), 'f', _precisionMoney);
             case ColumnOperationTotal:
