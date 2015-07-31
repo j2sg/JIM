@@ -107,7 +107,7 @@ QVariant View::Management::EntityModel::data(const QModelIndex &index, int role)
             Model::Domain::Entity *entity = _entities -> at(index.row());
             switch(index.column()) {
             case ColumnEntityId:
-                return QString::number(entity -> id());
+                return entity -> id();
             case ColumnEntityName:
                 return entity -> name();
             }

@@ -108,7 +108,7 @@ QVariant View::Management::CategoryModel::data(const QModelIndex &index, int rol
             Model::Domain::Category *category = _categories -> at(index.row());
             switch(index.column()) {
             case ColumnCategoryId:
-                return QString::number(category -> id());
+                return category -> id();
             case ColumnCategoryName:
                 return category -> name();
             case ColumnCategoryVat:

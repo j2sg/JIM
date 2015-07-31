@@ -111,7 +111,7 @@ QVariant View::Management::ProductModel::data(const QModelIndex &index, int role
             Model::Domain::Product *product = _products -> at(index.row());
             switch(index.column()) {
             case ColumnProductId:
-                return QString::number(product -> id());
+                return product -> id();
             case ColumnProductName:
                 return product -> name();
             case ColumnProductPrice:
