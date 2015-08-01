@@ -38,7 +38,7 @@ Model::Domain::Invoice::Invoice(Entity *company, int id, InvoiceType type)
     _paid = false;
     _payment = Cash;
     _discount = 0.0;
-    _discountType = Amount;
+    _discountType = NoDiscount;
     _notes = QString();
 }
 

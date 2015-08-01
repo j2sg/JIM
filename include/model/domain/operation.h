@@ -37,7 +37,7 @@ namespace Model
         public:
             Operation(int id = NO_ID, Product *product = 0, int quantity = 0,
                       double weight = 0.0, double price = 0.0,
-                      double discount = 0.0, DiscountType discountType = Amount);
+                      double discount = 0.0, DiscountType discountType = NoDiscount);
             Operation(const Operation &operation);
             ~Operation();
             Operation &operator=(const Operation &operation);

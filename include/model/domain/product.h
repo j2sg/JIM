@@ -38,7 +38,7 @@ namespace Model
         public:
             Product(int id = NO_ID, const QString &name = QString(), Category *category = 0,
                     double price = 0.0, PriceType priceType = Units,
-                    double discount = 0.0, DiscountType discountType = Amount);
+                    double discount = 0.0, DiscountType discountType = NoDiscount);
             Product(const Product &product);
             ~Product();
             Product &operator=(const Product &product);
