@@ -75,13 +75,12 @@ void View::Management::ProductDialog::productModified(bool modified)
 void View::Management::ProductDialog::textChangedOnPriceLineEdit(const QString text)
 {
     bool priceOK = !text.isEmpty() && text.toDouble() != 0;
+    Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox->currentData().toInt());
 
-    _discountDoubleSpinBox -> setEnabled(priceOK);
+    _discountDoubleSpinBox -> setEnabled(priceOK && type != Model::Domain::NoDiscount);
     _discountTypeComboBox -> setEnabled(priceOK);
 
-    if(priceOK) {
-        Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
-
+    if(priceOK && type != Model::Domain::NoDiscount) {
         if(type == Model::Domain::Amount) {
             _discountDoubleSpinBox -> setMaximum(text.toDouble());
             _discountDoubleSpinBox -> setSuffix(" €");
@@ -96,7 +95,11 @@ void View::Management::ProductDialog::currentIndexChangedOnDiscountTypeComboBox(
 {
     Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox->currentData().toInt());
 
-    if(type == Model::Domain::Amount) {
+    _discountDoubleSpinBox -> setEnabled(type != Model::Domain::NoDiscount);
+
+    if(type == Model::Domain::NoDiscount)
+        _discountDoubleSpinBox -> setValue(0.0);
+    else if(type == Model::Domain::Amount) {
         _discountDoubleSpinBox -> setMaximum(_priceLineEdit -> text().toDouble());
         _discountDoubleSpinBox -> setSuffix(" €");
     } else {
@@ -146,6 +149,7 @@ void View::Management::ProductDialog::createWidgets()
 
     _discountTypeLabel = new QLabel(tr("T&ype:"));
     _discountTypeComboBox = new QComboBox;
+    _discountTypeComboBox -> addItem(tr("No Discount"), Model::Domain::NoDiscount);
     _discountTypeComboBox -> addItem(tr("Percent"), Model::Domain::Percent);
     _discountTypeComboBox -> addItem(tr("Amount"), Model::Domain::Amount);
     _discountTypeComboBox -> setEnabled(false);
