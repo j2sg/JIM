@@ -166,8 +166,10 @@ namespace Model
 
         typedef enum DiscountTypeEnum
         {
+            NoDiscount,
             Percent,
-            Amount
+            Amount,
+            Free
         } DiscountType;
 
         typedef enum PaymentTypeEnum
