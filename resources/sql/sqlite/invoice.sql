@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS invoice (
    pit             REAL    CONSTRAINT invoice_general_pit_def_ct DEFAULT 0.0,
    paid            INTEGER CONSTRAINT invoice_paid_nn_ct NOT NULL,
    payment         INTEGER CONSTRAINT invoice_payment_nn_ct NOT NULL,
-   discount        REAL,
+   discount        REAL    CONSTRAINT invoice_discount_def_ct DEFAULT 0.0,
    discountType    INTEGER CONSTRAINT invoice_discount_type_def_ct DEFAULT 0,
    notes           TEXT,
    CONSTRAINT invoice_pk_ct                    PRIMARY KEY(id, type, companyId, companyType),
@@ -40,5 +40,5 @@ CREATE TABLE IF NOT EXISTS invoice (
    CONSTRAINT invoice_paid_chk_ct              CHECK(paid=0 OR paid=1),
    CONSTRAINT invoice_payment_chk_ct           CHECK(payment=0 OR payment=1 OR payment=2),
    CONSTRAINT invoice_discount_chk_ct          CHECK(discount>=0.0),
-   CONSTRAINT invoice_discount_type_chk_ct     CHECK(discountType=0 OR discountType=1)
+   CONSTRAINT invoice_discount_type_chk_ct     CHECK(discountType=0 OR discountType=1 OR discountType=2 OR discountType=3)
 );
