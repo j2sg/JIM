@@ -64,16 +64,16 @@ void View::Invoicing::OperationTable::selectOperationProduct()
         int row = currentIndex().row();
         int id = selector.product() -> id();
         QModelIndex curIndex = currentIndex();
+        QModelIndex nextIndex;
 
         if(voidOperation) {
             model() -> insertRows(row + 1, 1);
             curIndex = INDEX(row + 1, ColumnOperationId);
-        }
+            nextIndex = INDEX(row + 1, ColumnOperationQuantity);
+        } else
+            nextIndex = INDEX(row, ColumnOperationQuantity);
 
         model() -> setData(curIndex, QString::number(id));
-
-        QModelIndex nextIndex = firstEditableIndex(Forward);
-
         setCurrentIndex(nextIndex);
         edit(nextIndex);
     }
