@@ -72,7 +72,7 @@ void View::Invoicing::OperationTable::selectOperationProduct()
 
         model() -> setData(curIndex, QString::number(id));
 
-        QModelIndex nextIndex = INDEX(row + 1, ColumnOperationQuantity);
+        QModelIndex nextIndex = firstEditableIndex(Forward);
 
         setCurrentIndex(nextIndex);
         edit(nextIndex);
