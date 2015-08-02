@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="es_ES">
+<TS version="2.0" language="es_ES">
 <context>
     <name>QObject</name>
     <message>
@@ -98,7 +98,7 @@
     <message>
         <location filename="../../src/printing/printingmanager.cpp" line="114"/>
         <location filename="../../src/printing/printingmanager.cpp" line="141"/>
-        <location filename="../../src/view/invoicing/operationmodel.cpp" line="179"/>
+        <location filename="../../src/view/invoicing/operationmodel.cpp" line="191"/>
         <location filename="../../src/view/management/categorymodel.cpp" line="149"/>
         <location filename="../../src/view/management/entitymodel.cpp" line="130"/>
         <location filename="../../src/view/management/productmodel.cpp" line="136"/>
@@ -125,7 +125,7 @@
     <message>
         <location filename="../../src/printing/printingmanager.cpp" line="140"/>
         <location filename="../../src/view/invoicing/invoicemodel.cpp" line="140"/>
-        <location filename="../../src/view/invoicing/operationmodel.cpp" line="177"/>
+        <location filename="../../src/view/invoicing/operationmodel.cpp" line="189"/>
         <location filename="../../src/view/management/categorymodel.cpp" line="147"/>
         <location filename="../../src/view/management/entitymodel.cpp" line="128"/>
         <location filename="../../src/view/management/productmodel.cpp" line="134"/>
@@ -136,21 +136,21 @@
     </message>
     <message>
         <location filename="../../src/printing/printingmanager.cpp" line="142"/>
-        <location filename="../../src/view/invoicing/operationmodel.cpp" line="181"/>
+        <location filename="../../src/view/invoicing/operationmodel.cpp" line="193"/>
         <location filename="../../src/view/report/volumereportbyproductmodel.cpp" line="102"/>
         <source>Quantity</source>
         <translation>Cantidad</translation>
     </message>
     <message>
         <location filename="../../src/printing/printingmanager.cpp" line="143"/>
-        <location filename="../../src/view/invoicing/operationmodel.cpp" line="183"/>
+        <location filename="../../src/view/invoicing/operationmodel.cpp" line="195"/>
         <location filename="../../src/view/report/volumereportbyproductmodel.cpp" line="104"/>
         <source>Weight</source>
         <translation>Peso</translation>
     </message>
     <message>
         <location filename="../../src/printing/printingmanager.cpp" line="144"/>
-        <location filename="../../src/view/invoicing/operationmodel.cpp" line="185"/>
+        <location filename="../../src/view/invoicing/operationmodel.cpp" line="197"/>
         <location filename="../../src/view/management/productmodel.cpp" line="138"/>
         <source>Price</source>
         <translation>Precio</translation>
@@ -158,7 +158,7 @@
     <message>
         <location filename="../../src/printing/printingmanager.cpp" line="145"/>
         <location filename="../../src/view/invoicing/invoicemodel.cpp" line="148"/>
-        <location filename="../../src/view/invoicing/operationmodel.cpp" line="187"/>
+        <location filename="../../src/view/invoicing/operationmodel.cpp" line="203"/>
         <location filename="../../src/view/report/volumereportbydatemodel.cpp" line="95"/>
         <location filename="../../src/view/report/volumereportbyentitymodel.cpp" line="102"/>
         <source>Total</source>
@@ -260,6 +260,27 @@
         <translation>Super Reducido</translation>
     </message>
     <message>
+        <location filename="../../src/view/invoicing/operationdelegate.cpp" line="43"/>
+        <source>No Discount</source>
+        <translation>Sin Descuento</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/operationdelegate.cpp" line="46"/>
+        <source>Percent</source>
+        <translation>Porcentaje</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/operationdelegate.cpp" line="49"/>
+        <source>Amount</source>
+        <translation>Cantidad</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/operationdelegate.cpp" line="52"/>
+        <source>Free</source>
+        <translation>Gratis</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/operationdelegate.cpp" line="55"/>
         <location filename="../../src/view/management/categorymodel.cpp" line="128"/>
         <source>Unknown</source>
         <translation>Desconocido</translation>
@@ -311,6 +332,16 @@
         <location filename="../../src/view/report/volumereportbyproductmodel.cpp" line="106"/>
         <source>Total (no VAT)</source>
         <translation>Total (sin IVA)</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/operationmodel.cpp" line="199"/>
+        <source>DT</source>
+        <translation>TD</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/operationmodel.cpp" line="201"/>
+        <source>Disc</source>
+        <translation>Desc</translation>
     </message>
 </context>
 <context>
@@ -521,107 +552,107 @@ do you want to save the changes?</source>
 <context>
     <name>View::Invoicing::InvoiceEditorDataTab</name>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="175"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="176"/>
         <source>&amp;Details</source>
         <translation>&amp;Detalles</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="191"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="192"/>
         <source>&amp;Customer</source>
         <translation>&amp;Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="191"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="192"/>
         <source>&amp;Supplier</source>
         <translation>&amp;Proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="200"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="201"/>
         <source>&amp;Operations</source>
         <translation>&amp;Operaciones</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="219"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="220"/>
         <source>&amp;Payment</source>
         <translation>&amp;Pago</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="233"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="234"/>
         <source>&amp;Id:</source>
         <translation>&amp;Id:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="238"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="239"/>
         <source>&amp;Auto</source>
         <translation>&amp;Auto</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="240"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="241"/>
         <source>D&amp;ate:</source>
         <translation>&amp;Fecha:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="245"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="246"/>
         <source>&amp;Place:</source>
         <translation>&amp;Lugar:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="252"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="253"/>
         <source>I&amp;d:</source>
         <translation>I&amp;d:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="257"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="258"/>
         <source>&amp;Name:</source>
         <translation>&amp;Nombre:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="262"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="263"/>
         <source>&amp;VATIN:</source>
         <translation>&amp;NIF:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="267"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="268"/>
         <source>&amp;Select</source>
         <translation>&amp;Seleccionar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="288"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="289"/>
         <source>Subtotal:</source>
         <translation>Subtotal:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="293"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="294"/>
         <source>Taxes:</source>
         <translation>Impuestos:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="298"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="299"/>
         <source>Deduction:</source>
         <translation>Deducción:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="303"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="304"/>
         <source>Total:</source>
         <translation>Total:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="308"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="309"/>
         <source>&amp;Paid</source>
         <translation>&amp;Pagado</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="313"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="314"/>
         <source>Cash</source>
         <translation>Metálico</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="313"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="314"/>
         <source>Card</source>
         <translation>Tarjeta</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="313"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="314"/>
         <source>Transfer</source>
         <translation>Transferencia</translation>
     </message>
@@ -2220,62 +2251,87 @@ are you sure you wish to close the business?</source>
 <context>
     <name>View::Management::ProductDialog</name>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="42"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="43"/>
         <source>Product</source>
         <translation>Producto</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="76"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="113"/>
         <source>&amp;Id:</source>
         <translation>&amp;Id:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="80"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="117"/>
         <source>Auto &amp;Generate</source>
         <translation>Auto &amp;Generar</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="82"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="119"/>
         <source>&amp;Name:</source>
         <translation>&amp;Nombre:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="86"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="123"/>
         <source>&amp;Category:</source>
         <translation>&amp;Categoría:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="91"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="128"/>
         <source>&amp;Description:</source>
         <translation>&amp;Descripción:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="96"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="133"/>
         <source>&amp;Price:</source>
         <translation>&amp;Precio:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="101"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="138"/>
         <source>&amp;Type:</source>
         <translation>&amp;Tipo:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="103"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="140"/>
         <source>Units</source>
         <translation>Unidades</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="103"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="141"/>
         <source>Weight</source>
         <translation>Peso</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="121"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="144"/>
+        <source>&amp;Discount:</source>
+        <translation>&amp;Descuento:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/productdialog.cpp" line="150"/>
+        <source>T&amp;ype:</source>
+        <translation>T&amp;ipo:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/productdialog.cpp" line="152"/>
+        <source>No Discount</source>
+        <translation>Sin Descuento</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/productdialog.cpp" line="153"/>
+        <source>Percent</source>
+        <translation>Porcentaje</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/productdialog.cpp" line="154"/>
+        <source>Amount</source>
+        <translation>Cantidad</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/productdialog.cpp" line="177"/>
         <source>&amp;Save</source>
         <translation>&amp;Guardar</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="125"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="181"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Cancelar</translation>
     </message>
