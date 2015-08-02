@@ -62,9 +62,9 @@ void View::Invoicing::OperationEditor::productNotFound()
 
 void View::Invoicing::OperationEditor::addOperation()
 {
-    int row = _operationsTable -> currentIndex().row();
-    _operationModel -> insertRows(row + 1, 1);
-    QModelIndex index = _operationModel -> index(row + 1, ColumnOperationId);
+    int row = _operationModel -> rowCount(QModelIndex());
+    _operationModel -> insertRows(row, 1);
+    QModelIndex index = _operationModel -> index(row, ColumnOperationId);
     _operationsTable -> setCurrentIndex(index);
     _operationsTable -> edit(index);
     emit dataChanged();
