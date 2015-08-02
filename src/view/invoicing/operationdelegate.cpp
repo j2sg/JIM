@@ -28,8 +28,36 @@ void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOp
         int id = index.model() -> data(index, Qt::DisplayRole).toInt();
         QString text = QString::number(id).rightJustified(4, '0');
         QStyleOptionViewItem myOption = option;
+
         myOption.displayAlignment = Qt::AlignHCenter | Qt::AlignVCenter;
+
         drawDisplay(painter, myOption, myOption.rect, text);
+        drawFocus(painter, myOption, myOption.rect);
+    } else if(index.column() == ColumnOperationDiscountType) {
+        Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(index.model() -> data(index, Qt::DisplayRole).toInt());
+        QString strType;
+        QStyleOptionViewItem myOption = option;
+
+        switch(type) {
+        case Model::Domain::NoDiscount:
+            strType = QObject::tr("No Discount");
+            break;
+        case Model::Domain::Percent:
+            strType = QObject::tr("Percent");
+            break;
+        case Model::Domain::Amount:
+            strType = QObject::tr("Amount");
+            break;
+        case Model::Domain::Free:
+            strType = QObject::tr("Free");
+            break;
+        default:
+            strType = QObject::tr("Unknown");
+        }
+
+        myOption.displayAlignment = Qt::AlignHCenter | Qt::AlignVCenter;
+
+        drawDisplay(painter, myOption, myOption.rect, strType);
         drawFocus(painter, myOption, myOption.rect);
     } else
         QItemDelegate::paint(painter, option, index);
