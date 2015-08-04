@@ -251,7 +251,7 @@ void View::Management::ProductDialog::loadProduct()
     _priceLineEdit -> setText(QString::number(_product -> price(),'f', precisionMoney));
     _priceTypeComboBox -> setCurrentIndex(static_cast<int>(_product -> priceType()));
     _discountDoubleSpinBox -> setValue(_product -> discount());
-    _discountDoubleSpinBox -> setEnabled(_product -> price() != 0);
+    _discountDoubleSpinBox -> setEnabled(_product -> price() != 0 && _product -> discountType() != Model::Domain::NoDiscount);
     _discountTypeComboBox -> setCurrentIndex(static_cast<int>(_product -> discountType()));
     _discountTypeComboBox -> setEnabled(_product -> price() != 0);
     productModified(false);
