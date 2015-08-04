@@ -31,6 +31,8 @@
 #include <QComboBox>
 #include <QDoubleSpinBox>
 #include <QPushButton>
+#include <QIntValidator>
+#include <QDoubleValidator>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -112,7 +114,9 @@ void View::Management::ProductDialog::createWidgets()
 {
     _idLabel = new QLabel(tr("&Id:"));
     _idLineEdit = new QLineEdit;
-    _idLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
+    QIntValidator *idValidator = new QIntValidator(this);
+    idValidator -> setBottom(0);
+    _idLineEdit -> setValidator(idValidator);
     _idLabel -> setBuddy(_idLineEdit);
     _autoIdCheckBox = new QCheckBox(tr("Auto &Generate"));
 
@@ -132,7 +136,10 @@ void View::Management::ProductDialog::createWidgets()
 
     _priceLabel = new QLabel(tr("&Price:"));
     _priceLineEdit = new QLineEdit;
-    _priceLineEdit -> setValidator(new QRegExpValidator(QRegExp("[0-9]+(.[0-9]+)?"), this));
+    QDoubleValidator *priceValidator = new QDoubleValidator(this);
+    priceValidator -> setBottom(0.0);
+    priceValidator -> setLocale(QLocale::C);
+    _priceLineEdit -> setValidator(priceValidator);
     _priceLabel -> setBuddy(_priceLineEdit);
 
     _priceTypeLabel = new QLabel(tr("&Type:"));

@@ -27,6 +27,7 @@ QT_BEGIN_NAMESPACE
 class QLabel;
 class QLineEdit;
 class QCheckBox;
+class QIntValidator;
 QT_END_NAMESPACE
 
 namespace Model
@@ -61,6 +62,7 @@ namespace View
             void createUbicationWidgets();
             void createContactWidgets();
             void createConnections();
+            QIntValidator *_validator;
             QLabel *_idLabel;
             QLineEdit *_idLineEdit;
             QCheckBox *_autoIdCheckBox;

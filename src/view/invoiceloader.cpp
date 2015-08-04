@@ -23,7 +23,7 @@
 #include <QLineEdit>
 #include <QRadioButton>
 #include <QPushButton>
-#include <QRegExpValidator>
+#include <QIntValidator>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -57,7 +57,9 @@ void View::InvoiceLoader::createWidgets()
 {
     _invoiceLabel = new QLabel(tr("&Id:"));
     _invoiceLineEdit = new QLineEdit;
-    _invoiceLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
+    QIntValidator *idValidator = new QIntValidator(this);
+    idValidator -> setBottom(0);
+    _invoiceLineEdit -> setValidator(idValidator);
     _invoiceLabel -> setBuddy(_invoiceLineEdit);
 
     _typeLabel = new QLabel(tr("Type:"));

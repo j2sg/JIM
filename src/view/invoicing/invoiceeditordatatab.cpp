@@ -34,6 +34,7 @@
 #include <QDateEdit>
 #include <QComboBox>
 #include <QPushButton>
+#include <QIntValidator>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -233,7 +234,9 @@ void View::Invoicing::InvoiceEditorDataTab::createIdWidgets()
 {
     _idLabel = new QLabel(tr("&Id:"));
     _idLineEdit = new QLineEdit;
-    _idLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
+    QIntValidator *idValidator = new QIntValidator(this);
+    idValidator -> setBottom(0);
+    _idLineEdit -> setValidator(idValidator);
     _idLineEdit -> setFixedSize(_idLineEdit -> sizeHint());
     _idLabel -> setBuddy(_idLineEdit);
     _autoIdCheckBox = new QCheckBox(tr("&Auto"));

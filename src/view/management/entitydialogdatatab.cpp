@@ -27,7 +27,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
-#include <QRegExpValidator>
+#include <QIntValidator>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
@@ -98,6 +98,9 @@ void View::Management::EntityDialogDataTab::updateId()
 
 void View::Management::EntityDialogDataTab::createWidgets()
 {
+    _validator = new QIntValidator(this);
+    _validator -> setBottom(0);
+
     createIdWidgets();
 
     QGridLayout *idLayout = new QGridLayout;
@@ -158,7 +161,7 @@ void View::Management::EntityDialogDataTab::createIdWidgets()
 {
     _idLabel = new QLabel(tr("&Id:"));
     _idLineEdit = new QLineEdit;
-    _idLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
+    _idLineEdit -> setValidator(_validator);
     _idLabel -> setBuddy(_idLineEdit);
     _autoIdCheckBox = new QCheckBox(tr("&Auto"));
 
@@ -198,17 +201,17 @@ void View::Management::EntityDialogDataTab::createContactWidgets()
 {
     _telephoneLabel = new QLabel(tr("&Telephone:"));
     _telephoneLineEdit = new QLineEdit;
-    _telephoneLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
+    _telephoneLineEdit -> setValidator(_validator);
     _telephoneLabel -> setBuddy(_telephoneLineEdit);
 
     _mobileLabel = new QLabel(tr("&Mobile:"));
     _mobileLineEdit = new QLineEdit;
-    _mobileLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
+    _mobileLineEdit -> setValidator(_validator);
     _mobileLabel -> setBuddy(_mobileLineEdit);
 
     _faxLabel = new QLabel(tr("&Fax:"));
     _faxLineEdit = new QLineEdit;
-    _faxLineEdit -> setValidator(new QRegExpValidator(QRegExp("[1-9][0-9]*"), this));
+    _faxLineEdit -> setValidator(_validator);
     _faxLabel -> setBuddy(_faxLineEdit);
 
     _emailLabel = new QLabel(tr("&Email:"));
