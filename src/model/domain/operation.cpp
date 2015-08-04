@@ -150,8 +150,10 @@ double Model::Domain::Operation::total() const
 
     if(_discountType == Amount)
         res -= _discount;
-    else
+    else if(_discountType == Percent)
         res *= (1 - _discount / 100.0);
+    else if(_discountType == Free)
+        res = 0.0;
 
     return res;
 }
