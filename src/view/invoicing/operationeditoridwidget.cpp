@@ -62,6 +62,7 @@ void View::Invoicing::OperationEditorIdWidget::createWidgets()
     _toolButton -> setStyleSheet("border: 0px; padding: 0px;");
     _toolButton -> setCursor(Qt::ArrowCursor);
     _toolButton -> setStatusTip(tr("Select a product"));
+    _toolButton -> setShortcut(tr("Alt+F1"));
 }
 
 void View::Invoicing::OperationEditorIdWidget::createConnections()
