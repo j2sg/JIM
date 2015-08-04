@@ -40,6 +40,8 @@
 View::Management::ProductDialog::ProductDialog(Model::Domain::Product *product, QWidget *parent)
     : QDialog(parent), _product(product)
 {
+    _precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
+
     createWidgets();
     createConnections();
     setWindowTitle(tr("Product")+"[*]");
@@ -77,7 +79,7 @@ void View::Management::ProductDialog::productModified(bool modified)
 void View::Management::ProductDialog::textChangedOnPriceLineEdit(const QString text)
 {
     bool priceOK = !text.isEmpty() && text.toDouble() != 0;
-    Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox->currentData().toInt());
+    Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
 
     _discountDoubleSpinBox -> setEnabled(priceOK && type != Model::Domain::NoDiscount);
     _discountTypeComboBox -> setEnabled(priceOK);
@@ -85,9 +87,11 @@ void View::Management::ProductDialog::textChangedOnPriceLineEdit(const QString t
     if(priceOK && type != Model::Domain::NoDiscount) {
         if(type == Model::Domain::Amount) {
             _discountDoubleSpinBox -> setMaximum(text.toDouble());
-            _discountDoubleSpinBox -> setSuffix(" €");
+            _discountDoubleSpinBox -> setDecimals(_precisionMoney);
+            _discountDoubleSpinBox -> setSuffix(" " + QLocale::system().currencySymbol());
         } else {
             _discountDoubleSpinBox -> setMaximum(100.0);
+            _discountDoubleSpinBox -> setDecimals(2);
             _discountDoubleSpinBox -> setSuffix(" %");
         }
     }
@@ -103,9 +107,11 @@ void View::Management::ProductDialog::currentIndexChangedOnDiscountTypeComboBox(
         _discountDoubleSpinBox -> setValue(0.0);
     else if(type == Model::Domain::Amount) {
         _discountDoubleSpinBox -> setMaximum(_priceLineEdit -> text().toDouble());
-        _discountDoubleSpinBox -> setSuffix(" €");
+        _discountDoubleSpinBox -> setDecimals(_precisionMoney);
+        _discountDoubleSpinBox -> setSuffix(" " + QLocale::system().currencySymbol());
     } else {
         _discountDoubleSpinBox -> setMaximum(100.0);
+        _discountDoubleSpinBox -> setDecimals(2);
         _discountDoubleSpinBox -> setSuffix(" %");
     }
 }
@@ -138,6 +144,7 @@ void View::Management::ProductDialog::createWidgets()
     _priceLineEdit = new QLineEdit;
     QDoubleValidator *priceValidator = new QDoubleValidator(this);
     priceValidator -> setBottom(0.0);
+    priceValidator -> setDecimals(_precisionMoney);
     priceValidator -> setLocale(QLocale::C);
     _priceLineEdit -> setValidator(priceValidator);
     _priceLabel -> setBuddy(_priceLineEdit);
@@ -150,7 +157,9 @@ void View::Management::ProductDialog::createWidgets()
 
     _discountLabel = new QLabel(tr("&Discount:"));
     _discountDoubleSpinBox = new QDoubleSpinBox;
-    _discountDoubleSpinBox -> setSuffix(" €");
+    _discountDoubleSpinBox -> setDecimals(_precisionMoney);
+    _discountDoubleSpinBox -> setLocale(QLocale::C);
+    _discountDoubleSpinBox -> setSuffix(" " + QLocale::system().currencySymbol());
     _discountDoubleSpinBox -> setEnabled(false);
     _discountLabel -> setBuddy(_discountDoubleSpinBox);
 
@@ -236,8 +245,6 @@ void View::Management::ProductDialog::createConnections()
 
 void View::Management::ProductDialog::loadProduct()
 {
-    int precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
-
     updateId();
     _idLineEdit -> setEnabled(IS_NEW(_product -> id()));
     _autoIdCheckBox -> setChecked(IS_NEW(_product -> id()));
@@ -248,7 +255,7 @@ void View::Management::ProductDialog::loadProduct()
         _categoryComboBox -> setCurrentIndex(_categoryComboBox -> findText(_product -> category() -> name()));
 
     _descriptionTextEdit -> setPlainText(_product -> description());
-    _priceLineEdit -> setText(QString::number(_product -> price(),'f', precisionMoney));
+    _priceLineEdit -> setText(QString::number(_product -> price(),'f', _precisionMoney));
     _priceTypeComboBox -> setCurrentIndex(static_cast<int>(_product -> priceType()));
     _discountDoubleSpinBox -> setValue(_product -> discount());
     _discountDoubleSpinBox -> setEnabled(_product -> price() != 0 && _product -> discountType() != Model::Domain::NoDiscount);

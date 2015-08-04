@@ -84,6 +84,7 @@ namespace View
             QPushButton *_saveButton;
             QPushButton *_cancelButton;
             Model::Domain::Product *_product;
+            int _precisionMoney;
         };
     }
 }
