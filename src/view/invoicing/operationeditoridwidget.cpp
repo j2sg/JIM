@@ -20,6 +20,7 @@
 
 #include "operationeditoridwidget.h"
 #include <QToolButton>
+#include <QIntValidator>
 #include <QKeyEvent>
 #include <QStyle>
 
@@ -53,6 +54,9 @@ void View::Invoicing::OperationEditorIdWidget::showEvent(QShowEvent *event)
 
 void View::Invoicing::OperationEditorIdWidget::createWidgets()
 {
+    QIntValidator *idValidator = new QIntValidator(this);
+    idValidator -> setBottom(0);
+    setValidator(idValidator);
     _toolButton = new QToolButton(this);
     _toolButton -> setIcon(QIcon(":/images/manageproduct.png"));
     _toolButton -> setStyleSheet("border: 0px; padding: 0px;");
