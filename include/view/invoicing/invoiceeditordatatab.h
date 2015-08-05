@@ -31,6 +31,7 @@ class QLabel;
 class QLineEdit;
 class QCheckBox;
 class QDateEdit;
+class QDoubleSpinBox;
 class QComboBox;
 class QPushButton;
 QT_END_NAMESPACE
@@ -95,6 +96,9 @@ namespace View
             QPushButton *_detailEntityPushButton;
             OperationEditor *_operationEditor;
             TaxViewerWidget *_taxViewerWidget;
+            QLabel *_discountLabel;
+            QComboBox *_discountTypeComboBox;
+            QDoubleSpinBox *_discountDoubleSpinBox;
             QLabel *_subtotalLabel;
             QLabel *_subtotalValueLabel;
             QLabel *_taxesLabel;

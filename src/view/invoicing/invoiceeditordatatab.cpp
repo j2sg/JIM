@@ -32,6 +32,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QDateEdit>
+#include <QDoubleSpinBox>
 #include <QComboBox>
 #include <QPushButton>
 #include <QIntValidator>
@@ -205,18 +206,22 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
     createPaymentWidgets();
 
     QGridLayout *paymentLayout = new QGridLayout;
-    paymentLayout -> addWidget(_taxViewerWidget, 0, 0, 5, 1);
 
-    paymentLayout -> addWidget(_subtotalLabel, 0, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_subtotalValueLabel, 0, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_taxesLabel, 1, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_taxesValueLabel, 1, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_deductionLabel, 2, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_deductionValueLabel, 2, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_totalLabel, 3, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_totalValueLabel, 3, 2, 1, 1, Qt::AlignCenter);
-    paymentLayout -> addWidget(_paidCheckBox, 4, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_paymentComboBox, 4, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_taxViewerWidget, 0, 0, 4, 1);
+    paymentLayout -> addWidget(_discountLabel, 0, 1, 1, 1);
+    paymentLayout -> addWidget(_discountTypeComboBox, 0, 2, 1, 1);
+    paymentLayout -> addWidget(_discountDoubleSpinBox, 1, 2, 1, 1);
+    paymentLayout -> addWidget(_paidCheckBox, 2, 1, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_paymentComboBox, 2, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_subtotalLabel, 0, 3, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_subtotalValueLabel, 0, 4, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_taxesLabel, 1, 3, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_taxesValueLabel, 1, 4, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_deductionLabel, 2, 3, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_deductionValueLabel, 2, 4, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_totalLabel, 3, 3, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_totalValueLabel, 3, 4, 1, 1, Qt::AlignCenter);
+
 
     QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
     paymentGroupBox -> setLayout(paymentLayout);
@@ -288,6 +293,19 @@ void View::Invoicing::InvoiceEditorDataTab::createOperationsWidgets()
 void View::Invoicing::InvoiceEditorDataTab::createPaymentWidgets()
 {
     _taxViewerWidget = new TaxViewerWidget(_precisionTax, _precisionMoney);
+
+    _discountLabel = new QLabel(tr("Discount:"));
+    _discountTypeComboBox = new QComboBox;
+    _discountTypeComboBox -> addItem(tr("No Discount"), static_cast<int>(Model::Domain::NoDiscount));
+    _discountTypeComboBox -> addItem(tr("Percent"), static_cast<int>(Model::Domain::Percent));
+    _discountTypeComboBox -> addItem(tr("Amount"), static_cast<int>(Model::Domain::Amount));
+    _discountLabel -> setBuddy(_discountTypeComboBox);
+
+    _discountDoubleSpinBox = new QDoubleSpinBox;
+    _discountDoubleSpinBox -> setDecimals(_precisionMoney);
+    _discountDoubleSpinBox -> setLocale(QLocale::C);
+    _discountDoubleSpinBox -> setSuffix(" " + QLocale::system().currencySymbol());
+    _discountDoubleSpinBox -> setEnabled(false);
 
     _subtotalLabel = new QLabel(tr("Subtotal:"));
     _subtotalLabel -> setStyleSheet("QLabel { font : bold 10px; }");
