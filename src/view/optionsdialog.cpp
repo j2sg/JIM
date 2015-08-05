@@ -379,16 +379,19 @@ void View::OptionsDialog::loadOptions()
 
 bool View::OptionsDialog::saveOptions()
 {
-    QByteArray storePass = Persistence::Manager::readConfig("Password").toByteArray();
-    QByteArray currPass = QCryptographicHash::hash(_authenticationCurrentPassLineEdit -> text().toLatin1(), QCryptographicHash::Sha1);
-    QByteArray newPass = QCryptographicHash::hash(_authenticationNewPassLineEdit -> text().toLatin1(), QCryptographicHash::Sha1);
-    QByteArray reNewPass = QCryptographicHash::hash(_authenticationReNewPassLineEdit -> text().toLatin1(), QCryptographicHash::Sha1);
+    QString currPass = _authenticationCurrentPassLineEdit -> text();
+    QString newPass = _authenticationNewPassLineEdit -> text();
+    QString reNewPass = _authenticationReNewPassLineEdit -> text();
 
     if(!currPass.isEmpty() || !newPass.isEmpty() || !reNewPass.isEmpty()) {
-        if(storePass != currPass || newPass != reNewPass)
+        QByteArray storedPassEnc = Persistence::Manager::readConfig("Password").toByteArray();
+        QByteArray currPassEnc = QCryptographicHash::hash(currPass.toLatin1(), QCryptographicHash::Sha1);
+        QByteArray newPassEnc = QCryptographicHash::hash(newPass.toLatin1(), QCryptographicHash::Sha1);
+        QByteArray reNewPassEnc = QCryptographicHash::hash(reNewPass.toLatin1(), QCryptographicHash::Sha1);
+        if(storedPassEnc != currPassEnc || newPassEnc != reNewPassEnc)
             return false;
         else
-            Persistence::Manager::writeConfig(newPass, "Password");
+            Persistence::Manager::writeConfig(newPassEnc, "Password");
     }
 
     Persistence::Manager::writeConfig(_precisionMoneySpinBox -> value(), "Money", "Application/Precision");
