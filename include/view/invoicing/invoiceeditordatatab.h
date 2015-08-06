@@ -24,7 +24,7 @@
 #include <QWidget>
 #include "types.h"
 
-#define PAYMENT_GROUPBOX_HEIGHT 150
+#define TAXES_GROUPBOX_HEIGHT 120
 
 QT_BEGIN_NAMESPACE
 class QLabel;
@@ -76,7 +76,9 @@ namespace View
             void createIdWidgets();
             void createEntityWidgets();
             void createOperationsWidgets();
+            void createTaxesWidgets();
             void createPaymentWidgets();
+            void createTotalsWidgets();
             void createConnections();
 
             QLabel *_idLabel;
