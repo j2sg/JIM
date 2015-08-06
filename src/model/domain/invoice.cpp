@@ -264,7 +264,7 @@ double Model::Domain::Invoice::subtotal() const
 
     if(_discountType == Amount)
         res -= _discount;
-    else
+    else if(_discountType == Percent)
         res *= (1 - _discount / 100.0);
 
     return res;
