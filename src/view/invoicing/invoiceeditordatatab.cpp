@@ -45,7 +45,7 @@
 View::Invoicing::InvoiceEditorDataTab::InvoiceEditorDataTab(Model::Domain::Invoice *invoice, QWidget *parent)
     : QWidget(parent), _invoice(invoice)
 {
-    _currency = Persistence::Manager::readConfig("Currency", "Application").toString();
+    _currency = QLocale::system().currencySymbol();
     _precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
     _precisionTax = Persistence::Manager::readConfig("Tax", "Application/Precision").toInt();
     _precisionWeight = Persistence::Manager::readConfig("Weight", "Application/Precision").toInt();
@@ -108,7 +108,7 @@ void View::Invoicing::InvoiceEditorDataTab::stateChangedOnPaidCheckBox()
     _subtotalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
     _taxesValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
     _deductionValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(isChecked ? "green" : "red"));
-    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 12px; }").arg(isChecked ? "green" : "red"));
+    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 14px; }").arg(isChecked ? "green" : "red"));
     _paymentComboBox -> setEnabled(isChecked);
 }
 
@@ -159,7 +159,7 @@ void View::Invoicing::InvoiceEditorDataTab::updateTotals()
     _taxesValueLabel -> setText(QString::number(_invoice -> taxes(), 'f', _precisionMoney) + " " + _currency);
     _deductionValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 10px; }").arg(paid ? "green" : "red"));
     _deductionValueLabel -> setText(QString::number(_invoice -> deduction(), 'f', _precisionMoney) + " " + _currency);
-    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 12px; }").arg(paid ? "green" : "red"));
+    _totalValueLabel -> setStyleSheet(QString("QLabel { color : %1; font : bold 14px; }").arg(paid ? "green" : "red"));
     _totalValueLabel -> setText(QString::number(_invoice -> total(), 'f', _precisionMoney) + " " + _currency);
 }
 
@@ -231,13 +231,13 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
     QGridLayout *totalsLayout = new QGridLayout;
 
     totalsLayout -> addWidget(_subtotalLabel, 0, 0, 1, 1, Qt::AlignLeft);
-    totalsLayout -> addWidget(_subtotalValueLabel, 0, 1, 1, 1, Qt::AlignCenter);
+    totalsLayout -> addWidget(_subtotalValueLabel, 0, 1, 1, 1, Qt::AlignRight);
     totalsLayout -> addWidget(_taxesLabel, 1, 0, 1, 1, Qt::AlignLeft);
-    totalsLayout -> addWidget(_taxesValueLabel, 1, 1, 1, 1, Qt::AlignCenter);
+    totalsLayout -> addWidget(_taxesValueLabel, 1, 1, 1, 1, Qt::AlignRight);
     totalsLayout -> addWidget(_deductionLabel, 2, 0, 1, 1, Qt::AlignLeft);
-    totalsLayout -> addWidget(_deductionValueLabel, 2, 1, 1, 1, Qt::AlignCenter);
+    totalsLayout -> addWidget(_deductionValueLabel, 2, 1, 1, 1, Qt::AlignRight);
     totalsLayout -> addWidget(_totalLabel, 3, 0, 1, 1, Qt::AlignLeft);
-    totalsLayout -> addWidget(_totalValueLabel, 3, 1, 1, 1, Qt::AlignCenter);
+    totalsLayout -> addWidget(_totalValueLabel, 3, 1, 1, 1, Qt::AlignRight);
 
     QGroupBox *totalsGroupBox = new QGroupBox(tr("&Totals"));
     totalsGroupBox -> setLayout(totalsLayout);
@@ -346,22 +346,34 @@ void View::Invoicing::InvoiceEditorDataTab::createTotalsWidgets()
 {
     _subtotalLabel = new QLabel(tr("Subtotal:"));
     _subtotalLabel -> setStyleSheet("QLabel { font : bold 10px; }");
-    _subtotalValueLabel = new QLabel;
+    _subtotalValueLabel = new QLabel("000000.00");
+    _subtotalValueLabel -> setStyleSheet("QLabel { font : bold 10px; }");
+    _subtotalValueLabel -> setAlignment(Qt::AlignRight);
+    _subtotalValueLabel -> setMinimumSize(_subtotalValueLabel -> sizeHint());
     _subtotalLabel -> setBuddy(_subtotalValueLabel);
 
     _taxesLabel = new QLabel(tr("Taxes:"));
     _taxesLabel -> setStyleSheet("QLabel { font : bold 10px; }");
-    _taxesValueLabel = new QLabel;
+    _taxesValueLabel = new QLabel("000000.00");
+    _taxesValueLabel -> setStyleSheet("QLabel { font : bold 10px; }");
+    _taxesValueLabel -> setAlignment(Qt::AlignRight);
+    _taxesValueLabel -> setMinimumSize(_taxesValueLabel -> sizeHint());
     _taxesLabel -> setBuddy(_taxesValueLabel);
 
     _deductionLabel = new QLabel(tr("Deduction:"));
     _deductionLabel -> setStyleSheet("QLabel { font : bold 10px; }");
-    _deductionValueLabel = new QLabel;
+    _deductionValueLabel = new QLabel("000000.00");
+    _deductionValueLabel -> setStyleSheet("QLabel { font : bold 10px; }");
+    _deductionValueLabel -> setAlignment(Qt::AlignRight);
+    _deductionValueLabel -> setMinimumSize(_deductionValueLabel -> sizeHint());
     _deductionLabel -> setBuddy(_deductionValueLabel);
 
     _totalLabel = new QLabel(tr("Total:"));
-    _totalLabel -> setStyleSheet("QLabel { font : bold 12px; }");
-    _totalValueLabel = new QLabel;
+    _totalLabel -> setStyleSheet("QLabel { font : bold 14px; }");
+    _totalValueLabel = new QLabel("000000.00");
+    _totalValueLabel -> setStyleSheet("QLabel { font : bold 10px; }");
+    _totalValueLabel -> setAlignment(Qt::AlignRight);
+    _totalValueLabel -> setMinimumSize(_totalValueLabel -> sizeHint());
     _totalLabel -> setBuddy(_totalValueLabel);
 }
 
