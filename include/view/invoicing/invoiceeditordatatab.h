@@ -31,6 +31,7 @@ class QLabel;
 class QLineEdit;
 class QCheckBox;
 class QDateEdit;
+class QToolButton;
 class QDoubleSpinBox;
 class QComboBox;
 class QPushButton;
@@ -94,8 +95,8 @@ namespace View
             QLineEdit *_entityNameLineEdit;
             QLabel *_entityVatinLabel;
             QLineEdit *_entityVatinLineEdit;
-            QPushButton *_selectEntityPushButton;
-            QPushButton *_detailEntityPushButton;
+            QToolButton *_selectEntityToolButton;
+            QToolButton *_detailEntityToolButton;
             OperationEditor *_operationEditor;
             TaxViewerWidget *_taxViewerWidget;
             QLabel *_discountLabel;

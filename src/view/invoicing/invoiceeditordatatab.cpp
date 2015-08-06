@@ -32,6 +32,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QDateEdit>
+#include <QToolButton>
 #include <QDoubleSpinBox>
 #include <QComboBox>
 #include <QPushButton>
@@ -133,7 +134,7 @@ void View::Invoicing::InvoiceEditorDataTab::selectEntity()
         _entityIdLineEdit -> setText(QString::number(entity -> id()));
         _entityNameLineEdit -> setText(entity -> name());
         _entityVatinLineEdit -> setText(entity -> vatin());
-        _detailEntityPushButton -> setEnabled(true);
+        _detailEntityToolButton -> setEnabled(true);
 
         emit dataChanged();
 
@@ -186,8 +187,8 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
     entityLayout -> addWidget(_entityIdLineEdit, 0, 1, 1, 1);
     entityLayout -> addWidget(_entityVatinLabel, 0, 2, 1, 1);
     entityLayout -> addWidget(_entityVatinLineEdit, 0, 3, 1, 1);
-    entityLayout -> addWidget(_selectEntityPushButton, 0, 4, 1, 1);
-    entityLayout -> addWidget(_detailEntityPushButton, 0, 5, 1, 1);
+    entityLayout -> addWidget(_selectEntityToolButton, 0, 4, 1, 1);
+    entityLayout -> addWidget(_detailEntityToolButton, 0, 5, 1, 1);
     entityLayout -> addWidget(_entityNameLabel, 1, 0, 1, 1);
     entityLayout -> addWidget(_entityNameLineEdit, 1, 1, 1, 5);
 
@@ -292,16 +293,20 @@ void View::Invoicing::InvoiceEditorDataTab::createEntityWidgets()
     _entityVatinLineEdit -> setEnabled(false);
     _entityVatinLabel -> setBuddy(_entityVatinLineEdit);
 
-    _selectEntityPushButton = new QPushButton;
-    _selectEntityPushButton -> setIcon(_invoice -> type() ?
+    _selectEntityToolButton = new QToolButton;
+    _selectEntityToolButton -> setIcon(_invoice -> type() ?
                                            QIcon(":/images/entity.png") :
                                            QIcon(":/images/supplier.png"));
-    _selectEntityPushButton -> setFixedSize(_selectEntityPushButton -> sizeHint());
+    _selectEntityToolButton -> setStatusTip(tr("Select %0").arg(_invoice -> type() ?
+                                                                    tr("customer") :
+                                                                    tr("supplier")));
 
-    _detailEntityPushButton = new QPushButton;
-    _detailEntityPushButton -> setIcon(QIcon(":/images/about.png"));
-    _detailEntityPushButton -> setFixedSize(_detailEntityPushButton -> sizeHint());
-    _detailEntityPushButton -> setEnabled(_invoice -> entity());
+    _detailEntityToolButton = new QToolButton;
+    _detailEntityToolButton -> setIcon(QIcon(":/images/about.png"));
+    _detailEntityToolButton -> setStatusTip(tr("See details about %0").arg(_invoice -> type() ?
+                                                                               tr("customer") :
+                                                                               tr("supplier")));
+    _detailEntityToolButton -> setEnabled(_invoice -> entity());
 }
 
 void View::Invoicing::InvoiceEditorDataTab::createOperationsWidgets()
@@ -372,9 +377,9 @@ void View::Invoicing::InvoiceEditorDataTab::createConnections()
             this, SIGNAL(dataChanged()));
     connect(_placeLineEdit, SIGNAL(textChanged(QString)),
             this, SIGNAL(dataChanged()));
-    connect(_selectEntityPushButton, SIGNAL(clicked()),
+    connect(_selectEntityToolButton, SIGNAL(clicked()),
             this, SLOT(selectEntity()));
-    connect(_detailEntityPushButton, SIGNAL(clicked()),
+    connect(_detailEntityToolButton, SIGNAL(clicked()),
             this, SLOT(detailEntity()));
     connect(_operationEditor, SIGNAL(dataChanged()),
             this, SIGNAL(dataChanged()));
