@@ -556,107 +556,158 @@ do you want to save the changes?</source>
 <context>
     <name>View::Invoicing::InvoiceEditorDataTab</name>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="177"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="211"/>
         <source>&amp;Details</source>
         <translation>&amp;Detalles</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="193"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="227"/>
         <source>&amp;Customer</source>
         <translation>&amp;Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="193"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="227"/>
         <source>&amp;Supplier</source>
         <translation>&amp;Proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="202"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="236"/>
         <source>&amp;Operations</source>
         <translation>&amp;Operaciones</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="221"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="244"/>
+        <source>&amp;Taxes</source>
+        <translation>&amp;Impuestos</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="258"/>
         <source>&amp;Payment</source>
         <translation>&amp;Pago</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="235"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="274"/>
+        <source>&amp;Totals</source>
+        <translation>&amp;Totales</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="292"/>
         <source>&amp;Id:</source>
         <translation>&amp;Id:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="242"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="299"/>
         <source>&amp;Auto</source>
         <translation>&amp;Auto</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="244"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="301"/>
         <source>D&amp;ate:</source>
         <translation>&amp;Fecha:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="249"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="306"/>
         <source>&amp;Place:</source>
         <translation>&amp;Lugar:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="256"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="313"/>
         <source>I&amp;d:</source>
         <translation>I&amp;d:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="261"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="318"/>
         <source>&amp;Name:</source>
         <translation>&amp;Nombre:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="266"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="323"/>
         <source>&amp;VATIN:</source>
         <translation>&amp;NIF:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="271"/>
         <source>&amp;Select</source>
-        <translation>&amp;Seleccionar</translation>
+        <translation type="obsolete">&amp;Seleccionar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="292"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="379"/>
         <source>Subtotal:</source>
         <translation>Subtotal:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="297"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="387"/>
         <source>Taxes:</source>
         <translation>Impuestos:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="302"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="395"/>
         <source>Deduction:</source>
         <translation>Deducción:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="307"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="403"/>
         <source>Total:</source>
         <translation>Total:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="312"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="369"/>
         <source>&amp;Paid</source>
         <translation>&amp;Pagado</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="317"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="332"/>
+        <source>Select %0</source>
+        <translation>Seleccionar %0</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="333"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="339"/>
+        <source>customer</source>
+        <translation>cliente</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="334"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="340"/>
+        <source>supplier</source>
+        <translation>proveedor</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="338"/>
+        <source>See details about %0</source>
+        <translation>Ver detalles del %0</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="356"/>
+        <source>Discount:</source>
+        <translation>Descuento:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="358"/>
+        <source>No Discount</source>
+        <translation>Sin Descuento</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="359"/>
+        <source>Percent</source>
+        <translation>Porcentaje</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="360"/>
+        <source>Amount</source>
+        <translation>Cantidad</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="374"/>
         <source>Cash</source>
         <translation>Metálico</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="317"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="374"/>
         <source>Card</source>
         <translation>Tarjeta</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="317"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="374"/>
         <source>Transfer</source>
         <translation>Transferencia</translation>
     </message>
