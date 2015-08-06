@@ -66,9 +66,13 @@ void View::Invoicing::InvoiceEditorDataTab::loadInvoice()
     _entityNameLineEdit-> setText((_invoice -> entity() ? _invoice -> entity() -> name() : ""));
     _entityVatinLineEdit -> setText((_invoice -> entity() ? _invoice -> entity() -> vatin() : ""));
     _operationEditor -> setOperations(_invoice -> operations());
-    updateTotals();
+    _discountTypeComboBox -> setCurrentIndex(static_cast<int>(_invoice -> discountType()));
+    _discountTypeComboBox -> setEnabled(_invoice -> subtotal() != 0);
+    _discountDoubleSpinBox -> setValue(_invoice -> discount());
+    _discountDoubleSpinBox -> setEnabled(_invoice->discountType() != Model::Domain::NoDiscount);
     _paidCheckBox -> setChecked(_invoice -> paid());
     _paymentComboBox -> setCurrentIndex(static_cast<int>(_invoice -> payment()));
+    updateTotals();
 }
 
 void View::Invoicing::InvoiceEditorDataTab::saveInvoice()
@@ -76,6 +80,8 @@ void View::Invoicing::InvoiceEditorDataTab::saveInvoice()
     _invoice -> setId(_idLineEdit -> text().toInt());
     _invoice -> setDate(_dateDateEdit -> date());
     _invoice -> setPlace(_placeLineEdit -> text());
+    _invoice -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt()));
+    _invoice -> setDiscount(_discountDoubleSpinBox -> value());
     _invoice -> setPaid(_paidCheckBox -> isChecked());
     _invoice -> setPayment(static_cast<Model::Domain::PaymentType>(_paymentComboBox -> currentIndex()));
 }
@@ -87,6 +93,7 @@ void View::Invoicing::InvoiceEditorDataTab::updateTax()
                                (_invoice -> tax())[Model::Domain::PIT].value(),
                                _invoice -> deduction());
 
+    updateDiscount();
     updateTotals();
 }
 
@@ -100,6 +107,11 @@ bool View::Invoicing::InvoiceEditorDataTab::isSaveable()
 void View::Invoicing::InvoiceEditorDataTab::stateChangedOnAutoIdCheckBox()
 {
     _idLineEdit -> setEnabled(!_autoIdCheckBox -> isChecked());
+}
+
+void View::Invoicing::InvoiceEditorDataTab::currentIndexChangedOnDiscountTypeComboBox()
+{
+    updateDiscount();
 }
 
 void View::Invoicing::InvoiceEditorDataTab::stateChangedOnPaidCheckBox()
@@ -147,6 +159,26 @@ void View::Invoicing::InvoiceEditorDataTab::detailEntity()
 {
     View::Management::EntityViewer viewer(_invoice -> entity());
     viewer.exec();
+}
+
+void View::Invoicing::InvoiceEditorDataTab::updateDiscount()
+{
+    Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
+
+    _discountTypeComboBox->setEnabled(_invoice -> subtotal() != 0);
+    _discountDoubleSpinBox -> setEnabled(type != Model::Domain::NoDiscount);
+
+    if(type == Model::Domain::NoDiscount)
+        _discountDoubleSpinBox -> setValue(0.0);
+    else if(type == Model::Domain::Amount) {
+        _discountDoubleSpinBox -> setMaximum(_invoice -> subtotal());
+        _discountDoubleSpinBox -> setDecimals(_precisionMoney);
+        _discountDoubleSpinBox -> setSuffix(" " + QLocale::system().currencySymbol());
+    } else {
+        _discountDoubleSpinBox -> setMaximum(100.0);
+        _discountDoubleSpinBox -> setDecimals(2);
+        _discountDoubleSpinBox -> setSuffix(" %");
+    }
 }
 
 void View::Invoicing::InvoiceEditorDataTab::updateTotals()
@@ -397,6 +429,8 @@ void View::Invoicing::InvoiceEditorDataTab::createConnections()
             this, SIGNAL(dataChanged()));
     connect(_operationEditor, SIGNAL(dataChanged()),
             this, SLOT(updateTax()));
+    connect(_discountTypeComboBox, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(currentIndexChangedOnDiscountTypeComboBox()));
     connect(_paidCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnPaidCheckBox()));
     connect(_paidCheckBox, SIGNAL(stateChanged(int)),

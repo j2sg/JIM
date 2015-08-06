@@ -67,10 +67,12 @@ namespace View
             bool isSaveable();
         private slots:
             void stateChangedOnAutoIdCheckBox();
+            void currentIndexChangedOnDiscountTypeComboBox();
             void stateChangedOnPaidCheckBox();
             void updateId();
             void selectEntity();
             void detailEntity();
+            void updateDiscount();
             void updateTotals();
         private:
             void createWidgets();
