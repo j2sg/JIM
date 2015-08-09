@@ -124,10 +124,17 @@ void View::Invoicing::TaxViewerWidget::createWidgets()
     _taxTableWidget -> setFocusPolicy(Qt::NoFocus);
     _taxTableWidget -> setShowGrid(false);
     _taxTableWidget -> setAlternatingRowColors(true);
+    _taxTableWidget -> setColumnWidth(0, COLUMN_PERCENT_WIDTH);
+    _taxTableWidget -> setColumnWidth(2, COLUMN_PERCENT_WIDTH);
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-        _taxTableWidget -> horizontalHeader() -> setResizeMode(QHeaderView::Stretch);
+
+        _taxTableWidget -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+        _taxTableWidget -> horizontalHeader() -> setResizeMode(1, QHeaderView::Stretch);
+        _taxTableWidget -> horizontalHeader() -> setResizeMode(3, QHeaderView::Stretch);
     #else
-        _taxTableWidget -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Stretch);
+        _taxTableWidget -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Fixed);
+        _taxTableWidget -> horizontalHeader() -> setSectionResizeMode(1, QHeaderView::Stretch);
+        _taxTableWidget -> horizontalHeader() -> setSectionResizeMode(3, QHeaderView::Stretch);
     #endif
 
     for(int row = 0; row < 3; ++row)

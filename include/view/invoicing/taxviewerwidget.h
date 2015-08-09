@@ -25,6 +25,8 @@
 #include <QList>
 #include "types.h"
 
+#define COLUMN_PERCENT_WIDTH 50
+
 QT_BEGIN_NAMESPACE
 class QTableWidget;
 QT_END_NAMESPACE
