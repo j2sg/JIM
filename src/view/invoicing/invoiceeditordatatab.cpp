@@ -26,6 +26,7 @@
 #include "entityselector.h"
 #include "entityviewer.h"
 #include "operationeditor.h"
+#include "taxapplyingwidget.h"
 #include "taxviewerwidget.h"
 #include "persistencemanager.h"
 #include <QLabel>
@@ -64,7 +65,6 @@ void View::Invoicing::InvoiceEditorDataTab::loadInvoice()
     _placeLineEdit -> setText(_invoice -> place());
     _entityIdLineEdit -> setText((_invoice -> entity() ? QString::number(_invoice -> entity() -> id()) : ""));
     _entityNameLineEdit-> setText((_invoice -> entity() ? _invoice -> entity() -> name() : ""));
-    _entityVatinLineEdit -> setText((_invoice -> entity() ? _invoice -> entity() -> vatin() : ""));
     _operationEditor -> setOperations(_invoice -> operations());
     _discountTypeComboBox -> setCurrentIndex(static_cast<int>(_invoice -> discountType()));
     _discountTypeComboBox -> setEnabled(_invoice -> subtotal() != 0);
@@ -145,7 +145,6 @@ void View::Invoicing::InvoiceEditorDataTab::selectEntity()
         _invoice -> setEntity(entity);
         _entityIdLineEdit -> setText(QString::number(entity -> id()));
         _entityNameLineEdit -> setText(entity -> name());
-        _entityVatinLineEdit -> setText(entity -> vatin());
         _detailEntityToolButton -> setEnabled(true);
 
         emit dataChanged();
@@ -216,47 +215,48 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
 
     QGridLayout *entityLayout = new QGridLayout;
     entityLayout -> addWidget(_entityIdLabel, 0, 0, 1, 1);
-    entityLayout -> addWidget(_entityIdLineEdit, 0, 1, 1, 1);
-    entityLayout -> addWidget(_entityVatinLabel, 0, 2, 1, 1);
-    entityLayout -> addWidget(_entityVatinLineEdit, 0, 3, 1, 1);
-    entityLayout -> addWidget(_selectEntityToolButton, 0, 4, 1, 1);
-    entityLayout -> addWidget(_detailEntityToolButton, 0, 5, 1, 1);
+    entityLayout -> addWidget(_entityIdLineEdit, 0, 1, 1, 2);
+    entityLayout -> addWidget(_selectEntityToolButton, 0, 3, 1, 1);
+    entityLayout -> addWidget(_detailEntityToolButton, 0, 4, 1, 1);
     entityLayout -> addWidget(_entityNameLabel, 1, 0, 1, 1);
-    entityLayout -> addWidget(_entityNameLineEdit, 1, 1, 1, 5);
+    entityLayout -> addWidget(_entityNameLineEdit, 1, 1, 1, 4);
+
 
     QGroupBox *entityGroupBox = new QGroupBox((_invoice -> type() ? tr("&Customer") : tr("&Supplier")));
     entityGroupBox -> setLayout(entityLayout);
-
-    QHBoxLayout *topLayout = new QHBoxLayout;
-    topLayout -> addWidget(idGroupBox);
-    topLayout -> addWidget(entityGroupBox);
 
     createOperationsWidgets();
 
     QGroupBox *operationsGroupBox = new QGroupBox(tr("&Operations"));
     operationsGroupBox -> setLayout(_operationEditor -> layout());
 
+    QGridLayout *leftLayout = new QGridLayout;
+    leftLayout -> addWidget(idGroupBox, 0, 0, 1, 1);
+    leftLayout -> addWidget(entityGroupBox, 0, 1, 1, 1);
+    leftLayout -> addWidget(operationsGroupBox, 1, 0, 1, 2);
+
     createTaxesWidgets();
 
-    QGridLayout *taxesLayout = new QGridLayout;
-    taxesLayout -> addWidget(_taxViewerWidget, 0, 0, 1, 1);
+    QVBoxLayout *taxesLayout = new QVBoxLayout;
+    taxesLayout -> addWidget(_taxApplyingWidget);
+    taxesLayout -> addWidget(_taxViewerWidget);
 
     QGroupBox *taxesGroupBox = new QGroupBox(tr("&Taxes"));
     taxesGroupBox -> setLayout(taxesLayout);
-    taxesGroupBox -> setFixedHeight(TAXES_GROUPBOX_HEIGHT);
 
     createPaymentWidgets();
 
     QGridLayout *paymentLayout = new QGridLayout;
 
-    paymentLayout -> addWidget(_discountLabel, 0, 1, 1, 1);
-    paymentLayout -> addWidget(_discountTypeComboBox, 0, 2, 1, 1);
-    paymentLayout -> addWidget(_discountDoubleSpinBox, 0, 3, 1, 1);
-    paymentLayout -> addWidget(_paidCheckBox, 1, 1, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_paymentComboBox, 1, 2, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_discountLabel, 0, 0, 1, 1);
+    paymentLayout -> addWidget(_discountTypeComboBox, 0, 1, 1, 1);
+    paymentLayout -> addWidget(_discountDoubleSpinBox, 1, 1, 1, 1);
+    paymentLayout -> addWidget(_paidCheckBox, 2, 0, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_paymentComboBox, 2, 1, 1, 1, Qt::AlignCenter);
 
     QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
     paymentGroupBox -> setLayout(paymentLayout);
+    paymentGroupBox -> setFixedSize(paymentGroupBox -> sizeHint());
 
     createTotalsWidgets();
 
@@ -273,16 +273,16 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
 
     QGroupBox *totalsGroupBox = new QGroupBox(tr("&Totals"));
     totalsGroupBox -> setLayout(totalsLayout);
+    totalsGroupBox -> setFixedSize(totalsGroupBox -> sizeHint());
 
-    QHBoxLayout *bottomLayout = new QHBoxLayout;
-    bottomLayout -> addWidget(taxesGroupBox);
-    bottomLayout -> addWidget(paymentGroupBox);
-    bottomLayout -> addWidget(totalsGroupBox);
+    QGridLayout *rightLayout = new QGridLayout;
+    rightLayout -> addWidget(taxesGroupBox, 0, 0, 1, 2);
+    rightLayout -> addWidget(paymentGroupBox, 1, 0, 1, 1, Qt::AlignTop);
+    rightLayout -> addWidget(totalsGroupBox, 1, 1, 1, 1, Qt::AlignTop);
 
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addLayout(topLayout);
-    mainLayout -> addWidget(operationsGroupBox);
-    mainLayout -> addLayout(bottomLayout);
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout -> addLayout(leftLayout);
+    mainLayout -> addLayout(rightLayout);
 
     setLayout(mainLayout);
 }
@@ -320,11 +320,6 @@ void View::Invoicing::InvoiceEditorDataTab::createEntityWidgets()
     _entityNameLineEdit -> setEnabled(false);
     _entityNameLabel -> setBuddy(_entityNameLineEdit);
 
-    _entityVatinLabel = new QLabel(tr("&VATIN:"));
-    _entityVatinLineEdit = new QLineEdit;
-    _entityVatinLineEdit -> setEnabled(false);
-    _entityVatinLabel -> setBuddy(_entityVatinLineEdit);
-
     _selectEntityToolButton = new QToolButton;
     _selectEntityToolButton -> setIcon(_invoice -> type() ?
                                            QIcon(":/images/entity.png") :
@@ -348,6 +343,7 @@ void View::Invoicing::InvoiceEditorDataTab::createOperationsWidgets()
 
 void View::Invoicing::InvoiceEditorDataTab::createTaxesWidgets()
 {
+    _taxApplyingWidget = new View::Management::TaxApplyingWidget;
     _taxViewerWidget = new TaxViewerWidget(_precisionTax, _precisionMoney);
 }
 
@@ -378,7 +374,7 @@ void View::Invoicing::InvoiceEditorDataTab::createTotalsWidgets()
 {
     _subtotalLabel = new QLabel(tr("Subtotal:"));
     _subtotalLabel -> setStyleSheet("QLabel { font : bold 10px; }");
-    _subtotalValueLabel = new QLabel("000000.00");
+    _subtotalValueLabel = new QLabel("0000000.00");
     _subtotalValueLabel -> setStyleSheet("QLabel { font : bold 10px; }");
     _subtotalValueLabel -> setAlignment(Qt::AlignRight);
     _subtotalValueLabel -> setMinimumSize(_subtotalValueLabel -> sizeHint());
@@ -386,7 +382,7 @@ void View::Invoicing::InvoiceEditorDataTab::createTotalsWidgets()
 
     _taxesLabel = new QLabel(tr("Taxes:"));
     _taxesLabel -> setStyleSheet("QLabel { font : bold 10px; }");
-    _taxesValueLabel = new QLabel("000000.00");
+    _taxesValueLabel = new QLabel("0000000.00");
     _taxesValueLabel -> setStyleSheet("QLabel { font : bold 10px; }");
     _taxesValueLabel -> setAlignment(Qt::AlignRight);
     _taxesValueLabel -> setMinimumSize(_taxesValueLabel -> sizeHint());
@@ -394,7 +390,7 @@ void View::Invoicing::InvoiceEditorDataTab::createTotalsWidgets()
 
     _deductionLabel = new QLabel(tr("Deduction:"));
     _deductionLabel -> setStyleSheet("QLabel { font : bold 10px; }");
-    _deductionValueLabel = new QLabel("000000.00");
+    _deductionValueLabel = new QLabel("0000000.00");
     _deductionValueLabel -> setStyleSheet("QLabel { font : bold 10px; }");
     _deductionValueLabel -> setAlignment(Qt::AlignRight);
     _deductionValueLabel -> setMinimumSize(_deductionValueLabel -> sizeHint());
@@ -402,8 +398,8 @@ void View::Invoicing::InvoiceEditorDataTab::createTotalsWidgets()
 
     _totalLabel = new QLabel(tr("Total:"));
     _totalLabel -> setStyleSheet("QLabel { font : bold 14px; }");
-    _totalValueLabel = new QLabel("000000.00");
-    _totalValueLabel -> setStyleSheet("QLabel { font : bold 10px; }");
+    _totalValueLabel = new QLabel("0000000.00");
+    _totalValueLabel -> setStyleSheet("QLabel { font : bold 14px; }");
     _totalValueLabel -> setAlignment(Qt::AlignRight);
     _totalValueLabel -> setMinimumSize(_totalValueLabel -> sizeHint());
     _totalLabel -> setBuddy(_totalValueLabel);

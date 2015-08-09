@@ -93,7 +93,7 @@ void View::Management::TaxApplyingWidget::stateChangedOnVatCheckBox()
 
 void View::Management::TaxApplyingWidget::createWidgets()
 {
-    _applyAllRadioButton = new QRadioButton(tr("Apply &all taxes"));
+    _applyAllRadioButton = new QRadioButton(tr("&All taxes"));
     _customRadioButton = new QRadioButton(tr("&Custom"));
 
     _vatCheckBox = new QCheckBox(tr("&VAT"));

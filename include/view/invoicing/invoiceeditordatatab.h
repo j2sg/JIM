@@ -24,8 +24,6 @@
 #include <QWidget>
 #include "types.h"
 
-#define TAXES_GROUPBOX_HEIGHT 120
-
 QT_BEGIN_NAMESPACE
 class QLabel;
 class QLineEdit;
@@ -47,6 +45,11 @@ namespace Model
 
 namespace View
 {
+    namespace Management
+    {
+        class TaxApplyingWidget;
+    }
+
     namespace Invoicing
     {
         class OperationEditor;
@@ -95,11 +98,10 @@ namespace View
             QLineEdit *_entityIdLineEdit;
             QLabel *_entityNameLabel;
             QLineEdit *_entityNameLineEdit;
-            QLabel *_entityVatinLabel;
-            QLineEdit *_entityVatinLineEdit;
             QToolButton *_selectEntityToolButton;
             QToolButton *_detailEntityToolButton;
             OperationEditor *_operationEditor;
+            View::Management::TaxApplyingWidget *_taxApplyingWidget;
             TaxViewerWidget *_taxViewerWidget;
             QLabel *_discountLabel;
             QComboBox *_discountTypeComboBox;
