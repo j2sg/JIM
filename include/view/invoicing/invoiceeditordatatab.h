@@ -77,6 +77,7 @@ namespace View
             void detailEntity();
             void updateDiscount();
             void updateTotals();
+            void addNotes();
         private:
             void createWidgets();
             void createIdWidgets();
@@ -117,6 +118,7 @@ namespace View
             QCheckBox *_paidCheckBox;
             QComboBox *_paymentComboBox;
             Model::Domain::Invoice *_invoice;
+            QPushButton *_notesButton;
             QString _currency;
             int _precisionMoney;
             int _precisionTax;

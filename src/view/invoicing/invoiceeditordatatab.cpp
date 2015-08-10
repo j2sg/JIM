@@ -29,6 +29,7 @@
 #include "taxapplyingwidget.h"
 #include "taxviewerwidget.h"
 #include "persistencemanager.h"
+#include "notesdialog.h"
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -194,6 +195,18 @@ void View::Invoicing::InvoiceEditorDataTab::updateTotals()
     _totalValueLabel -> setText(QString::number(_invoice -> total(), 'f', _precisionMoney) + " " + _currency);
 }
 
+void View::Invoicing::InvoiceEditorDataTab::addNotes()
+{
+    NotesDialog notesDialog(_invoice -> notes(), this);
+
+    if(notesDialog.exec()) {
+        QString notes = notesDialog.notes();
+        _invoice->setNotes(notes);
+
+        emit dataChanged();
+    }
+}
+
 void View::Invoicing::InvoiceEditorDataTab::createWidgets()
 {
     createIdWidgets();
@@ -275,6 +288,7 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
 
     paymentLayout -> addWidget(_paidCheckBox, 0, 0, 1, 1, Qt::AlignLeft);
     paymentLayout -> addWidget(_paymentComboBox, 0, 1, 1, 1, Qt::AlignCenter);
+    paymentLayout -> addWidget(_notesButton, 0, 2, 1, 1);
 
     QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
     paymentGroupBox -> setLayout(paymentLayout);
@@ -374,6 +388,9 @@ void View::Invoicing::InvoiceEditorDataTab::createPaymentWidgets()
     _paymentComboBox = new QComboBox;
     _paymentComboBox -> setEnabled(false);
     _paymentComboBox -> addItems(QStringList() << tr("Cash") << tr("Card") << tr("Transfer"));
+
+    _notesButton = new QPushButton(tr("&Notes"));
+    _notesButton->setIcon(QIcon(":/images/notes.png"));
 }
 
 void View::Invoicing::InvoiceEditorDataTab::createTotalsWidgets()
@@ -439,4 +456,6 @@ void View::Invoicing::InvoiceEditorDataTab::createConnections()
             this, SIGNAL(dataChanged()));
     connect(_paymentComboBox, SIGNAL(currentIndexChanged(int)),
             this, SIGNAL(dataChanged()));
+    connect(_notesButton, SIGNAL(clicked()),
+            this, SLOT(addNotes()));
 }
