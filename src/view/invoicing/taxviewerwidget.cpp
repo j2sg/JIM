@@ -32,35 +32,9 @@ View::Invoicing::TaxViewerWidget::TaxViewerWidget(int precisionTax, int precisio
 
 void View::Invoicing::TaxViewerWidget::setTax(Model::Domain::TaxType type, double percent, double value)
 {
-    switch(static_cast<int>(type)) {
-    case Model::Domain::GeneralVAT:
-        _taxTableWidget -> item(0, 0) -> setText(QString::number(percent, 'f', _precisionTax));
-        _taxTableWidget -> item(0, 1) -> setText(QString::number(value, 'f', _precisionMoney));
-        break;
-    case Model::Domain::ReducedVAT:
-        _taxTableWidget -> item(1, 0) -> setText(QString::number(percent, 'f', _precisionTax));
-        _taxTableWidget -> item(1, 1) -> setText(QString::number(value, 'f', _precisionMoney));
-        break;
-    case Model::Domain::SuperReducedVAT:
-        _taxTableWidget -> item(2, 0) -> setText(QString::number(percent, 'f', _precisionTax));
-        _taxTableWidget -> item(2, 1) -> setText(QString::number(value, 'f', _precisionMoney));
-        break;
-    case Model::Domain::GeneralES:
-        _taxTableWidget -> item(0, 2) -> setText(QString::number(percent, 'f', _precisionTax));
-        _taxTableWidget -> item(0, 3) -> setText(QString::number(value, 'f', _precisionMoney));
-        break;
-    case Model::Domain::ReducedES:
-        _taxTableWidget -> item(1, 2) -> setText(QString::number(percent, 'f', _precisionTax));
-        _taxTableWidget -> item(1, 3) -> setText(QString::number(value, 'f', _precisionMoney));
-        break;
-    case Model::Domain::SuperReducedES:
-        _taxTableWidget -> item(2, 2) -> setText(QString::number(percent, 'f', _precisionTax));
-        _taxTableWidget -> item(2, 3) -> setText(QString::number(value, 'f', _precisionMoney));
-        break;
-    case Model::Domain::PIT:
-        _taxTableWidget -> item(3, 0) -> setText(QString::number(percent, 'f', _precisionTax));
-        _taxTableWidget -> item(3, 1) -> setText(QString::number(-value, 'f', _precisionMoney));
-        break;
+    if(type >= Model::Domain::GeneralVAT && type < Model::Domain::TaxTypeCount) {
+        _taxTableWidget -> item(static_cast<int>(type), 0) -> setText(QString::number(percent, 'f', _precisionTax));
+        _taxTableWidget -> item(static_cast<int>(type), 1) -> setText(QString::number(value, 'f', _precisionMoney));
     }
 
     updateRows();
@@ -95,28 +69,26 @@ void View::Invoicing::TaxViewerWidget::setTaxes(const QList<Model::Domain::VatBr
 
 void View::Invoicing::TaxViewerWidget::reset()
 {
-    for(int row = 0;row < 3;++row)
-        for(int col = 0;col < 4;++col)
+    for(int row = 0;row < 7;++row)
+        for(int col = 0;col < 2;++col)
             _taxTableWidget -> item(row, col) -> setText(QString::number(0.0, 'f', _precisionTax));
-
-    _taxTableWidget->item(3, 0) -> setText(QString::number(0.0, 'f', _precisionTax));
-    _taxTableWidget->item(3, 1) -> setText(QString::number(0.0, 'f', _precisionTax));
 
     updateRows();
 }
 
 void View::Invoicing::TaxViewerWidget::createWidgets()
 {
-    _taxTableWidget = new QTableWidget(4, 4);
+    _taxTableWidget = new QTableWidget(7, 2);
     _taxTableWidget -> setHorizontalHeaderLabels(QStringList() <<
-                                                 tr("%VAT") <<
-                                                 tr("$VAT") <<
-                                                 tr("%ES") <<
-                                                 tr("$ES"));
+                                                 QLocale::system().percent() <<
+                                                 QLocale::system().currencySymbol());
     _taxTableWidget -> setVerticalHeaderLabels(QStringList() <<
-                                               tr("GEN") <<
-                                               tr("RED") <<
-                                               tr("SRE") <<
+                                               tr("G-VAT") <<
+                                               tr("R-VAT") <<
+                                               tr("S-VAT") <<
+                                               tr("G-ES") <<
+                                               tr("R-ES") <<
+                                               tr("S-ES") <<
                                                tr("PIT"));
 
     _taxTableWidget -> setSelectionMode(QAbstractItemView::NoSelection);
@@ -125,32 +97,21 @@ void View::Invoicing::TaxViewerWidget::createWidgets()
     _taxTableWidget -> setShowGrid(false);
     _taxTableWidget -> setAlternatingRowColors(true);
     _taxTableWidget -> setColumnWidth(0, COLUMN_PERCENT_WIDTH);
-    _taxTableWidget -> setColumnWidth(2, COLUMN_PERCENT_WIDTH);
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 
         _taxTableWidget -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
         _taxTableWidget -> horizontalHeader() -> setResizeMode(1, QHeaderView::Stretch);
-        _taxTableWidget -> horizontalHeader() -> setResizeMode(3, QHeaderView::Stretch);
     #else
         _taxTableWidget -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Fixed);
         _taxTableWidget -> horizontalHeader() -> setSectionResizeMode(1, QHeaderView::Stretch);
-        _taxTableWidget -> horizontalHeader() -> setSectionResizeMode(3, QHeaderView::Stretch);
     #endif
 
-    for(int row = 0; row < 3; ++row)
-        for(int col = 0; col < 4; ++col) {
+    for(int row = 0; row < 7; ++row)
+        for(int col = 0; col < 2; ++col) {
             QTableWidgetItem *item = new QTableWidgetItem;
             item -> setTextAlignment(Qt::AlignCenter);
            _taxTableWidget -> setItem(row, col, item);
         }
-
-    QTableWidgetItem *pitPercentItem = new QTableWidgetItem;
-    pitPercentItem -> setTextAlignment(Qt::AlignCenter);
-    _taxTableWidget -> setItem(3, 0, pitPercentItem);
-
-    QTableWidgetItem *pitCostItem = new QTableWidgetItem;
-    pitCostItem -> setTextAlignment(Qt::AlignCenter);
-    _taxTableWidget -> setItem(3, 1, pitCostItem);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(_taxTableWidget);
@@ -160,26 +121,10 @@ void View::Invoicing::TaxViewerWidget::createWidgets()
 
 void View::Invoicing::TaxViewerWidget::updateRows()
 {
-    if(_taxTableWidget -> item(0, 1) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(0, 3) -> text().toDouble() == 0.0)
-        _taxTableWidget -> hideRow(0);
-    else
-        _taxTableWidget -> showRow(0);
-
-    if(_taxTableWidget -> item(1, 1) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(1, 3) -> text().toDouble() == 0.0)
-        _taxTableWidget -> hideRow(1);
-    else
-        _taxTableWidget -> showRow(1);
-
-    if(_taxTableWidget -> item(2, 1) -> text().toDouble() == 0.0 &&
-       _taxTableWidget -> item(2, 3) -> text().toDouble() == 0.0)
-        _taxTableWidget -> hideRow(2);
-    else
-        _taxTableWidget -> showRow(2);
-
-    if(_taxTableWidget -> item(3, 1) -> text().toDouble() == 0.0)
-        _taxTableWidget -> hideRow(3);
-    else
-        _taxTableWidget -> showRow(3);
+    for(int row = 0; row < 7; ++row) {
+        if(_taxTableWidget -> item(row, 1) -> text().toDouble() != 0.0)
+            _taxTableWidget -> showRow(row);
+        else
+            _taxTableWidget -> hideRow(row);
+    }
 }
