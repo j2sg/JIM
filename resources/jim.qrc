@@ -30,6 +30,7 @@
         <file>images/export.png</file>
         <file>images/import.png</file>
         <file>images/jim.png</file>
+        <file>images/notes.png</file>
         <file>sql/sqlite/category.sql</file>
         <file>sql/sqlite/config.sql</file>
         <file>sql/sqlite/entity.sql</file>
