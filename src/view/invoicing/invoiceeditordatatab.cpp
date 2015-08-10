@@ -215,11 +215,11 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
 
     QGridLayout *entityLayout = new QGridLayout;
     entityLayout -> addWidget(_entityIdLabel, 0, 0, 1, 1);
-    entityLayout -> addWidget(_entityIdLineEdit, 0, 1, 1, 2);
-    entityLayout -> addWidget(_selectEntityToolButton, 0, 3, 1, 1);
-    entityLayout -> addWidget(_detailEntityToolButton, 0, 4, 1, 1);
+    entityLayout -> addWidget(_entityIdLineEdit, 0, 1, 1, 1);
+    entityLayout -> addWidget(_selectEntityToolButton, 0, 2, 1, 1);
+    entityLayout -> addWidget(_detailEntityToolButton, 0, 3, 1, 1);
     entityLayout -> addWidget(_entityNameLabel, 1, 0, 1, 1);
-    entityLayout -> addWidget(_entityNameLineEdit, 1, 1, 1, 4);
+    entityLayout -> addWidget(_entityNameLineEdit, 1, 1, 1, 3);
 
 
     QGroupBox *entityGroupBox = new QGroupBox((_invoice -> type() ? tr("&Customer") : tr("&Supplier")));
@@ -230,11 +230,25 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
     QGroupBox *operationsGroupBox = new QGroupBox(tr("&Operations"));
     operationsGroupBox -> setLayout(_operationEditor -> layout());
 
+    createPaymentWidgets();
+
+    QGridLayout *paymentLayout = new QGridLayout;
+
+    paymentLayout -> addWidget(_discountLabel, 0, 0, 1, 1);
+    paymentLayout -> addWidget(_discountTypeComboBox, 0, 1, 1, 1);
+    paymentLayout -> addWidget(_discountDoubleSpinBox, 0, 2, 1, 1);
+    paymentLayout -> addWidget(_paidCheckBox, 0, 3, 1, 1, Qt::AlignLeft);
+    paymentLayout -> addWidget(_paymentComboBox, 0, 4, 1, 1, Qt::AlignCenter);
+
+    QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
+    paymentGroupBox -> setLayout(paymentLayout);
+    paymentGroupBox -> setFixedSize(paymentGroupBox -> sizeHint());
+
     QGridLayout *leftLayout = new QGridLayout;
     leftLayout -> addWidget(idGroupBox, 0, 0, 1, 1);
     leftLayout -> addWidget(entityGroupBox, 0, 1, 1, 1);
     leftLayout -> addWidget(operationsGroupBox, 1, 0, 1, 2);
-
+    leftLayout -> addWidget(paymentGroupBox, 2, 0, 1, 2);
     createTaxesWidgets();
 
     QVBoxLayout *taxesLayout = new QVBoxLayout;
@@ -243,20 +257,7 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
 
     QGroupBox *taxesGroupBox = new QGroupBox(tr("&Taxes"));
     taxesGroupBox -> setLayout(taxesLayout);
-
-    createPaymentWidgets();
-
-    QGridLayout *paymentLayout = new QGridLayout;
-
-    paymentLayout -> addWidget(_discountLabel, 0, 0, 1, 1);
-    paymentLayout -> addWidget(_discountTypeComboBox, 0, 1, 1, 1);
-    paymentLayout -> addWidget(_discountDoubleSpinBox, 1, 1, 1, 1);
-    paymentLayout -> addWidget(_paidCheckBox, 2, 0, 1, 1, Qt::AlignLeft);
-    paymentLayout -> addWidget(_paymentComboBox, 2, 1, 1, 1, Qt::AlignCenter);
-
-    QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
-    paymentGroupBox -> setLayout(paymentLayout);
-    paymentGroupBox -> setFixedSize(paymentGroupBox -> sizeHint());
+    taxesGroupBox -> setFixedWidth(taxesGroupBox -> sizeHint().width());
 
     createTotalsWidgets();
 
@@ -273,12 +274,10 @@ void View::Invoicing::InvoiceEditorDataTab::createWidgets()
 
     QGroupBox *totalsGroupBox = new QGroupBox(tr("&Totals"));
     totalsGroupBox -> setLayout(totalsLayout);
-    totalsGroupBox -> setFixedSize(totalsGroupBox -> sizeHint());
 
-    QGridLayout *rightLayout = new QGridLayout;
-    rightLayout -> addWidget(taxesGroupBox, 0, 0, 1, 2);
-    rightLayout -> addWidget(paymentGroupBox, 1, 0, 1, 1, Qt::AlignTop);
-    rightLayout -> addWidget(totalsGroupBox, 1, 1, 1, 1, Qt::AlignTop);
+    QVBoxLayout *rightLayout = new QVBoxLayout;
+    rightLayout -> addWidget(taxesGroupBox);
+    rightLayout -> addWidget(totalsGroupBox);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
     mainLayout -> addLayout(leftLayout);
