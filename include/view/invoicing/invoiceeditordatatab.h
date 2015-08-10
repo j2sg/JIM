@@ -83,6 +83,7 @@ namespace View
             void createEntityWidgets();
             void createOperationsWidgets();
             void createTaxesWidgets();
+            void createDiscountWidgets();
             void createPaymentWidgets();
             void createTotalsWidgets();
             void createConnections();
@@ -103,7 +104,6 @@ namespace View
             OperationEditor *_operationEditor;
             View::Management::TaxApplyingWidget *_taxApplyingWidget;
             TaxViewerWidget *_taxViewerWidget;
-            QLabel *_discountLabel;
             QComboBox *_discountTypeComboBox;
             QDoubleSpinBox *_discountDoubleSpinBox;
             QLabel *_subtotalLabel;
