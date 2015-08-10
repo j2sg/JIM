@@ -44,7 +44,7 @@ namespace View
             void createConnections();
 
             QTextEdit *_textEdit;
-            QPushButton *_okButton;
+            QPushButton *_saveButton;
             QPushButton *_cancelButton;
 
             QString _notes;

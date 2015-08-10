@@ -27,6 +27,8 @@
 View::Invoicing::NotesDialog::NotesDialog(const QString &notes, QWidget *parent) : QDialog(parent), _notes(notes)
 {
     createWidgets();
+    setWindowTitle(tr("Add Notes"));
+    setWindowIcon(QIcon(":/images/notes.png"));
     createConnections();
 }
 
@@ -48,17 +50,19 @@ void View::Invoicing::NotesDialog::createWidgets()
     _textEdit = new QTextEdit;
     _textEdit -> setPlainText(_notes);
 
-    _okButton = new QPushButton(tr("Ok"));
-    _okButton -> setDefault(true);
+    _saveButton = new QPushButton(tr("Save"));
+    _saveButton -> setIcon(QIcon(":images/save.png"));
+    _saveButton -> setDefault(true);
 
     _cancelButton = new QPushButton(tr("Cancel"));
+    _cancelButton -> setIcon(QIcon(":images/cancel.png"));
 
     QHBoxLayout *topLayout = new QHBoxLayout;
     topLayout -> addWidget(_textEdit);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout -> addStretch();
-    bottomLayout -> addWidget(_okButton);
+    bottomLayout -> addWidget(_saveButton);
     bottomLayout -> addWidget(_cancelButton);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -70,7 +74,7 @@ void View::Invoicing::NotesDialog::createWidgets()
 
 void View::Invoicing::NotesDialog::createConnections()
 {
-    connect(_okButton, SIGNAL(clicked()),
+    connect(_saveButton, SIGNAL(clicked()),
             this, SLOT(accept()));
     connect(_cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 }
