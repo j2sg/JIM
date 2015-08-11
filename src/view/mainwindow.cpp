@@ -578,9 +578,37 @@ void View::MainWindow::createCentralWidget()
 
 void View::MainWindow::createActions()
 {
-    _createCompanyAction = new QAction(tr("&Create Company..."), this);
-    _createCompanyAction -> setIcon(QIcon(":/images/company.png"));
-    _createCompanyAction -> setStatusTip(tr("Create a new company"));
+    _connectToDBAction = new QAction(tr("Connect to database"), this);
+    _connectToDBAction -> setIcon(QIcon(":/images/storageon.png"));
+    _connectToDBAction -> setStatusTip(tr("Open a connection to database"));
+
+    _disconnectToDBAction = new QAction(tr("Disconnect from database"), this);
+    _disconnectToDBAction -> setIcon(QIcon(":/images/storageoff.png"));
+    _disconnectToDBAction -> setStatusTip(tr("Close the connection from database"));
+
+    _importDatabaseAction = new QAction(tr("&Import database..."), this);
+    _importDatabaseAction -> setIcon(QIcon(":/images/import.png"));
+    _importDatabaseAction -> setStatusTip(tr("Import database from an existing file"));
+
+    _exportDatabaseAction = new QAction(tr("&Export database..."), this);
+    _exportDatabaseAction -> setIcon(QIcon(":/images/export.png"));
+    _exportDatabaseAction -> setStatusTip(tr("Export database to a file"));
+
+    _optionsAction = new QAction(tr("&Options..."), this);
+    _optionsAction -> setIcon(QIcon(":/images/options.png"));
+    _optionsAction -> setStatusTip(tr("Set up application options"));
+
+    _printingAction = new QAction(tr("&Printing..."), this);
+    _printingAction -> setIcon(QIcon(":/images/printing.png"));
+    _printingAction -> setStatusTip(tr("Set up printing"));
+
+    _exitAction = new QAction(tr("E&xit"), this);
+    _exitAction -> setIcon(QIcon(":/images/exit.png"));
+    _exitAction -> setStatusTip(tr("Exit application"));
+
+    _newCompanyAction = new QAction(tr("&New Company..."), this);
+    _newCompanyAction -> setIcon(QIcon(":/images/company.png"));
+    _newCompanyAction -> setStatusTip(tr("Create a new company"));
 
     _loadCompanyAction = new QAction(tr("&Load Company..."), this);
     _loadCompanyAction -> setStatusTip(tr("Load a specific company"));
@@ -591,34 +619,6 @@ void View::MainWindow::createActions()
     _setUpCompanyAction = new QAction(tr("&Details..."), this);
     _setUpCompanyAction -> setIcon(QIcon(":/images/about.png"));
     _setUpCompanyAction -> setStatusTip(tr("Set up company details"));
-
-    _connectStorageAction = new QAction(tr("Connect Storage"), this);
-    _connectStorageAction -> setIcon(QIcon(":/images/storageon.png"));
-    _connectStorageAction -> setStatusTip(tr("Establish the connection to storage media"));
-
-    _disconnectStorageAction = new QAction(tr("Disconnect Storage"), this);
-    _disconnectStorageAction -> setIcon(QIcon(":/images/storageoff.png"));
-    _disconnectStorageAction -> setStatusTip(tr("Finish the connection to storage media"));
-
-    _importStorageAction = new QAction(tr("&Import Storage..."), this);
-    _importStorageAction -> setIcon(QIcon(":/images/import.png"));
-    _importStorageAction -> setStatusTip(tr("Import Storage from an existing file"));
-
-    _exportStorageAction = new QAction(tr("&Export Storage..."), this);
-    _exportStorageAction -> setIcon(QIcon(":/images/export.png"));
-    _exportStorageAction -> setStatusTip(tr("Export Storage to a file"));
-
-    _optionsAction = new QAction(tr("&Options..."), this);
-    _optionsAction -> setIcon(QIcon(":/images/options.png"));
-    _optionsAction -> setStatusTip(tr("Set up application options"));
-
-    _printingAction = new QAction(tr("&Printing..."), this);
-    _printingAction -> setIcon(QIcon(":/images/printing.png"));
-    _printingAction -> setStatusTip(tr("Set up printing configuration"));
-
-    _exitAction = new QAction(tr("E&xit"), this);
-    _exitAction -> setIcon(QIcon(":/images/exit.png"));
-    _exitAction -> setStatusTip(tr("Exit the application"));
 
     _createSaleInvoiceAction = new QAction(tr("Create &Sale Invoice..."), this);
     _createSaleInvoiceAction -> setIcon(QIcon(":/images/saleinvoice.png"));
@@ -706,21 +706,22 @@ void View::MainWindow::createActions()
 void View::MainWindow::createMenus()
 {
     _applicationMenu = menuBar() -> addMenu(tr("&Application"));
-    _applicationMenu -> addAction(_createCompanyAction);
-    _applicationMenu -> addAction(_loadCompanyAction);
-    _applicationMenu -> addAction(_closeCompanyAction);
-    _applicationMenu -> addAction(_setUpCompanyAction);
+    _applicationMenu -> addAction(_connectToDBAction);
+    _applicationMenu -> addAction(_disconnectToDBAction);
     _applicationMenu -> addSeparator();
-    _applicationMenu -> addAction(_connectStorageAction);
-    _applicationMenu -> addAction(_disconnectStorageAction);
-    _applicationMenu -> addSeparator();
-    _applicationMenu -> addAction(_importStorageAction);
-    _applicationMenu -> addAction(_exportStorageAction);
+    _applicationMenu -> addAction(_importDatabaseAction);
+    _applicationMenu -> addAction(_exportDatabaseAction);
     _applicationMenu -> addSeparator();
     _applicationMenu -> addAction(_optionsAction);
     _applicationMenu -> addAction(_printingAction);
     _applicationMenu -> addSeparator();
     _applicationMenu -> addAction(_exitAction);
+
+    /*_applicationMenu -> addAction(_newCompanyAction);
+    _applicationMenu -> addAction(_loadCompanyAction);
+    _applicationMenu -> addAction(_closeCompanyAction);
+    _applicationMenu -> addAction(_setUpCompanyAction);
+    _applicationMenu -> addSeparator();*/
 
     _invoicingMenu = menuBar() -> addMenu(tr("&Invoicing"));
     _invoicingMenu -> addAction(_createBuyInvoiceAction);
@@ -795,7 +796,7 @@ void View::MainWindow::createConnections()
 {
     connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateWindowMenu()));
-    connect(_createCompanyAction, SIGNAL(triggered()),
+    connect(_newCompanyAction, SIGNAL(triggered()),
             this, SLOT(createCompany()));
     connect(_loadCompanyAction, SIGNAL(triggered()),
             this, SLOT(loadCompany()));
@@ -803,13 +804,13 @@ void View::MainWindow::createConnections()
             this, SLOT(closeCompany()));
     connect(_setUpCompanyAction, SIGNAL(triggered()),
             this, SLOT(setUpCompany()));
-    connect(_connectStorageAction, SIGNAL(triggered()),
+    connect(_connectToDBAction, SIGNAL(triggered()),
             this, SLOT(connectStorage()));
-    connect(_disconnectStorageAction, SIGNAL(triggered()),
+    connect(_disconnectToDBAction, SIGNAL(triggered()),
             this, SLOT(disconnectStorage()));
-    connect(_importStorageAction, SIGNAL(triggered()),
+    connect(_importDatabaseAction, SIGNAL(triggered()),
             this, SLOT(importStorage()));
-    connect(_exportStorageAction, SIGNAL(triggered()),
+    connect(_exportDatabaseAction, SIGNAL(triggered()),
             this, SLOT(exportStorage()));
     connect(_optionsAction, SIGNAL(triggered()),
             this, SLOT(options()));
@@ -964,12 +965,12 @@ void View::MainWindow::setStorageConnected(bool connected)
 {
     QString host = Persistence::Manager::readConfig("Host", "Storage/DBMS").toString();
 
-    _createCompanyAction -> setEnabled(connected);
+    _newCompanyAction -> setEnabled(connected);
     _loadCompanyAction -> setEnabled(connected);
-    _connectStorageAction -> setEnabled(!connected);
-    _disconnectStorageAction -> setEnabled(connected);
-    _importStorageAction -> setEnabled(!connected);
-    _exportStorageAction -> setEnabled(!connected);
+    _connectToDBAction -> setEnabled(!connected);
+    _disconnectToDBAction -> setEnabled(connected);
+    _importDatabaseAction -> setEnabled(!connected);
+    _exportDatabaseAction -> setEnabled(!connected);
     _manageCompanyAction -> setEnabled(connected);
     _manageCustomerAction -> setEnabled(connected);
     _manageSupplierAction -> setEnabled(connected);
@@ -986,11 +987,11 @@ void View::MainWindow::setStorageConnected(bool connected)
 
 void View::MainWindow::setCompanyOpen(bool open)
 {
-    _createCompanyAction -> setEnabled(!open);
+    _newCompanyAction -> setEnabled(!open);
     _loadCompanyAction -> setEnabled(!open);
     _closeCompanyAction -> setEnabled(open);
     _setUpCompanyAction -> setEnabled(open);
-    _disconnectStorageAction -> setEnabled(!open);
+    _disconnectToDBAction -> setEnabled(!open);
     _createSaleInvoiceAction -> setEnabled(open);
     _createBuyInvoiceAction -> setEnabled(open);
     _loadInvoiceAction -> setEnabled(open);

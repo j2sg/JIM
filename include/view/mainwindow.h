@@ -135,17 +135,17 @@ namespace View
         bool verifyExit();
 
         QMdiArea *_mdiArea;
-        QAction *_createCompanyAction;
-        QAction *_loadCompanyAction;
-        QAction *_closeCompanyAction;
-        QAction *_connectStorageAction;
-        QAction *_disconnectStorageAction;
-        QAction *_setUpCompanyAction;
-        QAction *_importStorageAction;
-        QAction *_exportStorageAction;
+        QAction *_connectToDBAction;
+        QAction *_disconnectToDBAction;
+        QAction *_importDatabaseAction;
+        QAction *_exportDatabaseAction;
         QAction *_optionsAction;
         QAction *_printingAction;
         QAction *_exitAction;
+        QAction *_newCompanyAction;
+        QAction *_loadCompanyAction;
+        QAction *_closeCompanyAction;
+        QAction *_setUpCompanyAction;
         QAction *_createSaleInvoiceAction;
         QAction *_createBuyInvoiceAction;
         QAction *_loadInvoiceAction;
