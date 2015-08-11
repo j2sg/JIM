@@ -672,7 +672,11 @@ void View::MainWindow::createActions()
     _manageCompanyAction -> setIcon(QIcon(":/images/company.png"));
     _manageCompanyAction -> setStatusTip(tr("Company Management"));
 
-    _manageCustomerAction = new QAction(tr("&Customers..."), this);
+    _manageInvoiceAction = new QAction(tr("&Invoices..."), this);
+    _manageInvoiceAction -> setIcon(QIcon(":/images/loadinvoice.png"));
+    _manageInvoiceAction -> setStatusTip(tr("Invoice Management"));
+
+    _manageCustomerAction = new QAction(tr("C&ustomers..."), this);
     _manageCustomerAction -> setIcon(QIcon(":/images/entity.png"));
     _manageCustomerAction -> setStatusTip(tr("Customer Management"));
 
@@ -779,6 +783,7 @@ void View::MainWindow::createMenus()
 
     _managementMenu = menuBar() -> addMenu(tr("&Management"));
     _managementMenu -> addAction(_manageCompanyAction);
+    _managementMenu -> addAction(_manageInvoiceAction);
     _managementMenu -> addAction(_manageCustomerAction);
     _managementMenu -> addAction(_manageSupplierAction);
     _managementMenu -> addAction(_manageProductAction);

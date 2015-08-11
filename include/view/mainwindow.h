@@ -162,6 +162,7 @@ namespace View
         QAction *_closeAllAction;
         QAction *_closeAllExceptAction;
         QAction *_manageCompanyAction;
+        QAction *_manageInvoiceAction;
         QAction *_manageCustomerAction;
         QAction *_manageSupplierAction;
         QAction *_manageProductAction;
