@@ -644,6 +644,11 @@ void View::MainWindow::createActions()
 
     _clearRecentInvoicesAction = new QAction(tr("Clear"), this);
 
+    _printInvoiceAction = new QAction(tr("&Print Invoice"), this);
+    _printInvoiceAction -> setIcon(QIcon(":/images/printing.png"));
+    _printInvoiceAction -> setIconText(tr("Print"));
+    _printInvoiceAction -> setStatusTip(tr("Print current invoice"));
+
     _saveAction = new QAction(tr("&Save Invoice"), this);
     _saveAction -> setIcon(QIcon(":/images/save.png"));
     _saveAction -> setIconText(tr("Save"));
@@ -661,7 +666,7 @@ void View::MainWindow::createActions()
     _closeAllAction -> setStatusTip(tr("Close all open invoices"));
 
     _closeAllExceptAction = new QAction(tr("Close All Invoices except"), this);
-    _closeAllExceptAction -> setStatusTip(tr("Close current company"));
+    _closeAllExceptAction -> setStatusTip(tr("Close all open invoices except current invoice"));
 
     _manageCompanyAction = new QAction(tr("&Companies..."), this);
     _manageCompanyAction -> setIcon(QIcon(":/images/company.png"));
@@ -762,6 +767,8 @@ void View::MainWindow::createMenus()
         _recentInvoiceSubMenu -> addAction(_recentInvoicesAction[k]);
     _recentInvoiceSubMenu -> addSeparator();
     _recentInvoiceSubMenu -> addAction(_clearRecentInvoicesAction);
+    _invoicingMenu -> addSeparator();
+    _invoicingMenu -> addAction(_printInvoiceAction);
     _invoicingMenu -> addSeparator();
     _invoicingMenu -> addAction(_saveAction);
     _invoicingMenu -> addAction(_saveAllAction);

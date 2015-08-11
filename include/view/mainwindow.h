@@ -155,6 +155,7 @@ namespace View
         QAction *_openInvoiceAction;
         QAction *_recentInvoicesAction[MAX_RECENT_ELEMENTS];
         QAction *_clearRecentInvoicesAction;
+        QAction *_printInvoiceAction;
         QAction *_saveAction;
         QAction *_saveAllAction;
         QAction *_closeAction;
