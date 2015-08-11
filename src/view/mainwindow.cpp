@@ -578,11 +578,11 @@ void View::MainWindow::createCentralWidget()
 
 void View::MainWindow::createActions()
 {
-    _connectToDBAction = new QAction(tr("Connect to database"), this);
+    _connectToDBAction = new QAction(tr("&Connect to database"), this);
     _connectToDBAction -> setIcon(QIcon(":/images/storageon.png"));
     _connectToDBAction -> setStatusTip(tr("Open a connection to database"));
 
-    _disconnectToDBAction = new QAction(tr("Disconnect from database"), this);
+    _disconnectToDBAction = new QAction(tr("&Disconnect from database"), this);
     _disconnectToDBAction -> setIcon(QIcon(":/images/storageoff.png"));
     _disconnectToDBAction -> setStatusTip(tr("Close the connection from database"));
 
@@ -610,35 +610,58 @@ void View::MainWindow::createActions()
     _newCompanyAction -> setIcon(QIcon(":/images/company.png"));
     _newCompanyAction -> setStatusTip(tr("Create a new company"));
 
-    _loadCompanyAction = new QAction(tr("&Load Company..."), this);
-    _loadCompanyAction -> setStatusTip(tr("Load a specific company"));
+    _openCompanyAction = new QAction(tr("&Open Company..."), this);
+    _openCompanyAction -> setStatusTip(tr("Open a certain company"));
+
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k) {
+        _recentCompaniesAction[k] = new QAction(this);
+        _recentCompaniesAction[k] -> setVisible(false);
+    }
+
+    _clearRecentCompaniesAction = new QAction(tr("Clear"), this);
+
+    _setUpCompanyAction = new QAction(tr("&Properties..."), this);
+    _setUpCompanyAction -> setIcon(QIcon(":/images/about.png"));
+    _setUpCompanyAction -> setStatusTip(tr("Set up company properties"));
 
     _closeCompanyAction = new QAction(tr("&Close Company"), this);
-    _closeCompanyAction -> setStatusTip(tr("Close the actual company"));
+    _closeCompanyAction -> setStatusTip(tr("Close current company"));
 
-    _setUpCompanyAction = new QAction(tr("&Details..."), this);
-    _setUpCompanyAction -> setIcon(QIcon(":/images/about.png"));
-    _setUpCompanyAction -> setStatusTip(tr("Set up company details"));
+    _newInvoiceAction = new QAction(tr("&New Invoice..."), this);
+    _newInvoiceAction -> setIcon(QIcon(":/images/saleinvoice.png"));
+    _newInvoiceAction -> setIconText(tr("New"));
+    _newInvoiceAction -> setStatusTip(tr("Create a new invoice"));
 
-    _createSaleInvoiceAction = new QAction(tr("Create &Sale Invoice..."), this);
-    _createSaleInvoiceAction -> setIcon(QIcon(":/images/saleinvoice.png"));
-    _createSaleInvoiceAction -> setIconText(tr("Sale Invoice"));
-    _createSaleInvoiceAction -> setStatusTip(tr("Create a new Sale Invoice with a customer"));
+    _openInvoiceAction = new QAction(tr("&Open Invoice..."), this);
+    _openInvoiceAction -> setIcon(QIcon(":/images/loadinvoice.png"));
+    _openInvoiceAction -> setIconText(tr("Open"));
+    _openInvoiceAction -> setStatusTip(tr("Open a certain invoice"));
 
-    _createBuyInvoiceAction = new QAction(tr("Create &Buy Invoice..."), this);
-    _createBuyInvoiceAction -> setIcon(QIcon(":/images/buyinvoice.png"));
-    _createBuyInvoiceAction -> setIconText(tr("Buy Invoice"));
-    _createBuyInvoiceAction -> setStatusTip(tr("Create a new Buy Invoice with a provider"));
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k) {
+        _recentInvoicesAction[k] = new QAction(this);
+        _recentInvoicesAction[k] -> setVisible(false);
+    }
 
-    _loadInvoiceAction = new QAction(tr("&Load Invoice..."), this);
-    _loadInvoiceAction -> setIcon(QIcon(":/images/loadinvoice.png"));
-    _loadInvoiceAction -> setIconText(tr("Load"));
-    _loadInvoiceAction -> setStatusTip(tr("Load a specific Invoice"));
+    _clearRecentInvoicesAction = new QAction(tr("Clear"), this);
 
-    _searchInvoiceAction = new QAction(tr("&Search Invoice..."), this);
-    _searchInvoiceAction -> setIcon(QIcon(":/images/search.png"));
-    _searchInvoiceAction -> setIconText(tr("Search"));
-    _searchInvoiceAction -> setStatusTip(tr("Make an invoice search"));
+    _saveAction = new QAction(tr("&Save Invoice"), this);
+    _saveAction -> setIcon(QIcon(":/images/save.png"));
+    _saveAction -> setIconText(tr("Save"));
+    _saveAction -> setStatusTip(tr("Save current invoice"));
+
+    _saveAllAction = new QAction(tr("&Save all"), this);
+    _saveAllAction -> setIcon(QIcon(":/images/save.png"));
+    _saveAllAction -> setIconText(tr("Save all"));
+    _saveAllAction -> setStatusTip(tr("Save all open invoices"));
+
+    _closeAction = new QAction(tr("&Close Invoice"), this);
+    _closeAction -> setStatusTip(tr("Close current invoice"));
+
+    _closeAllAction = new QAction(tr("Close All Invoices"), this);
+    _closeAllAction -> setStatusTip(tr("Close all open invoices"));
+
+    _closeAllExceptAction = new QAction(tr("Close All Invoices except"), this);
+    _closeAllExceptAction -> setStatusTip(tr("Close current company"));
 
     _manageCompanyAction = new QAction(tr("&Companies..."), this);
     _manageCompanyAction -> setIcon(QIcon(":/images/company.png"));
@@ -717,18 +740,35 @@ void View::MainWindow::createMenus()
     _applicationMenu -> addSeparator();
     _applicationMenu -> addAction(_exitAction);
 
-    /*_applicationMenu -> addAction(_newCompanyAction);
-    _applicationMenu -> addAction(_loadCompanyAction);
-    _applicationMenu -> addAction(_closeCompanyAction);
-    _applicationMenu -> addAction(_setUpCompanyAction);
-    _applicationMenu -> addSeparator();*/
+    _companiesMenu = menuBar() -> addMenu(tr("&Companies"));
+    _companiesMenu -> addAction(_newCompanyAction);
+    _companiesMenu -> addSeparator();
+    _companiesMenu -> addAction(_openCompanyAction);
+    _recentCompanySubMenu = _companiesMenu -> addMenu(tr("&Recent Companies"));
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
+        _recentCompanySubMenu -> addAction(_recentCompaniesAction[k]);
+    _recentCompanySubMenu -> addSeparator();
+    _recentCompanySubMenu -> addAction(_clearRecentCompaniesAction);
+    _companiesMenu -> addAction(_setUpCompanyAction);
+    _companiesMenu -> addSeparator();
+    _companiesMenu -> addAction(_closeCompanyAction);
 
     _invoicingMenu = menuBar() -> addMenu(tr("&Invoicing"));
-    _invoicingMenu -> addAction(_createBuyInvoiceAction);
-    _invoicingMenu -> addAction(_createSaleInvoiceAction);
+    _invoicingMenu -> addAction(_newInvoiceAction);
     _invoicingMenu -> addSeparator();
-    _invoicingMenu -> addAction(_loadInvoiceAction);
-    _invoicingMenu -> addAction(_searchInvoiceAction);
+    _invoicingMenu -> addAction(_openInvoiceAction);
+    _recentInvoiceSubMenu = _invoicingMenu -> addMenu(tr("&Recent Invoices"));
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
+        _recentInvoiceSubMenu -> addAction(_recentInvoicesAction[k]);
+    _recentInvoiceSubMenu -> addSeparator();
+    _recentInvoiceSubMenu -> addAction(_clearRecentInvoicesAction);
+    _invoicingMenu -> addSeparator();
+    _invoicingMenu -> addAction(_saveAction);
+    _invoicingMenu -> addAction(_saveAllAction);
+    _invoicingMenu -> addSeparator();
+    _invoicingMenu -> addAction(_closeAction);
+    _invoicingMenu -> addAction(_closeAllAction);
+    _invoicingMenu -> addAction(_closeAllExceptAction);
 
     _managementMenu = menuBar() -> addMenu(tr("&Management"));
     _managementMenu -> addAction(_manageCompanyAction);
@@ -763,12 +803,12 @@ void View::MainWindow::createMenus()
 
 void View::MainWindow::createToolBar()
 {
-    _invoicingToolBar = addToolBar(tr("Invoicing"));
+   /* _invoicingToolBar = addToolBar(tr("Invoicing"));
     _invoicingToolBar -> addAction(_createBuyInvoiceAction);
     _invoicingToolBar -> addAction(_createSaleInvoiceAction);
     _invoicingToolBar -> addAction(_loadInvoiceAction);
     _invoicingToolBar -> addAction(_searchInvoiceAction);
-    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);*/
 
     _managementToolBar = addToolBar(tr("Management"));
     _managementToolBar -> addAction(_manageCustomerAction);
@@ -798,7 +838,7 @@ void View::MainWindow::createConnections()
             this, SLOT(updateWindowMenu()));
     connect(_newCompanyAction, SIGNAL(triggered()),
             this, SLOT(createCompany()));
-    connect(_loadCompanyAction, SIGNAL(triggered()),
+    connect(_openCompanyAction, SIGNAL(triggered()),
             this, SLOT(loadCompany()));
     connect(_closeCompanyAction, SIGNAL(triggered()),
             this, SLOT(closeCompany()));
@@ -818,14 +858,14 @@ void View::MainWindow::createConnections()
             this, SLOT(printing()));
     connect(_exitAction, SIGNAL(triggered()),
             this, SLOT(close()));
-    connect(_createSaleInvoiceAction, SIGNAL(triggered()),
+    /*connect(_createSaleInvoiceAction, SIGNAL(triggered()),
             this, SLOT(createSaleInvoice()));
     connect(_createBuyInvoiceAction, SIGNAL(triggered()),
             this, SLOT(createBuyInvoice()));
     connect(_loadInvoiceAction, SIGNAL(triggered()),
             this, SLOT(loadInvoice()));
     connect(_searchInvoiceAction, SIGNAL(triggered()),
-            this, SLOT(searchInvoice()));
+            this, SLOT(searchInvoice()));*/
     connect(_manageCompanyAction, SIGNAL(triggered()),
             this, SLOT(manageCompany()));
     connect(_manageCustomerAction, SIGNAL(triggered()),
@@ -966,7 +1006,7 @@ void View::MainWindow::setStorageConnected(bool connected)
     QString host = Persistence::Manager::readConfig("Host", "Storage/DBMS").toString();
 
     _newCompanyAction -> setEnabled(connected);
-    _loadCompanyAction -> setEnabled(connected);
+    _openCompanyAction -> setEnabled(connected);
     _connectToDBAction -> setEnabled(!connected);
     _disconnectToDBAction -> setEnabled(connected);
     _importDatabaseAction -> setEnabled(!connected);
@@ -988,14 +1028,14 @@ void View::MainWindow::setStorageConnected(bool connected)
 void View::MainWindow::setCompanyOpen(bool open)
 {
     _newCompanyAction -> setEnabled(!open);
-    _loadCompanyAction -> setEnabled(!open);
+    _openCompanyAction -> setEnabled(!open);
     _closeCompanyAction -> setEnabled(open);
     _setUpCompanyAction -> setEnabled(open);
     _disconnectToDBAction -> setEnabled(!open);
-    _createSaleInvoiceAction -> setEnabled(open);
+    /*_createSaleInvoiceAction -> setEnabled(open);
     _createBuyInvoiceAction -> setEnabled(open);
     _loadInvoiceAction -> setEnabled(open);
-    _searchInvoiceAction -> setEnabled(open);
+    _searchInvoiceAction -> setEnabled(open);*/
     _manageCompanyAction -> setEnabled(!open);
     _volumeBuyAction -> setEnabled(open);
     _volumeSaleAction -> setEnabled(open);

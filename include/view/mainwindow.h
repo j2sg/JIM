@@ -25,6 +25,8 @@
 #include <QDate>
 #include "types.h"
 
+#define MAX_RECENT_ELEMENTS 10
+
 QT_BEGIN_NAMESPACE
 class QMdiArea;
 class QAction;
@@ -142,14 +144,22 @@ namespace View
         QAction *_optionsAction;
         QAction *_printingAction;
         QAction *_exitAction;
+
         QAction *_newCompanyAction;
-        QAction *_loadCompanyAction;
-        QAction *_closeCompanyAction;
+        QAction *_openCompanyAction;
+        QAction *_recentCompaniesAction[MAX_RECENT_ELEMENTS];
+        QAction *_clearRecentCompaniesAction;
         QAction *_setUpCompanyAction;
-        QAction *_createSaleInvoiceAction;
-        QAction *_createBuyInvoiceAction;
-        QAction *_loadInvoiceAction;
-        QAction *_searchInvoiceAction;
+        QAction *_closeCompanyAction;
+        QAction *_newInvoiceAction;
+        QAction *_openInvoiceAction;
+        QAction *_recentInvoicesAction[MAX_RECENT_ELEMENTS];
+        QAction *_clearRecentInvoicesAction;
+        QAction *_saveAction;
+        QAction *_saveAllAction;
+        QAction *_closeAction;
+        QAction *_closeAllAction;
+        QAction *_closeAllExceptAction;
         QAction *_manageCompanyAction;
         QAction *_manageCustomerAction;
         QAction *_manageSupplierAction;
@@ -160,14 +170,17 @@ namespace View
         //QAction *_calculatorAction;
         //QAction *_addressBookAction;
         QAction *_fullScreenAction;
-        QAction *_closeAction;
-        QAction *_closeAllAction;
+        QAction *_closeWindowAction;
+        QAction *_closeAllWindowsAction;
         QAction *_nextAction;
         QAction *_previousAction;
         QAction *_aboutAction;
         QAction *_aboutQtAction;
         QMenu *_applicationMenu;
+        QMenu *_companiesMenu;
+        QMenu *_recentCompanySubMenu;
         QMenu *_invoicingMenu;
+        QMenu *_recentInvoiceSubMenu;
         QMenu *_managementMenu;
         QMenu *_reportMenu;
         //QMenu *_toolsMenu;
@@ -186,6 +199,8 @@ namespace View
 
         View::Management::EntityEditor *_companyEditor;
         View::Management::BusinessEditor *_businessEditor;
+
+        static const int maxRecentElements = 10;
     };
 }
 
