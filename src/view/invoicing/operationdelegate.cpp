@@ -130,7 +130,12 @@ void View::Invoicing::OperationDelegate::setModelData(QWidget *editor, QAbstract
         OperationModel *operationModel = dynamic_cast<OperationModel *>(model);
         Model::Domain::Operation *currOperation = operationModel -> operations() -> at(index.row());
         QComboBox *discountTypeComboBox = qobject_cast<QComboBox *>(editor);
-        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(discountTypeComboBox -> currentData().toInt());
+        Model::Domain::DiscountType discountType;
+        #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+            discountType = static_cast<Model::Domain::DiscountType>(discountTypeComboBox -> itemData(discountTypeComboBox -> currentIndex()).toInt());
+        #else
+            discountType = static_cast<Model::Domain::DiscountType>(discountTypeComboBox -> currentData().toInt());
+        #endif
         if(discountType == Model::Domain::NoDiscount || discountType == Model::Domain::Percent || discountType == Model::Domain::Amount)
             currOperation -> setDiscount(0.0);
         else

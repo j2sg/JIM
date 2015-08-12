@@ -79,7 +79,13 @@ void View::Management::ProductDialog::productModified(bool modified)
 void View::Management::ProductDialog::textChangedOnPriceLineEdit(const QString text)
 {
     bool priceOK = !text.isEmpty() && text.toDouble() != 0;
-    Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
+    Model::Domain::DiscountType type;
+
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> itemData( _discountTypeComboBox -> currentIndex()).toInt());
+    #else
+        type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
+    #endif
 
     _discountDoubleSpinBox -> setEnabled(priceOK && type != Model::Domain::NoDiscount);
     _discountTypeComboBox -> setEnabled(priceOK);
@@ -99,7 +105,13 @@ void View::Management::ProductDialog::textChangedOnPriceLineEdit(const QString t
 
 void View::Management::ProductDialog::currentIndexChangedOnDiscountTypeComboBox()
 {
-    Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox->currentData().toInt());
+    Model::Domain::DiscountType type;
+
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> itemData( _discountTypeComboBox -> currentIndex()).toInt());
+    #else
+        type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
+    #endif
 
     _discountDoubleSpinBox -> setEnabled(type != Model::Domain::NoDiscount);
 
@@ -271,9 +283,14 @@ void View::Management::ProductDialog::saveProduct()
     _product -> setCategory(Model::Management::CategoryManager::get(Model::Management::CategoryManager::getAllNames().value(_categoryComboBox -> currentText())));
     _product -> setDescription(_descriptionTextEdit -> toPlainText());
     _product -> setPrice(_priceLineEdit -> text().toDouble());
-    _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> currentData().toInt()));
     _product -> setDiscount(_discountDoubleSpinBox -> value());
-    _product -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt()));
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> itemData(_priceTypeComboBox -> currentIndex()).toInt()));
+        _product -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> itemData(_discountTypeComboBox -> currentIndex()).toInt()));
+    #else
+        _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> currentData().toInt()));
+        _product -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt()));
+    #endif
 }
 
 bool View::Management::ProductDialog::isSaveable()

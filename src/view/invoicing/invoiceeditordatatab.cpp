@@ -81,7 +81,11 @@ void View::Invoicing::InvoiceEditorDataTab::saveInvoice()
     _invoice -> setId(_idLineEdit -> text().toInt());
     _invoice -> setDate(_dateDateEdit -> date());
     _invoice -> setPlace(_placeLineEdit -> text());
-    _invoice -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt()));
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        _invoice -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> itemData(_discountTypeComboBox -> currentIndex()).toInt()));
+    #else
+        _invoice -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt()));
+    #endif
     _invoice -> setDiscount(_discountDoubleSpinBox -> value());
     _invoice -> setPaid(_paidCheckBox -> isChecked());
     _invoice -> setPayment(static_cast<Model::Domain::PaymentType>(_paymentComboBox -> currentIndex()));
@@ -163,7 +167,13 @@ void View::Invoicing::InvoiceEditorDataTab::detailEntity()
 
 void View::Invoicing::InvoiceEditorDataTab::updateDiscount()
 {
-    Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
+    Model::Domain::DiscountType type;
+
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> itemData(_discountTypeComboBox -> currentIndex()).toInt());
+    #else
+        type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
+    #endif
 
     _discountTypeComboBox->setEnabled(_invoice -> subtotal() != 0);
     _discountDoubleSpinBox -> setEnabled(type != Model::Domain::NoDiscount);
