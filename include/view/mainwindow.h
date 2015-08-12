@@ -109,8 +109,6 @@ namespace View
         void volumeBuy();
         void volumeSale();
         void unpaidInvoices();
-        //void calculator();
-        //void addressBook();
         void fullscreen(bool enabled);
         void toolBarButtonStyle();
         void viewMode();
@@ -177,8 +175,6 @@ namespace View
         QAction *_volumeBuyAction;
         QAction *_volumeSaleAction;
         QAction *_unpaidInvoicesAction;
-        //QAction *_calculatorAction;
-        //QAction *_addressBookAction;
         QAction *_fullScreenAction;
         QAction *_showMenuBarAction;
         QAction *_showCompaniesToolBarAction;
@@ -210,7 +206,6 @@ namespace View
         QMenu *_recentInvoiceSubMenu;
         QMenu *_managementMenu;
         QMenu *_reportMenu;
-        //QMenu *_toolsMenu;
         QMenu *_windowMenu;
         QMenu *_showToolBarSubMenu;
         QMenu *_toolBarButtonStyleSubMenu;

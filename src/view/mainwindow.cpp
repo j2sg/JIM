@@ -524,16 +524,6 @@ void View::MainWindow::unpaidInvoices()
     unpaidsReport -> show();
 }
 
-/*void View::MainWindow::calculator()
-{
-    QMessageBox::information(this, tr("Calculator"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}*/
-
-/*void View::MainWindow::addressBook()
-{
-    QMessageBox::information(this, tr("Address Book"), tr("Feature not implemented yet"), QMessageBox::Ok);
-}*/
-
 void View::MainWindow::fullscreen(bool enabled)
 {
     if(enabled)
@@ -753,14 +743,6 @@ void View::MainWindow::createActions()
     _unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
     _unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
 
-    //_calculatorAction = new QAction(tr("&Calculator..."), this);
-    //_calculatorAction -> setIcon(QIcon(":/images/calc.png"));
-    //_calculatorAction -> setStatusTip(tr("Open Calculator"));
-
-    //_addressBookAction = new QAction(tr("&Address Book..."), this);
-    //_addressBookAction -> setIcon(QIcon(":/images/address.png"));
-    //_addressBookAction -> setStatusTip(tr("Open Address Book"));
-
     _fullScreenAction = new QAction(tr("&Full Screen"), this);
     _fullScreenAction -> setCheckable(true);
     _fullScreenAction -> setChecked(false);
@@ -902,10 +884,6 @@ void View::MainWindow::createMenus()
     _reportMenu -> addAction(_volumeBuyAction);
     _reportMenu -> addAction(_volumeSaleAction);
     _reportMenu -> addAction(_unpaidInvoicesAction);
-
-    //_toolsMenu = menuBar() -> addMenu(tr("&Tools"));
-    //_toolsMenu -> addAction(_calculatorAction);
-    //_toolsMenu -> addAction(_addressBookAction);
 
     _windowMenu = menuBar() -> addMenu(tr("&Window"));
     _windowMenu -> addAction(_fullScreenAction);
@@ -1050,10 +1028,6 @@ void View::MainWindow::createConnections()
             this, SLOT(volumeSale()));
     connect(_unpaidInvoicesAction, SIGNAL(triggered()),
             this, SLOT(unpaidInvoices()));
-    //connect(_calculatorAction, SIGNAL(triggered()),
-    //        this, SLOT(calculator()));
-    //connect(_addressBookAction, SIGNAL(triggered()),
-    //        this, SLOT(addressBook()));
     connect(_fullScreenAction, SIGNAL(toggled(bool)),
             this, SLOT(fullscreen(bool)));
     connect(_showMenuBarAction, SIGNAL(toggled(bool)),
@@ -1204,7 +1178,6 @@ void View::MainWindow::setStorageConnected(bool connected)
     _manageCustomerAction -> setEnabled(connected);
     _manageSupplierAction -> setEnabled(connected);
     _manageProductAction -> setEnabled(connected);
-    //_addressBookAction -> setEnabled(connected);
 
     _managementMenu -> setEnabled(connected);
 
