@@ -893,14 +893,22 @@ void View::MainWindow::createMenus()
 
 void View::MainWindow::createToolBar()
 {
-   /* _invoicingToolBar = addToolBar(tr("Invoicing"));
-    _invoicingToolBar -> addAction(_createBuyInvoiceAction);
-    _invoicingToolBar -> addAction(_createSaleInvoiceAction);
-    _invoicingToolBar -> addAction(_loadInvoiceAction);
-    _invoicingToolBar -> addAction(_searchInvoiceAction);
-    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);*/
+    _companiesToolBar = addToolBar(tr("Companies"));
+    _companiesToolBar -> addAction(_newCompanyAction);
+    _companiesToolBar -> addAction(_openCompanyAction);
+    _companiesToolBar -> addAction(_setUpCompanyAction);
+    _companiesToolBar -> addAction(_closeCompanyAction);
+
+    _invoicingToolBar = addToolBar(tr("Invoicing"));
+    _invoicingToolBar -> addAction(_newInvoiceAction);
+    _invoicingToolBar -> addAction(_openInvoiceAction);
+    _invoicingToolBar -> addAction(_printInvoiceAction);
+    _invoicingToolBar -> addAction(_saveAction);
+    _invoicingToolBar -> addAction(_closeAction);
+    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     _managementToolBar = addToolBar(tr("Management"));
+    _managementToolBar -> addAction(_manageInvoiceAction);
     _managementToolBar -> addAction(_manageCustomerAction);
     _managementToolBar -> addAction(_manageSupplierAction);
     _managementToolBar -> addAction(_manageProductAction);

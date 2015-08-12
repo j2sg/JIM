@@ -145,7 +145,6 @@ namespace View
         QAction *_optionsAction;
         QAction *_printingAction;
         QAction *_exitAction;
-
         QAction *_newCompanyAction;
         QAction *_openCompanyAction;
         QAction *_recentCompaniesAction[MAX_RECENT_ELEMENTS];
