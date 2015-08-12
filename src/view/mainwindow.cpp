@@ -73,12 +73,12 @@ View::MainWindow::MainWindow()
     _companyEditor = 0;
     _businessEditor = 0;
 
-    connectStorage();
+    connectToDB();
 }
 
 View::MainWindow::~MainWindow()
 {
-    disconnectStorage();
+    disconnectToDB();
 
     delete _printer;
 
@@ -163,7 +163,7 @@ bool View::MainWindow::login()
     return _authorized;
 }
 
-void View::MainWindow::connectStorage()
+void View::MainWindow::connectToDB()
 {
     if(!(_connected = Persistence::Manager::connectStorage()))
         QMessageBox::critical(this, tr("Connect Storage"),
@@ -174,7 +174,7 @@ void View::MainWindow::connectStorage()
     setStorageConnected(_connected);
 }
 
-void View::MainWindow::disconnectStorage()
+void View::MainWindow::disconnectToDB()
 {
     Persistence::Manager::disconnectStorage();
     setStorageConnected((_connected = false));
@@ -183,11 +183,11 @@ void View::MainWindow::disconnectStorage()
     deleteAllEditors();
 }
 
-void View::MainWindow::importStorage()
+void View::MainWindow::importDB()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Import Storage"), DEFAULT_STORAGE_PATH, tr("All Files (*.*)"));
 
-    if(fileName.isEmpty() || !verifyImportStorage())
+    if(fileName.isEmpty() || !verifyImportDB())
         return;
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -203,7 +203,7 @@ void View::MainWindow::importStorage()
         statusBar() -> showMessage(tr("Import Completed"), 5000);
 }
 
-void View::MainWindow::exportStorage()
+void View::MainWindow::exportDB()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export Storage"), DEFAULT_STORAGE_PATH, tr("All Files (*.*)"));
 
@@ -223,7 +223,20 @@ void View::MainWindow::exportStorage()
         statusBar() -> showMessage(tr("Export Completed"), 5000);
 }
 
-bool View::MainWindow::createCompany()
+void View::MainWindow::options()
+{
+    OptionsDialog dialog(this);
+
+    dialog.exec();
+}
+
+void View::MainWindow::printing()
+{
+    QPrintDialog printDialog(_printer, this);
+    printDialog.exec();
+}
+
+bool View::MainWindow::newCompany()
 {
     Model::Domain::Company company;
     View::Management::EntityDialog dialog(&company, this);
@@ -242,12 +255,12 @@ bool View::MainWindow::createCompany()
     return true;
 }
 
-void View::MainWindow::loadCompany()
+void View::MainWindow::openCompany()
 {
     QMap<QString, int> companyNames = Model::Management::CompanyManager::getAllNames();
 
-    if(companyNames.isEmpty() && verifyCreateCompany()) {
-        if(!createCompany())
+    if(companyNames.isEmpty() && verifyNewCompany()) {
+        if(!newCompany())
             return;
 
         companyNames = Model::Management::CompanyManager::getAllNames();
@@ -266,6 +279,33 @@ void View::MainWindow::loadCompany()
         } else
             QMessageBox::warning(this, tr("Load Company"),
                                   tr("Not exists any company with that Id"),
+                                  QMessageBox::Ok);
+    }
+}
+
+void View::MainWindow::recentCompanies()
+{
+
+}
+
+void View::MainWindow::clearRecentCompanies()
+{
+
+}
+
+void View::MainWindow::setUpCompany()
+{
+    if(!_company)
+        return;
+
+    View::Management::EntityDialog dialog(_company, this);
+
+    if(dialog.exec()) {
+        if(Model::Management::CompanyManager::modify(*_company))
+            statusBar() -> showMessage(tr("Modified Company %1").arg(_company -> name()), 5000);
+        else
+            QMessageBox::warning(this, tr("Company Modification"),
+                                  tr("There was an error on company update"),
                                   QMessageBox::Ok);
     }
 }
@@ -290,37 +330,7 @@ void View::MainWindow::closeCompany()
     setCompanyOpen(false);
 }
 
-void View::MainWindow::setUpCompany()
-{
-    if(!_company)
-        return;
-
-    View::Management::EntityDialog dialog(_company, this);
-
-    if(dialog.exec()) {
-        if(Model::Management::CompanyManager::modify(*_company))
-            statusBar() -> showMessage(tr("Modified Company %1").arg(_company -> name()), 5000);
-        else
-            QMessageBox::warning(this, tr("Company Modification"),
-                                  tr("There was an error on company update"),
-                                  QMessageBox::Ok);
-    }
-}
-
-void View::MainWindow::options()
-{
-    OptionsDialog dialog(this);
-
-    dialog.exec();
-}
-
-void View::MainWindow::printing()
-{
-    QPrintDialog printDialog(_printer, this);
-    printDialog.exec();
-}
-
-void View::MainWindow::createSaleInvoice()
+void View::MainWindow::newInvoice()
 {
     if(!_company)
         return;
@@ -330,17 +340,7 @@ void View::MainWindow::createSaleInvoice()
     editor -> show();
 }
 
-void View::MainWindow::createBuyInvoice()
-{
-    if(!_company)
-        return;
-
-    View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(_company, NO_ID, Model::Domain::Buy));
-    _mdiArea -> addSubWindow(editor);
-    editor -> show();
-}
-
-void View::MainWindow::loadInvoice(Model::Domain::Invoice *invoice)
+void View::MainWindow::openInvoice(Model::Domain::Invoice *invoice)
 {
     if(!_company)
         return;
@@ -371,7 +371,53 @@ void View::MainWindow::loadInvoice(Model::Domain::Invoice *invoice)
     editor -> show();
 }
 
-void View::MainWindow::searchInvoice()
+void View::MainWindow::recentInvoices()
+{
+
+}
+
+void View::MainWindow::clearRecentInvoices()
+{
+
+}
+
+void View::MainWindow::printInvoice()
+{
+    /*statusBar() -> showMessage(tr("Printing %1 %2")
+                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
+                               .arg(invoice.id()), 2000);
+
+    Printing::Manager::print(invoice, _printer);*/
+}
+
+void View::MainWindow::saveInvoice()
+{
+    /*statusBar() -> showMessage(tr("%1 %2 saved")
+                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
+                               .arg(invoice.id()), 2000);*/
+}
+
+void View::MainWindow::saveAll()
+{
+
+}
+
+void View::MainWindow::closeInvoice()
+{
+
+}
+
+void View::MainWindow::closeAll()
+{
+
+}
+
+void View::MainWindow::closeAllExcept()
+{
+
+}
+
+/*void View::MainWindow::searchInvoice()
 {
     if(!_company)
         return;
@@ -385,7 +431,7 @@ void View::MainWindow::searchInvoice()
         _mdiArea -> addSubWindow(result);
         result -> show();
     }
-}
+}*/
 
 void View::MainWindow::manageCompany()
 {
@@ -394,6 +440,11 @@ void View::MainWindow::manageCompany()
 
     _companyEditor -> show();
     _companyEditor -> activateWindow();
+}
+
+void View::MainWindow::manageInvoice()
+{
+
 }
 
 void View::MainWindow::manageCustomer()
@@ -424,14 +475,6 @@ void View::MainWindow::manageProduct()
     _businessEditor -> setCurrentTab(2);
     _businessEditor -> show();
     _businessEditor -> activateWindow();
-}
-
-void View::MainWindow::setFullScreen(bool fullScreen)
-{
-    if(fullScreen)
-        showFullScreen();
-    else
-        showNormal();
 }
 
 void View::MainWindow::volumeBuy()
@@ -491,6 +534,14 @@ void View::MainWindow::unpaidInvoices()
     QMessageBox::information(this, tr("Address Book"), tr("Feature not implemented yet"), QMessageBox::Ok);
 }*/
 
+void View::MainWindow::fullscreen(bool enabled)
+{
+    if(enabled)
+        showFullScreen();
+    else
+        showNormal();
+}
+
 void View::MainWindow::about()
 {
     QMessageBox::about(this, tr("About %1").arg(APPLICATION_NAME),
@@ -515,46 +566,6 @@ void View::MainWindow::updateWindowMenu()
     _closeAllAction -> setEnabled(hasWindowActive);
     _nextAction -> setEnabled(hasWindowActive);
     _previousAction -> setEnabled(hasWindowActive);
-}
-
-void View::MainWindow::invoicePrinted(const Model::Domain::Invoice &invoice)
-{
-    statusBar() -> showMessage(tr("Printing %1 %2")
-                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
-                               .arg(invoice.id()), 2000);
-
-    Printing::Manager::print(invoice, _printer);
-}
-
-
-void View::MainWindow::invoiceSaved(const Model::Domain::Invoice &invoice)
-{
-    statusBar() -> showMessage(tr("%1 %2 saved")
-                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
-                               .arg(invoice.id()), 2000);
-}
-
-void View::MainWindow::invoiceDeleted(const Model::Domain::Invoice &invoice)
-{
-    statusBar() -> showMessage(tr("%1 %2 deleted")
-                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
-                               .arg(invoice.id()), 2000);
-
-    _mdiArea -> closeActiveSubWindow();
-}
-
-void View::MainWindow::invoiceHasAddedNewEntity(const Model::Domain::Invoice &invoice)
-{
-    statusBar() -> showMessage(tr("%1 has added a new %2 %3")
-                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
-                               .arg(invoice.entity() -> type() ? tr("Supplier") : tr("Customer"))
-                               .arg(invoice.entity() -> id()), 2000);
-
-    //if(_supplierEditor && invoice.entity() -> type() == Model::Domain::SupplierEntity)
-    //    _supplierEditor -> addEntityFromInvoice(*(invoice.entity()));
-    //else if(_customerEditor && invoice.entity() -> type() == Model::Domain::CustomerEntity)
-    //    _customerEditor -> addEntityFromInvoice(*(invoice.entity()));
-
 }
 
 void View::MainWindow::createWidgets()
@@ -587,13 +598,13 @@ void View::MainWindow::createActions()
     _disconnectToDBAction -> setIcon(QIcon(":/images/storageoff.png"));
     _disconnectToDBAction -> setStatusTip(tr("Close the connection from database"));
 
-    _importDatabaseAction = new QAction(tr("&Import database..."), this);
-    _importDatabaseAction -> setIcon(QIcon(":/images/import.png"));
-    _importDatabaseAction -> setStatusTip(tr("Import database from an existing file"));
+    _importDBAction = new QAction(tr("&Import database..."), this);
+    _importDBAction -> setIcon(QIcon(":/images/import.png"));
+    _importDBAction -> setStatusTip(tr("Import database from an existing file"));
 
-    _exportDatabaseAction = new QAction(tr("&Export database..."), this);
-    _exportDatabaseAction -> setIcon(QIcon(":/images/export.png"));
-    _exportDatabaseAction -> setStatusTip(tr("Export database to a file"));
+    _exportDBAction = new QAction(tr("&Export database..."), this);
+    _exportDBAction -> setIcon(QIcon(":/images/export.png"));
+    _exportDBAction -> setStatusTip(tr("Export database to a file"));
 
     _optionsAction = new QAction(tr("&Options..."), this);
     _optionsAction -> setIcon(QIcon(":/images/options.png"));
@@ -799,8 +810,8 @@ void View::MainWindow::createMenus()
     _applicationMenu -> addAction(_connectToDBAction);
     _applicationMenu -> addAction(_disconnectToDBAction);
     _applicationMenu -> addSeparator();
-    _applicationMenu -> addAction(_importDatabaseAction);
-    _applicationMenu -> addAction(_exportDatabaseAction);
+    _applicationMenu -> addAction(_importDBAction);
+    _applicationMenu -> addAction(_exportDBAction);
     _applicationMenu -> addSeparator();
     _applicationMenu -> addAction(_optionsAction);
     _applicationMenu -> addAction(_printingAction);
@@ -935,33 +946,33 @@ void View::MainWindow::createConnections()
     connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateWindowMenu()));
     connect(_newCompanyAction, SIGNAL(triggered()),
-            this, SLOT(createCompany()));
+            this, SLOT(newCompany()));
     connect(_openCompanyAction, SIGNAL(triggered()),
-            this, SLOT(loadCompany()));
+            this, SLOT(openCompany()));
     connect(_closeCompanyAction, SIGNAL(triggered()),
             this, SLOT(closeCompany()));
     connect(_setUpCompanyAction, SIGNAL(triggered()),
             this, SLOT(setUpCompany()));
     connect(_connectToDBAction, SIGNAL(triggered()),
-            this, SLOT(connectStorage()));
+            this, SLOT(connectToDB()));
     connect(_disconnectToDBAction, SIGNAL(triggered()),
-            this, SLOT(disconnectStorage()));
-    connect(_importDatabaseAction, SIGNAL(triggered()),
-            this, SLOT(importStorage()));
-    connect(_exportDatabaseAction, SIGNAL(triggered()),
-            this, SLOT(exportStorage()));
+            this, SLOT(disconnectToDB()));
+    connect(_importDBAction, SIGNAL(triggered()),
+            this, SLOT(importDB()));
+    connect(_exportDBAction, SIGNAL(triggered()),
+            this, SLOT(exportDB()));
     connect(_optionsAction, SIGNAL(triggered()),
             this, SLOT(options()));
     connect(_printingAction, SIGNAL(triggered()),
             this, SLOT(printing()));
     connect(_exitAction, SIGNAL(triggered()),
             this, SLOT(close()));
-    /*connect(_createSaleInvoiceAction, SIGNAL(triggered()),
-            this, SLOT(createSaleInvoice()));
-    connect(_createBuyInvoiceAction, SIGNAL(triggered()),
+    connect(_newInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(newInvoice()));
+    /*connect(_createBuyInvoiceAction, SIGNAL(triggered()),
             this, SLOT(createBuyInvoice()));
     connect(_loadInvoiceAction, SIGNAL(triggered()),
-            this, SLOT(loadInvoice()));
+            this, SLOT(openInvoice()));
     connect(_searchInvoiceAction, SIGNAL(triggered()),
             this, SLOT(searchInvoice()));*/
     connect(_manageCompanyAction, SIGNAL(triggered()),
@@ -983,7 +994,7 @@ void View::MainWindow::createConnections()
     //connect(_addressBookAction, SIGNAL(triggered()),
     //        this, SLOT(addressBook()));
     connect(_fullScreenAction, SIGNAL(toggled(bool)),
-            this, SLOT(setFullScreen(bool)));
+            this, SLOT(fullscreen(bool)));
     connect(_closeAction, SIGNAL(triggered()),
             _mdiArea, SLOT(closeActiveSubWindow()));
     connect(_closeAllAction, SIGNAL(triggered()),
@@ -1001,15 +1012,6 @@ void View::MainWindow::createConnections()
 View::Invoicing::InvoiceEditor *View::MainWindow::createInvoiceEditor(Model::Domain::Invoice *invoice)
 {
     View::Invoicing::InvoiceEditor *editor = new View::Invoicing::InvoiceEditor(invoice);
-
-    connect(editor, SIGNAL(printed(const Model::Domain::Invoice &)),
-            this, SLOT(invoicePrinted(const Model::Domain::Invoice &)));
-    connect(editor, SIGNAL(saved(const Model::Domain::Invoice &)),
-            this, SLOT(invoiceSaved(const Model::Domain::Invoice &)));
-    connect(editor, SIGNAL(deleted(const Model::Domain::Invoice &)),
-            this, SLOT(invoiceDeleted(const Model::Domain::Invoice &)));
-    connect(editor, SIGNAL(entityAdded(const Model::Domain::Invoice &)),
-            this, SLOT(invoiceHasAddedNewEntity(const Model::Domain::Invoice &)));
 
     return editor;
 }
@@ -1034,7 +1036,7 @@ View::Invoicing::InvoiceSearchResult *View::MainWindow::createInvoiceSearchResul
     QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _company -> id(), mode, beginDate, endDate, entityId, minTotal, maxTotal, paid);
     View::Invoicing::InvoiceSearchResult *result = new View::Invoicing::InvoiceSearchResult(invoices, type);
 
-    connect(result, SIGNAL(loaded(Model::Domain::Invoice*)), this, SLOT(loadInvoice(Model::Domain::Invoice*)));
+    connect(result, SIGNAL(loaded(Model::Domain::Invoice*)), this, SLOT(openInvoice(Model::Domain::Invoice*)));
 
     return result;
 }
@@ -1107,8 +1109,8 @@ void View::MainWindow::setStorageConnected(bool connected)
     _openCompanyAction -> setEnabled(connected);
     _connectToDBAction -> setEnabled(!connected);
     _disconnectToDBAction -> setEnabled(connected);
-    _importDatabaseAction -> setEnabled(!connected);
-    _exportDatabaseAction -> setEnabled(!connected);
+    _importDBAction -> setEnabled(!connected);
+    _exportDBAction -> setEnabled(!connected);
     _manageCompanyAction -> setEnabled(connected);
     _manageCustomerAction -> setEnabled(connected);
     _manageSupplierAction -> setEnabled(connected);
@@ -1130,10 +1132,9 @@ void View::MainWindow::setCompanyOpen(bool open)
     _closeCompanyAction -> setEnabled(open);
     _setUpCompanyAction -> setEnabled(open);
     _disconnectToDBAction -> setEnabled(!open);
-    /*_createSaleInvoiceAction -> setEnabled(open);
-    _createBuyInvoiceAction -> setEnabled(open);
-    _loadInvoiceAction -> setEnabled(open);
-    _searchInvoiceAction -> setEnabled(open);*/
+    _newInvoiceAction -> setEnabled(open);
+    _openInvoiceAction -> setEnabled(open);
+    //_searchInvoiceAction -> setEnabled(open);
     _manageCompanyAction -> setEnabled(!open);
     _volumeBuyAction -> setEnabled(open);
     _volumeSaleAction -> setEnabled(open);
@@ -1148,7 +1149,7 @@ void View::MainWindow::setCompanyOpen(bool open)
                                                  : QString()));
 }
 
-bool View::MainWindow::verifyImportStorage()
+bool View::MainWindow::verifyImportDB()
 {
     return QMessageBox::warning(this, tr("Verify Import Storage"),
                                        tr("You must know that all stored data will be removed.\n"
@@ -1157,7 +1158,7 @@ bool View::MainWindow::verifyImportStorage()
                                        QMessageBox::No) == QMessageBox::Yes;
 }
 
-bool View::MainWindow::verifyCreateCompany()
+bool View::MainWindow::verifyNewCompany()
 {
     return QMessageBox::question(this, tr("Verify Company Creation"),
                                        tr("Not found any company. Perhaps this is the first time that\n"

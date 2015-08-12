@@ -78,36 +78,42 @@ namespace View
         bool firstExecution();
         bool login();
     private slots:
-        void connectStorage();
-        void disconnectStorage();
-        void importStorage();
-        void exportStorage();
-        bool createCompany();
-        void loadCompany();
-        void closeCompany();
-        void setUpCompany();
+        void connectToDB();
+        void disconnectToDB();
+        void importDB();
+        void exportDB();
         void options();
         void printing();
-        void createSaleInvoice();
-        void createBuyInvoice();
-        void loadInvoice(Model::Domain::Invoice *invoice = 0);
-        void searchInvoice();
+        bool newCompany();
+        void openCompany();
+        void recentCompanies();
+        void clearRecentCompanies();
+        void setUpCompany();
+        void closeCompany();
+        void newInvoice();
+        void openInvoice(Model::Domain::Invoice *invoice = 0);
+        void recentInvoices();
+        void clearRecentInvoices();
+        void printInvoice();
+        void saveInvoice();
+        void saveAll();
+        void closeInvoice();
+        void closeAll();
+        void closeAllExcept();
+        //void searchInvoice();
         void manageCompany();
+        void manageInvoice();
         void manageCustomer();
         void manageSupplier();
         void manageProduct();
-        void setFullScreen(bool fullScreen);
         void volumeBuy();
         void volumeSale();
         void unpaidInvoices();
         //void calculator();
         //void addressBook();
+        void fullscreen(bool enabled);
         void about();
         void updateWindowMenu();
-        void invoicePrinted(const Model::Domain::Invoice &invoice);
-        void invoiceSaved(const Model::Domain::Invoice &invoice);
-        void invoiceDeleted(const Model::Domain::Invoice &invoice);
-        void invoiceHasAddedNewEntity(const Model::Domain::Invoice &invoice);
     private:
         void createWidgets();
         void createCentralWidget();
@@ -132,16 +138,16 @@ namespace View
         void deleteAllEditors();
         void setStorageConnected(bool connected = true);
         void setCompanyOpen(bool open = true);
-        bool verifyImportStorage();
-        bool verifyCreateCompany();
+        bool verifyImportDB();
+        bool verifyNewCompany();
         bool verifyCloseCompany();
         bool verifyExit();
 
         QMdiArea *_mdiArea;
         QAction *_connectToDBAction;
         QAction *_disconnectToDBAction;
-        QAction *_importDatabaseAction;
-        QAction *_exportDatabaseAction;
+        QAction *_importDBAction;
+        QAction *_exportDBAction;
         QAction *_optionsAction;
         QAction *_printingAction;
         QAction *_exitAction;
@@ -222,8 +228,6 @@ namespace View
 
         View::Management::EntityEditor *_companyEditor;
         View::Management::BusinessEditor *_businessEditor;
-
-        static const int maxRecentElements = 10;
     };
 }
 
