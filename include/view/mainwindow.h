@@ -113,7 +113,7 @@ namespace View
         //void addressBook();
         void fullscreen(bool enabled);
         void toolBarButtonStyle();
-        void mdiView();
+        void viewMode();
         void about();
         void updateWindowMenu();
     private:

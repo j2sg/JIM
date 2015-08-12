@@ -544,12 +544,43 @@ void View::MainWindow::fullscreen(bool enabled)
 
 void View::MainWindow::toolBarButtonStyle()
 {
+    QAction *action = qobject_cast<QAction *>(sender());
 
+    if(action) {
+        Qt::ToolButtonStyle style = _companiesToolBar -> toolButtonStyle();
+
+        if(action == _toolBarIconOnlyAction) {
+            style = Qt::ToolButtonIconOnly;
+        } else if(action == _toolBarTextOnlyAction) {
+            style = Qt::ToolButtonTextOnly;
+        } else if(action == _toolBarTextBesideIconAction) {
+            style = Qt::ToolButtonTextBesideIcon;
+        } else if(action == _toolBarTextUnderIconAction) {
+            style = Qt::ToolButtonTextUnderIcon;
+        }
+
+        _companiesToolBar -> setToolButtonStyle(style);
+        _invoicingToolBar -> setToolButtonStyle(style);
+        _managementToolBar -> setToolButtonStyle(style);
+        _reportToolBar -> setToolButtonStyle(style);
+    }
 }
 
-void View::MainWindow::mdiView()
+void View::MainWindow::viewMode()
 {
+    QAction *action = qobject_cast<QAction *>(sender());
 
+    if(action) {
+        QMdiArea::ViewMode mode = _mdiArea -> viewMode();
+
+        if(action == _mdiTabbedViewAction) {
+            mode = QMdiArea::TabbedView;
+        } else if(action == _mdiSubWindowViewAction) {
+            mode = QMdiArea::SubWindowView;
+        }
+
+        _mdiArea -> setViewMode(mode);
+    }
 }
 
 void View::MainWindow::about()
@@ -1046,9 +1077,9 @@ void View::MainWindow::createConnections()
     connect(_toolBarTextUnderIconAction, SIGNAL(toggled(bool)),
             this, SLOT(toolBarButtonStyle()));
     connect(_mdiTabbedViewAction, SIGNAL(toggled(bool)),
-            this, SLOT(mdiView()));
+            this, SLOT(viewMode()));
     connect(_mdiSubWindowViewAction, SIGNAL(toggled(bool)),
-            this, SLOT(mdiView()));
+            this, SLOT(viewMode()));
     connect(_cascadeAction, SIGNAL(triggered()),
             _mdiArea, SLOT(cascadeSubWindows()));
     connect(_tileAction, SIGNAL(triggered()),
