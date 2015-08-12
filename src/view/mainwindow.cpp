@@ -542,6 +542,16 @@ void View::MainWindow::fullscreen(bool enabled)
         showNormal();
 }
 
+void View::MainWindow::toolBarButtonStyle()
+{
+
+}
+
+void View::MainWindow::mdiView()
+{
+
+}
+
 void View::MainWindow::about()
 {
     QMessageBox::about(this, tr("About %1").arg(APPLICATION_NAME),
@@ -945,14 +955,6 @@ void View::MainWindow::createConnections()
 {
     connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
             this, SLOT(updateWindowMenu()));
-    connect(_newCompanyAction, SIGNAL(triggered()),
-            this, SLOT(newCompany()));
-    connect(_openCompanyAction, SIGNAL(triggered()),
-            this, SLOT(openCompany()));
-    connect(_closeCompanyAction, SIGNAL(triggered()),
-            this, SLOT(closeCompany()));
-    connect(_setUpCompanyAction, SIGNAL(triggered()),
-            this, SLOT(setUpCompany()));
     connect(_connectToDBAction, SIGNAL(triggered()),
             this, SLOT(connectToDB()));
     connect(_disconnectToDBAction, SIGNAL(triggered()),
@@ -967,16 +969,44 @@ void View::MainWindow::createConnections()
             this, SLOT(printing()));
     connect(_exitAction, SIGNAL(triggered()),
             this, SLOT(close()));
+    connect(_newCompanyAction, SIGNAL(triggered()),
+            this, SLOT(newCompany()));
+    connect(_openCompanyAction, SIGNAL(triggered()),
+            this, SLOT(openCompany()));
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
+        connect(_recentCompaniesAction[k], SIGNAL(triggered()),
+                this, SLOT(recentCompanies()));
+    connect(_clearRecentCompaniesAction, SIGNAL(triggered()),
+            this, SLOT(clearRecentCompanies()));
+    connect(_setUpCompanyAction, SIGNAL(triggered()),
+            this, SLOT(setUpCompany()));
+    connect(_closeCompanyAction, SIGNAL(triggered()),
+            this, SLOT(closeCompany()));
     connect(_newInvoiceAction, SIGNAL(triggered()),
             this, SLOT(newInvoice()));
-    /*connect(_createBuyInvoiceAction, SIGNAL(triggered()),
-            this, SLOT(createBuyInvoice()));
-    connect(_loadInvoiceAction, SIGNAL(triggered()),
+    connect(_openInvoiceAction, SIGNAL(triggered()),
             this, SLOT(openInvoice()));
-    connect(_searchInvoiceAction, SIGNAL(triggered()),
-            this, SLOT(searchInvoice()));*/
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
+        connect(_recentInvoicesAction[k], SIGNAL(triggered()),
+                this, SLOT(recentInvoices()));
+    connect(_clearRecentInvoicesAction, SIGNAL(triggered()),
+            this, SLOT(clearRecentInvoices()));
+    connect(_printInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(printInvoice()));
+    connect(_saveAction, SIGNAL(triggered()),
+            this, SLOT(saveInvoice()));
+    connect(_saveAllAction, SIGNAL(triggered()),
+            this, SLOT(saveAll()));
+    connect(_closeAction, SIGNAL(triggered()),
+            this, SLOT(closeInvoice()));
+    connect(_closeAllAction, SIGNAL(triggered()),
+            this, SLOT(closeAll()));
+    connect(_closeAllExceptAction, SIGNAL(triggered()),
+            this, SLOT(closeAllExcept()));
     connect(_manageCompanyAction, SIGNAL(triggered()),
             this, SLOT(manageCompany()));
+    connect(_manageInvoiceAction, SIGNAL(triggered()),
+            this, SLOT(manageInvoice()));
     connect(_manageCustomerAction, SIGNAL(triggered()),
             this, SLOT(manageCustomer()));
     connect(_manageSupplierAction, SIGNAL(triggered()),
@@ -995,9 +1025,37 @@ void View::MainWindow::createConnections()
     //        this, SLOT(addressBook()));
     connect(_fullScreenAction, SIGNAL(toggled(bool)),
             this, SLOT(fullscreen(bool)));
-    connect(_closeAction, SIGNAL(triggered()),
+    connect(_showMenuBarAction, SIGNAL(toggled(bool)),
+            menuBar(), SLOT(setVisible(bool)));
+    connect(_showCompaniesToolBarAction, SIGNAL(toggled(bool)),
+            _companiesToolBar, SLOT(setVisible(bool)));
+    connect(_showInvoicingToolBarAction, SIGNAL(toggled(bool)),
+            _invoicingToolBar, SLOT(setVisible(bool)));
+    connect(_showManagementToolBarAction, SIGNAL(toggled(bool)),
+            _managementToolBar, SLOT(setVisible(bool)));
+    connect(_showReportToolBarAction, SIGNAL(toggled(bool)),
+            _reportToolBar, SLOT(setVisible(bool)));
+    connect(_showStatusBarAction, SIGNAL(toggled(bool)),
+            statusBar(), SLOT(setVisible(bool)));
+    connect(_toolBarIconOnlyAction, SIGNAL(toggled(bool)),
+            this, SLOT(toolBarButtonStyle()));
+    connect(_toolBarTextOnlyAction, SIGNAL(toggled(bool)),
+            this, SLOT(toolBarButtonStyle()));
+    connect(_toolBarTextBesideIconAction, SIGNAL(toggled(bool)),
+            this, SLOT(toolBarButtonStyle()));
+    connect(_toolBarTextUnderIconAction, SIGNAL(toggled(bool)),
+            this, SLOT(toolBarButtonStyle()));
+    connect(_mdiTabbedViewAction, SIGNAL(toggled(bool)),
+            this, SLOT(mdiView()));
+    connect(_mdiSubWindowViewAction, SIGNAL(toggled(bool)),
+            this, SLOT(mdiView()));
+    connect(_cascadeAction, SIGNAL(triggered()),
+            _mdiArea, SLOT(cascadeSubWindows()));
+    connect(_tileAction, SIGNAL(triggered()),
+            _mdiArea, SLOT(tileSubWindows()));
+    connect(_closeWindowAction, SIGNAL(triggered()),
             _mdiArea, SLOT(closeActiveSubWindow()));
-    connect(_closeAllAction, SIGNAL(triggered()),
+    connect(_closeAllWindowsAction, SIGNAL(triggered()),
             _mdiArea, SLOT(closeAllSubWindows()));
     connect(_nextAction, SIGNAL(triggered()),
             _mdiArea, SLOT(activateNextSubWindow()));

@@ -112,6 +112,8 @@ namespace View
         //void calculator();
         //void addressBook();
         void fullscreen(bool enabled);
+        void toolBarButtonStyle();
+        void mdiView();
         void about();
         void updateWindowMenu();
     private:
