@@ -43,6 +43,7 @@
 #include <QMdiArea>
 #include <QMdiSubWindow>
 #include <QAction>
+#include <QActionGroup>
 #include <QMenu>
 #include <QMenuBar>
 #include <QToolBar>
@@ -708,16 +709,73 @@ void View::MainWindow::createActions()
     //_addressBookAction -> setIcon(QIcon(":/images/address.png"));
     //_addressBookAction -> setStatusTip(tr("Open Address Book"));
 
-    _fullScreenAction = new QAction(tr("Full Screen"), this);
+    _fullScreenAction = new QAction(tr("&Full Screen"), this);
     _fullScreenAction -> setCheckable(true);
     _fullScreenAction -> setChecked(false);
-    _fullScreenAction -> setStatusTip(tr("Show full screen mode"));
+    _fullScreenAction -> setStatusTip(tr("Show Full screen mode"));
 
-    _closeAction = new QAction(tr("Close"), this);
-    _closeAction -> setStatusTip(tr("Close active window"));
+    _showMenuBarAction = new QAction(tr("Show &Menu bar"), this);
+    _showMenuBarAction -> setCheckable(true);
+    _showMenuBarAction -> setChecked(true);
+    _showMenuBarAction -> setShortcut(tr("Ctrl+M"));
 
-    _closeAllAction = new QAction(tr("Close All"), this);
-    _closeAllAction -> setStatusTip(tr("Close all windows"));
+    _showCompaniesToolBarAction = new QAction(tr("&Companies"), this);
+    _showCompaniesToolBarAction -> setCheckable(true);
+    _showCompaniesToolBarAction -> setChecked(true);
+
+    _showInvoicingToolBarAction = new QAction(tr("&Invoicing"), this);
+    _showInvoicingToolBarAction -> setCheckable(true);
+    _showInvoicingToolBarAction -> setChecked(true);
+
+    _showManagementToolBarAction = new QAction(tr("&Management"), this);
+    _showManagementToolBarAction -> setCheckable(true);
+    _showManagementToolBarAction -> setChecked(true);
+
+    _showReportToolBarAction = new QAction(tr("&Reports"), this);
+    _showReportToolBarAction -> setCheckable(true);
+    _showReportToolBarAction -> setChecked(true);
+
+    _showStatusBarAction = new QAction(tr("Show &Status bar"), this);
+    _showStatusBarAction -> setCheckable(true);
+    _showStatusBarAction -> setChecked(true);
+
+    _toolBarIconOnlyAction = new QAction(tr("Icon only"), this);
+    _toolBarIconOnlyAction -> setCheckable(true);
+
+    _toolBarTextOnlyAction = new QAction(tr("Text only"), this);
+    _toolBarTextOnlyAction -> setCheckable(true);
+
+    _toolBarTextBesideIconAction = new QAction(tr("Text beside icon"), this);
+    _toolBarTextBesideIconAction -> setCheckable(true);
+
+    _toolBarTextUnderIconAction = new QAction(tr("Text under icon"), this);
+    _toolBarTextUnderIconAction -> setCheckable(true);
+
+    _toolBarButtonStyleActionGroup = new QActionGroup(this);
+    _toolBarButtonStyleActionGroup -> addAction(_toolBarIconOnlyAction);
+    _toolBarButtonStyleActionGroup -> addAction(_toolBarTextOnlyAction);
+    _toolBarButtonStyleActionGroup -> addAction(_toolBarTextBesideIconAction);
+    _toolBarButtonStyleActionGroup -> addAction(_toolBarTextUnderIconAction);
+
+    _mdiTabbedViewAction = new QAction(tr("Tabbed View"), this);
+    _mdiTabbedViewAction -> setCheckable(true);
+
+    _mdiSubWindowViewAction = new QAction(tr("SubWindow View"), this);
+    _mdiSubWindowViewAction -> setCheckable(true);
+
+    _mdiViewActionGroup = new QActionGroup(this);
+    _mdiViewActionGroup -> addAction(_mdiTabbedViewAction);
+    _mdiViewActionGroup -> addAction(_mdiSubWindowViewAction);
+
+    _cascadeAction = new QAction(tr("Cascade"), this);
+
+    _tileAction = new QAction(tr("Tile"), this);
+
+    _closeWindowAction = new QAction(tr("Close"), this);
+    _closeWindowAction -> setStatusTip(tr("Close active window"));
+
+    _closeAllWindowsAction = new QAction(tr("Close All"), this);
+    _closeAllWindowsAction -> setStatusTip(tr("Close all windows"));
 
     _nextAction = new QAction(tr("Next"), this);
     _nextAction -> setShortcuts(QKeySequence::NextChild);
@@ -788,7 +846,7 @@ void View::MainWindow::createMenus()
     _managementMenu -> addAction(_manageSupplierAction);
     _managementMenu -> addAction(_manageProductAction);
 
-    _reportMenu = menuBar() -> addMenu(tr("&Report"));
+    _reportMenu = menuBar() -> addMenu(tr("&Reports"));
     _reportMenu -> addAction(_volumeBuyAction);
     _reportMenu -> addAction(_volumeSaleAction);
     _reportMenu -> addAction(_unpaidInvoicesAction);
@@ -800,8 +858,28 @@ void View::MainWindow::createMenus()
     _windowMenu = menuBar() -> addMenu(tr("&Window"));
     _windowMenu -> addAction(_fullScreenAction);
     _windowMenu -> addSeparator();
-    _windowMenu -> addAction(_closeAction);
-    _windowMenu -> addAction(_closeAllAction);
+    _windowMenu -> addAction(_showMenuBarAction);
+    _showToolBarSubMenu = _windowMenu -> addMenu(tr("Show &Tool bar"));
+    _showToolBarSubMenu -> addAction(_showCompaniesToolBarAction);
+    _showToolBarSubMenu -> addAction(_showInvoicingToolBarAction);
+    _showToolBarSubMenu -> addAction(_showManagementToolBarAction);
+    _showToolBarSubMenu -> addAction(_showReportToolBarAction);
+    _windowMenu -> addAction(_showStatusBarAction);
+    _windowMenu -> addSeparator();
+    _toolBarButtonStyleSubMenu = _windowMenu -> addMenu(tr("Tool bar style"));
+    _toolBarButtonStyleSubMenu -> addAction(_toolBarIconOnlyAction);
+    _toolBarButtonStyleSubMenu -> addAction(_toolBarTextOnlyAction);
+    _toolBarButtonStyleSubMenu -> addAction(_toolBarTextBesideIconAction);
+    _toolBarButtonStyleSubMenu -> addAction(_toolBarTextUnderIconAction);
+    _mdiViewModeSubMenu = _windowMenu -> addMenu(tr("View Mode"));
+    _mdiViewModeSubMenu -> addAction(_mdiTabbedViewAction);
+    _mdiViewModeSubMenu -> addAction(_mdiSubWindowViewAction);
+    _windowMenu -> addSeparator();
+    _windowMenu -> addAction(_cascadeAction);
+    _windowMenu -> addAction(_tileAction);
+    _windowMenuSeparatorAction = _windowMenu -> addSeparator();
+    _windowMenu -> addAction(_closeWindowAction);
+    _windowMenu -> addAction(_closeAllWindowsAction);
     _windowMenu -> addSeparator();
     _windowMenu -> addAction(_nextAction);
     _windowMenu -> addAction(_previousAction);

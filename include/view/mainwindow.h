@@ -30,6 +30,7 @@
 QT_BEGIN_NAMESPACE
 class QMdiArea;
 class QAction;
+class QActionGroup;
 class QMenu;
 class QToolBar;
 class QLabel;
@@ -172,6 +173,23 @@ namespace View
         //QAction *_calculatorAction;
         //QAction *_addressBookAction;
         QAction *_fullScreenAction;
+        QAction *_showMenuBarAction;
+        QAction *_showCompaniesToolBarAction;
+        QAction *_showInvoicingToolBarAction;
+        QAction *_showManagementToolBarAction;
+        QAction *_showReportToolBarAction;
+        QAction *_showStatusBarAction;
+        QAction *_toolBarIconOnlyAction;
+        QAction *_toolBarTextOnlyAction;
+        QAction *_toolBarTextBesideIconAction;
+        QAction *_toolBarTextUnderIconAction;
+        QActionGroup *_toolBarButtonStyleActionGroup;
+        QAction *_mdiTabbedViewAction;
+        QAction *_mdiSubWindowViewAction;
+        QActionGroup *_mdiViewActionGroup;
+        QAction *_windowMenuSeparatorAction;
+        QAction *_cascadeAction;
+        QAction *_tileAction;
         QAction *_closeWindowAction;
         QAction *_closeAllWindowsAction;
         QAction *_nextAction;
@@ -187,7 +205,11 @@ namespace View
         QMenu *_reportMenu;
         //QMenu *_toolsMenu;
         QMenu *_windowMenu;
+        QMenu *_showToolBarSubMenu;
+        QMenu *_toolBarButtonStyleSubMenu;
+        QMenu *_mdiViewModeSubMenu;
         QMenu *_helpMenu;
+        QToolBar *_companiesToolBar;
         QToolBar *_invoicingToolBar;
         QToolBar *_managementToolBar;
         QToolBar *_reportToolBar;
