@@ -27,7 +27,6 @@
 
 QT_BEGIN_NAMESPACE
 class QTabWidget;
-class QPushButton;
 QT_END_NAMESPACE
 
 namespace Model
@@ -57,9 +56,6 @@ namespace View
         protected:
             void closeEvent(QCloseEvent *event);
         signals:
-            void printed(const Model::Domain::Invoice &invoice);
-            void saved(const Model::Domain::Invoice &invoice);
-            void deleted(const Model::Domain::Invoice &invoice);
             void entityAdded(const Model::Domain::Invoice &invoice);
         private slots:
             void invoiceModified(bool modified = true);
@@ -79,9 +75,6 @@ namespace View
             QTabWidget *_tabWidget;
             InvoiceEditorDataTab *_dataTab;
             InvoiceEditorOtherTab *_otherTab;
-            QPushButton *_printButton;
-            QPushButton *_saveButton;
-            QPushButton *_deleteButton;
             Model::Domain::Invoice *_invoice;
             int _id;
         };

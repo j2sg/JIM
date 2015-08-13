@@ -26,7 +26,6 @@
 #include "company.h"
 #include "types.h"
 #include <QTabWidget>
-#include <QPushButton>
 #include <QCloseEvent>
 #include <QApplication>
 #include <QHBoxLayout>
@@ -68,21 +67,16 @@ void View::Invoicing::InvoiceEditor::closeEvent(QCloseEvent *event)
 void View::Invoicing::InvoiceEditor::invoiceModified(bool modified)
 {
     setWindowModified(modified);
-    _printButton -> setEnabled(!IS_NEW(_invoice -> id()) && !modified);
-    _saveButton -> setEnabled(isSaveable() && modified);
 }
 
 void View::Invoicing::InvoiceEditor::print()
 {
-    emit printed(*_invoice);
 }
 
 bool View::Invoicing::InvoiceEditor::save()
 {
     if(saveInvoice()) {
-        emit saved(*_invoice);
         _id = _invoice -> id();
-        _deleteButton -> setEnabled(true);
         setTitle();
         invoiceModified(false);
 
@@ -97,12 +91,12 @@ bool View::Invoicing::InvoiceEditor::save()
 
 void View::Invoicing::InvoiceEditor::_delete()
 {
-    if(deleteInvoice())
+    /*if(deleteInvoice())
         emit deleted(*_invoice);
     else
         QMessageBox::warning(this, tr("Delete"),
                                    tr("Has been occurred an error when delete"),
-                                   QMessageBox::Ok);
+                                   QMessageBox::Ok);*/
 }
 
 void View::Invoicing::InvoiceEditor::createWidgets()
@@ -113,28 +107,8 @@ void View::Invoicing::InvoiceEditor::createWidgets()
     _tabWidget -> addTab(_dataTab, tr("&Data"));
     _tabWidget -> addTab(_otherTab, tr("&Other"));
 
-    _printButton = new QPushButton(tr("&Print"));
-    _printButton -> setIcon(QIcon(":/images/printing.png"));
-    _printButton -> setEnabled(!IS_NEW(_invoice -> id()));
-
-    _saveButton = new QPushButton(tr("&Save"));
-    _saveButton -> setIcon(QIcon(":/images/save.png"));
-    _saveButton -> setDefault(true);
-    _saveButton -> setEnabled(false);
-
-    _deleteButton = new QPushButton(tr("&Delete"));
-    _deleteButton -> setIcon(QIcon(":/images/delete.png"));
-    _deleteButton -> setEnabled(!IS_NEW(_invoice -> id()));
-
-    QHBoxLayout *bottomLayout = new QHBoxLayout;
-    bottomLayout -> addWidget(_printButton);
-    bottomLayout -> addStretch();
-    bottomLayout -> addWidget(_deleteButton);
-    bottomLayout -> addWidget(_saveButton);
-
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(_tabWidget);
-    mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
 }
@@ -151,12 +125,6 @@ void View::Invoicing::InvoiceEditor::createConnections()
             this, SLOT(invoiceModified()));
     connect(_otherTab, SIGNAL(taxesChanged()),
             _dataTab, SLOT(updateTax()));
-    connect(_printButton, SIGNAL(clicked()),
-            this, SLOT(print()));
-    connect(_saveButton, SIGNAL(clicked()),
-            this, SLOT(save()));
-    connect(_deleteButton, SIGNAL(clicked()),
-            this, SLOT(_delete()));
 }
 
 void View::Invoicing::InvoiceEditor::setTitle()

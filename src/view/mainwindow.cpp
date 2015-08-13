@@ -792,11 +792,9 @@ void View::MainWindow::createActions()
     _toolBarTextBesideIconAction -> setCheckable(true);
     _toolBarTextBesideIconAction -> setData(Qt::ToolButtonTextBesideIcon);
 
-
     _toolBarTextUnderIconAction = new QAction(tr("Text under icon"), this);
     _toolBarTextUnderIconAction -> setCheckable(true);
     _toolBarTextUnderIconAction -> setData(Qt::ToolButtonTextUnderIcon);
-
 
     _toolBarButtonStyleActionGroup = new QActionGroup(this);
     _toolBarButtonStyleActionGroup -> addAction(_toolBarIconOnlyAction);
