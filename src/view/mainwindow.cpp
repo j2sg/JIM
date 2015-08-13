@@ -591,12 +591,16 @@ void View::MainWindow::about()
 
 void View::MainWindow::updateWindowMenu()
 {
-    bool hasWindowActive = _mdiArea -> activeSubWindow() != 0;
+    bool activeSubWindow = _mdiArea -> activeSubWindow() != 0;
+    bool subWindowView = _mdiArea -> viewMode() == QMdiArea::SubWindowView;
 
-    _closeAction -> setEnabled(hasWindowActive);
-    _closeAllAction -> setEnabled(hasWindowActive);
-    _nextAction -> setEnabled(hasWindowActive);
-    _previousAction -> setEnabled(hasWindowActive);
+    _windowMenuSeparatorAction -> setVisible(subWindowView);
+    _cascadeAction -> setVisible(subWindowView);
+    _tileAction -> setVisible(subWindowView);
+    _closeAction -> setEnabled(activeSubWindow);
+    _closeAllAction -> setEnabled(activeSubWindow);
+    _nextAction -> setEnabled(activeSubWindow);
+    _previousAction -> setEnabled(activeSubWindow);
 }
 
 void View::MainWindow::createWidgets()
@@ -1062,8 +1066,12 @@ void View::MainWindow::createConnections()
             this, SLOT(toolBarButtonStyle()));
     connect(_mdiTabbedViewAction, SIGNAL(toggled(bool)),
             this, SLOT(viewMode()));
+    connect(_mdiTabbedViewAction, SIGNAL(toggled(bool)),
+            this, SLOT(updateWindowMenu()));
     connect(_mdiSubWindowViewAction, SIGNAL(toggled(bool)),
             this, SLOT(viewMode()));
+    connect(_mdiSubWindowViewAction, SIGNAL(toggled(bool)),
+            this, SLOT(updateWindowMenu()));
     connect(_cascadeAction, SIGNAL(triggered()),
             _mdiArea, SLOT(cascadeSubWindows()));
     connect(_tileAction, SIGNAL(triggered()),
