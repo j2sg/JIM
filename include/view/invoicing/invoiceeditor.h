@@ -22,6 +22,18 @@
 #define INVOICEEDITOR_H
 
 #include <QWidget>
+#include "types.h"
+
+QT_BEGIN_NAMESPACE
+class QLabel;
+class QLineEdit;
+class QCheckBox;
+class QDateEdit;
+class QToolButton;
+class QDoubleSpinBox;
+class QComboBox;
+class QPushButton;
+QT_END_NAMESPACE
 
 namespace Model
 {
@@ -33,8 +45,16 @@ namespace Model
 
 namespace View
 {
+    namespace Management
+    {
+        class TaxApplyingWidget;
+    }
+
     namespace Invoicing
     {
+        class OperationEditor;
+        class TaxViewerWidget;
+
         class InvoiceEditor : public QWidget
         {
             Q_OBJECT
@@ -46,20 +66,72 @@ namespace View
             void closeEvent(QCloseEvent *event);
         signals:
             void entityAdded(const Model::Domain::Invoice &invoice);
+        public slots:
+            bool save();
+            void print();
+            bool isSaveable();
         private slots:
             void invoiceModified(bool modified = true);
-            void print();
-            bool save();
-            void _delete();
+            void stateChangedOnAutoIdCheckBox();
+            void taxChangedOnTaxApplying(Model::Domain::TaxFlag taxApplying);
+            void currentIndexChangedOnDiscountTypeComboBox();
+            void stateChangedOnPaidCheckBox();
+            void updateId();
+            void selectEntity();
+            void detailEntity();
+            void updateTax();
+            void updateDiscount();
+            void updateTotals();
+            void addNotes();
         private:
             void createWidgets();
+            void createIdWidgets();
+            void createEntityWidgets();
+            void createOperationsWidgets();
+            void createTaxesWidgets();
+            void createDiscountWidgets();
+            void createPaymentWidgets();
+            void createTotalsWidgets();
             void createConnections();
             void setTitle();
             void loadInvoice();
             bool saveInvoice();
             bool deleteInvoice();
-            bool isSaveable();
             bool verifySave();
+
+            QLabel *_idLabel;
+            QLineEdit *_idLineEdit;
+            QCheckBox *_autoIdCheckBox;
+            QLabel *_dateLabel;
+            QDateEdit *_dateDateEdit;
+            QLabel *_placeLabel;
+            QLineEdit *_placeLineEdit;
+            QLabel *_entityIdLabel;
+            QLineEdit *_entityIdLineEdit;
+            QLabel *_entityNameLabel;
+            QLineEdit *_entityNameLineEdit;
+            QToolButton *_selectEntityToolButton;
+            QToolButton *_detailEntityToolButton;
+            OperationEditor *_operationEditor;
+            View::Management::TaxApplyingWidget *_taxApplyingWidget;
+            TaxViewerWidget *_taxViewerWidget;
+            QComboBox *_discountTypeComboBox;
+            QDoubleSpinBox *_discountDoubleSpinBox;
+            QLabel *_subtotalLabel;
+            QLabel *_subtotalValueLabel;
+            QLabel *_taxesLabel;
+            QLabel *_taxesValueLabel;
+            QLabel *_deductionLabel;
+            QLabel *_deductionValueLabel;
+            QLabel *_totalLabel;
+            QLabel *_totalValueLabel;
+            QCheckBox *_paidCheckBox;
+            QComboBox *_paymentComboBox;
+            QPushButton *_notesButton;
+            QString _currency;
+            int _precisionMoney;
+            int _precisionTax;
+            int _precisionWeight;
 
             Model::Domain::Invoice *_invoice;
             int _id;
