@@ -119,6 +119,7 @@ namespace View
         void createCentralWidget();
         void createActions();
         void createMenus();
+        void createContextMenu();
         void createToolBar();
         void createStatusBar();
         void createConnections();

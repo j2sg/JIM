@@ -604,6 +604,7 @@ void View::MainWindow::createWidgets()
     createCentralWidget();
     createActions();
     createMenus();
+    createContextMenu();
     createToolBar();
     createStatusBar();
 }
@@ -921,6 +922,18 @@ void View::MainWindow::createMenus()
     updateWindowMenu();
 }
 
+void View::MainWindow::createContextMenu()
+{
+    QAction *separator = new QAction(this);
+    separator -> setSeparator(true);
+
+    addAction(_fullScreenAction);
+    addAction(separator);
+    addAction(_showMenuBarAction);
+    addAction(_showStatusBarAction);
+    setContextMenuPolicy(Qt::ActionsContextMenu);
+}
+
 void View::MainWindow::createToolBar()
 {
     _companiesToolBar = addToolBar(tr("Companies"));
@@ -935,20 +948,17 @@ void View::MainWindow::createToolBar()
     _invoicingToolBar -> addAction(_printInvoiceAction);
     _invoicingToolBar -> addAction(_saveAction);
     _invoicingToolBar -> addAction(_closeAction);
-    _invoicingToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     _managementToolBar = addToolBar(tr("Management"));
     _managementToolBar -> addAction(_manageInvoiceAction);
     _managementToolBar -> addAction(_manageCustomerAction);
     _managementToolBar -> addAction(_manageSupplierAction);
     _managementToolBar -> addAction(_manageProductAction);
-    _managementToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
     _reportToolBar = addToolBar(tr("Report"));
     _reportToolBar -> addAction(_volumeBuyAction);
     _reportToolBar -> addAction(_volumeSaleAction);
     _reportToolBar -> addAction(_unpaidInvoicesAction);
-    _reportToolBar -> setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 }
 
 void View::MainWindow::createStatusBar()
