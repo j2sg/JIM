@@ -25,6 +25,7 @@
 #include <QFile>
 #include <QDir>
 #include <QTextStream>
+#include <QMdiArea>
 
 bool Persistence::Manager::existsConfig()
 {
@@ -49,6 +50,19 @@ bool Persistence::Manager::createConfig(bool overwrite)
     setting.setValue("Money",                     DEFAULT_APPLICATION_MONEY_PRECISION);
     setting.setValue("Tax",                       DEFAULT_APPLICATION_TAX_PRECISION);
     setting.setValue("Weight",                    DEFAULT_APPLICATION_WEIGHT_PRECISION);
+    setting.endGroup();
+    setting.beginGroup("Appearance");
+    setting.setValue("Geometry",                  QByteArray());
+    setting.setValue("State",                     QByteArray());
+    setting.setValue("Fullscreen",                false);
+    setting.setValue("ShowMenuBar",               true);
+    setting.setValue("ShowCompaniesToolBar",      true);
+    setting.setValue("ShowInvoicingToolBar",      true);
+    setting.setValue("ShowManagementToolBar",     true);
+    setting.setValue("ShowReportToolBar",         true);
+    setting.setValue("ShowStatusBar",             true);
+    setting.setValue("ToolBarStyle",              Qt::ToolButtonIconOnly);
+    setting.setValue("ViewMode",                  QMdiArea::TabbedView);
     setting.endGroup();
     setting.endGroup();
     setting.beginGroup("Storage");
