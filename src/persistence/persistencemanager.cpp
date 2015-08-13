@@ -53,7 +53,6 @@ bool Persistence::Manager::createConfig(bool overwrite)
     setting.endGroup();
     setting.beginGroup("Appearance");
     setting.setValue("Geometry",                  QByteArray());
-    setting.setValue("State",                     QByteArray());
     setting.setValue("Fullscreen",                false);
     setting.setValue("ShowMenuBar",               true);
     setting.setValue("ShowCompaniesToolBar",      true);

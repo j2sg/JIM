@@ -123,6 +123,8 @@ namespace View
         void createToolBar();
         void createStatusBar();
         void createConnections();
+        void loadSettings();
+        void saveSettings();
         View::Invoicing::InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
         View::Invoicing::InvoiceEditor *findInvoiceEditor(Model::Domain::Invoice *invoice);
         View::Invoicing::InvoiceSearchResult *createInvoiceSearchResult(Model::Domain::InvoiceType type,

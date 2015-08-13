@@ -61,6 +61,7 @@ View::MainWindow::MainWindow()
 {
     createWidgets();
     createConnections();
+    loadSettings();
     setWindowIcon(QIcon(":/images/jim.png"));
     setCompanyOpen(false);
 
@@ -78,6 +79,7 @@ View::MainWindow::MainWindow()
 
 View::MainWindow::~MainWindow()
 {
+    saveSettings();
     disconnectToDB();
 
     delete _printer;
@@ -780,15 +782,21 @@ void View::MainWindow::createActions()
 
     _toolBarIconOnlyAction = new QAction(tr("Icon only"), this);
     _toolBarIconOnlyAction -> setCheckable(true);
+    _toolBarIconOnlyAction -> setData(Qt::ToolButtonIconOnly);
 
     _toolBarTextOnlyAction = new QAction(tr("Text only"), this);
     _toolBarTextOnlyAction -> setCheckable(true);
+    _toolBarTextOnlyAction -> setData(Qt::ToolButtonTextOnly);
 
     _toolBarTextBesideIconAction = new QAction(tr("Text beside icon"), this);
     _toolBarTextBesideIconAction -> setCheckable(true);
+    _toolBarTextBesideIconAction -> setData(Qt::ToolButtonTextBesideIcon);
+
 
     _toolBarTextUnderIconAction = new QAction(tr("Text under icon"), this);
     _toolBarTextUnderIconAction -> setCheckable(true);
+    _toolBarTextUnderIconAction -> setData(Qt::ToolButtonTextUnderIcon);
+
 
     _toolBarButtonStyleActionGroup = new QActionGroup(this);
     _toolBarButtonStyleActionGroup -> addAction(_toolBarIconOnlyAction);
@@ -798,9 +806,11 @@ void View::MainWindow::createActions()
 
     _mdiTabbedViewAction = new QAction(tr("Tabbed View"), this);
     _mdiTabbedViewAction -> setCheckable(true);
+    _mdiTabbedViewAction -> setData(QMdiArea::TabbedView);
 
     _mdiSubWindowViewAction = new QAction(tr("SubWindow View"), this);
     _mdiSubWindowViewAction -> setCheckable(true);
+    _mdiSubWindowViewAction -> setData(QMdiArea::SubWindowView);
 
     _mdiViewActionGroup = new QActionGroup(this);
     _mdiViewActionGroup -> addAction(_mdiTabbedViewAction);
@@ -1088,6 +1098,52 @@ void View::MainWindow::createConnections()
             this, SLOT(about()));
     connect(_aboutQtAction, SIGNAL(triggered()),
             qApp, SLOT(aboutQt()));
+}
+
+void View::MainWindow::loadSettings()
+{
+    restoreGeometry(Persistence::Manager::readConfig("Geometry", "Application/Appearance").toByteArray());
+    _fullScreenAction -> setChecked((Persistence::Manager::readConfig("Fullscreen", "Application/Appearance").toBool()));
+    _showMenuBarAction -> setChecked((Persistence::Manager::readConfig("ShowMenuBar", "Application/Appearance").toBool()));
+    _showCompaniesToolBarAction -> setChecked((Persistence::Manager::readConfig("ShowCompaniesToolBar", "Application/Appearance").toBool()));
+    _showInvoicingToolBarAction -> setChecked((Persistence::Manager::readConfig("ShowInvoicingToolBar", "Application/Appearance").toBool()));
+    _showManagementToolBarAction -> setChecked((Persistence::Manager::readConfig("ShowManagementToolBar", "Application/Appearance").toBool()));
+    _showReportToolBarAction -> setChecked((Persistence::Manager::readConfig("ShowReportToolBar", "Application/Appearance").toBool()));
+    _showStatusBarAction -> setChecked((Persistence::Manager::readConfig("ShowStatusBar", "Application/Appearance").toBool()));
+
+    Qt::ToolButtonStyle style = static_cast<Qt::ToolButtonStyle>(Persistence::Manager::readConfig("ToolBarStyle", "Application/Appearance").toInt());
+
+    _toolBarIconOnlyAction -> setChecked(style == Qt::ToolButtonIconOnly);
+    _toolBarTextOnlyAction -> setChecked(style == Qt::ToolButtonTextOnly);
+    _toolBarTextBesideIconAction -> setChecked(style == Qt::ToolButtonTextBesideIcon);
+    _toolBarTextUnderIconAction -> setChecked(style == Qt::ToolButtonTextUnderIcon);
+
+    QMdiArea::ViewMode mode = static_cast<QMdiArea::ViewMode>(Persistence::Manager::readConfig("ViewMode", "Application/Appearance").toInt());
+
+    _mdiTabbedViewAction -> setChecked(mode == QMdiArea::TabbedView);
+    _mdiSubWindowViewAction -> setChecked(mode == QMdiArea::SubWindowView);
+}
+
+void View::MainWindow::saveSettings()
+{
+    Persistence::Manager::writeConfig(saveGeometry(), "Geometry", "Application/Appearance");
+    Persistence::Manager::writeConfig(_fullScreenAction -> isChecked(), "Fullscreen", "Application/Appearance");
+    Persistence::Manager::writeConfig(_showMenuBarAction -> isChecked(), "ShowMenuBar", "Application/Appearance");
+    Persistence::Manager::writeConfig(_showCompaniesToolBarAction -> isChecked(), "ShowCompaniesToolBar", "Application/Appearance");
+    Persistence::Manager::writeConfig(_showInvoicingToolBarAction -> isChecked(), "ShowInvoicingToolBar", "Application/Appearance");
+    Persistence::Manager::writeConfig(_showManagementToolBarAction -> isChecked(), "ShowManagementToolBar", "Application/Appearance");
+    Persistence::Manager::writeConfig(_showReportToolBarAction -> isChecked(), "ShowReportToolBar", "Application/Appearance");
+    Persistence::Manager::writeConfig(_showStatusBarAction -> isChecked(), "ShowStatusBar", "Application/Appearance");
+
+    QAction *checkedAction = _toolBarButtonStyleActionGroup -> checkedAction();
+
+    if(checkedAction)
+        Persistence::Manager::writeConfig(checkedAction -> data(), "ToolBarStyle", "Application/Appearance");
+
+    checkedAction = _mdiViewActionGroup -> checkedAction();
+
+    if(checkedAction)
+        Persistence::Manager::writeConfig(checkedAction -> data(), "ViewMode", "Application/Appearance");
 }
 
 View::Invoicing::InvoiceEditor *View::MainWindow::createInvoiceEditor(Model::Domain::Invoice *invoice)
