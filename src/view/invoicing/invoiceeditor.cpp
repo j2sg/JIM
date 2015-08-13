@@ -19,8 +19,6 @@
  **/
 
 #include "invoiceeditor.h"
-#include "invoiceeditordatatab.h"
-#include "invoiceeditorothertab.h"
 #include "invoice.h"
 #include "invoicemanager.h"
 #include "company.h"
@@ -39,7 +37,6 @@ View::Invoicing::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, Q
     createConnections();
 
     setTitle();
-    setMinimumWidth(INVOICE_EDITOR_MINIMUM_WIDTH);
     setAttribute(Qt::WA_DeleteOnClose);
 
     loadInvoice();
@@ -101,30 +98,10 @@ void View::Invoicing::InvoiceEditor::_delete()
 
 void View::Invoicing::InvoiceEditor::createWidgets()
 {
-    _tabWidget = new QTabWidget;
-    _dataTab = new InvoiceEditorDataTab(_invoice);
-    _otherTab = new InvoiceEditorOtherTab(_invoice);
-    _tabWidget -> addTab(_dataTab, tr("&Data"));
-    _tabWidget -> addTab(_otherTab, tr("&Other"));
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addWidget(_tabWidget);
-
-    setLayout(mainLayout);
 }
 
 void View::Invoicing::InvoiceEditor::createConnections()
 {
-    connect(_dataTab, SIGNAL(dataChanged()),
-            this, SLOT(invoiceModified()));
-    connect(_dataTab, SIGNAL(entityAdded(const Model::Domain::Invoice &)),
-            this, SIGNAL(entityAdded(const Model::Domain::Invoice &)));
-    connect(_otherTab, SIGNAL(taxesChanged()),
-            this, SLOT(invoiceModified()));
-    connect(_otherTab, SIGNAL(notesChanged()),
-            this, SLOT(invoiceModified()));
-    connect(_otherTab, SIGNAL(taxesChanged()),
-            _dataTab, SLOT(updateTax()));
 }
 
 void View::Invoicing::InvoiceEditor::setTitle()
@@ -137,16 +114,16 @@ void View::Invoicing::InvoiceEditor::loadInvoice()
 {
     _id = _invoice -> id();
 
-    _dataTab -> loadInvoice();
-    _otherTab -> loadInvoice();
+    //_dataTab -> loadInvoice();
+    //_otherTab -> loadInvoice();
 
     invoiceModified(false);
 }
 
 bool View::Invoicing::InvoiceEditor::saveInvoice()
 {
-    _dataTab -> saveInvoice();
-    _otherTab -> saveInvoice();
+    //_dataTab -> saveInvoice();
+    //_otherTab -> saveInvoice();
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
@@ -167,7 +144,8 @@ bool View::Invoicing::InvoiceEditor::deleteInvoice()
 
 bool View::Invoicing::InvoiceEditor::isSaveable()
 {
-    return _dataTab -> isSaveable();
+    //return _dataTab -> isSaveable();
+    return false;
 }
 
 bool View::Invoicing::InvoiceEditor::verifySave()

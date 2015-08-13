@@ -23,18 +23,11 @@
 
 #include <QWidget>
 
-#define INVOICE_EDITOR_MINIMUM_WIDTH 550
-
-QT_BEGIN_NAMESPACE
-class QTabWidget;
-QT_END_NAMESPACE
-
 namespace Model
 {
     namespace Domain
     {
         class Invoice;
-        class Entity;
     }
 }
 
@@ -42,10 +35,6 @@ namespace View
 {
     namespace Invoicing
     {
-
-        class InvoiceEditorDataTab;
-        class InvoiceEditorOtherTab;
-
         class InvoiceEditor : public QWidget
         {
             Q_OBJECT
@@ -72,9 +61,6 @@ namespace View
             bool isSaveable();
             bool verifySave();
 
-            QTabWidget *_tabWidget;
-            InvoiceEditorDataTab *_dataTab;
-            InvoiceEditorOtherTab *_otherTab;
             Model::Domain::Invoice *_invoice;
             int _id;
         };
