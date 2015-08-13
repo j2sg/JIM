@@ -45,6 +45,11 @@ const QString &View::Invoicing::NotesDialog::notes() const
     return _notes;
 }
 
+void View::Invoicing::NotesDialog::textChangedOnTextEdit()
+{
+    _saveButton -> setEnabled(true);
+}
+
 void View::Invoicing::NotesDialog::createWidgets()
 {
     _textEdit = new QTextEdit;
@@ -53,6 +58,7 @@ void View::Invoicing::NotesDialog::createWidgets()
     _saveButton = new QPushButton(tr("Save"));
     _saveButton -> setIcon(QIcon(":images/save.png"));
     _saveButton -> setDefault(true);
+    _saveButton -> setEnabled(false);
 
     _cancelButton = new QPushButton(tr("Cancel"));
     _cancelButton -> setIcon(QIcon(":images/cancel.png"));
@@ -74,6 +80,8 @@ void View::Invoicing::NotesDialog::createWidgets()
 
 void View::Invoicing::NotesDialog::createConnections()
 {
+    connect(_textEdit, SIGNAL(textChanged()),
+            this, SLOT(textChangedOnTextEdit()));
     connect(_saveButton, SIGNAL(clicked()),
             this, SLOT(accept()));
     connect(_cancelButton, SIGNAL(clicked()), this, SLOT(reject()));

@@ -39,6 +39,8 @@ namespace View
             NotesDialog(const QString &notes, QWidget *parent = 0);
             void done(int result);
             const QString &notes() const;
+        private slots:
+            void textChangedOnTextEdit();
         private:
             void createWidgets();
             void createConnections();
