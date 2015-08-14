@@ -477,76 +477,221 @@
 <context>
     <name>View::Invoicing::InvoiceEditor</name>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="91"/>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="95"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="92"/>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="96"/>
         <source>Has been occurred an error when save</source>
         <translation>Ha ocurrido un error al guardar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="103"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation type="obsolete">Eliminar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="104"/>
         <source>Has been occurred an error when delete</source>
-        <translation>Ha ocurrido un error al eliminar</translation>
+        <translation type="obsolete">Ha ocurrido un error al eliminar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="113"/>
         <source>&amp;Data</source>
-        <translation>&amp;Datos</translation>
+        <translation type="obsolete">&amp;Datos</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="114"/>
         <source>&amp;Other</source>
-        <translation>&amp;Otros</translation>
+        <translation type="obsolete">&amp;Otros</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="116"/>
         <source>&amp;Print</source>
-        <translation>&amp;Imprimir</translation>
+        <translation type="obsolete">&amp;Imprimir</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="120"/>
         <source>&amp;Save</source>
-        <translation>&amp;Guardar</translation>
+        <translation type="obsolete">&amp;Guardar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="125"/>
         <source>&amp;Delete</source>
-        <translation>&amp;Eliminar</translation>
+        <translation type="obsolete">&amp;Eliminar</translation>
     </message>
     <message>
         <source>&amp;Finish</source>
         <translation type="obsolete">&amp;Finalizar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="164"/>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="257"/>
+        <source>&amp;Details</source>
+        <translation>&amp;Detalles</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="271"/>
+        <source>&amp;Customer</source>
+        <translation>&amp;Cliente</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="271"/>
+        <source>&amp;Supplier</source>
+        <translation>&amp;Proveedor</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="276"/>
+        <source>&amp;Operations</source>
+        <translation>&amp;Operaciones</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="291"/>
+        <source>&amp;Totals</source>
+        <translation>&amp;Totales</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="306"/>
+        <source>&amp;Taxes</source>
+        <translation>&amp;Impuestos</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="316"/>
+        <source>&amp;Discount</source>
+        <translation>&amp;Descuento</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="327"/>
+        <source>&amp;Payment</source>
+        <translation>&amp;Pago</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="345"/>
+        <source>&amp;Id:</source>
+        <translation>&amp;Id:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="352"/>
+        <source>&amp;Auto</source>
+        <translation>&amp;Auto</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="354"/>
+        <source>D&amp;ate:</source>
+        <translation>&amp;Fecha:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="359"/>
+        <source>&amp;Place:</source>
+        <translation>&amp;Lugar:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="366"/>
+        <source>I&amp;d:</source>
+        <translation>I&amp;d:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="371"/>
+        <source>&amp;Name:</source>
+        <translation>&amp;Nombre:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="380"/>
+        <source>Select %0</source>
+        <translation>Seleccionar %0</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="381"/>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="387"/>
+        <source>customer</source>
+        <translation>cliente</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="382"/>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="388"/>
+        <source>supplier</source>
+        <translation>proveedor</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="386"/>
+        <source>See details about %0</source>
+        <translation>Ver detalles del %0</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="406"/>
+        <source>No Discount</source>
+        <translation>Sin Descuento</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="407"/>
+        <source>Percent</source>
+        <translation>Porcentaje</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="408"/>
+        <source>Amount</source>
+        <translation>Cantidad</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="419"/>
+        <source>&amp;Paid</source>
+        <translation>&amp;Pagado</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="424"/>
+        <source>Cash</source>
+        <translation>Metálico</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="424"/>
+        <source>Card</source>
+        <translation>Tarjeta</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="424"/>
+        <source>Transfer</source>
+        <translation>Transferencia</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="426"/>
+        <source>&amp;Notes</source>
+        <translation>&amp;Notas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="432"/>
+        <source>Subtotal:</source>
+        <translation>Subtotal:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="440"/>
+        <source>Taxes:</source>
+        <translation>Impuestos:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="448"/>
+        <source>Deduction:</source>
+        <translation>Deducción:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="456"/>
+        <source>Total:</source>
+        <translation>Total:</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="501"/>
         <source>Sale Invoice</source>
         <translation>Factura de Venta</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="164"/>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="501"/>
         <source>Buy Invoice</source>
         <translation>Factura de Compra</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="165"/>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="502"/>
         <source>New</source>
         <translation>Nueva</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="208"/>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="564"/>
         <source>Verify Save</source>
         <translation>Verificar Guardar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="209"/>
+        <location filename="../../src/view/invoicing/invoiceeditor.cpp" line="565"/>
         <source>This invoice has been modified
 do you want to save the changes?</source>
         <translation>Esta factura ha sido modificada
@@ -556,158 +701,166 @@ do you want to save the changes?</source>
 <context>
     <name>View::Invoicing::InvoiceEditorDataTab</name>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="211"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="233"/>
         <source>&amp;Details</source>
         <translation>&amp;Detalles</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="227"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="247"/>
         <source>&amp;Customer</source>
         <translation>&amp;Cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="227"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="247"/>
         <source>&amp;Supplier</source>
         <translation>&amp;Proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="236"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="252"/>
         <source>&amp;Operations</source>
         <translation>&amp;Operaciones</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="244"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="282"/>
         <source>&amp;Taxes</source>
         <translation>&amp;Impuestos</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="258"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="303"/>
         <source>&amp;Payment</source>
         <translation>&amp;Pago</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="274"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="267"/>
         <source>&amp;Totals</source>
         <translation>&amp;Totales</translation>
     </message>
     <message>
         <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="292"/>
+        <source>&amp;Discount</source>
+        <translation>&amp;Descuento</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="321"/>
         <source>&amp;Id:</source>
         <translation>&amp;Id:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="299"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="328"/>
         <source>&amp;Auto</source>
         <translation>&amp;Auto</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="301"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="330"/>
         <source>D&amp;ate:</source>
         <translation>&amp;Fecha:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="306"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="335"/>
         <source>&amp;Place:</source>
         <translation>&amp;Lugar:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="313"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="342"/>
         <source>I&amp;d:</source>
         <translation>I&amp;d:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="318"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="347"/>
         <source>&amp;Name:</source>
         <translation>&amp;Nombre:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="323"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="402"/>
+        <source>&amp;Notes</source>
+        <translation>&amp;Notas</translation>
+    </message>
+    <message>
         <source>&amp;VATIN:</source>
-        <translation>&amp;NIF:</translation>
+        <translation type="obsolete">&amp;NIF:</translation>
     </message>
     <message>
         <source>&amp;Select</source>
         <translation type="obsolete">&amp;Seleccionar</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="379"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="408"/>
         <source>Subtotal:</source>
         <translation>Subtotal:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="387"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="416"/>
         <source>Taxes:</source>
         <translation>Impuestos:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="395"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="424"/>
         <source>Deduction:</source>
         <translation>Deducción:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="403"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="432"/>
         <source>Total:</source>
         <translation>Total:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="369"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="395"/>
         <source>&amp;Paid</source>
         <translation>&amp;Pagado</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="332"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="356"/>
         <source>Select %0</source>
         <translation>Seleccionar %0</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="333"/>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="339"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="357"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="363"/>
         <source>customer</source>
         <translation>cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="334"/>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="340"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="358"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="364"/>
         <source>supplier</source>
         <translation>proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="338"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="362"/>
         <source>See details about %0</source>
         <translation>Ver detalles del %0</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="356"/>
         <source>Discount:</source>
-        <translation>Descuento:</translation>
+        <translation type="obsolete">Descuento:</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="358"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="382"/>
         <source>No Discount</source>
         <translation>Sin Descuento</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="359"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="383"/>
         <source>Percent</source>
         <translation>Porcentaje</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="360"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="384"/>
         <source>Amount</source>
         <translation>Cantidad</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="374"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="400"/>
         <source>Cash</source>
         <translation>Metálico</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="374"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="400"/>
         <source>Card</source>
         <translation>Tarjeta</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="374"/>
+        <location filename="../../src/view/invoicing/invoiceeditordatatab.cpp" line="400"/>
         <source>Transfer</source>
         <translation>Transferencia</translation>
     </message>
@@ -902,6 +1055,24 @@ do you want to save the changes?</source>
     </message>
 </context>
 <context>
+    <name>View::Invoicing::NotesDialog</name>
+    <message>
+        <location filename="../../src/view/invoicing/notesdialog.cpp" line="30"/>
+        <source>Add Notes</source>
+        <translation>Añadir Notas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/notesdialog.cpp" line="58"/>
+        <source>Save</source>
+        <translation>Guardar</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/notesdialog.cpp" line="63"/>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+</context>
+<context>
     <name>View::Invoicing::OperationDelegate</name>
     <message>
         <location filename="../../src/view/invoicing/operationdelegate.cpp" line="78"/>
@@ -995,42 +1166,65 @@ do you want to save the changes?</source>
 <context>
     <name>View::Invoicing::TaxViewerWidget</name>
     <message>
-        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="112"/>
         <source>%VAT</source>
-        <translation>%IVA</translation>
+        <translation type="obsolete">%IVA</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="113"/>
         <source>$VAT</source>
-        <translation>$IVA</translation>
+        <translation type="obsolete">$IVA</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="114"/>
         <source>%ES</source>
-        <translation>%RE</translation>
+        <translation type="obsolete">%RE</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="115"/>
         <source>$ES</source>
-        <translation>$RE</translation>
+        <translation type="obsolete">$RE</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="117"/>
         <source>GEN</source>
-        <translation>GEN</translation>
+        <translation type="obsolete">GEN</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="118"/>
         <source>RED</source>
-        <translation>RED</translation>
+        <translation type="obsolete">RED</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="119"/>
         <source>SRE</source>
-        <translation>SRE</translation>
+        <translation type="obsolete">SRE</translation>
     </message>
     <message>
-        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="120"/>
+        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="86"/>
+        <source>G-VAT</source>
+        <translation>IVA-G</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="87"/>
+        <source>R-VAT</source>
+        <translation>IVA-R</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="88"/>
+        <source>S-VAT</source>
+        <translation>IVA-S</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="89"/>
+        <source>G-ES</source>
+        <translation>RE-G</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="90"/>
+        <source>R-ES</source>
+        <translation>RE-R</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="91"/>
+        <source>S-ES</source>
+        <translation>RE-S</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/invoicing/taxviewerwidget.cpp" line="92"/>
         <source>PIT</source>
         <translation>IRPF</translation>
     </message>
@@ -1038,109 +1232,108 @@ do you want to save the changes?</source>
 <context>
     <name>View::MainWindow</name>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="105"/>
-        <location filename="../../src/view/mainwindow.cpp" line="116"/>
-        <location filename="../../src/view/mainwindow.cpp" line="120"/>
-        <location filename="../../src/view/mainwindow.cpp" line="124"/>
+        <location filename="../../src/view/mainwindow.cpp" line="108"/>
+        <location filename="../../src/view/mainwindow.cpp" line="119"/>
+        <location filename="../../src/view/mainwindow.cpp" line="123"/>
+        <location filename="../../src/view/mainwindow.cpp" line="127"/>
         <source>First Execution</source>
         <translation>Primera Ejecución</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="106"/>
+        <location filename="../../src/view/mainwindow.cpp" line="109"/>
         <source>This is the first time that you run the application.
 You must set the access password.</source>
         <translation>Esta es la primera vez que ejecuta la aplicación
 Debe establecer una contraseña de acceso.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="117"/>
+        <location filename="../../src/view/mainwindow.cpp" line="120"/>
         <source>Password saved. Welcome to %1.</source>
         <translation>Contraseña guardada. Bienvenido a %1.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="121"/>
+        <location filename="../../src/view/mainwindow.cpp" line="124"/>
         <source>Password cannot be saved. Application will be closed.</source>
         <translation>La contraseña no puede guardarse. La aplicación será cerrada.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="125"/>
+        <location filename="../../src/view/mainwindow.cpp" line="128"/>
         <source>Setting up password canceled. Application will be closed.</source>
         <translation>Establecimiento de contraseña cancelado. La aplicación será cerrada.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="142"/>
-        <location filename="../../src/view/mainwindow.cpp" line="148"/>
-        <location filename="../../src/view/mainwindow.cpp" line="158"/>
+        <location filename="../../src/view/mainwindow.cpp" line="145"/>
+        <location filename="../../src/view/mainwindow.cpp" line="151"/>
+        <location filename="../../src/view/mainwindow.cpp" line="161"/>
         <source>Authentication Failed</source>
         <translation>Fallo de Autenticación</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="143"/>
+        <location filename="../../src/view/mainwindow.cpp" line="146"/>
         <source>Authentication canceled. Application will be closed.</source>
         <translation>Autenticación cancelada. La aplicación será cerrada.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="149"/>
+        <location filename="../../src/view/mainwindow.cpp" line="152"/>
         <source>Wrong Password. You have %1 attempts more.</source>
         <translation>Contraseña Incorrecta. Tienes %1 intentos mas.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="159"/>
+        <location filename="../../src/view/mainwindow.cpp" line="162"/>
         <source>Max attempts number exceeded. Application will be closed.</source>
         <translation>Excedido el número máximo de intentos. La aplicación será cerrada.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="168"/>
-        <location filename="../../src/view/mainwindow.cpp" line="595"/>
+        <location filename="../../src/view/mainwindow.cpp" line="171"/>
         <source>Connect Storage</source>
         <translation>Conectar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="169"/>
+        <location filename="../../src/view/mainwindow.cpp" line="172"/>
         <source>There was an error on connection attempt.
 Check out your storage configuration.</source>
         <translation>Hubo un error durante el intento de conexión.
 Compruebe su configuración de almacenamiento.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="187"/>
-        <location filename="../../src/view/mainwindow.cpp" line="197"/>
+        <location filename="../../src/view/mainwindow.cpp" line="190"/>
+        <location filename="../../src/view/mainwindow.cpp" line="200"/>
         <source>Import Storage</source>
         <translation>Importar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="187"/>
-        <location filename="../../src/view/mainwindow.cpp" line="207"/>
+        <location filename="../../src/view/mainwindow.cpp" line="190"/>
+        <location filename="../../src/view/mainwindow.cpp" line="210"/>
         <source>All Files (*.*)</source>
         <translation>Todos los Archivos (*.*)</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="198"/>
+        <location filename="../../src/view/mainwindow.cpp" line="201"/>
         <source>There was errors on import.
 Verify if file exists and/or directory permissions.</source>
         <translation>Hubo errores durante la importación.
 Verifique si el fichero existe y/o los permisos del directorio.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="202"/>
+        <location filename="../../src/view/mainwindow.cpp" line="205"/>
         <source>Import Completed</source>
         <translation>Importación Completada</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="207"/>
-        <location filename="../../src/view/mainwindow.cpp" line="217"/>
+        <location filename="../../src/view/mainwindow.cpp" line="210"/>
+        <location filename="../../src/view/mainwindow.cpp" line="220"/>
         <source>Export Storage</source>
         <translation>Exportar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="218"/>
+        <location filename="../../src/view/mainwindow.cpp" line="221"/>
         <source>There was errors on export.
 Verify permissions of destination directory.</source>
         <translation>Hubo errores durante la exportación.
 Verifique los permisos del directorio destino.</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="222"/>
+        <location filename="../../src/view/mainwindow.cpp" line="225"/>
         <source>Export Completed</source>
         <translation>Exportación Completada</translation>
     </message>
@@ -1185,72 +1378,56 @@ Verifique los permisos del directorio destino.</translation>
         <translation type="obsolete">Hubo errores en la modificación de la empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="356"/>
+        <location filename="../../src/view/mainwindow.cpp" line="359"/>
         <source>Load Invoice</source>
         <translation>Cargar Factura</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="357"/>
+        <location filename="../../src/view/mainwindow.cpp" line="360"/>
         <source>Not exists any invoice with that Id</source>
         <translation>No existe ninguna factura con ese Id</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="495"/>
+        <location filename="../../src/view/mainwindow.cpp" line="580"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="496"/>
+        <location filename="../../src/view/mainwindow.cpp" line="581"/>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;h3&gt;Invoicing and Management for SMBs&lt;/h3&gt;&lt;p&gt;(C) %3 %4 &lt;a href= &quot;mailto:%5&quot; &gt;%5&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href= &quot;%6&quot; &gt;%6&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Licensed under &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot; &gt;GNU General Public License version 3&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;h3&gt;Facturación y Gestión para PYMEs&lt;/h3&gt;&lt;p&gt;(C) %3 %4 &lt;a href= &quot;mailto:%5&quot; &gt;%5&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;a href= &quot;%6&quot; &gt;%6&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Licenciado bajo &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot; &gt;Licencia Pública General GNU versión 3&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="521"/>
         <source>Printing %1 %2</source>
-        <translation>Imprimiendo %1 %2</translation>
+        <translation type="obsolete">Imprimiendo %1 %2</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="522"/>
-        <location filename="../../src/view/mainwindow.cpp" line="532"/>
-        <location filename="../../src/view/mainwindow.cpp" line="539"/>
-        <location filename="../../src/view/mainwindow.cpp" line="548"/>
-        <location filename="../../src/view/mainwindow.cpp" line="625"/>
         <source>Sale Invoice</source>
-        <translation>Factura de Venta</translation>
+        <translation type="obsolete">Factura de Venta</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="522"/>
-        <location filename="../../src/view/mainwindow.cpp" line="532"/>
-        <location filename="../../src/view/mainwindow.cpp" line="539"/>
-        <location filename="../../src/view/mainwindow.cpp" line="548"/>
-        <location filename="../../src/view/mainwindow.cpp" line="630"/>
         <source>Buy Invoice</source>
-        <translation>Factura de Compra</translation>
+        <translation type="obsolete">Factura de Compra</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="531"/>
         <source>%1 %2 saved</source>
-        <translation>%1 %2 guardada</translation>
+        <translation type="obsolete">%1 %2 guardada</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="538"/>
         <source>%1 %2 deleted</source>
-        <translation>%1 %2 eliminada</translation>
+        <translation type="obsolete">%1 %2 eliminada</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="547"/>
         <source>%1 has added a new %2 %3</source>
-        <translation>%1 ha añadido un nuevo %2 %3</translation>
+        <translation type="obsolete">%1 ha añadido un nuevo %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="549"/>
         <source>Supplier</source>
-        <translation>Proveedor</translation>
+        <translation type="obsolete">Proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="549"/>
         <source>Customer</source>
-        <translation>Cliente</translation>
+        <translation type="obsolete">Cliente</translation>
     </message>
     <message>
         <source>&amp;Create Business...</source>
@@ -1277,248 +1454,294 @@ Verifique los permisos del directorio destino.</translation>
         <translation type="obsolete">Cierra la empresa actual</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="591"/>
         <source>&amp;Details...</source>
-        <translation>&amp;Detalles...</translation>
+        <translation type="obsolete">&amp;Detalles...</translation>
     </message>
     <message>
         <source>Set up business details</source>
         <translation type="obsolete">Establece los detalles de la empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="232"/>
+        <location filename="../../src/view/mainwindow.cpp" line="248"/>
         <source>Created Company %1</source>
         <translation>Creada empresa %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="234"/>
+        <location filename="../../src/view/mainwindow.cpp" line="250"/>
         <source>Company Creation</source>
         <translation>Creación de empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="235"/>
+        <location filename="../../src/view/mainwindow.cpp" line="251"/>
         <source>There was an error on company creation</source>
         <translation>Hubo un error en la creación de la empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="263"/>
+        <location filename="../../src/view/mainwindow.cpp" line="279"/>
         <source>Loaded Company %1</source>
         <translation>Cargada empresa %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="266"/>
+        <location filename="../../src/view/mainwindow.cpp" line="282"/>
         <source>Load Company</source>
         <translation>Cargar Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="267"/>
+        <location filename="../../src/view/mainwindow.cpp" line="283"/>
         <source>Not exists any company with that Id</source>
         <translation>No existe ninguna empresa con ese Id</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="284"/>
+        <location filename="../../src/view/mainwindow.cpp" line="327"/>
         <source>Closed Company %1</source>
         <translation>Cerrada Empresa %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="301"/>
+        <location filename="../../src/view/mainwindow.cpp" line="307"/>
         <source>Modified Company %1</source>
         <translation>Modificada Empresa %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="303"/>
+        <location filename="../../src/view/mainwindow.cpp" line="309"/>
         <source>Company Modification</source>
         <translation>Modificación de Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="304"/>
+        <location filename="../../src/view/mainwindow.cpp" line="310"/>
         <source>There was an error on company update</source>
         <translation>Hubo un error en la actualización de la empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="581"/>
         <source>&amp;Create Company...</source>
-        <translation>&amp;Crear Empresa...</translation>
+        <translation type="obsolete">&amp;Crear Empresa...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="583"/>
+        <location filename="../../src/view/mainwindow.cpp" line="661"/>
         <source>Create a new company</source>
         <translation>Crea una nueva empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="585"/>
         <source>&amp;Load Company...</source>
-        <translation>C&amp;argar Empresa...</translation>
+        <translation type="obsolete">C&amp;argar Empresa...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="586"/>
         <source>Load a specific company</source>
-        <translation>Carga una empresa específica</translation>
+        <translation type="obsolete">Carga una empresa específica</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="588"/>
+        <location filename="../../src/view/mainwindow.cpp" line="677"/>
         <source>&amp;Close Company</source>
         <translation>C&amp;errar Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="589"/>
         <source>Close the actual company</source>
-        <translation>Cierra la empresa actual</translation>
+        <translation type="obsolete">Cierra la empresa actual</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="593"/>
         <source>Set up company details</source>
-        <translation>Establece detalles de la empresa</translation>
+        <translation type="obsolete">Establece detalles de la empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="597"/>
         <source>Establish the connection to storage media</source>
-        <translation>Establece la conexión con el medio de almacenamiento</translation>
+        <translation type="obsolete">Establece la conexión con el medio de almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="599"/>
         <source>Disconnect Storage</source>
-        <translation>Desconectar Almacenamiento</translation>
+        <translation type="obsolete">Desconectar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="601"/>
         <source>Finish the connection to storage media</source>
-        <translation>Finaliza la conexion con el medio de almacenamiento</translation>
+        <translation type="obsolete">Finaliza la conexion con el medio de almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="603"/>
         <source>&amp;Import Storage...</source>
-        <translation>&amp;Importar Almacenamiento...</translation>
+        <translation type="obsolete">&amp;Importar Almacenamiento...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="605"/>
         <source>Import Storage from an existing file</source>
-        <translation>Importar Almacenamiento desde un fichero existente</translation>
+        <translation type="obsolete">Importar Almacenamiento desde un fichero existente</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="607"/>
         <source>&amp;Export Storage...</source>
-        <translation>&amp;Exportar Almacenamiento...</translation>
+        <translation type="obsolete">&amp;Exportar Almacenamiento...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="609"/>
         <source>Export Storage to a file</source>
-        <translation>Exportar Almacenamiento a un fichero</translation>
+        <translation type="obsolete">Exportar Almacenamiento a un fichero</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="611"/>
+        <location filename="../../src/view/mainwindow.cpp" line="647"/>
         <source>&amp;Options...</source>
         <translation>&amp;Opciones...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="613"/>
+        <location filename="../../src/view/mainwindow.cpp" line="649"/>
         <source>Set up application options</source>
         <translation>Establece las opciones de la aplicación</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="615"/>
+        <location filename="../../src/view/mainwindow.cpp" line="651"/>
         <source>&amp;Printing...</source>
         <translation>&amp;Impresión...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="617"/>
         <source>Set up printing configuration</source>
-        <translation>Establece la configuración de Impresión</translation>
+        <translation type="obsolete">Establece la configuración de Impresión</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="619"/>
+        <location filename="../../src/view/mainwindow.cpp" line="655"/>
         <source>E&amp;xit</source>
         <translation>&amp;Salir</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="621"/>
         <source>Exit the application</source>
-        <translation>Abandonar la aplicación</translation>
+        <translation type="obsolete">Abandonar la aplicación</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="623"/>
         <source>Create &amp;Sale Invoice...</source>
-        <translation>Crear Factura de &amp;Ventas...</translation>
+        <translation type="obsolete">Crear Factura de &amp;Ventas...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="626"/>
         <source>Create a new Sale Invoice with a customer</source>
-        <translation>Crear una nueva factura de ventas con un cliente</translation>
+        <translation type="obsolete">Crear una nueva factura de ventas con un cliente</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="628"/>
         <source>Create &amp;Buy Invoice...</source>
-        <translation>Crear Factura de &amp;Compras...</translation>
+        <translation type="obsolete">Crear Factura de &amp;Compras...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="631"/>
         <source>Create a new Buy Invoice with a provider</source>
-        <translation>Crear una nueva factura de compras con un proveedor</translation>
+        <translation type="obsolete">Crear una nueva factura de compras con un proveedor</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="633"/>
         <source>&amp;Load Invoice...</source>
-        <translation>&amp;Cargar Factura...</translation>
+        <translation type="obsolete">&amp;Cargar Factura...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="635"/>
         <source>Load</source>
-        <translation>Cargar</translation>
+        <translation type="obsolete">Cargar</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="636"/>
         <source>Load a specific Invoice</source>
-        <translation>Cargar factura específica</translation>
+        <translation type="obsolete">Cargar factura específica</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="638"/>
         <source>&amp;Search Invoice...</source>
-        <translation>&amp;Buscar Factura...</translation>
+        <translation type="obsolete">&amp;Buscar Factura...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="640"/>
         <source>Search</source>
-        <translation>Buscar</translation>
+        <translation type="obsolete">Buscar</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="641"/>
         <source>Make an invoice search</source>
-        <translation>Hacer una busqueda de facturas</translation>
+        <translation type="obsolete">Hacer una busqueda de facturas</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="643"/>
+        <location filename="../../src/view/mainwindow.cpp" line="721"/>
         <source>&amp;Companies...</source>
         <translation>&amp;Empresas...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="645"/>
+        <location filename="../../src/view/mainwindow.cpp" line="723"/>
         <source>Company Management</source>
         <translation>Gestión de Empresas</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="1006"/>
+        <location filename="../../src/view/mainwindow.cpp" line="775"/>
+        <location filename="../../src/view/mainwindow.cpp" line="896"/>
+        <source>&amp;Reports</source>
+        <translation>&amp;Informes</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="779"/>
+        <source>Show &amp;Status bar</source>
+        <translation>Mostrar Barra de &amp;Estado</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="783"/>
+        <source>Icon only</source>
+        <translation>Solo icono</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="787"/>
+        <source>Text only</source>
+        <translation>Solo texto</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="791"/>
+        <source>Text beside icon</source>
+        <translation>Texto junto al icono</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="795"/>
+        <source>Text under icon</source>
+        <translation>Texto bajo el icono</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="805"/>
+        <source>Tabbed View</source>
+        <translation>Vista de pestañas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="809"/>
+        <source>SubWindow View</source>
+        <translation>Vista de Subventanas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="861"/>
+        <source>&amp;Recent Companies</source>
+        <translation>Empresas &amp;Recientes</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="874"/>
+        <source>&amp;Recent Invoices</source>
+        <translation>Facturas &amp;Recientes</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="905"/>
+        <source>Show &amp;Tool bar</source>
+        <translation>Mostrar Barra de &amp;Herramientas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="912"/>
+        <source>Tool bar style</source>
+        <translation>Estilo de Barra de Herramientas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="917"/>
+        <source>View Mode</source>
+        <translation>Modo de vista</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="951"/>
+        <source>Companies</source>
+        <translation>Empresas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="1280"/>
         <source> - Company #%1 - %2</source>
         <translation> - Empresa #%1 - %2</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="1023"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1297"/>
         <source>Verify Company Creation</source>
         <translation>Verificar creación de empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="1024"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1298"/>
         <source>Not found any company. Perhaps this is the first time that
 you execute the application or all company has been removed.
 do you want to create a new company now?</source>
         <translation>No se ha encontrado ninguna empresa. Quizás esta es la primera vez que ejecuta la aplicación o todas las empresas han sido borradas. ¿Quiere crear una nueva empresa ahora?</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="1033"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1307"/>
         <source>Verify Close Company</source>
         <translation>Verificar Cerrar Empresa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="1034"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1308"/>
         <source>There are active invoices.
 are you sure you wish to close the company?</source>
         <translation>Hay facturas activas ¿Esta seguro de que desea cerrar la empresa?</translation>
@@ -1532,203 +1755,435 @@ are you sure you wish to close the company?</source>
         <translation type="obsolete">Gestión de Empresas</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="647"/>
         <source>&amp;Customers...</source>
-        <translation>&amp;Clientes...</translation>
+        <translation type="obsolete">&amp;Clientes...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="649"/>
+        <location filename="../../src/view/mainwindow.cpp" line="731"/>
         <source>Customer Management</source>
         <translation>Gestión de Clientes</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="651"/>
+        <location filename="../../src/view/mainwindow.cpp" line="733"/>
         <source>&amp;Suppliers...</source>
         <translation>&amp;Proveedores...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="653"/>
+        <location filename="../../src/view/mainwindow.cpp" line="735"/>
         <source>Supplier Management</source>
         <translation>Gestión de Proveedores</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="655"/>
+        <location filename="../../src/view/mainwindow.cpp" line="737"/>
         <source>&amp;Products...</source>
         <translation>P&amp;roductos...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="657"/>
+        <location filename="../../src/view/mainwindow.cpp" line="739"/>
         <source>Product Management</source>
         <translation>Gestión de Productos</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="659"/>
+        <location filename="../../src/view/mainwindow.cpp" line="741"/>
         <source>&amp;Volume Buy...</source>
         <translation>Volumen de &amp;Compras...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="661"/>
+        <location filename="../../src/view/mainwindow.cpp" line="743"/>
         <source>Make a report about Volume Buy</source>
         <translation>Hacer un informe acerca del volumen de compras</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="663"/>
+        <location filename="../../src/view/mainwindow.cpp" line="745"/>
         <source>&amp;Volume Sale...</source>
         <translation>Volumen de &amp;Ventas...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="665"/>
+        <location filename="../../src/view/mainwindow.cpp" line="747"/>
         <source>Make a report about Volume Sale</source>
         <translation>Hacer un informe acerca del volumen de ventas</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="667"/>
+        <location filename="../../src/view/mainwindow.cpp" line="749"/>
         <source>&amp;Unpaid Invoices...</source>
         <translation>Facturas &amp;Impagadas...</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="669"/>
+        <location filename="../../src/view/mainwindow.cpp" line="751"/>
         <source>Show all unpaid invoices</source>
         <translation>Mostrar todas las facturas impagadas</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="679"/>
         <source>Full Screen</source>
-        <translation>Pantalla Completa</translation>
+        <translation type="obsolete">Pantalla Completa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="682"/>
         <source>Show full screen mode</source>
-        <translation>Mostrar modo de Pantalla Completa</translation>
+        <translation type="obsolete">Mostrar modo de Pantalla Completa</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="684"/>
+        <location filename="../../src/view/mainwindow.cpp" line="821"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="685"/>
+        <location filename="../../src/view/mainwindow.cpp" line="822"/>
         <source>Close active window</source>
         <translation>Cerrar la ventana actual</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="687"/>
+        <location filename="../../src/view/mainwindow.cpp" line="824"/>
         <source>Close All</source>
         <translation>Cerrar Todas</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="688"/>
+        <location filename="../../src/view/mainwindow.cpp" line="825"/>
         <source>Close all windows</source>
         <translation>Cerrar todas las ventanas</translation>
     </message>
     <message>
+        <location filename="../../src/view/mainwindow.cpp" line="819"/>
         <source>Tile</source>
-        <translation type="obsolete">Mosaico</translation>
+        <translation>Mosaico</translation>
     </message>
     <message>
         <source>Tile windows</source>
         <translation type="obsolete">Ventanas en mosaico</translation>
     </message>
     <message>
+        <location filename="../../src/view/mainwindow.cpp" line="817"/>
         <source>Cascade</source>
-        <translation type="obsolete">Cascada</translation>
+        <translation>Cascada</translation>
     </message>
     <message>
         <source>Cascade windows</source>
         <translation type="obsolete">Ventanas en Cascada</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="690"/>
+        <location filename="../../src/view/mainwindow.cpp" line="827"/>
         <source>Next</source>
         <translation>Siguiente</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="692"/>
+        <location filename="../../src/view/mainwindow.cpp" line="829"/>
         <source>Go to next window</source>
         <translation>Ir a la siguiente ventana</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="694"/>
+        <location filename="../../src/view/mainwindow.cpp" line="831"/>
         <source>Previous</source>
         <translation>Anterior</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="696"/>
+        <location filename="../../src/view/mainwindow.cpp" line="833"/>
         <source>Go to previous window</source>
         <translation>Ir a la ventana anterior</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="698"/>
+        <location filename="../../src/view/mainwindow.cpp" line="835"/>
         <source>About</source>
         <translation>Acerca</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="700"/>
+        <location filename="../../src/view/mainwindow.cpp" line="837"/>
         <source>Show information about the application</source>
         <translation>Muestra información acerca de la aplicación</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="702"/>
+        <location filename="../../src/view/mainwindow.cpp" line="839"/>
         <source>About &amp;Qt</source>
         <translation>Acerca de &amp;Qt</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="703"/>
+        <location filename="../../src/view/mainwindow.cpp" line="840"/>
         <source>Show information about Qt library</source>
         <translation>Mostrar información acerca de la biblioteca Qt</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="708"/>
+        <location filename="../../src/view/mainwindow.cpp" line="845"/>
         <source>&amp;Application</source>
         <translation>&amp;Aplicación</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="725"/>
+        <location filename="../../src/view/mainwindow.cpp" line="767"/>
+        <location filename="../../src/view/mainwindow.cpp" line="870"/>
         <source>&amp;Invoicing</source>
         <translation>&amp;Facturación</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="732"/>
+        <location filename="../../src/view/mainwindow.cpp" line="631"/>
+        <source>&amp;Connect to database</source>
+        <translation>&amp;Conectar a base de datos</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="633"/>
+        <source>Open a connection to database</source>
+        <translation>Abre una conexión con base de datos</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="635"/>
+        <source>&amp;Disconnect from database</source>
+        <translation>&amp;Desconectar de base de datos</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="637"/>
+        <source>Close the connection from database</source>
+        <translation>Cierra la conexión con la base de datos</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="639"/>
+        <source>&amp;Import database...</source>
+        <translation>&amp;Importar base de datos...</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="641"/>
+        <source>Import database from an existing file</source>
+        <translation>Importar base de datos desde un fichero existente</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="643"/>
+        <source>&amp;Export database...</source>
+        <translation>&amp;Exportar base de datos...</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="645"/>
+        <source>Export database to a file</source>
+        <translation>Exportar base de datos a un fichero</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="653"/>
+        <source>Set up printing</source>
+        <translation>Configurar Impresión</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="657"/>
+        <source>Exit application</source>
+        <translation>Salir de la aplicación</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="659"/>
+        <source>&amp;New Company...</source>
+        <translation>&amp;Nueva Empresa...</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="663"/>
+        <source>&amp;Open Company...</source>
+        <translation>&amp;Abrir Empresa...</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="664"/>
+        <source>Open a certain company</source>
+        <translation>Abrir una determinada empresa</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="671"/>
+        <location filename="../../src/view/mainwindow.cpp" line="695"/>
+        <source>Clear</source>
+        <translation>Limpiar</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="673"/>
+        <source>&amp;Properties...</source>
+        <translation>&amp;Propiedades...</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="675"/>
+        <source>Set up company properties</source>
+        <translation>Configurar propiedades de la empresa</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="678"/>
+        <source>Close current company</source>
+        <translation>Cerrar empresa actual</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="680"/>
+        <source>&amp;New Invoice...</source>
+        <translation>&amp;Nueva Factura...</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="682"/>
+        <source>New</source>
+        <translation>Nueva</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="683"/>
+        <source>Create a new invoice</source>
+        <translation>Crear una nueva factura</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="685"/>
+        <source>&amp;Open Invoice...</source>
+        <translation>&amp;Abrir Factura...</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="687"/>
+        <source>Open</source>
+        <translation>Abrir</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="688"/>
+        <source>Open a certain invoice</source>
+        <translation>Abrir una determinada factura</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="697"/>
+        <source>&amp;Print Invoice</source>
+        <translation>&amp;Imprimir Factura</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="699"/>
+        <source>Print</source>
+        <translation>Imprimir</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="700"/>
+        <source>Print current invoice</source>
+        <translation>Imprimir factura actual</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="702"/>
+        <source>&amp;Save Invoice</source>
+        <translation>&amp;Guardar Factura</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="704"/>
+        <source>Save</source>
+        <translation>Guardar</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="705"/>
+        <source>Save current invoice</source>
+        <translation>Guardar factura actual</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="707"/>
+        <source>&amp;Save all</source>
+        <translation>&amp;Guardar todas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="709"/>
+        <source>Save all</source>
+        <translation>Guardar todas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="710"/>
+        <source>Save all open invoices</source>
+        <translation>Guardar todas las facturas abiertas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="712"/>
+        <source>&amp;Close Invoice</source>
+        <translation>&amp;Cerrar Factura</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="713"/>
+        <source>Close current invoice</source>
+        <translation>Cerrar factura actual</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="715"/>
+        <source>Close All Invoices</source>
+        <translation>Cerrar todas las facturas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="716"/>
+        <source>Close all open invoices</source>
+        <translation>Cerrar todas las facturas abiertas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="718"/>
+        <source>Close All Invoices except</source>
+        <translation>Cerrar todas las facturas excepto</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="719"/>
+        <source>Close all open invoices except current invoice</source>
+        <translation>Cerrar todas las facturas excepto la factura actual</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="725"/>
+        <source>&amp;Invoices...</source>
+        <translation>&amp;Facturas...</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="727"/>
+        <source>Invoice Management</source>
+        <translation>Gestión de facturas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="729"/>
+        <source>C&amp;ustomers...</source>
+        <translation>&amp;Clientes</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="753"/>
+        <source>&amp;Full Screen</source>
+        <translation>&amp;Pantalla Completa</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="756"/>
+        <source>Show Full screen mode</source>
+        <translation>Mostrar modo de pantalla completa</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="758"/>
+        <source>Show &amp;Menu bar</source>
+        <translation>Mostrar Barra de &amp;Menu</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="761"/>
+        <source>Ctrl+M</source>
+        <translation>Ctrl+M</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="763"/>
+        <location filename="../../src/view/mainwindow.cpp" line="857"/>
+        <source>&amp;Companies</source>
+        <translation>&amp;Empresas</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/mainwindow.cpp" line="771"/>
+        <location filename="../../src/view/mainwindow.cpp" line="889"/>
         <source>&amp;Management</source>
         <translation>&amp;Gestión</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="738"/>
         <source>&amp;Report</source>
-        <translation>&amp;Informe</translation>
+        <translation type="obsolete">&amp;Informe</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="747"/>
+        <location filename="../../src/view/mainwindow.cpp" line="901"/>
         <source>&amp;Window</source>
         <translation>&amp;Ventana</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="756"/>
+        <location filename="../../src/view/mainwindow.cpp" line="930"/>
         <source>&amp;Help</source>
         <translation>A&amp;yuda</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="765"/>
+        <location filename="../../src/view/mainwindow.cpp" line="957"/>
         <source>Invoicing</source>
         <translation>Facturación</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="772"/>
+        <location filename="../../src/view/mainwindow.cpp" line="964"/>
         <source>Management</source>
         <translation>Gestión</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="778"/>
+        <location filename="../../src/view/mainwindow.cpp" line="970"/>
         <source>Report</source>
         <translation>Informe</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="984"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1259"/>
         <source>Connected to %1</source>
         <translation>Conectado a %1</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="984"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1259"/>
         <source>Disconnected</source>
         <translation>Desconectado</translation>
     </message>
@@ -1737,12 +2192,12 @@ are you sure you wish to close the company?</source>
         <translation type="obsolete"> - Empresa #%1 - %2</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="1014"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1288"/>
         <source>Verify Import Storage</source>
         <translation>Verificar Importar Almacenamiento</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="1015"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1289"/>
         <source>You must know that all stored data will be removed.
 are you sure you wish to import storage?</source>
         <translation>Debe saber que todos los datos almacenados serán eliminados.
@@ -1771,12 +2226,12 @@ are you sure you wish to close the business?</source>
 ¿Esta seguro de querer cerrar la empresa?</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="1042"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1316"/>
         <source>Verify Exit</source>
         <translation>Verificar Salida</translation>
     </message>
     <message>
-        <location filename="../../src/view/mainwindow.cpp" line="1043"/>
+        <location filename="../../src/view/mainwindow.cpp" line="1317"/>
         <source>are you sure you wish to exit the program?</source>
         <translation>¿Está seguro de querer abandonar la aplicación?</translation>
     </message>
@@ -2339,82 +2794,82 @@ are you sure you wish to close the business?</source>
         <translation>Producto</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="121"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="133"/>
         <source>&amp;Id:</source>
         <translation>&amp;Id:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="127"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="139"/>
         <source>Auto &amp;Generate</source>
         <translation>Auto &amp;Generar</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="129"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="141"/>
         <source>&amp;Name:</source>
         <translation>&amp;Nombre:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="133"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="145"/>
         <source>&amp;Category:</source>
         <translation>&amp;Categoría:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="138"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="150"/>
         <source>&amp;Description:</source>
         <translation>&amp;Descripción:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="143"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="155"/>
         <source>&amp;Price:</source>
         <translation>&amp;Precio:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="152"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="164"/>
         <source>&amp;Type:</source>
         <translation>&amp;Tipo:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="154"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="166"/>
         <source>Units</source>
         <translation>Unidades</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="155"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="167"/>
         <source>Weight</source>
         <translation>Peso</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="158"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="170"/>
         <source>&amp;Discount:</source>
         <translation>&amp;Descuento:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="166"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="178"/>
         <source>T&amp;ype:</source>
         <translation>T&amp;ipo:</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="168"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="180"/>
         <source>No Discount</source>
         <translation>Sin Descuento</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="169"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="181"/>
         <source>Percent</source>
         <translation>Porcentaje</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="170"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="182"/>
         <source>Amount</source>
         <translation>Cantidad</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="193"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="205"/>
         <source>&amp;Save</source>
         <translation>&amp;Guardar</translation>
     </message>
     <message>
-        <location filename="../../src/view/management/productdialog.cpp" line="197"/>
+        <location filename="../../src/view/management/productdialog.cpp" line="209"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Cancelar</translation>
     </message>
@@ -2571,9 +3026,13 @@ are you sure you want to delete the product?</source>
 <context>
     <name>View::Management::TaxApplyingWidget</name>
     <message>
-        <location filename="../../src/view/management/taxapplyingwidget.cpp" line="96"/>
         <source>Apply &amp;all taxes</source>
-        <translation>Aplicar &amp;Todos los Impuestos</translation>
+        <translation type="obsolete">Aplicar &amp;Todos los Impuestos</translation>
+    </message>
+    <message>
+        <location filename="../../src/view/management/taxapplyingwidget.cpp" line="96"/>
+        <source>&amp;All taxes</source>
+        <translation>&amp;Todos</translation>
     </message>
     <message>
         <location filename="../../src/view/management/taxapplyingwidget.cpp" line="97"/>
