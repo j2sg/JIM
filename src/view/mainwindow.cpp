@@ -591,6 +591,41 @@ void View::MainWindow::about()
                        .arg(APPLICATION_WEB));
 }
 
+void View::MainWindow::updateInvoicingMenu()
+{
+    bool activeSubWindow = _mdiArea -> activeSubWindow() != 0;
+    View::Invoicing::InvoiceEditor *editor = 0;
+
+    if(activeSubWindow)
+        editor = qobject_cast<View::Invoicing::InvoiceEditor *>(_mdiArea -> activeSubWindow() -> widget());
+
+    bool isInvoiceEditor = editor != 0;
+    bool existsOtherEditor = false;
+    bool existsOtherEditorReadyToSave = false;
+
+    foreach(QMdiSubWindow *window, _mdiArea -> subWindowList()) {
+        View::Invoicing::InvoiceEditor *otherEditor = qobject_cast<View::Invoicing::InvoiceEditor *>(window -> widget());
+
+        if((existsOtherEditor = otherEditor != 0 && otherEditor != editor))
+            break;
+
+    }
+
+    foreach(QMdiSubWindow *window, _mdiArea -> subWindowList()) {
+        View::Invoicing::InvoiceEditor *otherEditor = qobject_cast<View::Invoicing::InvoiceEditor *>(window -> widget());
+
+        if((existsOtherEditorReadyToSave = otherEditor != 0 && otherEditor != editor && otherEditor -> isSaveable()))
+            break;
+    }
+
+    _printInvoiceAction -> setEnabled(isInvoiceEditor && editor -> isPrintable());
+    _saveAction -> setEnabled(isInvoiceEditor && editor -> isSaveable());
+    _saveAllAction -> setEnabled((isInvoiceEditor && editor -> isSaveable()) || existsOtherEditorReadyToSave);
+    _closeAction -> setEnabled(isInvoiceEditor);
+    _closeAllAction -> setEnabled(isInvoiceEditor || existsOtherEditor);
+    _closeAllExceptAction -> setEnabled(isInvoiceEditor && existsOtherEditor);
+}
+
 void View::MainWindow::updateWindowMenu()
 {
     bool activeSubWindow = _mdiArea -> activeSubWindow() != 0;
@@ -599,8 +634,8 @@ void View::MainWindow::updateWindowMenu()
     _windowMenuSeparatorAction -> setVisible(subWindowView);
     _cascadeAction -> setVisible(subWindowView);
     _tileAction -> setVisible(subWindowView);
-    _closeAction -> setEnabled(activeSubWindow);
-    _closeAllAction -> setEnabled(activeSubWindow);
+    _closeWindowAction -> setEnabled(activeSubWindow);
+    _closeAllWindowsAction -> setEnabled(activeSubWindow);
     _nextAction -> setEnabled(activeSubWindow);
     _previousAction -> setEnabled(activeSubWindow);
 }
@@ -931,6 +966,7 @@ void View::MainWindow::createMenus()
     _helpMenu -> addAction(_aboutAction);
     _helpMenu -> addAction(_aboutQtAction);
 
+    updateInvoicingMenu();
     updateWindowMenu();
 }
 
@@ -984,8 +1020,6 @@ void View::MainWindow::createStatusBar()
 
 void View::MainWindow::createConnections()
 {
-    connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
-            this, SLOT(updateWindowMenu()));
     connect(_connectToDBAction, SIGNAL(triggered()),
             this, SLOT(connectToDB()));
     connect(_disconnectToDBAction, SIGNAL(triggered()),
@@ -1096,6 +1130,10 @@ void View::MainWindow::createConnections()
             this, SLOT(about()));
     connect(_aboutQtAction, SIGNAL(triggered()),
             qApp, SLOT(aboutQt()));
+    connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
+            this, SLOT(updateInvoicingMenu()));
+    connect(_mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)),
+            this, SLOT(updateWindowMenu()));
 }
 
 void View::MainWindow::loadSettings()
@@ -1147,6 +1185,8 @@ void View::MainWindow::saveSettings()
 View::Invoicing::InvoiceEditor *View::MainWindow::createInvoiceEditor(Model::Domain::Invoice *invoice)
 {
     View::Invoicing::InvoiceEditor *editor = new View::Invoicing::InvoiceEditor(invoice);
+
+    connect(editor, SIGNAL(dataChanged()), this, SLOT(updateInvoicingMenu()));
 
     return editor;
 }

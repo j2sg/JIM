@@ -134,6 +134,9 @@ void View::Invoicing::InvoiceEditor::currentIndexChangedOnDiscountTypeComboBox()
 
 void View::Invoicing::InvoiceEditor::invoiceModified(bool modified)
 {
+    if(modified)
+        emit dataChanged();
+
     setWindowModified(modified);
 }
 

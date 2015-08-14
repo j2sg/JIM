@@ -113,6 +113,7 @@ namespace View
         void toolBarButtonStyle();
         void viewMode();
         void about();
+        void updateInvoicingMenu();
         void updateWindowMenu();
     private:
         void createWidgets();
