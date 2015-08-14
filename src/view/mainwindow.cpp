@@ -608,7 +608,6 @@ void View::MainWindow::updateInvoicingMenu()
 
         if((existsOtherEditor = otherEditor != 0 && otherEditor != editor))
             break;
-
     }
 
     foreach(QMdiSubWindow *window, _mdiArea -> subWindowList()) {
