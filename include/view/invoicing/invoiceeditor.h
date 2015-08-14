@@ -62,14 +62,16 @@ namespace View
             InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *parent = 0);
             int id() const;
             ~InvoiceEditor();
+            bool isSaveable();
+            bool isPrintable();
         protected:
             void closeEvent(QCloseEvent *event);
         signals:
+            void dataChanged();
             void entityAdded(const Model::Domain::Invoice &invoice);
         public slots:
             bool save();
             void print();
-            bool isSaveable();
         private slots:
             void invoiceModified(bool modified = true);
             void stateChangedOnAutoIdCheckBox();

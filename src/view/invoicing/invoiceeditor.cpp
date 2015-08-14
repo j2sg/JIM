@@ -75,6 +75,18 @@ View::Invoicing::InvoiceEditor::~InvoiceEditor()
         delete _invoice;
 }
 
+bool View::Invoicing::InvoiceEditor::isSaveable()
+{
+    return !(_idLineEdit -> text().isEmpty()) &&
+           !(_entityIdLineEdit -> text().isEmpty()) &&
+           !(_operationEditor -> operations() -> isEmpty());
+}
+
+bool View::Invoicing::InvoiceEditor::isPrintable()
+{
+    return !IS_NEW(_id) && !isWindowModified();
+}
+
 void View::Invoicing::InvoiceEditor::closeEvent(QCloseEvent *event)
 {
     if(verifySave())
@@ -101,13 +113,6 @@ bool View::Invoicing::InvoiceEditor::save()
 
 void View::Invoicing::InvoiceEditor::print()
 {
-}
-
-bool View::Invoicing::InvoiceEditor::isSaveable()
-{
-    return !(_idLineEdit -> text().isEmpty()) &&
-           !(_entityIdLineEdit -> text().isEmpty()) &&
-           !(_operationEditor -> operations() -> isEmpty());
 }
 
 void View::Invoicing::InvoiceEditor::stateChangedOnAutoIdCheckBox()
