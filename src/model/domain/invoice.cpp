@@ -25,7 +25,7 @@
 #include "product.h"
 #include "category.h"
 
-Model::Domain::Invoice::Invoice(Entity *company, int id, InvoiceType type)
+Model::Domain::Invoice::Invoice(Entity *company, InvoiceType type, int id)
     : _id(id), _type(type), _company(company)
 {
     _entity = 0;

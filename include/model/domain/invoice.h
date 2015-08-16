@@ -40,7 +40,7 @@ namespace Model
         {
             friend std::ostream &operator<<(std::ostream &os, const Invoice &invoice);
         public:
-            Invoice(Entity *company, int id = NO_ID, InvoiceType type = Buy);
+            Invoice(Entity *company, InvoiceType type = Buy, int id = NO_ID);
             Invoice(const Invoice &invoice);
             ~Invoice();
             Invoice &operator=(const Invoice &invoice);

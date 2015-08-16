@@ -146,7 +146,7 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Do
                                                        (result -> at(0)).at(19).toInt());
         QString notes                            = (result -> at(0)).at(20).toString();
 
-        invoice = new Model::Domain::Invoice(company, id, type);
+        invoice = new Model::Domain::Invoice(company, type, id);
         invoice -> setEntity(entity);
         invoice -> setDate(date);
         invoice -> setPlace(place);
@@ -203,7 +203,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
                                                        row.at(19).toInt());
         QString notes                            = row.at(20).toString();
 
-        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, id, type);
+        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, type, id);
         invoice -> setEntity(entity);
         invoice -> setDate(date);
         invoice -> setPlace(place);
@@ -290,7 +290,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
                                                        row.at(19).toInt());
         QString notes                            = row.at(20).toString();
 
-        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, id, type);
+        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(company, type, id);
         invoice -> setEntity(entity);
         invoice -> setDate(date);
         invoice -> setPlace(place);
