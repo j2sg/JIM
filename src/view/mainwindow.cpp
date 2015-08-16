@@ -338,7 +338,7 @@ void View::MainWindow::newInvoice()
     if(!_company)
         return;
 
-    View::Invoicing::NewInvoiceDialog dialog(this);
+    View::NewInvoiceDialog dialog(this);
 
     connect(&dialog, SIGNAL(entityAdded(Model::Domain::Entity)),
             this, SLOT(entityAdded(Model::Domain::Entity)));

@@ -44,40 +44,37 @@ namespace Model
 
 namespace View
 {
-    namespace Invoicing
+    class NewInvoiceDialog : public QDialog
     {
-        class NewInvoiceDialog : public QDialog
-        {
-            Q_OBJECT
-        public:
-            NewInvoiceDialog(QWidget *parent = 0);
-            void done(int result);
-            Model::Domain::InvoiceType type() const;
-            Model::Domain::Entity *entity();
-        signals:
-            void entityAdded(const Model::Domain::Entity& entity);
-        private slots:
-            void toggledOnRadioButton();
-            void selectEntity();
-        private:
-            void createWidgets();
-            void createConnections();
+        Q_OBJECT
+    public:
+        NewInvoiceDialog(QWidget *parent = 0);
+        void done(int result);
+        Model::Domain::InvoiceType type() const;
+        Model::Domain::Entity *entity();
+    signals:
+        void entityAdded(const Model::Domain::Entity& entity);
+    private slots:
+        void toggledOnRadioButton();
+        void selectEntity();
+    private:
+        void createWidgets();
+        void createConnections();
 
-            QRadioButton *_buyRadioButton;
-            QRadioButton *_saleRadioButton;
-            QLabel *_entityIdLabel;
-            QLineEdit *_entityIdLineEdit;
-            QLabel *_entityNameLabel;
-            QLineEdit *_entityNameLineEdit;
-            QPushButton *_selectButton;
-            QPushButton *_createButton;
-            QPushButton *_cancelButton;
-            QGroupBox *_entityGroupBox;
+        QRadioButton *_buyRadioButton;
+        QRadioButton *_saleRadioButton;
+        QLabel *_entityIdLabel;
+        QLineEdit *_entityIdLineEdit;
+        QLabel *_entityNameLabel;
+        QLineEdit *_entityNameLineEdit;
+        QPushButton *_selectButton;
+        QPushButton *_createButton;
+        QPushButton *_cancelButton;
+        QGroupBox *_entityGroupBox;
 
-            Model::Domain::InvoiceType _type;
-            Model::Domain::Entity *_entity;
-        };
-    }
+        Model::Domain::InvoiceType _type;
+        Model::Domain::Entity *_entity;
+    };
 }
 
 #endif // NEWINVOICEDIALOG_H

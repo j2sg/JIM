@@ -10,7 +10,7 @@
 #include <QGridLayout>
 #include <QGroupBox>
 
-View::Invoicing::NewInvoiceDialog::NewInvoiceDialog(QWidget *parent) : QDialog(parent)
+View::NewInvoiceDialog::NewInvoiceDialog(QWidget *parent) : QDialog(parent)
 {
     _entity = 0;
 
@@ -20,7 +20,7 @@ View::Invoicing::NewInvoiceDialog::NewInvoiceDialog(QWidget *parent) : QDialog(p
     setWindowIcon(QIcon(":images/loadinvoice.png"));
 }
 
-void View::Invoicing::NewInvoiceDialog::done(int result)
+void View::NewInvoiceDialog::done(int result)
 {
     if(result) {
         _type = _buyRadioButton -> isChecked() ? Model::Domain::Buy : Model::Domain::Sale;
@@ -32,17 +32,17 @@ void View::Invoicing::NewInvoiceDialog::done(int result)
     QDialog::done(result);
 }
 
-Model::Domain::InvoiceType View::Invoicing::NewInvoiceDialog::type() const
+Model::Domain::InvoiceType View::NewInvoiceDialog::type() const
 {
     return _type;
 }
 
-Model::Domain::Entity *View::Invoicing::NewInvoiceDialog::entity()
+Model::Domain::Entity *View::NewInvoiceDialog::entity()
 {
     return _entity;
 }
 
-void View::Invoicing::NewInvoiceDialog::toggledOnRadioButton()
+void View::NewInvoiceDialog::toggledOnRadioButton()
 {
     Model::Domain::InvoiceType type = _buyRadioButton -> isChecked() ? Model::Domain::Buy : Model::Domain::Sale;
 
@@ -50,7 +50,7 @@ void View::Invoicing::NewInvoiceDialog::toggledOnRadioButton()
     _selectButton -> setIcon(type == Model::Domain::Buy ? QIcon(":images/supplier.png") : QIcon(":images/entity.png"));
 }
 
-void View::Invoicing::NewInvoiceDialog::selectEntity()
+void View::NewInvoiceDialog::selectEntity()
 {
     Model::Domain::EntityType entityType = _buyRadioButton -> isChecked() ? Model::Domain::SupplierEntity :
                                                                             Model::Domain::CustomerEntity;
@@ -68,7 +68,7 @@ void View::Invoicing::NewInvoiceDialog::selectEntity()
     }
 }
 
-void View::Invoicing::NewInvoiceDialog::createWidgets()
+void View::NewInvoiceDialog::createWidgets()
 {
     _buyRadioButton = new QRadioButton(tr("Buy"));
     _saleRadioButton = new QRadioButton(tr("Sale"));
@@ -127,7 +127,7 @@ void View::Invoicing::NewInvoiceDialog::createWidgets()
     setLayout(mainLayout);
 }
 
-void View::Invoicing::NewInvoiceDialog::createConnections()
+void View::NewInvoiceDialog::createConnections()
 {
     connect(_buyRadioButton, SIGNAL(toggled(bool)),
             this, SLOT(toggledOnRadioButton()));
