@@ -20,8 +20,8 @@
 
 #include "entity.h"
 
-Model::Domain::Entity::Entity(int id, EntityType type, const QString &vatin, const QString &name)
-    : _id(id), _type(type),_vatin(vatin), _name(name)
+Model::Domain::Entity::Entity(EntityType type, int id, const QString &vatin, const QString &name)
+    : _type(type), _id(id),_vatin(vatin), _name(name)
 {
     _country = _province = _city = _address = _pc = _email = _web = _notes = QString();
     _telephone = _mobile = _fax = 0;

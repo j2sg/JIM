@@ -109,7 +109,7 @@ Model::Domain::Entity *Model::Management::EntityManager::get(int id, Model::Doma
 
         entity = (type == Model::Domain::CompanyEntity ?
                       new Model::Domain::Company(id, vatin, name) :
-                      new Model::Domain::Entity(id, type, vatin, name));
+                      new Model::Domain::Entity(type, id, vatin, name));
         entity -> setCountry(country);
         entity -> setProvince(province);
         entity -> setCity(city);
@@ -169,7 +169,7 @@ QList<Model::Domain::Entity *> *Model::Management::EntityManager::getAllByType(M
 
         Model::Domain::Entity *entity = (type == Model::Domain::CompanyEntity ?
                                              new Model::Domain::Company(id, vatin, name) :
-                                             new Model::Domain::Entity(id, type, vatin, name));
+                                             new Model::Domain::Entity(type, id, vatin, name));
         entity -> setCountry(country);
         entity -> setProvince(province);
         entity -> setCity(city);

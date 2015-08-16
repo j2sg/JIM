@@ -34,7 +34,7 @@ namespace Model
         {
             friend std::ostream &operator<<(std::ostream &os, const Entity &entity);
         public:
-            Entity(int id = NO_ID, EntityType type = CustomerEntity,
+            Entity(EntityType type = CustomerEntity, int id = NO_ID,
                    const QString &vatin = QString(),
                    const QString &name = QString());
             bool operator==(const Entity &entity) const;

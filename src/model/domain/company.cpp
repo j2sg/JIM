@@ -22,7 +22,7 @@
 
 Model::Domain::Company::Company(int id, const QString &vatin, const QString &name,
                                   TaxFlag taxOnSale, TaxFlag taxOnBuy)
-    : Entity(id, CompanyEntity, vatin, name), _taxOnSale(taxOnSale), _taxOnBuy(taxOnBuy)
+    : Entity(CompanyEntity, id, vatin, name), _taxOnSale(taxOnSale), _taxOnBuy(taxOnBuy)
 {
     for(int k = 0;k < TaxTypeCount;++k)
         _tax[k].setType(static_cast<TaxType>(k));
