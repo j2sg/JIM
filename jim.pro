@@ -117,7 +117,8 @@ HEADERS += include/global.h \
     include/view/companyloader.h \
     include/view/management/businesseditor.h \
     include/view/management/entityproxymodel.h \
-    include/view/invoicing/notesdialog.h
+    include/view/invoicing/notesdialog.h \
+    include/view/invoicing/newinvoicedialog.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
@@ -185,7 +186,8 @@ SOURCES += src/main.cpp \
     src/view/companyloader.cpp \
     src/view/management/businesseditor.cpp \
     src/view/management/entityproxymodel.cpp \
-    src/view/invoicing/notesdialog.cpp
+    src/view/invoicing/notesdialog.cpp \
+    src/view/invoicing/newinvoicedialog.cpp
 
 RESOURCES += resources/jim.qrc
 
