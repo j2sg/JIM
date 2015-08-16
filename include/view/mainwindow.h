@@ -113,6 +113,7 @@ namespace View
         void toolBarButtonStyle();
         void viewMode();
         void about();
+        void entityAdded(const Model::Domain::Entity& entity);
         void updateInvoicingMenu();
         void updateWindowMenu();
     private:

@@ -25,6 +25,7 @@
 #include "companyloader.h"
 #include "optionsdialog.h"
 #include "invoiceloader.h"
+#include "newinvoicedialog.h"
 #include "invoiceeditor.h"
 #include "invoicesearch.h"
 #include "invoicesearchresult.h"
@@ -337,9 +338,23 @@ void View::MainWindow::newInvoice()
     if(!_company)
         return;
 
-    View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(new Model::Domain::Invoice(_company, NO_ID, Model::Domain::Sale));
-    _mdiArea -> addSubWindow(editor);
-    editor -> show();
+    View::Invoicing::NewInvoiceDialog dialog(this);
+
+    connect(&dialog, SIGNAL(entityAdded(Model::Domain::Entity)),
+            this, SLOT(entityAdded(Model::Domain::Entity)));
+
+    if(dialog.exec()) {
+        Model::Domain::InvoiceType type = dialog.type();
+        Model::Domain::Entity *entity = dialog.entity();
+        Model::Domain::Invoice *invoice = new Model::Domain::Invoice(_company, type);
+
+        if(entity)
+            invoice -> setEntity(entity);
+
+        View::Invoicing::InvoiceEditor *editor = createInvoiceEditor(invoice);
+        _mdiArea -> addSubWindow(editor);
+        editor -> show();
+    }
 }
 
 void View::MainWindow::openInvoice(Model::Domain::Invoice *invoice)
@@ -589,6 +604,13 @@ void View::MainWindow::about()
                        .arg(AUTHOR_NAME)
                        .arg(AUTHOR_EMAIL)
                        .arg(APPLICATION_WEB));
+}
+
+void View::MainWindow::entityAdded(const Model::Domain::Entity& entity)
+{
+    statusBar() -> showMessage(tr("Added %1 %2 - %3").arg(entity.type() == Model::Domain::SupplierEntity ? tr("supplier") : tr("customer"))
+                                                     .arg(QString::number(entity.id()))
+                                                     .arg(entity.name()), 5000);
 }
 
 void View::MainWindow::updateInvoicingMenu()
