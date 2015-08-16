@@ -42,14 +42,14 @@ View::Management::EntitySelector::EntitySelector(Model::Domain::EntityType type,
                                                  QWidget *parent)
     : QDialog(parent) , _type(type), _behavior(behavior)
 {
+    _entity = 0;
+    _created = false;
+
     createWidgets();
     createConnections();
     setTitle();
     setIcon();
     setMinimumWidth(ENTITY_SELECTOR_MINIMUM_WIDTH);
-
-    _entity = 0;
-    _created = false;
 }
 
 View::Management::EntitySelector::~EntitySelector()
@@ -60,8 +60,10 @@ View::Management::EntitySelector::~EntitySelector()
 void View::Management::EntitySelector::done(int result)
 {
     if(result) {
-        int row = _entitiesTableView -> currentIndex().row();
-        _entity = new Model::Domain::Entity(*(_entityModel -> entities() -> at(row)));
+        if(!_entity) {
+            int row = _entitiesTableView -> currentIndex().row();
+            _entity = new Model::Domain::Entity(*(_entityModel -> entities() -> at(row)));
+        }
     }
 
     QDialog::done(result);
@@ -116,10 +118,7 @@ void View::Management::EntitySelector::createEntity()
 
     if(dialog.exec()) {
         if(Model::Management::EntityManager::create(*entity)) {
-            int row = _entitiesTableView -> currentIndex().row();
-            _entityModel -> insertEntity(row + 1, entity);
-            QModelIndex index = _entityModel -> index(row + 1, ColumnEntityId);
-            _entitiesTableView -> setCurrentIndex(index);
+            _entity = entity;
             _created = true;
             QDialog::accept();
         } else {
