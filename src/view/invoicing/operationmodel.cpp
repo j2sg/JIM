@@ -82,8 +82,6 @@ QVariant View::Invoicing::OperationModel::data(const QModelIndex &index, int rol
                 return QString::number(operation -> weight(), 'f', _precisionWeight);
             case ColumnOperationPrice:
                 return QString::number(operation -> price(), 'f', _precisionMoney);
-            case ColumnOperationDiscountType:
-                return static_cast<int>(operation -> discountType());
             case ColumnOperationDiscount:
                 return QString::number(operation -> discount(), 'f', _precisionMoney);
             case ColumnOperationTotal:
@@ -122,9 +120,6 @@ bool View::Invoicing::OperationModel::setData(const QModelIndex &index, const QV
         case ColumnOperationPrice:
             operation -> setPrice(value.toDouble());
             break;
-        case ColumnOperationDiscountType:
-            operation -> setDiscountType(static_cast<Model::Domain::DiscountType>(value.toInt()));
-            break;
         case ColumnOperationDiscount:
             operation -> setDiscount(value.toDouble());
             break;
@@ -134,7 +129,6 @@ bool View::Invoicing::OperationModel::setData(const QModelIndex &index, const QV
         if(index.column() == ColumnOperationQuantity ||
            index.column() == ColumnOperationWeight ||
            index.column() == ColumnOperationPrice ||
-           index.column() == ColumnOperationDiscountType ||
            index.column() == ColumnOperationDiscount) {
             QModelIndex totalIndex = createIndex(index.row(), ColumnOperationTotal);
             emit dataChanged(totalIndex, totalIndex);
@@ -195,10 +189,8 @@ QVariant View::Invoicing::OperationModel::headerData(int section, Qt::Orientatio
                 return QObject::tr("Weight");
             case ColumnOperationPrice:
                 return QObject::tr("Price");
-            case ColumnOperationDiscountType:
-                return QObject::tr("DT");
             case ColumnOperationDiscount:
-                return QObject::tr("Disc");
+                return QObject::tr("Discount");
             case ColumnOperationTotal:
                 return QObject::tr("Total");
             }
@@ -214,7 +206,7 @@ Qt::ItemFlags View::Invoicing::OperationModel::flags(const QModelIndex &index) c
    switch(index.column()) {
    case ColumnOperationId: case ColumnOperationQuantity:
    case ColumnOperationWeight: case ColumnOperationPrice:
-   case ColumnOperationDiscountType: case ColumnOperationDiscount:
+   case ColumnOperationDiscount:
        flags |= Qt::ItemIsEditable;
    }
 

@@ -42,7 +42,6 @@ void View::Invoicing::OperationTable::setColumnsWidth()
     setColumnWidth(ColumnOperationQuantity,     COLUMN_OPERATION_QUANTITY_WIDTH);
     setColumnWidth(ColumnOperationWeight,       COLUMN_OPERATION_WEIGHT_WIDTH);
     setColumnWidth(ColumnOperationPrice,        COLUMN_OPERATION_PRICE_WIDTH);
-    setColumnWidth(ColumnOperationDiscountType, COLUMN_OPERATION_DISCOUNT_TYPE_WIDTH);
     setColumnWidth(ColumnOperationDiscount,     COLUMN_OPERATION_DISCOUNT_WIDTH);
     setColumnWidth(ColumnOperationTotal,        COLUMN_OPERATION_TOTAL_WIDTH);
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)

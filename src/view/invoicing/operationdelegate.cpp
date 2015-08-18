@@ -37,7 +37,7 @@ void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOp
 
         drawDisplay(painter, myOption, myOption.rect, text);
         drawFocus(painter, myOption, myOption.rect);
-    } else if(index.column() == ColumnOperationDiscountType) {
+    } /*else if(index.column() == ColumnOperationDiscountType) {
         Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(index.model() -> data(index, Qt::DisplayRole).toInt());
         QString strType;
         QStyleOptionViewItem myOption = option;
@@ -63,7 +63,7 @@ void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOp
 
         drawDisplay(painter, myOption, myOption.rect, strType);
         drawFocus(painter, myOption, myOption.rect);
-    } else
+    } */else
         QItemDelegate::paint(painter, option, index);
 }
 
@@ -73,7 +73,7 @@ QWidget *View::Invoicing::OperationDelegate::createEditor(QWidget *parent, const
         OperationEditorIdWidget *operationEditorIdWidget = new OperationEditorIdWidget(parent);
         connect(operationEditorIdWidget, SIGNAL(productSelectionRequested()), this, SIGNAL(productRequested()));
         return operationEditorIdWidget;
-    } else if(index.column() == ColumnOperationDiscountType) {
+    } /*else if(index.column() == ColumnOperationDiscountType) {
         QComboBox *discountTypeComboBox = new QComboBox(parent);
         discountTypeComboBox -> addItem(tr("No Disc"), static_cast<int>(Model::Domain::NoDiscount));
         discountTypeComboBox -> addItem(tr("Percent"), static_cast<int>(Model::Domain::Percent));
@@ -85,7 +85,7 @@ QWidget *View::Invoicing::OperationDelegate::createEditor(QWidget *parent, const
         QDoubleSpinBox *discountDoubleSpinBox = new QDoubleSpinBox(parent);
         connect(discountDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(commitAndCloseEditor()));
         return discountDoubleSpinBox;
-    } else
+    } */else
         return QItemDelegate::createEditor(parent, option, index);
 }
 
@@ -95,7 +95,7 @@ void View::Invoicing::OperationDelegate::setEditorData(QWidget *editor, const QM
         int id = index.model() -> data(index, Qt::DisplayRole).toInt();
         OperationEditorIdWidget *operationEditorIdWidget = qobject_cast<OperationEditorIdWidget *>(editor);
         operationEditorIdWidget -> setId(id);
-    } else if(index.column() == ColumnOperationDiscountType) {
+    } /*else if(index.column() == ColumnOperationDiscountType) {
         Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(index.model() -> data(index, Qt::DisplayRole).toInt());
         QComboBox *discountTypeComboBox = qobject_cast<QComboBox *>(editor);
         discountTypeComboBox -> setCurrentIndex(static_cast<int>(discountType));
@@ -116,7 +116,7 @@ void View::Invoicing::OperationDelegate::setEditorData(QWidget *editor, const QM
         }
         discountDoubleSpinBox->setValue(discount);
         discountDoubleSpinBox -> setEnabled(discountType != Model::Domain::NoDiscount && discountType != Model::Domain::Free);
-    } else
+    } */else
         QItemDelegate::setEditorData(editor, index);
 }
 
@@ -126,7 +126,7 @@ void View::Invoicing::OperationDelegate::setModelData(QWidget *editor, QAbstract
         OperationEditorIdWidget *operationEditorIdWidget = qobject_cast<OperationEditorIdWidget *>(editor);
         int id = operationEditorIdWidget -> id();
         model -> setData(index, id);
-    } else if(index.column() == ColumnOperationDiscountType) {
+    } /*else if(index.column() == ColumnOperationDiscountType) {
         OperationModel *operationModel = dynamic_cast<OperationModel *>(model);
         Model::Domain::Operation *currOperation = operationModel -> operations() -> at(index.row());
         QComboBox *discountTypeComboBox = qobject_cast<QComboBox *>(editor);
@@ -144,7 +144,7 @@ void View::Invoicing::OperationDelegate::setModelData(QWidget *editor, QAbstract
     } else if(index.column() == ColumnOperationDiscount) {
         QDoubleSpinBox *discountDoubleSpinBox = qobject_cast<QDoubleSpinBox *>(editor);
         model -> setData(index, discountDoubleSpinBox -> value());
-    } else
+    } */else
         QItemDelegate::setModelData(editor, model, index);
 }
 

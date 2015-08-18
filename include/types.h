@@ -65,7 +65,6 @@ namespace View
             ColumnOperationQuantity,
             ColumnOperationWeight,
             ColumnOperationPrice,
-            ColumnOperationDiscountType,
             ColumnOperationDiscount,
             ColumnOperationTotal,
             ColumnOperationCount
