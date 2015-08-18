@@ -44,18 +44,20 @@ namespace View
         int selected() const;
         bool isSetAsDefault() const;
     private slots:
-        void rowSelectionChanged();
+        void currentRowChangedOnListWidget(int row);
+        void setAsDefault();
     private:
-        void createWidgets(const QMap<QString, int>& companies, const QString &defCompany);
+        void createWidgets();
         void createConnections();
 
         QLabel *_label;
         QListWidget *_listWidget;
         QPushButton *_setAsDefaultButton;
-        QPushButton *_detailsButton;
         QPushButton *_openButton;
         QPushButton *_cancelButton;
 
+        QMap<QString, int> _companies;
+        QString _defCompany;
         int _selected;
         bool _default;
     };
