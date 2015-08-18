@@ -19,39 +19,101 @@
  **/
 
 #include "operationeditordiscountwidget.h"
+#include "persistencemanager.h"
+#include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QHBoxLayout>
 
 View::Invoicing::OperationEditorDiscountWidget::OperationEditorDiscountWidget(QWidget *parent) : QWidget(parent)
 {
+    _precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
+
     createWidgets();
     createConnections();
 }
 
-void View::Invoicing::OperationEditorDiscountWidget::setDiscountType(Model::Domain::DiscountType discountType)
+void View::Invoicing::OperationEditorDiscountWidget::setDiscountType(Model::Domain::DiscountType discountType, double maxDiscount)
 {
+    _comboBox -> setCurrentIndex(static_cast<int>(discountType));
+    _doubleSpinBox->setEnabled(discountType != Model::Domain::NoDiscount && discountType != Model::Domain::Free);
 
-}
-
-void View::Invoicing::OperationEditorDiscountWidget::setDiscount(double discount)
-{
-
+    if(discountType == Model::Domain::NoDiscount) {
+        _doubleSpinBox -> setValue(0.0);
+    } else if(discountType == Model::Domain::Percent) {
+        _doubleSpinBox -> setMaximum(100.0);
+        _doubleSpinBox -> setDecimals(2);
+        _doubleSpinBox -> setSuffix(" %");
+    } else if(discountType == Model::Domain::Amount) {
+        _doubleSpinBox -> setMaximum(maxDiscount);
+        _doubleSpinBox -> setDecimals(_precisionMoney);
+        _doubleSpinBox -> setSuffix(" " + QLocale::system().currencySymbol());
+    } else {
+        _doubleSpinBox -> setValue(100.0);
+        _doubleSpinBox -> setDecimals(2);
+        _doubleSpinBox -> setSuffix(" %");
+    }
 }
 
 Model::Domain::DiscountType View::Invoicing::OperationEditorDiscountWidget::discountType() const
 {
-    return Model::Domain::NoDiscount;
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        return static_cast<Model::Domain::DiscountType>(_comboBox -> itemData(_comboBox -> currentIndex()).toInt());
+    #else
+        return static_cast<Model::Domain::DiscountType>(_comboBox -> currentData().toInt());
+    #endif
+}
+
+void View::Invoicing::OperationEditorDiscountWidget::setDiscount(double discount)
+{
+    _doubleSpinBox -> setValue(discount);
 }
 
 double View::Invoicing::OperationEditorDiscountWidget::discount() const
 {
-    return 0.0;
+    return _doubleSpinBox -> value();
+}
+
+void View::Invoicing::OperationEditorDiscountWidget::currentIndexChanged()
+{
+    Model::Domain::DiscountType type;
+
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        type = static_cast<Model::Domain::DiscountType>(_comboBox -> itemData( _comboBox -> currentIndex()).toInt());
+    #else
+        type = static_cast<Model::Domain::DiscountType>(_comboBox -> currentData().toInt());
+    #endif
+
+    if(type == Model::Domain::NoDiscount || type == Model::Domain::Free)
+        emit editingFinished();
+    else
+        _doubleSpinBox -> setFocus();
 }
 
 void View::Invoicing::OperationEditorDiscountWidget::createWidgets()
 {
+    _comboBox = new QComboBox;
+    _comboBox -> addItem(tr("No Disc"), static_cast<int>(Model::Domain::NoDiscount));
+    _comboBox -> addItem(tr("Percent"), static_cast<int>(Model::Domain::Percent));
+    _comboBox -> addItem(tr("Amount"), static_cast<int>(Model::Domain::Amount));
+    _comboBox -> addItem(tr("Free"), static_cast<int>(Model::Domain::Free));
 
+    _doubleSpinBox = new QDoubleSpinBox;
+    _doubleSpinBox -> setDecimals(_precisionMoney);
+    _doubleSpinBox -> setLocale(QLocale::C);
+    _doubleSpinBox -> setSuffix(" " + QLocale::system().currencySymbol());
+    _doubleSpinBox -> setEnabled(false);
+
+    QHBoxLayout *mainLayout = new QHBoxLayout;
+    mainLayout -> addWidget(_comboBox);
+    mainLayout -> addWidget(_doubleSpinBox);
+
+    setLayout(mainLayout);
 }
 
 void View::Invoicing::OperationEditorDiscountWidget::createConnections()
 {
-
+    connect(_comboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(currentIndexChanged()));
+    connect(_doubleSpinBox, SIGNAL(valueChanged(double)),
+            this, SIGNAL(editingFinished()));
 }

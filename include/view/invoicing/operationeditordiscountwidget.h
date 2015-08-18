@@ -40,18 +40,21 @@ namespace View
             OperationEditorDiscountWidget(QWidget *parent = 0);
         signals:
             void editingFinished();
-        public slots:
-            void setDiscountType(Model::Domain::DiscountType discountType);
-            void setDiscount(double discount);
         public:
+            void setDiscountType(Model::Domain::DiscountType discountType, double maxDiscount = 0.0);
             Model::Domain::DiscountType discountType() const;
+            void setDiscount(double discount);
             double discount() const;
+        private slots:
+            void currentIndexChanged();
         private:
             void createWidgets();
             void createConnections();
 
             QComboBox *_comboBox;
             QDoubleSpinBox *_doubleSpinBox;
+
+            int _precisionMoney;
         };
     }
 }
