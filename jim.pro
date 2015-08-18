@@ -114,7 +114,6 @@ HEADERS += include/global.h \
     include/view/management/productselector.h \
     include/model/domain/company.h \
     include/model/management/companymanager.h \
-    include/view/companyloader.h \
     include/view/management/businesseditor.h \
     include/view/management/entityproxymodel.h \
     include/view/invoicing/notesdialog.h \
@@ -184,7 +183,6 @@ SOURCES += src/main.cpp \
     src/view/management/productselector.cpp \
     src/model/domain/company.cpp \
     src/model/management/companymanager.cpp \
-    src/view/companyloader.cpp \
     src/view/management/businesseditor.cpp \
     src/view/management/entityproxymodel.cpp \
     src/view/invoicing/notesdialog.cpp \

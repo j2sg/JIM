@@ -22,10 +22,10 @@
 #include "persistencemanager.h"
 #include "registerdialog.h"
 #include "authdialog.h"
-#include "companyloader.h"
+#include "opencompanydialog.h"
 #include "optionsdialog.h"
-#include "invoiceloader.h"
 #include "newinvoicedialog.h"
+#include "invoiceloader.h"
 #include "invoiceeditor.h"
 #include "invoicesearch.h"
 #include "invoicesearchresult.h"
@@ -260,24 +260,25 @@ bool View::MainWindow::newCompany()
 
 void View::MainWindow::openCompany()
 {
-    QMap<QString, int> companyNames = Model::Management::CompanyManager::getAllNames();
+    QMap<QString, int> companies = Model::Management::CompanyManager::getAllNames();
 
-    if(companyNames.isEmpty() && verifyNewCompany()) {
+    if(companies.isEmpty() && verifyNewCompany()) {
         if(!newCompany())
             return;
 
-        companyNames = Model::Management::CompanyManager::getAllNames();
+        companies = Model::Management::CompanyManager::getAllNames();
     }
 
-    CompanyLoader loader(companyNames.keys(), Persistence::Manager::readConfig("DefaultCompany").toString());
+    OpenCompanyDialog dialog(companies, Persistence::Manager::readConfig("DefaultCompany").toString());
 
-    if(loader.exec()) {
-        _company = Model::Management::CompanyManager::get(companyNames.value(loader.selectedCompany()));
+    if(dialog.exec()) {
+        _company = Model::Management::CompanyManager::get(dialog.selected());
+
         if(_company) {
-            if(loader.defaultCompany())
-                Persistence::Manager::writeConfig(loader.selectedCompany(), "DefaultCompany");
+            if(dialog.isSetAsDefault())
+                Persistence::Manager::writeConfig(companies.key(dialog.selected()), "DefaultCompany");
 
-            statusBar() -> showMessage(tr("Loaded Company %1").arg(_company -> name()), 5000);
+            statusBar() -> showMessage(tr("Open Company %1").arg(_company -> name()), 5000);
             setCompanyOpen(true);
         } else
             QMessageBox::warning(this, tr("Load Company"),
