@@ -76,8 +76,8 @@ namespace Model
             virtual TaxFlag taxOnBuy() const;
             virtual Tax *tax();
         protected:
-            int _id;
             EntityType _type;
+            int _id;
             QString _vatin;
             QString _name;
             QString _country;
