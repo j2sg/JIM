@@ -43,8 +43,8 @@ namespace View
         public:
             void setDiscountType(Model::Domain::DiscountType discountType, double maxDiscount = 0.0);
             Model::Domain::DiscountType discountType() const;
-            void setDiscount(double discount);
-            double discount() const;
+            void setDiscountValue(double discountValue);
+            double discountValue() const;
         private slots:
             void currentIndexChanged();
         private:
@@ -55,6 +55,7 @@ namespace View
             QDoubleSpinBox *_doubleSpinBox;
 
             int _precisionMoney;
+            int _max;
         };
     }
 }

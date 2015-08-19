@@ -27,15 +27,20 @@
 View::Invoicing::OperationEditorDiscountWidget::OperationEditorDiscountWidget(QWidget *parent) : QWidget(parent)
 {
     _precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
+    _max = 0;
 
     createWidgets();
     createConnections();
+
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 void View::Invoicing::OperationEditorDiscountWidget::setDiscountType(Model::Domain::DiscountType discountType, double maxDiscount)
 {
+    _max = maxDiscount;
+
     _comboBox -> setCurrentIndex(static_cast<int>(discountType));
-    _doubleSpinBox->setEnabled(discountType != Model::Domain::NoDiscount && discountType != Model::Domain::Free);
+    _doubleSpinBox -> setEnabled(discountType != Model::Domain::NoDiscount && discountType != Model::Domain::Free);
 
     if(discountType == Model::Domain::NoDiscount) {
         _doubleSpinBox -> setValue(0.0);
@@ -44,7 +49,7 @@ void View::Invoicing::OperationEditorDiscountWidget::setDiscountType(Model::Doma
         _doubleSpinBox -> setDecimals(2);
         _doubleSpinBox -> setSuffix(" %");
     } else if(discountType == Model::Domain::Amount) {
-        _doubleSpinBox -> setMaximum(maxDiscount);
+        _doubleSpinBox -> setMaximum(_max);
         _doubleSpinBox -> setDecimals(_precisionMoney);
         _doubleSpinBox -> setSuffix(" " + QLocale::system().currencySymbol());
     } else {
@@ -63,27 +68,46 @@ Model::Domain::DiscountType View::Invoicing::OperationEditorDiscountWidget::disc
     #endif
 }
 
-void View::Invoicing::OperationEditorDiscountWidget::setDiscount(double discount)
+void View::Invoicing::OperationEditorDiscountWidget::setDiscountValue(double discountValue)
 {
-    _doubleSpinBox -> setValue(discount);
+    _doubleSpinBox -> setValue(discountValue);
 }
 
-double View::Invoicing::OperationEditorDiscountWidget::discount() const
+double View::Invoicing::OperationEditorDiscountWidget::discountValue() const
 {
     return _doubleSpinBox -> value();
 }
 
 void View::Invoicing::OperationEditorDiscountWidget::currentIndexChanged()
 {
-    Model::Domain::DiscountType type;
+    Model::Domain::DiscountType discountType;
 
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-        type = static_cast<Model::Domain::DiscountType>(_comboBox -> itemData( _comboBox -> currentIndex()).toInt());
+        discountType = static_cast<Model::Domain::DiscountType>(_comboBox -> itemData( _comboBox -> currentIndex()).toInt());
     #else
-        type = static_cast<Model::Domain::DiscountType>(_comboBox -> currentData().toInt());
+        discountType = static_cast<Model::Domain::DiscountType>(_comboBox -> currentData().toInt());
     #endif
 
-    if(type == Model::Domain::NoDiscount || type == Model::Domain::Free)
+    _doubleSpinBox -> setEnabled(discountType != Model::Domain::NoDiscount && discountType != Model::Domain::Free);
+
+    if(discountType == Model::Domain::NoDiscount) {
+        _doubleSpinBox -> setValue(0.0);
+    } else if(discountType == Model::Domain::Percent) {
+        _doubleSpinBox -> setMaximum(100.0);
+        _doubleSpinBox -> setDecimals(2);
+        _doubleSpinBox -> setSuffix(" %");
+    } else if(discountType == Model::Domain::Amount) {
+        _doubleSpinBox -> setMaximum(_max);
+        _doubleSpinBox -> setDecimals(_precisionMoney);
+        _doubleSpinBox -> setSuffix(" " + QLocale::system().currencySymbol());
+    } else {
+        _doubleSpinBox -> setMaximum(100.0);
+        _doubleSpinBox -> setDecimals(2);
+        _doubleSpinBox -> setSuffix(" %");
+        _doubleSpinBox -> setValue(100.0);
+    }
+
+    if(discountType == Model::Domain::NoDiscount || discountType == Model::Domain::Free)
         emit editingFinished();
     else
         _doubleSpinBox -> setFocus();
