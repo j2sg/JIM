@@ -38,7 +38,7 @@ namespace Model
         public:
             Product(int id = NO_ID, const QString &name = QString(), Category *category = 0,
                     double price = 0.0, PriceType priceType = Units,
-                    double discount = 0.0, DiscountType discountType = NoDiscount);
+                    double discountValue = 0.0, DiscountType discountType = NoDiscount);
             Product(const Product &product);
             ~Product();
             Product &operator=(const Product &product);
@@ -54,8 +54,10 @@ namespace Model
             double price() const;
             void setPriceType(PriceType priceType);
             PriceType priceType() const;
-            void setDiscount(double discount);
-            double discount() const;
+            void setDiscount(Discount discount);
+            Discount discount() const;
+            void setDiscountValue(double discountValue);
+            double discountValue() const;
             void setDiscountType(DiscountType discountType);
             DiscountType discountType() const;
             void setDescription(const QString &description);
@@ -66,7 +68,7 @@ namespace Model
             Category *_category;
             double _price;
             PriceType _priceType;
-            double _discount;
+            double _discountValue;
             DiscountType _discountType;
             QString _description;
         };

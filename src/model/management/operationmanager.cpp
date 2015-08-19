@@ -38,7 +38,7 @@ bool Model::Management::OperationManager::createAll(QList<Model::Domain::Operati
                   .arg(operation -> quantity())
                   .arg(operation -> weight())
                   .arg(operation -> price())
-                  .arg(operation -> discount())
+                  .arg(operation -> discountValue())
                   .arg(static_cast<int>(operation -> discountType()));
 
         if(!(agent -> insert(sql)))
@@ -81,10 +81,10 @@ QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllBy
         int quantity                             = row.at(2).toInt();
         double weight                            = row.at(3).toDouble();
         double price                             = row.at(4).toDouble();
-        double discount                          = row.at(5).toDouble();
+        double discountValue                     = row.at(5).toDouble();
         Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(row.at(6).toInt());
 
-        operations -> push_back(new Model::Domain::Operation(id, product, quantity, weight, price, discount, discountType));
+        operations -> push_back(new Model::Domain::Operation(id, product, quantity, weight, price, discountValue, discountType));
     }
 
     delete result;
@@ -107,10 +107,10 @@ QList<Model::Domain::Operation *> *Model::Management::OperationManager::getAllBy
         int quantity                             = row.at(1).toInt();
         double weight                            = row.at(2).toDouble();
         double price                             = row.at(3).toDouble();
-        double discount                          = row.at(4).toDouble();
+        double discountValue                     = row.at(4).toDouble();
         Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(row.at(5).toInt());
 
-        operations -> push_back(new Model::Domain::Operation(id, new Model::Domain::Product(*product), quantity, weight, price, discount, discountType));
+        operations -> push_back(new Model::Domain::Operation(id, new Model::Domain::Product(*product), quantity, weight, price, discountValue, discountType));
     }
 
     delete result;

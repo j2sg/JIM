@@ -269,7 +269,7 @@ void View::Management::ProductDialog::loadProduct()
     _descriptionTextEdit -> setPlainText(_product -> description());
     _priceLineEdit -> setText(QString::number(_product -> price(),'f', _precisionMoney));
     _priceTypeComboBox -> setCurrentIndex(static_cast<int>(_product -> priceType()));
-    _discountDoubleSpinBox -> setValue(_product -> discount());
+    _discountDoubleSpinBox -> setValue(_product -> discountValue());
     _discountDoubleSpinBox -> setEnabled(_product -> price() != 0 && _product -> discountType() != Model::Domain::NoDiscount);
     _discountTypeComboBox -> setCurrentIndex(static_cast<int>(_product -> discountType()));
     _discountTypeComboBox -> setEnabled(_product -> price() != 0);
@@ -283,7 +283,7 @@ void View::Management::ProductDialog::saveProduct()
     _product -> setCategory(Model::Management::CategoryManager::get(Model::Management::CategoryManager::getAllNames().value(_categoryComboBox -> currentText())));
     _product -> setDescription(_descriptionTextEdit -> toPlainText());
     _product -> setPrice(_priceLineEdit -> text().toDouble());
-    _product -> setDiscount(_discountDoubleSpinBox -> value());
+    _product -> setDiscountValue(_discountDoubleSpinBox -> value());
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
         _product -> setPriceType(static_cast<Model::Domain::PriceType>(_priceTypeComboBox -> itemData(_priceTypeComboBox -> currentIndex()).toInt()));
         _product -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> itemData(_discountTypeComboBox -> currentIndex()).toInt()));

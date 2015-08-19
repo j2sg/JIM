@@ -526,7 +526,7 @@ void View::Invoicing::InvoiceEditor::loadInvoice()
     _taxApplyingWidget -> setTaxApplying(_invoice -> taxOnInvoice());
     _discountTypeComboBox -> setCurrentIndex(static_cast<int>(_invoice -> discountType()));
     _discountTypeComboBox -> setEnabled(_invoice -> subtotal() != 0);
-    _discountDoubleSpinBox -> setValue(_invoice -> discount());
+    _discountDoubleSpinBox -> setValue(_invoice -> discountValue());
     _discountDoubleSpinBox -> setEnabled(_invoice->discountType() != Model::Domain::NoDiscount);
     _paidCheckBox -> setChecked(_invoice -> paid());
     _paymentComboBox -> setCurrentIndex(static_cast<int>(_invoice -> payment()));
@@ -545,7 +545,7 @@ bool View::Invoicing::InvoiceEditor::saveInvoice()
     #else
         _invoice -> setDiscountType(static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt()));
     #endif
-    _invoice -> setDiscount(_discountDoubleSpinBox -> value());
+    _invoice -> setDiscountValue(_discountDoubleSpinBox -> value());
     _invoice -> setPaid(_paidCheckBox -> isChecked());
     _invoice -> setPayment(static_cast<Model::Domain::PaymentType>(_paymentComboBox -> currentIndex()));
 

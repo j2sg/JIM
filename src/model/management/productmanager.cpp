@@ -33,7 +33,7 @@ bool Model::Management::ProductManager::create(const Model::Domain::Product &pro
                       .arg(product.category() -> id())
                       .arg(product.price())
                       .arg(static_cast<int>(product.priceType()))
-                      .arg(product.discount())
+                      .arg(product.discountValue())
                       .arg(static_cast<int>(product.discountType()));
 
     return agent -> insert(sql);
@@ -50,7 +50,7 @@ bool Model::Management::ProductManager::modify(const Model::Domain::Product &pro
                       .arg(product.category() -> id())
                       .arg(product.price())
                       .arg(static_cast<int>(product.priceType()))
-                      .arg(product.discount())
+                      .arg(product.discountValue())
                       .arg(static_cast<int>(product.discountType()));
 
     return agent -> update(sql);

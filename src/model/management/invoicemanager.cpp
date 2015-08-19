@@ -51,7 +51,7 @@ bool Model::Management::InvoiceManager::create(const Model::Domain::Invoice &inv
                       .arg(invoice.tax(Model::Domain::PIT).value())
                       .arg(invoice.paid())
                       .arg(static_cast<int>(invoice.payment()))
-                      .arg(invoice.discount())
+                      .arg(invoice.discountValue())
                       .arg(static_cast<int>(invoice.discountType()))
                       .arg(invoice.notes());
 
@@ -88,7 +88,7 @@ bool Model::Management::InvoiceManager::modify(const Model::Domain::Invoice &inv
                       .arg(invoice.tax(Model::Domain::PIT).value())
                       .arg(invoice.paid())
                       .arg(static_cast<int>(invoice.payment()))
-                      .arg(invoice.discount())
+                      .arg(invoice.discountValue())
                       .arg(static_cast<int>(invoice.discountType()))
                       .arg(invoice.notes());
 
@@ -141,7 +141,7 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Do
         bool paid                                = (result -> at(0)).at(16).toBool();
         Model::Domain::PaymentType payment       = static_cast<Model::Domain::PaymentType>(
                                                        (result -> at(0)).at(17).toInt());
-        double discount                          = (result -> at(0)).at(18).toDouble();
+        double discountValue                     = (result -> at(0)).at(18).toDouble();
         Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(
                                                        (result -> at(0)).at(19).toInt());
         QString notes                            = (result -> at(0)).at(20).toString();
@@ -161,7 +161,7 @@ Model::Domain::Invoice *Model::Management::InvoiceManager::get(int id, Model::Do
         invoice -> setTax(Model::Domain::Tax(Model::Domain::PIT, pit));
         invoice -> setPaid(paid);
         invoice -> setPayment(payment);
-        invoice -> setDiscount(discount);
+        invoice -> setDiscountValue(discountValue);
         invoice -> setDiscountType(discountType);
         invoice -> setNotes(notes);
     }
@@ -198,7 +198,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
         double pit                               = row.at(15).toDouble();
         bool paid                                = row.at(16).toBool();
         Model::Domain::PaymentType payment       = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
-        double discount                          = row.at(18).toDouble();
+        double discountValue                     = row.at(18).toDouble();
         Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(
                                                        row.at(19).toInt());
         QString notes                            = row.at(20).toString();
@@ -218,7 +218,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::getAllByType
         invoice -> setTax(Model::Domain::Tax(Model::Domain::PIT, pit));
         invoice -> setPaid(paid);
         invoice -> setPayment(payment);
-        invoice -> setDiscount(discount);
+        invoice -> setDiscountValue(discountValue);
         invoice -> setDiscountType(discountType);
         invoice -> setNotes(notes);
 
@@ -285,7 +285,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
         double pit                               = row.at(15).toDouble();
         bool paid                                = row.at(16).toBool();
         Model::Domain::PaymentType payment       = static_cast<Model::Domain::PaymentType>(row.at(17).toInt());
-        double discount                          = row.at(18).toDouble();
+        double discountValue                     = row.at(18).toDouble();
         Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(
                                                        row.at(19).toInt());
         QString notes                            = row.at(20).toString();
@@ -305,7 +305,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
         invoice -> setTax(Model::Domain::Tax(Model::Domain::PIT, pit));
         invoice -> setPaid(paid);
         invoice -> setPayment(payment);
-        invoice -> setDiscount(discount);
+        invoice -> setDiscountValue(discountValue);
         invoice -> setDiscountType(discountType);
         invoice -> setNotes(notes);
 

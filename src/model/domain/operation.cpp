@@ -21,12 +21,12 @@
 #include "operation.h"
 #include "product.h"
 
-Model::Domain::Operation::Operation(int id, Product *product, int quantity, double weight, double price, double discount, DiscountType discountType)
-    : _id(id), _product(product), _quantity(quantity), _weight(weight), _price(price), _discount(discount), _discountType(discountType)
+Model::Domain::Operation::Operation(int id, Product *product, int quantity, double weight, double price, double discountValue, DiscountType discountType)
+    : _id(id), _product(product), _quantity(quantity), _weight(weight), _price(price), _discountValue(discountValue), _discountType(discountType)
 {
     if(_product) {
         _price = _product -> price();
-        _discount = _product -> discount();
+        _discountValue = _product -> discountValue();
         _discountType = _product -> discountType();
     }
 }
@@ -49,7 +49,7 @@ Model::Domain::Operation &Model::Domain::Operation::operator=(const Operation &o
     _quantity = operation._quantity;
     _weight = operation._weight;
     _price = operation._price;
-    _discount = operation._discount;
+    _discountValue = operation._discountValue;
     _discountType = operation._discountType;
 
     return *this;
@@ -121,14 +121,25 @@ double Model::Domain::Operation::price() const
     return _price;
 }
 
-void Model::Domain::Operation::setDiscount(double discount)
+void Model::Domain::Operation::setDiscount(Discount discount)
 {
-    _discount = discount;
+    _discountValue = discount._value;
+    _discountType = discount._type;
 }
 
-double Model::Domain::Operation::discount() const
+Model::Domain::Discount Model::Domain::Operation::discount() const
 {
-    return _discount;
+    return Discount(_discountValue, _discountType, _price);
+}
+
+void Model::Domain::Operation::setDiscountValue(double discountValue)
+{
+    _discountValue = discountValue;
+}
+
+double Model::Domain::Operation::discountValue() const
+{
+    return _discountValue;
 }
 
 void Model::Domain::Operation::setDiscountType(DiscountType discountType)
@@ -149,9 +160,9 @@ double Model::Domain::Operation::total() const
     double res = ((_product -> priceType() == Units) ? _quantity : _weight) * _price;
 
     if(_discountType == Amount)
-        res -= _discount;
+        res -= _discountValue;
     else if(_discountType == Percent)
-        res *= (1 - _discount / 100.0);
+        res *= (1 - _discountValue / 100.0);
     else if(_discountType == Free)
         res = 0.0;
 

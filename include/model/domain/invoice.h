@@ -69,8 +69,10 @@ namespace Model
             bool paid() const;
             void setPayment(PaymentType payment);
             PaymentType payment() const;
-            void setDiscount(double discount);
-            double discount() const;
+            void setDiscount(Discount discount);
+            Discount discount() const;
+            void setDiscountValue(double discountValue);
+            double discountValue() const;
             void setDiscountType(DiscountType discountType);
             DiscountType discountType() const;
             void setNotes(const QString &notes);
@@ -93,7 +95,7 @@ namespace Model
             Tax _tax[TaxTypeCount];
             bool _paid;
             PaymentType _payment;
-            double _discount;
+            double _discountValue;
             DiscountType _discountType;
             QString _notes;
         };

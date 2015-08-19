@@ -37,14 +37,14 @@ void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOp
 
         drawDisplay(painter, myOption, myOption.rect, text);
         drawFocus(painter, myOption, myOption.rect);
-    } /*else if(index.column() == ColumnOperationDiscountType) {
+    } else if(index.column() == ColumnOperationDiscount) {
         Model::Domain::DiscountType type = static_cast<Model::Domain::DiscountType>(index.model() -> data(index, Qt::DisplayRole).toInt());
         QString strType;
         QStyleOptionViewItem myOption = option;
 
         switch(type) {
         case Model::Domain::NoDiscount:
-            strType = QObject::tr("No Disc");
+            strType = QObject::tr("No Discount");
             break;
         case Model::Domain::Percent:
             strType = QObject::tr("Percent");
@@ -63,7 +63,7 @@ void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOp
 
         drawDisplay(painter, myOption, myOption.rect, strType);
         drawFocus(painter, myOption, myOption.rect);
-    } */else
+    } else
         QItemDelegate::paint(painter, option, index);
 }
 

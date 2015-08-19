@@ -171,6 +171,22 @@ namespace Model
             Free
         } DiscountType;
 
+        typedef struct DiscountStruct
+        {
+            double _value;
+            DiscountType _type;
+            double _max;
+
+            DiscountStruct(double value = 0.0,
+                           DiscountType type = Model::Domain::NoDiscount,
+                           double max = 0.0)
+            {
+                _value = value;
+                _type = type;
+                _max = max;
+            }
+        } Discount;
+
         typedef enum PaymentTypeEnum
         {
             Cash,

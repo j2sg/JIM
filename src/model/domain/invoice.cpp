@@ -37,7 +37,7 @@ Model::Domain::Invoice::Invoice(Entity *company, InvoiceType type, int id)
         _tax[k] = (_company ? (_company -> tax())[k] : Tax(static_cast<TaxType>(k)));
     _paid = false;
     _payment = Cash;
-    _discount = 0.0;
+    _discountValue = 0.0;
     _discountType = NoDiscount;
     _notes = QString();
 }
@@ -60,23 +60,23 @@ Model::Domain::Invoice::~Invoice()
 
 Model::Domain::Invoice &Model::Domain::Invoice::operator=(const Invoice &invoice)
 {
-    _id           = invoice._id;
-    _type         = invoice._type;
-    _company      = (invoice._company) ? new Company(dynamic_cast<const Company &>(*invoice._company)) : 0;
-    _entity       = (invoice._entity) ? new Entity(*invoice._entity) : 0;
-    _date         = invoice._date;
-    _place        = invoice._place;
-    _operations = new QList<Operation *>;
+    _id            = invoice._id;
+    _type          = invoice._type;
+    _company       = (invoice._company) ? new Company(dynamic_cast<const Company &>(*invoice._company)) : 0;
+    _entity        = (invoice._entity) ? new Entity(*invoice._entity) : 0;
+    _date          = invoice._date;
+    _place         = invoice._place;
+    _operations    = new QList<Operation *>;
     foreach(Operation *operation, *invoice._operations)
         _operations -> push_back(new Operation(*operation));
-    _taxOnInvoice = invoice._taxOnInvoice;
+    _taxOnInvoice  = invoice._taxOnInvoice;
     for(int k = 0;k < TaxTypeCount;++k)
         _tax[k] = invoice._tax[k];
-    _paid         = invoice._paid;
-    _payment      = invoice._payment;
-    _discount     = invoice._discount;
-    _discountType = invoice._discountType;
-    _notes        = invoice._notes;
+    _paid          = invoice._paid;
+    _payment       = invoice._payment;
+    _discountValue = invoice._discountValue;
+    _discountType  = invoice._discountType;
+    _notes         = invoice._notes;
 
     return *this;
 }
@@ -224,14 +224,25 @@ Model::Domain::PaymentType Model::Domain::Invoice::payment() const
     return _payment;
 }
 
-void Model::Domain::Invoice::setDiscount(double discount)
+void Model::Domain::Invoice::setDiscount(Discount discount)
 {
-    _discount = discount;
+    _discountValue = discount._value;
+    _discountType = discount._type;
 }
 
-double Model::Domain::Invoice::discount() const
+Model::Domain::Discount Model::Domain::Invoice::discount() const
 {
-    return _discount;
+    return Discount(_discountValue, _discountType, subtotal());
+}
+
+void Model::Domain::Invoice::setDiscountValue(double discountValue)
+{
+    _discountValue = discountValue;
+}
+
+double Model::Domain::Invoice::discountValue() const
+{
+    return _discountValue;
 }
 
 void Model::Domain::Invoice::setDiscountType(DiscountType discountType)
@@ -263,9 +274,9 @@ double Model::Domain::Invoice::subtotal() const
             res += operation -> total();
 
     if(_discountType == Amount)
-        res -= _discount;
+        res -= _discountValue;
     else if(_discountType == Percent)
-        res *= (1 - _discount / 100.0);
+        res *= (1 - _discountValue / 100.0);
 
     return res;
 }

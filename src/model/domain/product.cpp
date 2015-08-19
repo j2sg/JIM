@@ -23,9 +23,9 @@
 
 Model::Domain::Product::Product(int id, const QString &name, Category *category,
                                 double price, PriceType priceType,
-                                double discount, DiscountType discountType)
+                                double discountValue, DiscountType discountType)
     : _id(id), _name(name), _category(category), _price(price), _priceType(priceType),
-      _discount(discount), _discountType(discountType)
+      _discountValue(discountValue), _discountType(discountType)
 {
     _description = QString();
 }
@@ -48,7 +48,7 @@ Model::Domain::Product &Model::Domain::Product::operator=(const Product &product
     _category = (product._category) ? new Category(*product._category) : 0;
     _price = product._price;
     _priceType = product._priceType;
-    _discount = product._discount;
+    _discountValue = product._discountValue;
     _discountType = product._discountType;
     _description = product._description;
 
@@ -118,14 +118,25 @@ Model::Domain::PriceType Model::Domain::Product::priceType() const
     return _priceType;
 }
 
-void Model::Domain::Product::setDiscount(double discount)
+void Model::Domain::Product::setDiscount(Discount discount)
 {
-    _discount = discount;
+    _discountValue = discount._value;
+    _discountType = discount._type;
 }
 
-double Model::Domain::Product::discount() const
+Model::Domain::Discount Model::Domain::Product::discount() const
 {
-    return _discount;
+    return Discount(_discountValue, _discountType, _price);
+}
+
+void Model::Domain::Product::setDiscountValue(double discountValue)
+{
+    _discountValue = discountValue;
+}
+
+double Model::Domain::Product::discountValue() const
+{
+    return _discountValue;
 }
 
 void Model::Domain::Product::setDiscountType(DiscountType discountType)
@@ -137,7 +148,6 @@ Model::Domain::DiscountType Model::Domain::Product::discountType() const
 {
     return _discountType;
 }
-
 
 void Model::Domain::Product::setDescription(const QString &description)
 {
