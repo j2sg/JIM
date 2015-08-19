@@ -21,6 +21,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#include <QMetaType>
+
 // Maximum Authentication Attempts.
 #define MAX_AUTH_ATTEMPTS 3
 
@@ -260,5 +262,7 @@ namespace Persistence
         SQLITE
     } DBMSType;
 }
+
+Q_DECLARE_METATYPE(Model::Domain::Discount)
 
 #endif // TYPES_H

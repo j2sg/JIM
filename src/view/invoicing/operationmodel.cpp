@@ -83,7 +83,11 @@ QVariant View::Invoicing::OperationModel::data(const QModelIndex &index, int rol
             case ColumnOperationPrice:
                 return QString::number(operation -> price(), 'f', _precisionMoney);
             case ColumnOperationDiscount:
-                return QString::number(operation -> discountValue(), 'f', _precisionMoney);
+            {
+                QVariant val;
+                val.setValue(operation -> discount());
+                return val;
+            }
             case ColumnOperationTotal:
                 return QString::number(operation -> total(), 'f', _precisionMoney);
             }
@@ -121,7 +125,7 @@ bool View::Invoicing::OperationModel::setData(const QModelIndex &index, const QV
             operation -> setPrice(value.toDouble());
             break;
         case ColumnOperationDiscount:
-            operation -> setDiscountValue(value.toDouble());
+            operation -> setDiscount(value.value<Model::Domain::Discount>());
             break;
         }
 
