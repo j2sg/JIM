@@ -22,7 +22,6 @@
 #include "operation.h"
 #include "product.h"
 #include "productmanager.h"
-#include "types.h"
 
 View::Invoicing::OperationModel::OperationModel(QList<Model::Domain::Operation *> *operations,
                                                 int precisionWeight, int precisionMoney,
@@ -83,11 +82,7 @@ QVariant View::Invoicing::OperationModel::data(const QModelIndex &index, int rol
             case ColumnOperationPrice:
                 return QString::number(operation -> price(), 'f', _precisionMoney);
             case ColumnOperationDiscount:
-            {
-                QVariant val;
-                val.setValue(operation -> discount());
-                return val;
-            }
+                return QString::number(operation -> discountValue(), 'f', 2);
             case ColumnOperationTotal:
                 return QString::number(operation -> total(), 'f', _precisionMoney);
             }
@@ -125,7 +120,7 @@ bool View::Invoicing::OperationModel::setData(const QModelIndex &index, const QV
             operation -> setPrice(value.toDouble());
             break;
         case ColumnOperationDiscount:
-            operation -> setDiscount(value.value<Model::Domain::Discount>());
+            operation -> setDiscountValue(value.toDouble());
             break;
         }
 
