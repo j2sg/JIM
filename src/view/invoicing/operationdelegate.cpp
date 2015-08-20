@@ -20,8 +20,8 @@
 
 #include "operationdelegate.h"
 #include "operationeditoridwidget.h"
-#include "operationeditordiscountwidget.h"
 #include "types.h"
+#include <QDoubleSpinBox>
 
 void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
@@ -35,27 +35,16 @@ void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOp
         drawDisplay(painter, myOption, myOption.rect, text);
         drawFocus(painter, myOption, myOption.rect);
     } else if(index.column() == ColumnOperationDiscount) {
-        Model::Domain::Discount discount = index.model() -> data(index, Qt::DisplayRole).value<Model::Domain::Discount>();
+        double discountValue = index.model() -> data(index, Qt::DisplayRole).toDouble();
         QString text;
         QStyleOptionViewItem myOption = option;
 
-        if(discount._type == Model::Domain::Amount)
-            discount._value = discount._max != 0 ? (discount._value / discount._max) * 100.0 : 0;
-
-        switch(discount._type) {
-        case Model::Domain::NoDiscount:
+        if(discountValue == 0)
             text = QObject::tr("-");
-            break;
-        case Model::Domain::Percent:
-        case Model::Domain::Amount:
-            text = QString::number(discount._value, 'f', 2);
-            break;
-        case Model::Domain::Free:
+        else if(discountValue < 100)
+            text = QString::number(discountValue, 'f', 2);
+        else
             text = QObject::tr("Free");
-            break;
-        default:
-            text = QObject::tr("Unknown");
-        }
 
         myOption.displayAlignment = Qt::AlignHCenter | Qt::AlignVCenter;
 
@@ -72,8 +61,11 @@ QWidget *View::Invoicing::OperationDelegate::createEditor(QWidget *parent, const
         connect(operationEditorIdWidget, SIGNAL(productSelectionRequested()), this, SIGNAL(productRequested()));
         return operationEditorIdWidget;
     } else if(index.column() == ColumnOperationDiscount) {
-        OperationEditorDiscountWidget *operationEditorDiscountWidget = new OperationEditorDiscountWidget(parent);
-        connect(operationEditorDiscountWidget, SIGNAL(editingFinished()), this, SLOT(commitAndCloseEditor()));
+        QDoubleSpinBox *operationEditorDiscountWidget = new QDoubleSpinBox(parent);
+        operationEditorDiscountWidget -> setMaximum(100.0);
+        operationEditorDiscountWidget -> setDecimals(2);
+        operationEditorDiscountWidget -> setPrefix(("-"));
+        operationEditorDiscountWidget -> setSuffix(" %");
         return operationEditorDiscountWidget;
     } else
         return QItemDelegate::createEditor(parent, option, index);
@@ -86,10 +78,9 @@ void View::Invoicing::OperationDelegate::setEditorData(QWidget *editor, const QM
         OperationEditorIdWidget *operationEditorIdWidget = qobject_cast<OperationEditorIdWidget *>(editor);
         operationEditorIdWidget -> setId(id);
     } else if(index.column() == ColumnOperationDiscount) {
-        Model::Domain::Discount discount = index.model() -> data(index, Qt::DisplayRole).value<Model::Domain::Discount>();
-        OperationEditorDiscountWidget *operationEditorDiscountWidget = qobject_cast<OperationEditorDiscountWidget *>(editor);
-        operationEditorDiscountWidget -> setDiscountType(discount._type, discount._max);
-        operationEditorDiscountWidget -> setDiscountValue(discount._value);
+        double discountValue = index.model() -> data(index, Qt::DisplayRole).toDouble();
+        QDoubleSpinBox *operationEditorDiscountWidget = qobject_cast<QDoubleSpinBox *>(editor);
+        operationEditorDiscountWidget -> setValue(discountValue);
     } else
         QItemDelegate::setEditorData(editor, index);
 }
@@ -101,10 +92,9 @@ void View::Invoicing::OperationDelegate::setModelData(QWidget *editor, QAbstract
         int id = operationEditorIdWidget -> id();
         model -> setData(index, id);
     } else if(index.column() == ColumnOperationDiscount) {
-        OperationEditorDiscountWidget *operationEditorDiscountWidget = qobject_cast<OperationEditorDiscountWidget *>(editor);
-        QVariant val;
-        val.setValue(Model::Domain::Discount(operationEditorDiscountWidget->discountValue(), operationEditorDiscountWidget->discountType()));
-        model->setData(index, val);
+        QDoubleSpinBox *operationEditorDiscountWidget = qobject_cast<QDoubleSpinBox *>(editor);
+        double discountValue = operationEditorDiscountWidget -> value();
+        model -> setData(index, discountValue);
     } else
         QItemDelegate::setModelData(editor, model, index);
 }
