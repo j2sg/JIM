@@ -133,13 +133,12 @@ void View::Invoicing::OperationTable::keyPressEvent(QKeyEvent *event)
 
 QModelIndex View::Invoicing::OperationTable::firstEditableIndex(View::Invoicing::DirectionEditing direction)
 {
-    QModelIndex index;
     int row = currentIndex().row();
     int col = currentIndex().column() + static_cast<int>(direction);
+    QModelIndex index = INDEX(row, col);
 
-    do {
-            index = INDEX(row, col);
-    } while(!IS_EDITABLE(index) && HAS_NEXT(direction, col));
+    while(index.isValid() && !IS_EDITABLE(index))
+        index = INDEX(row, col += static_cast<int>(direction));
 
     if(!index.isValid()) {
         if(row == (model() -> rowCount() - 1))

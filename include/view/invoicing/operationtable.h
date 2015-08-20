@@ -33,10 +33,7 @@
 #define COLUMN_OPERATION_TOTAL_WIDTH         70
 
 #define INDEX(row, column) (model() -> index(row, column))
-#define IS_EDITABLE(index) (model() -> flags(index) & Qt::ItemIsEditable)
-#define FORWARD(column) (column++ < ColumnOperationCount)
-#define BACKWARD(column) (column-- >= ColumnOperationId)
-#define HAS_NEXT(direction, column) ((direction == Forward) ? FORWARD(column) : BACKWARD(column))
+#define IS_EDITABLE(index) (((model() -> flags(index) & Qt::ItemIsEditable)) == Qt::ItemIsEditable)
 
 namespace View
 {

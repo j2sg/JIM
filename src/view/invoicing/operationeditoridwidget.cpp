@@ -21,7 +21,6 @@
 #include "operationeditoridwidget.h"
 #include <QToolButton>
 #include <QIntValidator>
-#include <QKeyEvent>
 #include <QStyle>
 
 View::Invoicing::OperationEditorIdWidget::OperationEditorIdWidget(QWidget *parent) : QLineEdit(parent)
