@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS operation (
    weight       REAL,
    price        REAL    CONSTRAINT operation_price_nn_ct NOT NULL,
    discount     REAL    CONSTRAINT operation_discount_def_ct DEFAULT 0.0,
-   discountType INTEGER CONSTRAINT operation_discount_type_def_ct DEFAULT 0,
    CONSTRAINT operation_pk_ct           PRIMARY KEY(id, invoiceId, invoiceType, companyId, companyType),
    CONSTRAINT operation_invoice_fk_ct   FOREIGN KEY(invoiceId, invoiceType, companyId, companyType)
                                         REFERENCES invoice(id, type, companyId, companyType)
@@ -22,6 +21,5 @@ CREATE TABLE IF NOT EXISTS operation (
    CONSTRAINT operation_quantity_chk_ct CHECK(quantity>=0),
    CONSTRAINT operation_weight_chk_ct   CHECK(weight>=0.0),
    CONSTRAINT operation_price_chk_ct    CHECK(price>=0.0),
-   CONSTRAINT operation_discount_chk_ct      CHECK(discount>=0.0),
-   CONSTRAINT operation_discount_type_chk_ct CHECK(discountType=0 OR discountType=1 OR discountType=2 OR discountType=3)
+   CONSTRAINT operation_discount_chk_ct      CHECK(discount>=0.0 AND discount<=100)
 );

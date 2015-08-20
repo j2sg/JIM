@@ -92,8 +92,7 @@ std::ostream &Model::Domain::operator<<(std::ostream &os, const Operation &opera
               << operation._quantity      << std::endl
               << operation._weight        << std::endl
               << operation._price         << std::endl
-              << operation._discountValue << std::endl
-              << operation._discountType  << std::endl;
+              << operation._discountValue << std::endl;
 }
 
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Product &product)

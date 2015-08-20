@@ -29,7 +29,7 @@
 #define COLUMN_OPERATION_QUANTITY_WIDTH      70
 #define COLUMN_OPERATION_WEIGHT_WIDTH        70
 #define COLUMN_OPERATION_PRICE_WIDTH         70
-#define COLUMN_OPERATION_DISCOUNT_WIDTH     160
+#define COLUMN_OPERATION_DISCOUNT_WIDTH      70
 #define COLUMN_OPERATION_TOTAL_WIDTH         70
 
 #define INDEX(row, column) (model() -> index(row, column))
