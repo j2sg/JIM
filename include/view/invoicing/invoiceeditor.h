@@ -33,6 +33,7 @@ class QToolButton;
 class QDoubleSpinBox;
 class QComboBox;
 class QPushButton;
+class QPrinter;
 QT_END_NAMESPACE
 
 namespace Model
@@ -60,8 +61,10 @@ namespace View
             Q_OBJECT
         public:
             InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *parent = 0);
-            int id() const;
             ~InvoiceEditor();
+            int id() const;
+            const Model::Domain::Invoice *invoice() const;
+            void setPrinter(QPrinter *printer);
             bool isSaveable();
             bool isPrintable();
         protected:
@@ -71,7 +74,7 @@ namespace View
             void entityAdded(const Model::Domain::Invoice &invoice);
         public slots:
             bool save();
-            void print();
+            bool print();
         private slots:
             void invoiceModified(bool modified = true);
             void stateChangedOnAutoIdCheckBox();
@@ -98,7 +101,6 @@ namespace View
             void setTitle();
             void loadInvoice();
             bool saveInvoice();
-            bool deleteInvoice();
             bool verifySave();
 
             QLabel *_idLabel;
@@ -130,6 +132,7 @@ namespace View
             QCheckBox *_paidCheckBox;
             QComboBox *_paymentComboBox;
             QPushButton *_notesButton;
+            QPrinter *_printer;
             QString _currency;
             int _precisionMoney;
             int _precisionTax;

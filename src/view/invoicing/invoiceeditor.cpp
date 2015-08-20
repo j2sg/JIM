@@ -28,8 +28,9 @@
 #include "operationeditor.h"
 #include "taxapplyingwidget.h"
 #include "taxviewerwidget.h"
-#include "persistencemanager.h"
 #include "notesdialog.h"
+#include "persistencemanager.h"
+#include "printingmanager.h"
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -38,6 +39,7 @@
 #include <QDoubleSpinBox>
 #include <QComboBox>
 #include <QPushButton>
+#include <QPrinter>
 #include <QCloseEvent>
 #include <QApplication>
 #include <QIntValidator>
@@ -50,6 +52,8 @@
 View::Invoicing::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *parent)
     : QWidget(parent), _invoice(invoice)
 {
+    _printer = 0;
+
     _currency = QLocale::system().currencySymbol();
     _precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
     _precisionTax = Persistence::Manager::readConfig("Tax", "Application/Precision").toInt();
@@ -64,15 +68,25 @@ View::Invoicing::InvoiceEditor::InvoiceEditor(Model::Domain::Invoice *invoice, Q
     loadInvoice();
 }
 
+View::Invoicing::InvoiceEditor::~InvoiceEditor()
+{
+    if(_invoice)
+        delete _invoice;
+}
+
 int View::Invoicing::InvoiceEditor::id() const
 {
     return _id;
 }
 
-View::Invoicing::InvoiceEditor::~InvoiceEditor()
+const Model::Domain::Invoice *View::Invoicing::InvoiceEditor::invoice() const
 {
-    if(_invoice)
-        delete _invoice;
+    return _invoice;
+}
+
+void View::Invoicing::InvoiceEditor::setPrinter(QPrinter *printer)
+{
+    _printer = printer;
 }
 
 bool View::Invoicing::InvoiceEditor::isSaveable()
@@ -111,8 +125,12 @@ bool View::Invoicing::InvoiceEditor::save()
     }
 }
 
-void View::Invoicing::InvoiceEditor::print()
+bool View::Invoicing::InvoiceEditor::print()
 {
+    if(_printer)
+        return Printing::Manager::print(*_invoice, _printer);
+
+    return false;
 }
 
 void View::Invoicing::InvoiceEditor::stateChangedOnAutoIdCheckBox()
@@ -557,13 +575,6 @@ bool View::Invoicing::InvoiceEditor::saveInvoice()
     QApplication::restoreOverrideCursor();
 
     return ok;
-}
-
-bool View::Invoicing::InvoiceEditor::deleteInvoice()
-{
-    return Model::Management::InvoiceManager::remove(_invoice -> id(),
-                                                     _invoice -> type(),
-                                                     _invoice -> company() -> id());
 }
 
 bool View::Invoicing::InvoiceEditor::verifySave()

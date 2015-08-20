@@ -97,7 +97,6 @@ namespace View
         void printInvoice();
         void saveInvoice();
         void saveAll();
-        void closeInvoice();
         void closeAll();
         void closeAllExcept();
         //void searchInvoice();

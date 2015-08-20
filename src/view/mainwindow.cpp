@@ -401,38 +401,58 @@ void View::MainWindow::clearRecentInvoices()
 
 void View::MainWindow::printInvoice()
 {
-    /*statusBar() -> showMessage(tr("Printing %1 %2")
-                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
-                               .arg(invoice.id()), 2000);
+    View::Invoicing::InvoiceEditor *invoiceEditor = qobject_cast<View::Invoicing::InvoiceEditor *>(_mdiArea -> currentSubWindow() -> widget());
 
-    Printing::Manager::print(invoice, _printer);*/
+    if(invoiceEditor) {
+        if(invoiceEditor -> print())
+            statusBar() -> showMessage(tr("Printing %1 %2")
+                                           .arg((invoiceEditor -> invoice() -> type() == Model::Domain::Sale) ? tr("Sale Invoice") : tr("Buy Invoice"))
+                                           .arg(invoiceEditor -> invoice() -> id()), 2000);
+    }
 }
 
 void View::MainWindow::saveInvoice()
 {
-    /*statusBar() -> showMessage(tr("%1 %2 saved")
-                               .arg((static_cast<int>(invoice.type())) ? tr("Sale Invoice") : tr("Buy Invoice"))
-                               .arg(invoice.id()), 2000);*/
+    View::Invoicing::InvoiceEditor *invoiceEditor = qobject_cast<View::Invoicing::InvoiceEditor *>(_mdiArea -> currentSubWindow() -> widget());
+
+    if(invoiceEditor) {
+        if(invoiceEditor -> save())
+            statusBar() -> showMessage(tr("%1 %2 saved")
+                                           .arg((invoiceEditor -> invoice() -> type() == Model::Domain::Sale) ? tr("Sale Invoice") : tr("Buy Invoice"))
+                                           .arg(invoiceEditor -> invoice() -> id()), 2000);
+    }
 }
 
 void View::MainWindow::saveAll()
 {
+    foreach(QMdiSubWindow *window, _mdiArea -> subWindowList()) {
+        View::Invoicing::InvoiceEditor *invoiceEditor = qobject_cast<View::Invoicing::InvoiceEditor *>(window -> widget());
 
-}
-
-void View::MainWindow::closeInvoice()
-{
-
+        if(invoiceEditor && invoiceEditor -> isSaveable() && invoiceEditor -> save())
+            statusBar() -> showMessage(tr("All invoices saved"), 2000);
+    }
 }
 
 void View::MainWindow::closeAll()
 {
+    foreach(QMdiSubWindow *window, _mdiArea -> subWindowList()) {
+        View::Invoicing::InvoiceEditor *invoiceEditor = qobject_cast<View::Invoicing::InvoiceEditor *>(window -> widget());
 
+        if(invoiceEditor)
+            window -> close();
+    }
 }
 
 void View::MainWindow::closeAllExcept()
 {
+    QMdiSubWindow *currWindow = _mdiArea -> currentSubWindow();
 
+    foreach(QMdiSubWindow *window, _mdiArea -> subWindowList()) {
+        View::Invoicing::InvoiceEditor *invoiceEditor = qobject_cast<View::Invoicing::InvoiceEditor *>(window -> widget());
+
+        if(invoiceEditor && window != currWindow)
+            window -> close();
+    }
 }
 
 /*void View::MainWindow::searchInvoice()
@@ -1085,7 +1105,7 @@ void View::MainWindow::createConnections()
     connect(_saveAllAction, SIGNAL(triggered()),
             this, SLOT(saveAll()));
     connect(_closeAction, SIGNAL(triggered()),
-            this, SLOT(closeInvoice()));
+            _mdiArea, SLOT(closeActiveSubWindow()));
     connect(_closeAllAction, SIGNAL(triggered()),
             this, SLOT(closeAll()));
     connect(_closeAllExceptAction, SIGNAL(triggered()),
@@ -1207,6 +1227,8 @@ void View::MainWindow::saveSettings()
 View::Invoicing::InvoiceEditor *View::MainWindow::createInvoiceEditor(Model::Domain::Invoice *invoice)
 {
     View::Invoicing::InvoiceEditor *editor = new View::Invoicing::InvoiceEditor(invoice);
+
+    editor -> setPrinter(_printer);
 
     connect(editor, SIGNAL(dataChanged()), this, SLOT(updateInvoicingMenu()));
 
