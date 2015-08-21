@@ -277,7 +277,8 @@ void View::MainWindow::openCompany(Model::Domain::Entity *company)
 
             if(_company && dialog.isSetAsDefault())
                 Persistence::Manager::writeConfig(companies.key(dialog.selected()), "DefaultCompany");
-        }
+        } else
+            return;
     } else
         _company = company;
 
