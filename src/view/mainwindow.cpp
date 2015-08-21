@@ -394,16 +394,40 @@ void View::MainWindow::openInvoice(Model::Domain::Invoice *invoice)
     }
 
     editor -> show();
+
+    if(!IS_NEW(invoice -> id())) {
+        _recentInvoices.removeAll(QString("%1|%2|%3|%4").arg(_company -> id())
+                                                        .arg(_company -> name())
+                                                        .arg((invoice -> type() == Model::Domain::Buy ? tr("Buy") : tr("Sale")))
+                                                        .arg(invoice -> id()));
+        _recentInvoices.prepend(QString("%1|%2|%3|%4").arg(_company -> id())
+                                                      .arg(_company -> name())
+                                                      .arg((invoice -> type() == Model::Domain::Buy ? tr("Buy") : tr("Sale")))
+                                                      .arg(invoice -> id()));
+        updateRecentInvoices();
+    }
 }
 
 void View::MainWindow::openRecentInvoice()
 {
+    QAction *recentInvoiceAction = qobject_cast<QAction *>(sender());
+    int companyId = recentInvoiceAction -> data().toString().split('|').at(0).toInt();
+    Model::Domain::InvoiceType invoiceType = (recentInvoiceAction -> data().toString().split('|').at(2) == tr("Buy")) ? Model::Domain::Buy :
+                                                                                                                        Model::Domain::Sale;
+    int invoiceId = recentInvoiceAction -> data().toString().split('|').at(3).toInt();
 
+    if(companyId != _company -> id() && verifyCloseCurrentCompanyAndOpenAnother()) {
+        closeCompany();
+        openCompany(Model::Management::CompanyManager::get(companyId));
+    }
+
+    openInvoice(Model::Management::InvoiceManager::get(invoiceId, invoiceType, companyId));
 }
 
 void View::MainWindow::clearRecentInvoices()
 {
-
+    _recentInvoices.clear();
+    updateRecentInvoices();
 }
 
 void View::MainWindow::printInvoice()
@@ -657,7 +681,18 @@ void View::MainWindow::updateRecentCompanies()
 
 void View::MainWindow::updateRecentInvoices()
 {
-
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k) {
+        if(k < _recentInvoices.count()) {
+            int companyId = _recentInvoices.at(k).split('|').at(0).toInt();
+            QString companyName = _recentInvoices.at(k).split('|').at(1);
+            QString invoiceType = _recentInvoices.at(k).split('|').at(2);
+            int invoiceId = _recentInvoices.at(k).split('|').at(3).toInt();
+            _recentInvoicesAction[k] -> setText(QString("(%1) %2 : %3 - #%4").arg(companyId).arg(companyName).arg(invoiceType).arg(invoiceId));
+            _recentInvoicesAction[k] -> setData(_recentInvoices.at(k));
+            _recentInvoicesAction[k] -> setVisible(true);
+        } else
+            _recentInvoicesAction[k] -> setVisible(false);
+    }
 }
 
 void View::MainWindow::updateInvoicingMenu()
@@ -1382,12 +1417,14 @@ void View::MainWindow::setCompanyOpen(bool open)
     _newCompanyAction -> setEnabled(!open);
     _openCompanyAction -> setEnabled(!open);
     for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
-        _recentCompaniesAction[k]->setEnabled(!open);
+        _recentCompaniesAction[k] -> setEnabled(!open);
     _closeCompanyAction -> setEnabled(open);
     _setUpCompanyAction -> setEnabled(open);
     _disconnectToDBAction -> setEnabled(!open);
     _newInvoiceAction -> setEnabled(open);
     _openInvoiceAction -> setEnabled(open);
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
+        _recentInvoicesAction[k] -> setEnabled(open);
     //_searchInvoiceAction -> setEnabled(open);
     _manageCompanyAction -> setEnabled(!open);
     _volumeBuyAction -> setEnabled(open);
@@ -1427,6 +1464,15 @@ bool View::MainWindow::verifyCloseCompany()
     return QMessageBox::question(this, tr("Verify Close Company"),
                                  tr("There are active invoices.\n"
                                     "are you sure you wish to close the company?"),
+                                 QMessageBox::Yes | QMessageBox::Default |
+                                 QMessageBox::No) == QMessageBox::Yes;
+}
+
+bool View::MainWindow::verifyCloseCurrentCompanyAndOpenAnother()
+{
+    return QMessageBox::question(this, tr("Verify Close Company"),
+                                 tr("This invoice not belongs to the current company.\n"
+                                    "do you want to close current company and open the other company?"),
                                  QMessageBox::Yes | QMessageBox::Default |
                                  QMessageBox::No) == QMessageBox::Yes;
 }

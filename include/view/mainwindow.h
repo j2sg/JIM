@@ -148,6 +148,7 @@ namespace View
         bool verifyImportDB();
         bool verifyNewCompany();
         bool verifyCloseCompany();
+        bool verifyCloseCurrentCompanyAndOpenAnother();
         bool verifyExit();
 
         QMdiArea *_mdiArea;
