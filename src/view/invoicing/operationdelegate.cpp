@@ -40,7 +40,7 @@ void View::Invoicing::OperationDelegate::paint(QPainter *painter, const QStyleOp
         QStyleOptionViewItem myOption = option;
 
         if(discountValue == 0)
-            text = QObject::tr("-");
+            text = QString("-");
         else if(discountValue < 100)
             text = QString::number(discountValue, 'f', 2);
         else
