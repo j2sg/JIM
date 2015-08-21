@@ -258,43 +258,50 @@ bool View::MainWindow::newCompany()
     return true;
 }
 
-void View::MainWindow::openCompany()
+void View::MainWindow::openCompany(Model::Domain::Entity *company)
 {
-    QMap<QString, int> companies = Model::Management::CompanyManager::getAllNames();
+    if(!company) {
+        QMap<QString, int> companies = Model::Management::CompanyManager::getAllNames();
 
-    if(companies.isEmpty() && verifyNewCompany()) {
-        if(!newCompany())
-            return;
+        if(companies.isEmpty() && verifyNewCompany()) {
+            if(!newCompany())
+                return;
 
-        companies = Model::Management::CompanyManager::getAllNames();
-    }
+            companies = Model::Management::CompanyManager::getAllNames();
+        }
 
-    OpenCompanyDialog dialog(companies, Persistence::Manager::readConfig("DefaultCompany").toString());
+        OpenCompanyDialog dialog(companies, Persistence::Manager::readConfig("DefaultCompany").toString());
 
-    if(dialog.exec()) {
-        _company = Model::Management::CompanyManager::get(dialog.selected());
+        if(dialog.exec()) {
+            _company = Model::Management::CompanyManager::get(dialog.selected());
 
-        if(_company) {
-            if(dialog.isSetAsDefault())
+            if(_company && dialog.isSetAsDefault())
                 Persistence::Manager::writeConfig(companies.key(dialog.selected()), "DefaultCompany");
+        }
+    } else
+        _company = company;
 
-            statusBar() -> showMessage(tr("Open Company %1").arg(_company -> name()), 5000);
-            setCompanyOpen(true);
-        } else
-            QMessageBox::warning(this, tr("Load Company"),
-                                  tr("Not exists any company with that Id"),
-                                  QMessageBox::Ok);
-    }
+    if(_company) {
+        statusBar() -> showMessage(tr("Open Company %1").arg(_company -> name()), 5000);
+        _recentCompanies.removeAll(QString("%1|%2").arg(_company -> id()).arg(_company -> name()));
+        _recentCompanies.prepend(QString("%1|%2").arg(_company -> id()).arg(_company -> name()));
+        setCompanyOpen(true);
+        updateRecentCompanies();
+    } else
+        QMessageBox::warning(this, tr("Load Company"), tr("Not exists any company with that Id"), QMessageBox::Ok);
 }
 
-void View::MainWindow::recentCompanies()
+void View::MainWindow::openRecentCompany()
 {
+    QAction *recentCompanyAction = qobject_cast<QAction *>(sender());
 
+    openCompany(Model::Management::CompanyManager::get(recentCompanyAction -> data().toInt()));
 }
 
 void View::MainWindow::clearRecentCompanies()
 {
-
+    _recentCompanies.clear();
+    updateRecentCompanies();
 }
 
 void View::MainWindow::setUpCompany()
@@ -389,7 +396,7 @@ void View::MainWindow::openInvoice(Model::Domain::Invoice *invoice)
     editor -> show();
 }
 
-void View::MainWindow::recentInvoices()
+void View::MainWindow::openRecentInvoice()
 {
 
 }
@@ -632,6 +639,25 @@ void View::MainWindow::entityAdded(const Model::Domain::Entity& entity)
     statusBar() -> showMessage(tr("Added %1 %2 - %3").arg(entity.type() == Model::Domain::SupplierEntity ? tr("supplier") : tr("customer"))
                                                      .arg(QString::number(entity.id()))
                                                      .arg(entity.name()), 5000);
+}
+
+void View::MainWindow::updateRecentCompanies()
+{
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k) {
+        if(k < _recentCompanies.count()) {
+            int companyId = _recentCompanies.at(k).split('|').at(0).toInt();
+            QString companyName = _recentCompanies.at(k).split('|').at(1);
+            _recentCompaniesAction[k] -> setText(QString("(%1) %2").arg(companyId).arg(companyName));
+            _recentCompaniesAction[k] -> setData(companyId);
+            _recentCompaniesAction[k] -> setVisible(true);
+        } else
+            _recentCompaniesAction[k] -> setVisible(false);
+    }
+}
+
+void View::MainWindow::updateRecentInvoices()
+{
+
 }
 
 void View::MainWindow::updateInvoicingMenu()
@@ -1082,7 +1108,7 @@ void View::MainWindow::createConnections()
             this, SLOT(openCompany()));
     for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
         connect(_recentCompaniesAction[k], SIGNAL(triggered()),
-                this, SLOT(recentCompanies()));
+                this, SLOT(openRecentCompany()));
     connect(_clearRecentCompaniesAction, SIGNAL(triggered()),
             this, SLOT(clearRecentCompanies()));
     connect(_setUpCompanyAction, SIGNAL(triggered()),
@@ -1095,7 +1121,7 @@ void View::MainWindow::createConnections()
             this, SLOT(openInvoice()));
     for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
         connect(_recentInvoicesAction[k], SIGNAL(triggered()),
-                this, SLOT(recentInvoices()));
+                this, SLOT(openRecentInvoice()));
     connect(_clearRecentInvoicesAction, SIGNAL(triggered()),
             this, SLOT(clearRecentInvoices()));
     connect(_printInvoiceAction, SIGNAL(triggered()),
@@ -1180,6 +1206,9 @@ void View::MainWindow::createConnections()
 
 void View::MainWindow::loadSettings()
 {
+    _recentCompanies = Persistence::Manager::readConfig("RecentCompanies").toStringList();
+    _recentInvoices = Persistence::Manager::readConfig("RecentInvoices").toStringList();
+
     restoreGeometry(Persistence::Manager::readConfig("Geometry", "Application/Appearance").toByteArray());
     _fullScreenAction -> setChecked((Persistence::Manager::readConfig("Fullscreen", "Application/Appearance").toBool()));
     _showMenuBarAction -> setChecked((Persistence::Manager::readConfig("ShowMenuBar", "Application/Appearance").toBool()));
@@ -1200,10 +1229,15 @@ void View::MainWindow::loadSettings()
 
     _mdiTabbedViewAction -> setChecked(mode == QMdiArea::TabbedView);
     _mdiSubWindowViewAction -> setChecked(mode == QMdiArea::SubWindowView);
+
+    updateRecentCompanies();
+    updateRecentInvoices();
 }
 
 void View::MainWindow::saveSettings()
 {
+    Persistence::Manager::writeConfig(_recentCompanies, "RecentCompanies");
+    Persistence::Manager::writeConfig(_recentInvoices, "RecentInvoices");
     Persistence::Manager::writeConfig(saveGeometry(), "Geometry", "Application/Appearance");
     Persistence::Manager::writeConfig(_fullScreenAction -> isChecked(), "Fullscreen", "Application/Appearance");
     Persistence::Manager::writeConfig(_showMenuBarAction -> isChecked(), "ShowMenuBar", "Application/Appearance");
@@ -1347,6 +1381,8 @@ void View::MainWindow::setCompanyOpen(bool open)
 {
     _newCompanyAction -> setEnabled(!open);
     _openCompanyAction -> setEnabled(!open);
+    for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
+        _recentCompaniesAction[k]->setEnabled(!open);
     _closeCompanyAction -> setEnabled(open);
     _setUpCompanyAction -> setEnabled(open);
     _disconnectToDBAction -> setEnabled(!open);

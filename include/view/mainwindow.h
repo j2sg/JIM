@@ -22,6 +22,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStringList>
 #include <QDate>
 #include "types.h"
 
@@ -85,14 +86,14 @@ namespace View
         void options();
         void printing();
         bool newCompany();
-        void openCompany();
-        void recentCompanies();
+        void openCompany(Model::Domain::Entity *company = 0);
+        void openRecentCompany();
         void clearRecentCompanies();
         void setUpCompany();
         void closeCompany();
         void newInvoice();
         void openInvoice(Model::Domain::Invoice *invoice = 0);
-        void recentInvoices();
+        void openRecentInvoice();
         void clearRecentInvoices();
         void printInvoice();
         void saveInvoice();
@@ -113,6 +114,8 @@ namespace View
         void viewMode();
         void about();
         void entityAdded(const Model::Domain::Entity& entity);
+        void updateRecentCompanies();
+        void updateRecentInvoices();
         void updateInvoicingMenu();
         void updateWindowMenu();
     private:
@@ -223,12 +226,15 @@ namespace View
         QLabel *_storageStateLabel;
         QPrinter *_printer;
 
+        View::Management::EntityEditor *_companyEditor;
+        View::Management::BusinessEditor *_businessEditor;
+
         Model::Domain::Entity *_company;
         bool _authorized;
         bool _connected;
+        QStringList _recentCompanies;
+        QStringList _recentInvoices;
 
-        View::Management::EntityEditor *_companyEditor;
-        View::Management::BusinessEditor *_businessEditor;
     };
 }
 

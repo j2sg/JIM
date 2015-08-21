@@ -44,6 +44,8 @@ bool Persistence::Manager::createConfig(bool overwrite)
     setting.setValue("Executed",                  true);
     setting.setValue("Password",                  QByteArray());
     setting.setValue("DefaultCompany",           "");
+    setting.setValue("RecentCompanies",           QStringList());
+    setting.setValue("RecentInvoices",            QStringList());
     setting.beginGroup("Application");
     setting.setValue("Currency",                  DEFAULT_APPLICATION_CURRENCY);
     setting.beginGroup("Precision");
