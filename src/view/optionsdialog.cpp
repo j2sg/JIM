@@ -38,6 +38,8 @@
 
 View::OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent)
 {
+    _restartRequired = false;
+
     createWidgets();
     createConnections();
     setWindowTitle(tr("Options"));
@@ -47,14 +49,24 @@ View::OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent)
 
 void View::OptionsDialog::done(int result)
 {
-    if(result)
+    if(result) {
         if(!saveOptions()) {
             QMessageBox::warning(this, tr("Configuration changes"),
                                        tr("There are wrong parameters"));
             return;
         }
 
+        if(_restartRequired)
+            QMessageBox::information(this, tr("Apply changes"),
+                                           tr("Some changes will take effect after restart the application"));
+    }
+
     QDialog::done(result);
+}
+
+void View::OptionsDialog::currentIndexChangedOnLanguageComboBox()
+{
+    _restartRequired = true;
 }
 
 void View::OptionsDialog::currentIndexChangedOnStorageDBMSComboBox()
@@ -122,10 +134,19 @@ void View::OptionsDialog::createWidgets()
 
 void View::OptionsDialog::createApplicationPageWidgets()
 {
+    _languageLabel = new QLabel(tr("&Language:"));
+    _languageComboBox = new QComboBox;
+    _languageComboBox -> addItem(tr("Default"), DefaultLanguage);
+    _languageComboBox -> addItem(tr("English"), EnglishLanguage);
+    _languageComboBox -> addItem(tr("Spanish"), SpanishLanguage);
+    _languageLabel -> setBuddy(_languageComboBox);
+
     _autoOpenDefaultCompany = new QCheckBox(tr("Auto Open Default Company at startup"));
 
     QGridLayout *applicationLayout  = new QGridLayout;
-    applicationLayout -> addWidget(_autoOpenDefaultCompany, 0, 0, 1, 1);
+    applicationLayout -> addWidget(_languageLabel, 0, 0, 1, 1);
+    applicationLayout -> addWidget(_languageComboBox, 0, 1, 1, 1);
+    applicationLayout -> addWidget(_autoOpenDefaultCompany, 1, 0, 1, 2);
 
     QGroupBox *applicationGroupBox = new QGroupBox(tr("Application"));
     applicationGroupBox -> setLayout(applicationLayout);
@@ -344,6 +365,8 @@ void View::OptionsDialog::createConnections()
 {
     connect(_listWidget, SIGNAL(currentRowChanged(int)),
             _stackedLayout, SLOT(setCurrentIndex(int)));
+    connect(_languageComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(currentIndexChangedOnLanguageComboBox()));
     connect(_storageDBMSComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(currentIndexChangedOnStorageDBMSComboBox()));
     connect(_defaultPushButton, SIGNAL(clicked()),
@@ -356,6 +379,7 @@ void View::OptionsDialog::createConnections()
 
 void View::OptionsDialog::loadOptions()
 {
+    _languageComboBox -> setCurrentIndex(Persistence::Manager::readConfig("Language").toInt());
     _autoOpenDefaultCompany -> setChecked(Persistence::Manager::readConfig("AutoOpenDefaultCompany").toBool());
 
     _precisionMoneySpinBox -> setValue(Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
@@ -391,6 +415,11 @@ void View::OptionsDialog::loadOptions()
 
 bool View::OptionsDialog::saveOptions()
 {
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        Persistence::Manager::writeConfig(_languageComboBox -> itemData(_languageComboBox -> currentIndex()).toInt(), "Language");
+    #else
+        Persistence::Manager::writeConfig(_languageComboBox -> currentData().toInt(), "Language");
+    #endif
     Persistence::Manager::writeConfig(_autoOpenDefaultCompany -> isChecked(), "AutoOpenDefaultCompany");
 
     Persistence::Manager::writeConfig(_precisionMoneySpinBox -> value(), "Money", "Application/Precision");

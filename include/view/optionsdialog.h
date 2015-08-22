@@ -49,6 +49,7 @@ namespace View
         OptionsDialog(QWidget *parent = 0);
         void done(int result);
     private slots:
+        void currentIndexChangedOnLanguageComboBox();
         void currentIndexChangedOnStorageDBMSComboBox();
         void setDefaultValues();
     private:
@@ -60,6 +61,8 @@ namespace View
         void loadOptions();
         bool saveOptions();
 
+        QLabel *_languageLabel;
+        QComboBox *_languageComboBox;
         QCheckBox *_autoOpenDefaultCompany;
         QLabel *_currencyLabel;
         QComboBox *_currencyComboBox;
@@ -105,6 +108,8 @@ namespace View
         QPushButton *_defaultPushButton;
         QPushButton *_okPushButton;
         QPushButton *_cancelPushButton;
+
+        bool _restartRequired;
     };
 }
 

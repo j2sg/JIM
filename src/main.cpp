@@ -37,31 +37,31 @@ int main(int argc, char *argv[])
     QTranslator translator;
     bool firstLogin = false;
 
-    setUpApplication(&app, &translator);
-
-    std::cout << QString("%1 %2").arg(app.applicationName()).arg(app.applicationVersion()).toStdString() << std::endl;
+    std::cout << QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION).toStdString() << std::endl;
     std::cout << QObject::tr("Starting ...").toStdString() << std::endl;
 
     if(!verifyConfig(&firstLogin)) {
-        std::cout << QObject::tr("Config          :  Error  :  Application will be closed").toStdString() << std::endl;
+        std::cout << QObject::tr("Config: Error: Application will be closed").toStdString() << std::endl;
         return 1;
     } else
-        std::cout << QObject::tr("Config          :  OK").toStdString() << std::endl;
+        std::cout << QObject::tr("Config: OK").toStdString() << std::endl;
+
+    setUpApplication(&app, &translator);
 
     if(!verifyStorage()) {
-        std::cout << QObject::tr("Storage         :  Error  :  Application will be closed").toStdString() << std::endl;
+        std::cout << QObject::tr("Storage: Error: Application will be closed").toStdString() << std::endl;
         return 1;
     } else
-        std::cout << QObject::tr("Storage         :  OK").toStdString() << std::endl;
+        std::cout << QObject::tr("Storage: OK").toStdString() << std::endl;
 
     View::MainWindow mainWindow;
     mainWindow.show();
 
     if(!initApplication(&mainWindow, firstLogin)) {
-        std::cout << QObject::tr("Authentication  :  Error  :  Application will be closed").toStdString() << std::endl;
+        std::cout << QObject::tr("Authentication:  Error:  Application will be closed").toStdString() << std::endl;
         return 1;
     } else
-        std::cout << QObject::tr("Authentication  :  OK").toStdString() << std::endl;
+        std::cout << QObject::tr("Authentication: OK").toStdString() << std::endl;
 
     std::cout << QObject::tr("Running ...").toStdString() << std::endl;
 
@@ -75,8 +75,23 @@ void setUpApplication(QApplication *app, QTranslator *translator)
     app -> setApplicationName(APPLICATION_NAME);
     app -> setApplicationVersion(APPLICATION_VERSION);
 
-    translator -> load("jim_" + QLocale::system().name(), ":/translations");
-    app -> installTranslator(translator);
+    QString translationFilePath;
+
+    switch(static_cast<SupportedLanguage>(Persistence::Manager::readConfig("Language").toInt())) {
+    case DefaultLanguage:
+        translationFilePath = QString("jim_%1").arg(QLocale::system().name());
+        break;
+    case SpanishLanguage:
+        translationFilePath = QString("jim_es");
+        break;
+    default:
+        translationFilePath = QString();
+    }
+
+    if(!translationFilePath.isEmpty()) {
+        translator -> load("jim_" + QLocale::system().name(), ":/translations");
+        app -> installTranslator(translator);
+    }
 }
 
 bool verifyConfig(bool *firstLogin)

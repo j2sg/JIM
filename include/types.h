@@ -263,6 +263,13 @@ namespace Persistence
     } DBMSType;
 }
 
+typedef enum SupportedLanguageEnum
+{
+    DefaultLanguage,
+    EnglishLanguage,
+    SpanishLanguage
+} SupportedLanguage;
+
 Q_DECLARE_METATYPE(Model::Domain::Discount)
 
 #endif // TYPES_H
