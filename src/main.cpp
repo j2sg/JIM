@@ -21,7 +21,7 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
-#include <QDebug>
+#include <iostream>
 #include "mainwindow.h"
 #include "persistencemanager.h"
 #include "global.h"
@@ -39,31 +39,31 @@ int main(int argc, char *argv[])
 
     setUpApplication(&app, &translator);
 
-    qDebug() << QString("%1 %2").arg(app.applicationName()).arg(app.applicationVersion());
-    qDebug() << QObject::tr("Starting ...");
+    std::cout << QString("%1 %2").arg(app.applicationName()).arg(app.applicationVersion()).toStdString() << std::endl;
+    std::cout << QObject::tr("Starting ...").toStdString() << std::endl;
 
     if(!verifyConfig(&firstLogin)) {
-        qDebug() << QObject::tr("Config          :  Error  :  Application will be closed");
+        std::cout << QObject::tr("Config          :  Error  :  Application will be closed").toStdString() << std::endl;
         return 1;
     } else
-        qDebug() << QObject::tr("Config          :  OK");
+        std::cout << QObject::tr("Config          :  OK").toStdString() << std::endl;
 
     if(!verifyStorage()) {
-        qDebug() << QObject::tr("Storage         :  Error  :  Application will be closed");
+        std::cout << QObject::tr("Storage         :  Error  :  Application will be closed").toStdString() << std::endl;
         return 1;
     } else
-        qDebug() << QObject::tr("Storage         :  OK");
+        std::cout << QObject::tr("Storage         :  OK").toStdString() << std::endl;
 
     View::MainWindow mainWindow;
     mainWindow.show();
 
     if(!initApplication(&mainWindow, firstLogin)) {
-        qDebug() << QObject::tr("Authentication  :  Error  :  Application will be closed");
+        std::cout << QObject::tr("Authentication  :  Error  :  Application will be closed").toStdString() << std::endl;
         return 1;
     } else
-        qDebug() << QObject::tr("Authentication  :  OK");
+        std::cout << QObject::tr("Authentication  :  OK").toStdString() << std::endl;
 
-    qDebug() << QObject::tr("Running ...");
+    std::cout << QObject::tr("Running ...").toStdString() << std::endl;
 
     return app.exec();
 }
