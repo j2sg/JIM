@@ -163,6 +163,9 @@ bool View::MainWindow::login()
                                     tr("Max attempts number exceeded. Application will be closed."),
                                     QMessageBox::Ok);
 
+    if(_authorized)
+        autoOpenDefaultCompany();
+
     return _authorized;
 }
 
@@ -1242,6 +1245,8 @@ void View::MainWindow::createConnections()
 
 void View::MainWindow::loadSettings()
 {
+    _autoOpenDefaultCompany = Persistence::Manager::readConfig("AutoOpenDefaultCompany").toBool();
+
     _recentCompanies = Persistence::Manager::readConfig("RecentCompanies").toStringList();
     _recentInvoices = Persistence::Manager::readConfig("RecentInvoices").toStringList();
 
@@ -1292,6 +1297,17 @@ void View::MainWindow::saveSettings()
 
     if(checkedAction)
         Persistence::Manager::writeConfig(checkedAction -> data(), "ViewMode", "Application/Appearance");
+}
+
+void View::MainWindow::autoOpenDefaultCompany()
+{
+    QString defCompany = Persistence::Manager::readConfig("DefaultCompany").toString();
+
+    if(_autoOpenDefaultCompany && !defCompany.isEmpty()) {
+        QMap<QString, int> companies = Model::Management::CompanyManager::getAllNames();
+        _company = Model::Management::CompanyManager::get(companies.value(defCompany));
+        setCompanyOpen(true);
+    }
 }
 
 View::Invoicing::InvoiceEditor *View::MainWindow::createInvoiceEditor(Model::Domain::Invoice *invoice)

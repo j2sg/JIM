@@ -129,6 +129,7 @@ namespace View
         void createConnections();
         void loadSettings();
         void saveSettings();
+        void autoOpenDefaultCompany();
         View::Invoicing::InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
         View::Invoicing::InvoiceEditor *findInvoiceEditor(Model::Domain::Invoice *invoice);
         View::Invoicing::InvoiceSearchResult *createInvoiceSearchResult(Model::Domain::InvoiceType type,
@@ -233,6 +234,7 @@ namespace View
         Model::Domain::Entity *_company;
         bool _authorized;
         bool _connected;
+        bool _autoOpenDefaultCompany;
         QStringList _recentCompanies;
         QStringList _recentInvoices;
 
