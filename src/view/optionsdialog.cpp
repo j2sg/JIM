@@ -22,6 +22,7 @@
 #include "taxwidget.h"
 #include "persistencemanager.h"
 #include "types.h"
+#include <QCheckBox>
 #include <QLabel>
 #include <QComboBox>
 #include <QSpinBox>
@@ -121,6 +122,14 @@ void View::OptionsDialog::createWidgets()
 
 void View::OptionsDialog::createApplicationPageWidgets()
 {
+    _autoOpenDefaultCompany = new QCheckBox(tr("Auto Open Default Company at startup"));
+
+    QGridLayout *applicationLayout  = new QGridLayout;
+    applicationLayout -> addWidget(_autoOpenDefaultCompany, 0, 0, 1, 1);
+
+    QGroupBox *applicationGroupBox = new QGroupBox(tr("Application"));
+    applicationGroupBox -> setLayout(applicationLayout);
+
     _currencyLabel = new QLabel(tr("&Currency:"));
     _currencyComboBox = new QComboBox;
     _currencyComboBox -> addItems(QStringList() << "EUR");
@@ -207,6 +216,7 @@ void View::OptionsDialog::createApplicationPageWidgets()
     storageGroupBox -> setLayout(storageLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout -> addWidget(applicationGroupBox);
     mainLayout -> addWidget(unitsGroupBox);
     mainLayout -> addWidget(storageGroupBox);
     mainLayout -> addStretch();
@@ -346,6 +356,8 @@ void View::OptionsDialog::createConnections()
 
 void View::OptionsDialog::loadOptions()
 {
+    _autoOpenDefaultCompany -> setChecked(Persistence::Manager::readConfig("AutoOpenDefaultCompany").toBool());
+
     _precisionMoneySpinBox -> setValue(Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
     _precisionTaxSpinBox -> setValue(Persistence::Manager::readConfig("Tax", "Application/Precision").toInt());
     _precisionWeightSpinBox -> setValue(Persistence::Manager::readConfig("Weight", "Application/Precision").toInt());
@@ -379,6 +391,21 @@ void View::OptionsDialog::loadOptions()
 
 bool View::OptionsDialog::saveOptions()
 {
+    Persistence::Manager::writeConfig(_autoOpenDefaultCompany -> isChecked(), "AutoOpenDefaultCompany");
+
+    Persistence::Manager::writeConfig(_precisionMoneySpinBox -> value(), "Money", "Application/Precision");
+    Persistence::Manager::writeConfig(_precisionTaxSpinBox -> value(), "Tax", "Application/Precision");
+    Persistence::Manager::writeConfig(_precisionWeightSpinBox -> value(), "Weight", "Application/Precision");
+
+    if(static_cast<Persistence::DBMSType>(_storageDBMSComboBox -> currentIndex()) != Persistence::SQLITE) {
+        Persistence::Manager::writeConfig(_storageDBMSComboBox -> currentIndex(), "Type", "Storage");
+        Persistence::Manager::writeConfig(_storageNameLineEdit-> text(), "Name", "Storage/DBMS");
+        Persistence::Manager::writeConfig(_storageHostLineEdit -> text(), "Host", "Storage/DBMS");
+        Persistence::Manager::writeConfig(_storagePortSpinBox -> value(), "Port", "Storage/DBMS");
+        Persistence::Manager::writeConfig(_storageUserLineEdit -> text(), "User", "Storage/DBMS");
+        Persistence::Manager::writeConfig(_storagePassLineEdit -> text().toLatin1(), "Pass", "Storage/DBMS");
+    }
+
     QString currPass = _authenticationCurrentPassLineEdit -> text();
     QString newPass = _authenticationNewPassLineEdit -> text();
     QString reNewPass = _authenticationReNewPassLineEdit -> text();
@@ -392,19 +419,6 @@ bool View::OptionsDialog::saveOptions()
             return false;
         else
             Persistence::Manager::writeConfig(newPassEnc, "Password");
-    }
-
-    Persistence::Manager::writeConfig(_precisionMoneySpinBox -> value(), "Money", "Application/Precision");
-    Persistence::Manager::writeConfig(_precisionTaxSpinBox -> value(), "Tax", "Application/Precision");
-    Persistence::Manager::writeConfig(_precisionWeightSpinBox -> value(), "Weight", "Application/Precision");
-
-    if(static_cast<Persistence::DBMSType>(_storageDBMSComboBox -> currentIndex()) != Persistence::SQLITE) {
-        Persistence::Manager::writeConfig(_storageDBMSComboBox -> currentIndex(), "Type", "Storage");
-        Persistence::Manager::writeConfig(_storageNameLineEdit-> text(), "Name", "Storage/DBMS");
-        Persistence::Manager::writeConfig(_storageHostLineEdit -> text(), "Host", "Storage/DBMS");
-        Persistence::Manager::writeConfig(_storagePortSpinBox -> value(), "Port", "Storage/DBMS");
-        Persistence::Manager::writeConfig(_storageUserLineEdit -> text(), "User", "Storage/DBMS");
-        Persistence::Manager::writeConfig(_storagePassLineEdit -> text().toLatin1(), "Pass", "Storage/DBMS");
     }
 
     Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::GeneralVAT), "GeneralVAT", "Invoicing/Tax");

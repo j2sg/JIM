@@ -24,6 +24,7 @@
 #include <QDialog>
 
 QT_BEGIN_NAMESPACE
+class QCheckBox;
 class QLabel;
 class QComboBox;
 class QSpinBox;
@@ -59,6 +60,7 @@ namespace View
         void loadOptions();
         bool saveOptions();
 
+        QCheckBox *_autoOpenDefaultCompany;
         QLabel *_currencyLabel;
         QComboBox *_currencyComboBox;
         QLabel *_precisionMoneyLabel;
