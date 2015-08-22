@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     mainWindow.show();
 
     if(!initApplication(&mainWindow, firstLogin)) {
-        std::cout << QObject::tr("Authentication:  Error:  Application will be closed").toStdString() << std::endl;
+        std::cout << QObject::tr("Authentication: Error: Application will be closed").toStdString() << std::endl;
         return 1;
     } else
         std::cout << QObject::tr("Authentication: OK").toStdString() << std::endl;
