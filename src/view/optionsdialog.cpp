@@ -82,10 +82,10 @@ void View::OptionsDialog::currentIndexChangedOnStorageDBMSComboBox()
 
 void View::OptionsDialog::setDefaultValues()
 {
-    QString currentPass = Persistence::Manager::readConfig("Password").toString();
+    QByteArray currentPass = Persistence::Manager::readConfig("Password").toByteArray();
 
     Persistence::Manager::createConfig(true);
-    Persistence::Manager::writeConfig(currentPass.toLatin1(), "Password");
+    Persistence::Manager::writeConfig(currentPass, "Password");
 
     loadOptions();
 }
