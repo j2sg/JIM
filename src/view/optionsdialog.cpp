@@ -141,12 +141,15 @@ void View::OptionsDialog::createApplicationPageWidgets()
     _languageComboBox -> addItem(tr("Spanish"), SpanishLanguage);
     _languageLabel -> setBuddy(_languageComboBox);
 
-    _autoOpenDefaultCompany = new QCheckBox(tr("Auto Open Default Company at startup"));
+    _autoOpenDefaultCompany = new QCheckBox(tr("&Auto Open Default Company at startup"));
+
+    _askOnExit = new QCheckBox(tr("Ask on e&xit"));
 
     QGridLayout *applicationLayout  = new QGridLayout;
     applicationLayout -> addWidget(_languageLabel, 0, 0, 1, 1);
     applicationLayout -> addWidget(_languageComboBox, 0, 1, 1, 1);
     applicationLayout -> addWidget(_autoOpenDefaultCompany, 1, 0, 1, 2);
+    applicationLayout -> addWidget(_askOnExit, 2, 0, 1, 2);
 
     QGroupBox *applicationGroupBox = new QGroupBox(tr("Application"));
     applicationGroupBox -> setLayout(applicationLayout);
@@ -381,6 +384,7 @@ void View::OptionsDialog::loadOptions()
 {
     _languageComboBox -> setCurrentIndex(Persistence::Manager::readConfig("Language").toInt());
     _autoOpenDefaultCompany -> setChecked(Persistence::Manager::readConfig("AutoOpenDefaultCompany").toBool());
+    _askOnExit -> setChecked(Persistence::Manager::readConfig("AskOnExit").toBool());
 
     _precisionMoneySpinBox -> setValue(Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
     _precisionTaxSpinBox -> setValue(Persistence::Manager::readConfig("Tax", "Application/Precision").toInt());
@@ -421,6 +425,7 @@ bool View::OptionsDialog::saveOptions()
         Persistence::Manager::writeConfig(_languageComboBox -> currentData().toInt(), "Language");
     #endif
     Persistence::Manager::writeConfig(_autoOpenDefaultCompany -> isChecked(), "AutoOpenDefaultCompany");
+    Persistence::Manager::writeConfig(_askOnExit -> isChecked(), "AskOnExit");
 
     Persistence::Manager::writeConfig(_precisionMoneySpinBox -> value(), "Money", "Application/Precision");
     Persistence::Manager::writeConfig(_precisionTaxSpinBox -> value(), "Tax", "Application/Precision");

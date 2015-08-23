@@ -1496,8 +1496,10 @@ bool View::MainWindow::verifyCloseCurrentCompanyAndOpenAnother()
 
 bool View::MainWindow::verifyExit()
 {
-    return QMessageBox::question(this, tr("Verify Exit"),
-                                 tr("are you sure you wish to exit the program?"),
-                                 QMessageBox::Yes | QMessageBox::Default |
-                                 QMessageBox::No) == QMessageBox::Yes;
+    bool askOnExit = Persistence::Manager::readConfig("AskOnExit").toBool();
+
+    return !askOnExit || QMessageBox::question(this, tr("Verify Exit"),
+                                              tr("are you sure you wish to exit the program?"),
+                                              QMessageBox::Yes | QMessageBox::Default |
+                                              QMessageBox::No) == QMessageBox::Yes;
 }

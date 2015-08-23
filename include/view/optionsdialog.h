@@ -64,6 +64,7 @@ namespace View
         QLabel *_languageLabel;
         QComboBox *_languageComboBox;
         QCheckBox *_autoOpenDefaultCompany;
+        QCheckBox *_askOnExit;
         QLabel *_currencyLabel;
         QComboBox *_currencyComboBox;
         QLabel *_precisionMoneyLabel;

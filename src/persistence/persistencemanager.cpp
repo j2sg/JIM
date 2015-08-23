@@ -46,6 +46,7 @@ bool Persistence::Manager::createConfig(bool overwrite)
     setting.setValue("Language",                  DefaultLanguage);
     setting.setValue("DefaultCompany",           "");
     setting.setValue("AutoOpenDefaultCompany",    false);
+    setting.setValue("AskOnExit",                 true);
     setting.setValue("RecentCompanies",           QStringList());
     setting.setValue("RecentInvoices",            QStringList());
     setting.beginGroup("Application");
