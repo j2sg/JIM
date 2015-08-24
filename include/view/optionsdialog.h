@@ -50,6 +50,8 @@ namespace View
         void done(int result);
     private slots:
         void currentIndexChangedOnLanguageComboBox();
+        void stateChangedOnRequestPasswordCheckBox();
+        void changePassword();
         void currentIndexChangedOnStorageDBMSComboBox();
         void setDefaultValues();
     private:
@@ -63,8 +65,10 @@ namespace View
 
         QLabel *_languageLabel;
         QComboBox *_languageComboBox;
-        QCheckBox *_autoOpenDefaultCompany;
-        QCheckBox *_askOnExit;
+        QCheckBox *_requestPasswordCheckBox;
+        QPushButton *_passwordButton;
+        QCheckBox *_autoOpenDefaultCompanyCheckBox;
+        QCheckBox *_askOnExitCheckBox;
         QLabel *_currencyLabel;
         QComboBox *_currencyComboBox;
         QLabel *_precisionMoneyLabel;

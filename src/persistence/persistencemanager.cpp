@@ -42,6 +42,7 @@ bool Persistence::Manager::createConfig(bool overwrite)
     QSettings setting(ORGANIZATION_NAME, APPLICATION_NAME);
 
     setting.setValue("Executed",                  true);
+    setting.setValue("RequestPassword",           false);
     setting.setValue("Password",                  QByteArray());
     setting.setValue("Language",                  DefaultLanguage);
     setting.setValue("DefaultCompany",           "");

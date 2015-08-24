@@ -69,6 +69,16 @@ void View::OptionsDialog::currentIndexChangedOnLanguageComboBox()
     _restartRequired = true;
 }
 
+void View::OptionsDialog::stateChangedOnRequestPasswordCheckBox()
+{
+    _passwordButton -> setEnabled(_requestPasswordCheckBox -> isChecked());
+}
+
+void View::OptionsDialog::changePassword()
+{
+
+}
+
 void View::OptionsDialog::currentIndexChangedOnStorageDBMSComboBox()
 {
     bool isNotSQLite = _storageDBMSComboBox -> currentIndex() != Persistence::SQLITE;
@@ -141,15 +151,22 @@ void View::OptionsDialog::createApplicationPageWidgets()
     _languageComboBox -> addItem(tr("Spanish"), SpanishLanguage);
     _languageLabel -> setBuddy(_languageComboBox);
 
-    _autoOpenDefaultCompany = new QCheckBox(tr("&Auto Open Default Company at startup"));
+    _requestPasswordCheckBox = new QCheckBox(tr("Request Password at startup"));
+    _passwordButton = new QPushButton(tr("Password"));
+    _passwordButton -> setIcon(QIcon(":images/password.png"));
+    _passwordButton -> setFixedSize(_passwordButton -> sizeHint());
 
-    _askOnExit = new QCheckBox(tr("Ask on e&xit"));
+    _autoOpenDefaultCompanyCheckBox = new QCheckBox(tr("&Auto Open Default Company at startup"));
+
+    _askOnExitCheckBox = new QCheckBox(tr("Ask on e&xit"));
 
     QGridLayout *applicationLayout  = new QGridLayout;
     applicationLayout -> addWidget(_languageLabel, 0, 0, 1, 1);
     applicationLayout -> addWidget(_languageComboBox, 0, 1, 1, 1);
-    applicationLayout -> addWidget(_autoOpenDefaultCompany, 1, 0, 1, 2);
-    applicationLayout -> addWidget(_askOnExit, 2, 0, 1, 2);
+    applicationLayout -> addWidget(_requestPasswordCheckBox, 1, 0, 1, 1);
+    applicationLayout -> addWidget(_passwordButton, 1, 1, 1, 1);
+    applicationLayout -> addWidget(_autoOpenDefaultCompanyCheckBox, 2, 0, 1, 2);
+    applicationLayout -> addWidget(_askOnExitCheckBox, 3, 0, 1, 2);
 
     QGroupBox *applicationGroupBox = new QGroupBox(tr("Application"));
     applicationGroupBox -> setLayout(applicationLayout);
@@ -370,6 +387,10 @@ void View::OptionsDialog::createConnections()
             _stackedLayout, SLOT(setCurrentIndex(int)));
     connect(_languageComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(currentIndexChangedOnLanguageComboBox()));
+    connect(_requestPasswordCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(stateChangedOnRequestPasswordCheckBox()));
+    connect(_passwordButton, SIGNAL(clicked()),
+            this, SLOT(changePassword()));
     connect(_storageDBMSComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(currentIndexChangedOnStorageDBMSComboBox()));
     connect(_defaultPushButton, SIGNAL(clicked()),
@@ -383,8 +404,10 @@ void View::OptionsDialog::createConnections()
 void View::OptionsDialog::loadOptions()
 {
     _languageComboBox -> setCurrentIndex(Persistence::Manager::readConfig("Language").toInt());
-    _autoOpenDefaultCompany -> setChecked(Persistence::Manager::readConfig("AutoOpenDefaultCompany").toBool());
-    _askOnExit -> setChecked(Persistence::Manager::readConfig("AskOnExit").toBool());
+    _requestPasswordCheckBox -> setChecked(Persistence::Manager::readConfig("AutoOpenDefaultCompany").toBool());
+    _passwordButton -> setEnabled(_requestPasswordCheckBox -> isChecked());
+    _autoOpenDefaultCompanyCheckBox -> setChecked(Persistence::Manager::readConfig("RequestPassword").toBool());
+    _askOnExitCheckBox -> setChecked(Persistence::Manager::readConfig("AskOnExit").toBool());
 
     _precisionMoneySpinBox -> setValue(Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
     _precisionTaxSpinBox -> setValue(Persistence::Manager::readConfig("Tax", "Application/Precision").toInt());
@@ -424,8 +447,9 @@ bool View::OptionsDialog::saveOptions()
     #else
         Persistence::Manager::writeConfig(_languageComboBox -> currentData().toInt(), "Language");
     #endif
-    Persistence::Manager::writeConfig(_autoOpenDefaultCompany -> isChecked(), "AutoOpenDefaultCompany");
-    Persistence::Manager::writeConfig(_askOnExit -> isChecked(), "AskOnExit");
+    Persistence::Manager::writeConfig(_requestPasswordCheckBox -> isChecked(), "RequestPassword");
+    Persistence::Manager::writeConfig(_autoOpenDefaultCompanyCheckBox -> isChecked(), "AutoOpenDefaultCompany");
+    Persistence::Manager::writeConfig(_askOnExitCheckBox -> isChecked(), "AskOnExit");
 
     Persistence::Manager::writeConfig(_precisionMoneySpinBox -> value(), "Money", "Application/Precision");
     Persistence::Manager::writeConfig(_precisionTaxSpinBox -> value(), "Tax", "Application/Precision");
