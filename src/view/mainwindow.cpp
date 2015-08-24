@@ -104,64 +104,39 @@ void View::MainWindow::closeEvent(QCloseEvent *event)
         event -> ignore();
 }
 
-bool View::MainWindow::firstExecution()
-{
-    QMessageBox::information(this, tr("First Execution"),
-                                   tr("This is the first time that you run the application.\n"
-                                      "You must set the access password."),
-                             QMessageBox::Ok);
-
-    RegisterDialog dialog(this);
-
-    if(dialog.exec()) {
-        QByteArray password = QCryptographicHash::hash(dialog.password().toLatin1(), QCryptographicHash::Sha1);
-
-        if((_authorized = Persistence::Manager::writeConfig(password, "Password")))
-            QMessageBox::information(this, tr("First Execution"),
-                                           tr("Password saved. Welcome to %1.").arg(APPLICATION_NAME),
-                                           QMessageBox::Ok);
-        else
-            QMessageBox::critical(this, tr("First Execution"),
-                                        tr("Password cannot be saved. Application will be closed."),
-                                        QMessageBox::Ok);
-    } else {
-        QMessageBox::critical(this, tr("First Execution"),
-                                    tr("Setting up password canceled. Application will be closed."),
-                                    QMessageBox::Ok);
-
-        Persistence::Manager::deleteConfig();
-    }
-
-    return _authorized;
-}
-
 bool View::MainWindow::login()
 {
-    AuthDialog dialog(this);
-    QByteArray password = Persistence::Manager::readConfig("Password").toByteArray();
-    int attempts = 0;
+    bool requestPassword = Persistence::Manager::readConfig("RequestPassword").toBool();
 
-    do {
-        if(!dialog.exec()) {
-            QMessageBox::critical(this, tr("Authentication Failed"),
-                                       tr("Authentication canceled. Application will be closed."),
-                                       QMessageBox::Ok);
-            return false;
-        } else if(QCryptographicHash::hash(dialog.password().toLatin1(), QCryptographicHash::Sha1) != password) {
-            if(attempts < MAX_AUTH_ATTEMPTS - 1)
-                QMessageBox::warning(this, tr("Authentication Failed"),
-                                           tr("Wrong Password. You have %1 attempts more.")
-                                               .arg(MAX_AUTH_ATTEMPTS - attempts - 1),
+    if(!requestPassword)
+        _authorized = true;
+    else {
+        AuthDialog dialog(this);
+        QByteArray password = Persistence::Manager::readConfig("Password").toByteArray();
+        int attempts = 0;
+
+        do {
+            if(!dialog.exec()) {
+                QMessageBox::critical(this, tr("Authentication Failed"),
+                                           tr("Authentication canceled. Application will be closed."),
                                            QMessageBox::Ok);
-            ++attempts;
-        } else
-            _authorized = true;
-    } while(!_authorized && attempts < MAX_AUTH_ATTEMPTS);
+                return false;
+            } else if(QCryptographicHash::hash(dialog.password().toLatin1(), QCryptographicHash::Sha1) != password) {
+                if(attempts < MAX_AUTH_ATTEMPTS - 1)
+                    QMessageBox::warning(this, tr("Authentication Failed"),
+                                               tr("Wrong Password. You have %1 attempts more.")
+                                                   .arg(MAX_AUTH_ATTEMPTS - attempts - 1),
+                                               QMessageBox::Ok);
+                ++attempts;
+            } else
+                _authorized = true;
+        } while(!_authorized && attempts < MAX_AUTH_ATTEMPTS);
 
-    if(attempts == MAX_AUTH_ATTEMPTS)
-        QMessageBox::critical(this, tr("Authentication Failed"),
-                                    tr("Max attempts number exceeded. Application will be closed."),
-                                    QMessageBox::Ok);
+        if(attempts == MAX_AUTH_ATTEMPTS)
+            QMessageBox::critical(this, tr("Authentication Failed"),
+                                        tr("Max attempts number exceeded. Application will be closed."),
+                                        QMessageBox::Ok);
+    }
 
     if(_authorized)
         autoOpenDefaultCompany();

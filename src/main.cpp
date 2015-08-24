@@ -27,20 +27,19 @@
 #include "global.h"
 
 void setUpApplication(QApplication *app, QTranslator *translator);
-bool verifyConfig(bool *firstExecution);
+bool verifyConfig();
 bool verifyStorage();
-bool initApplication(View::MainWindow *mainWindow, bool firstExecution);
+bool initApplication(View::MainWindow *mainWindow);
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     QTranslator translator;
-    bool firstLogin = false;
 
     std::cout << QString("%1 %2").arg(APPLICATION_NAME).arg(APPLICATION_VERSION).toStdString() << std::endl;
     std::cout << QObject::tr("Starting ...").toStdString() << std::endl;
 
-    if(!verifyConfig(&firstLogin)) {
+    if(!verifyConfig()) {
         std::cout << QObject::tr("Config: Error: Application will be closed").toStdString() << std::endl;
         return 1;
     } else
@@ -57,7 +56,7 @@ int main(int argc, char *argv[])
     View::MainWindow mainWindow;
     mainWindow.show();
 
-    if(!initApplication(&mainWindow, firstLogin)) {
+    if(!initApplication(&mainWindow)) {
         std::cout << QObject::tr("Authentication: Error: Application will be closed").toStdString() << std::endl;
         return 1;
     } else
@@ -94,25 +93,17 @@ void setUpApplication(QApplication *app, QTranslator *translator)
     }
 }
 
-bool verifyConfig(bool *firstLogin)
+bool verifyConfig()
 {
-    if(!Persistence::Manager::existsConfig() && !Persistence::Manager::createConfig())
-            return false;
-
-    *firstLogin = Persistence::Manager::readConfig("Password").toByteArray().isEmpty();
-
-    return true;
+    return Persistence::Manager::existsConfig() || Persistence::Manager::createConfig();
 }
 
 bool verifyStorage()
 {
-    if(!Persistence::Manager::existsStorage())
-        return Persistence::Manager::createStorage();
-
-    return true;
+    return Persistence::Manager::existsStorage() || Persistence::Manager::createStorage();
 }
 
-bool initApplication(View::MainWindow *mainWindow, bool firstLogin)
+bool initApplication(View::MainWindow *mainWindow)
 {
-    return firstLogin ? mainWindow -> firstExecution() : mainWindow -> login();
+    return mainWindow -> login();
 }
