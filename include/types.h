@@ -23,6 +23,9 @@
 
 #include <QMetaType>
 
+// Minimum Password Length
+#define MIN_PASS_LENGTH 6
+
 // Maximum Authentication Attempts.
 #define MAX_AUTH_ATTEMPTS 3
 
