@@ -20,6 +20,7 @@
 
 #include "optionsdialog.h"
 #include "taxwidget.h"
+#include "setuppassworddialog.h"
 #include "persistencemanager.h"
 #include "types.h"
 #include <QCheckBox>
@@ -76,7 +77,14 @@ void View::OptionsDialog::stateChangedOnRequestPasswordCheckBox()
 
 void View::OptionsDialog::changePassword()
 {
+    SetUpPasswordDialog dialog(_password.isEmpty(), this);
 
+    if(dialog.exec()) {
+        if(_password.isEmpty() || _password == QCryptographicHash::hash(dialog.currentPassword().toLatin1(), QCryptographicHash::Sha1))
+            _password = QCryptographicHash::hash(dialog.newPassword().toLatin1(), QCryptographicHash::Sha1);
+        else
+            QMessageBox::critical(this, tr("Change Password"), tr("The current password you typed is incorrect"));
+    }
 }
 
 void View::OptionsDialog::currentIndexChangedOnStorageDBMSComboBox()
@@ -92,31 +100,23 @@ void View::OptionsDialog::currentIndexChangedOnStorageDBMSComboBox()
 
 void View::OptionsDialog::setDefaultValues()
 {
-    QByteArray currentPass = Persistence::Manager::readConfig("Password").toByteArray();
-
     Persistence::Manager::createConfig(true);
-    Persistence::Manager::writeConfig(currentPass, "Password");
-
     loadOptions();
 }
 
 void View::OptionsDialog::createWidgets()
 {
     createApplicationPageWidgets();
-    createAuthenticationPageWidgets();
     createInvoicingPageWidgets();
 
     _listWidget = new QListWidget;
     _listWidget -> addItem(new QListWidgetItem(QIcon(":/images/options.png"),
                                                tr("Application")));
-    _listWidget -> addItem(new QListWidgetItem(QIcon(":/images/password.png"),
-                                               tr("Authentication")));
     _listWidget -> addItem(new QListWidgetItem(QIcon(":/images/loadinvoice.png"),
                                                tr("Invoicing")));
 
     _stackedLayout = new QStackedLayout;
     _stackedLayout -> addWidget(_applicationPage);
-    _stackedLayout -> addWidget(_authenticationPage);
     _stackedLayout -> addWidget(_invoicingPage);
 
     _defaultPushButton = new QPushButton(tr("&Defaults"));
@@ -267,43 +267,6 @@ void View::OptionsDialog::createApplicationPageWidgets()
     _applicationPage -> setLayout(mainLayout);
 }
 
-void View::OptionsDialog::createAuthenticationPageWidgets()
-{
-    _authenticationCurrentPassLabel = new QLabel(tr("&Current:"));
-    _authenticationCurrentPassLineEdit = new QLineEdit;
-    _authenticationCurrentPassLineEdit -> setEchoMode(QLineEdit::Password);
-    _authenticationCurrentPassLabel -> setBuddy(_authenticationCurrentPassLineEdit);
-
-    _authenticationNewPassLabel = new QLabel(tr("&New:"));
-    _authenticationNewPassLineEdit = new QLineEdit;
-    _authenticationNewPassLineEdit -> setEchoMode(QLineEdit::Password);
-    _authenticationNewPassLabel -> setBuddy(_authenticationNewPassLineEdit);
-
-    _authenticationReNewPassLabel = new QLabel(tr("&Re-New:"));
-    _authenticationReNewPassLineEdit = new QLineEdit;
-    _authenticationReNewPassLineEdit -> setEchoMode(QLineEdit::Password);
-    _authenticationReNewPassLabel -> setBuddy(_authenticationReNewPassLineEdit);
-
-    QGridLayout *passwordLayout = new QGridLayout;
-    passwordLayout -> addWidget(_authenticationCurrentPassLabel, 0, 0);
-    passwordLayout -> addWidget(_authenticationCurrentPassLineEdit, 0, 1);
-    passwordLayout -> addWidget(_authenticationNewPassLabel, 1, 0);
-    passwordLayout -> addWidget(_authenticationNewPassLineEdit, 1, 1);
-    passwordLayout -> addWidget(_authenticationReNewPassLabel, 1, 2);
-    passwordLayout -> addWidget(_authenticationReNewPassLineEdit, 1, 3);
-
-    QGroupBox *passwordGroupBox = new QGroupBox(tr("Access Password"));
-    passwordGroupBox -> setLayout(passwordLayout);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addWidget(passwordGroupBox);
-    mainLayout -> addStretch();
-
-    _authenticationPage = new QWidget;
-
-    _authenticationPage -> setLayout(mainLayout);
-}
-
 void View::OptionsDialog::createInvoicingPageWidgets()
 {
     _invoicingTaxesTaxWidget = new View::Management::TaxWidget(0, Qt::Vertical);
@@ -404,9 +367,10 @@ void View::OptionsDialog::createConnections()
 void View::OptionsDialog::loadOptions()
 {
     _languageComboBox -> setCurrentIndex(Persistence::Manager::readConfig("Language").toInt());
-    _requestPasswordCheckBox -> setChecked(Persistence::Manager::readConfig("AutoOpenDefaultCompany").toBool());
+    _requestPasswordCheckBox -> setChecked(Persistence::Manager::readConfig("RequestPassword").toBool());
     _passwordButton -> setEnabled(_requestPasswordCheckBox -> isChecked());
-    _autoOpenDefaultCompanyCheckBox -> setChecked(Persistence::Manager::readConfig("RequestPassword").toBool());
+    _password = Persistence::Manager::readConfig("Password").toByteArray();
+    _autoOpenDefaultCompanyCheckBox -> setChecked(Persistence::Manager::readConfig("AutoOpenDefaultCompany").toBool());
     _askOnExitCheckBox -> setChecked(Persistence::Manager::readConfig("AskOnExit").toBool());
 
     _precisionMoneySpinBox -> setValue(Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
@@ -464,7 +428,9 @@ bool View::OptionsDialog::saveOptions()
         Persistence::Manager::writeConfig(_storagePassLineEdit -> text().toLatin1(), "Pass", "Storage/DBMS");
     }
 
-    QString currPass = _authenticationCurrentPassLineEdit -> text();
+    Persistence::Manager::writeConfig(_password, "Password");
+
+    /*QString currPass = _authenticationCurrentPassLineEdit -> text();
     QString newPass = _authenticationNewPassLineEdit -> text();
     QString reNewPass = _authenticationReNewPassLineEdit -> text();
 
@@ -477,7 +443,7 @@ bool View::OptionsDialog::saveOptions()
             return false;
         else
             Persistence::Manager::writeConfig(newPassEnc, "Password");
-    }
+    }*/
 
     Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::GeneralVAT), "GeneralVAT", "Invoicing/Tax");
     Persistence::Manager::writeConfig(_invoicingTaxesTaxWidget -> tax(Model::Domain::ReducedVAT), "ReducedVAT", "Invoicing/Tax");

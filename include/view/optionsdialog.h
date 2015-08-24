@@ -57,7 +57,6 @@ namespace View
     private:
         void createWidgets();
         void createApplicationPageWidgets();
-        void createAuthenticationPageWidgets();
         void createInvoicingPageWidgets();
         void createConnections();
         void loadOptions();
@@ -90,12 +89,6 @@ namespace View
         QLabel *_storagePassLabel;
         QLineEdit *_storagePassLineEdit;
         QListWidget *_listWidget;
-        QLabel *_authenticationCurrentPassLabel;
-        QLineEdit *_authenticationCurrentPassLineEdit;
-        QLabel *_authenticationNewPassLabel;
-        QLineEdit *_authenticationNewPassLineEdit;
-        QLabel *_authenticationReNewPassLabel;
-        QLineEdit *_authenticationReNewPassLineEdit;
         View::Management::TaxWidget *_invoicingTaxesTaxWidget;
         //QLabel *_invoicingMaxDebtByCustomerLabel;
         //QSpinBox *_invoicingMaxDebtByCustomerSpinBox;
@@ -107,13 +100,13 @@ namespace View
         //QLabel *_invoicingMaxPaymentDelayBySupplierLabel;
         //QSpinBox *_invoicingMaxPaymentDelayBySupplierSpinBox;
         QWidget *_applicationPage;
-        QWidget *_authenticationPage;
         QWidget *_invoicingPage;
         QStackedLayout *_stackedLayout;
         QPushButton *_defaultPushButton;
         QPushButton *_okPushButton;
         QPushButton *_cancelPushButton;
 
+        QByteArray _password;
         bool _restartRequired;
     };
 }
