@@ -20,7 +20,6 @@
 
 #include "mainwindow.h"
 #include "persistencemanager.h"
-#include "registerdialog.h"
 #include "authdialog.h"
 #include "opencompanydialog.h"
 #include "optionsdialog.h"

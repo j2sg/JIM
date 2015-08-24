@@ -59,7 +59,6 @@ HEADERS += include/global.h \
            include/view/invoiceloader.h \
            include/view/mainwindow.h \
            include/view/optionsdialog.h \
-           include/view/registerdialog.h \
            include/model/domain/category.h \
            include/model/domain/entity.h \
            include/model/domain/invoice.h \
@@ -129,7 +128,6 @@ SOURCES += src/main.cpp \
            src/view/invoiceloader.cpp \
            src/view/mainwindow.cpp \
            src/view/optionsdialog.cpp \
-           src/view/registerdialog.cpp \
            src/model/domain/category.cpp \
            src/model/domain/entity.cpp \
            src/model/domain/invoice.cpp \
