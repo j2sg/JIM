@@ -379,6 +379,7 @@ void View::Invoicing::InvoiceEditor::createIdWidgets()
 
     _dateLabel = new QLabel(tr("D&ate:"));
     _dateDateEdit = new QDateEdit;
+    _dateDateEdit -> setCalendarPopup(true);
     _dateDateEdit -> setFixedSize(_dateDateEdit -> sizeHint());
     _dateLabel -> setBuddy(_dateDateEdit);
 
