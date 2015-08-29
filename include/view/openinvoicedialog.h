@@ -43,6 +43,8 @@ namespace View
         void done(int result);
         int id() const;
         Model::Domain::InvoiceType type() const;
+    private slots:
+        void textChangedOnIdLineEdit();
     private:
         void createWidgets();
         void createConnections();

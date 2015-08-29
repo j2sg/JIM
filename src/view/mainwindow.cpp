@@ -24,7 +24,7 @@
 #include "opencompanydialog.h"
 #include "optionsdialog.h"
 #include "newinvoicedialog.h"
-#include "invoiceloader.h"
+#include "openinvoicedialog.h"
 #include "invoiceeditor.h"
 #include "invoicesearch.h"
 #include "invoicesearchresult.h"
@@ -349,15 +349,15 @@ void View::MainWindow::openInvoice(Model::Domain::Invoice *invoice)
         return;
 
     if(!invoice) {
-        InvoiceLoader loader;
+        OpenInvoiceDialog dialog(this);
 
-        if(!loader.exec())
+        if(!dialog.exec())
             return;
 
-        invoice = Model::Management::InvoiceManager::get(loader.id(), loader.type(), _company -> id());
+        invoice = Model::Management::InvoiceManager::get(dialog.id(), dialog.type(), _company -> id());
 
         if(!invoice) {
-            QMessageBox::warning(this, tr("Load Invoice"),
+            QMessageBox::warning(this, tr("Open Invoice"),
                                        tr("Not exists any invoice with that Id"),
                                        QMessageBox::Ok);
             return;

@@ -31,6 +31,9 @@
 
 View::OpenInvoiceDialog::OpenInvoiceDialog(QWidget *parent) : QDialog(parent)
 {
+    _id = NO_ID;
+    _type = Model::Domain::Buy;
+
     createWidgets();
     createConnections();
     setWindowTitle(tr("Open Invoice"));
@@ -40,6 +43,15 @@ View::OpenInvoiceDialog::OpenInvoiceDialog(QWidget *parent) : QDialog(parent)
 
 void View::OpenInvoiceDialog::done(int result)
 {
+    if(result) {
+        _id = _idLineEdit->text().toInt();
+        #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+            _type = static_cast<Model::Domain::InvoiceType>(_typeComboBox -> itemData(_typeComboBox -> currentIndex()).toInt());
+        #else
+            _type = static_cast<Model::Domain::InvoiceType>(_typeComboBox -> currentData().toInt());
+        #endif
+    }
+
     QDialog::done(result);
 }
 
@@ -51,6 +63,11 @@ int View::OpenInvoiceDialog::id() const
 Model::Domain::InvoiceType View::OpenInvoiceDialog::type() const
 {
     return _type;
+}
+
+void View::OpenInvoiceDialog::textChangedOnIdLineEdit()
+{
+    _openButton -> setEnabled(!_idLineEdit -> text().isEmpty());
 }
 
 void View::OpenInvoiceDialog::createWidgets()
@@ -91,6 +108,9 @@ void View::OpenInvoiceDialog::createWidgets()
 
     _idLabel = new QLabel(tr("&Id:"));
     _idLineEdit = new QLineEdit;
+    QIntValidator *idValidator = new QIntValidator(this);
+    idValidator -> setBottom(0);
+    _idLineEdit -> setValidator(idValidator);
     _idLabel -> setBuddy(_idLineEdit);
 
     _filterLabel = new QLabel(tr("Filter by Supplier:"));
@@ -126,5 +146,10 @@ void View::OpenInvoiceDialog::createWidgets()
 
 void View::OpenInvoiceDialog::createConnections()
 {
-
+    connect(_idLineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(textChangedOnIdLineEdit()));
+    connect(_openButton, SIGNAL(clicked()),
+            this, SLOT(accept()));
+    connect(_cancelButton, SIGNAL(clicked()),
+            this, SLOT(reject()));
 }
