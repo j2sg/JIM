@@ -56,7 +56,6 @@ HEADERS += include/global.h \
            include/persistence/sqlagent.h \
            include/printing/printingmanager.h \
            include/view/authdialog.h \
-           include/view/invoiceloader.h \
            include/view/mainwindow.h \
            include/view/optionsdialog.h \
            include/model/domain/category.h \
@@ -126,7 +125,6 @@ SOURCES += src/main.cpp \
            src/persistence/sqlagent.cpp \
            src/printing/printingmanager.cpp \
            src/view/authdialog.cpp \
-           src/view/invoiceloader.cpp \
            src/view/mainwindow.cpp \
            src/view/optionsdialog.cpp \
            src/model/domain/category.cpp \
