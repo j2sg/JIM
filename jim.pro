@@ -118,7 +118,8 @@ HEADERS += include/global.h \
     include/view/newinvoicedialog.h \
     include/view/opencompanydialog.h \
     include/view/setuppassworddialog.h \
-    include/view/openinvoicedialog.h
+    include/view/openinvoicedialog.h \
+    include/view/openinvoicemodel.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
@@ -187,7 +188,8 @@ SOURCES += src/main.cpp \
     src/view/newinvoicedialog.cpp \
     src/view/opencompanydialog.cpp \
     src/view/setuppassworddialog.cpp \
-    src/view/openinvoicedialog.cpp
+    src/view/openinvoicedialog.cpp \
+    src/view/openinvoicemodel.cpp
 
 RESOURCES += resources/jim.qrc
 

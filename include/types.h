@@ -50,6 +50,15 @@
 
 namespace View
 {
+    typedef enum ColumnOpenInvoiceEnum
+    {
+        ColumnOpenInvoiceId,
+        ColumnOpenInvoiceDate,
+        ColumnOpenInvoiceEntityName,
+        ColumnOpenInvoiceTotal,
+        ColumnOpenInvoiceCount
+    } ColumnOpenInvoice;
+
     namespace Invoicing
     {
         typedef enum ColumnInvoiceEnum
