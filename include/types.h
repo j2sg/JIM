@@ -50,6 +50,26 @@
 
 namespace View
 {
+    typedef enum InvoicesByDateEnum
+    {
+        TodayInvoices,
+        YesterdayInvoices,
+        CurrentWeekInvoices,
+        LastWeekInvoices,
+        CurrentMonthInvoices,
+        LastMonthInvoices,
+        CurrentYearInvoices,
+        LastYearInvoices,
+        AllInvoices
+    } InvoicesByDate;
+
+    typedef enum InvoicesByStatusEnum
+    {
+        AnyStatus,
+        PaidStatus,
+        UnpaidStatus
+    } InvoicesByStatus;
+
     typedef enum ColumnOpenInvoiceEnum
     {
         ColumnOpenInvoiceId,
