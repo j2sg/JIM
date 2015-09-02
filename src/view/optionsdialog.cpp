@@ -114,6 +114,7 @@ void View::OptionsDialog::createWidgets()
                                                tr("Application")));
     _listWidget -> addItem(new QListWidgetItem(QIcon(":/images/loadinvoice.png"),
                                                tr("Invoicing")));
+    _listWidget -> setFixedWidth(1.1 * _listWidget -> sizeHintForColumn(0) + 2 * _listWidget -> frameWidth());
 
     _stackedLayout = new QStackedLayout;
     _stackedLayout -> addWidget(_applicationPage);
