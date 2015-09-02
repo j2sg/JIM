@@ -105,7 +105,7 @@ QVariant View::OpenInvoiceModel::headerData(int section, Qt::Orientation orienta
             case ColumnOpenInvoiceDate:
                 return QObject::tr("Date");
             case ColumnOpenInvoiceEntityName:
-                return (_type ? QObject::tr("Customer") : QObject::tr("Supplier"));
+                return QObject::tr("Entity");
             case ColumnOpenInvoiceTotal:
                 return QObject::tr("Total");
             }

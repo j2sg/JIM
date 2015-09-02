@@ -23,7 +23,6 @@
 
 #include <QAbstractTableModel>
 #include <QList>
-#include "types.h"
 
 namespace Model
 {
@@ -39,8 +38,8 @@ namespace View
     class OpenInvoiceModel : public QAbstractTableModel
     {
     public:
-        OpenInvoiceModel(QList<Model::Domain::Invoice *> *invoices, Model::Domain::InvoiceType type, int precision = 2, QObject *parent = 0)
-            : QAbstractTableModel(parent), _invoices(invoices), _type(type), _precision(precision) {}
+        OpenInvoiceModel(QList<Model::Domain::Invoice *> *invoices, int precision = 2, QObject *parent = 0)
+            : QAbstractTableModel(parent), _invoices(invoices), _precision(precision) {}
         ~OpenInvoiceModel();
         QList<Model::Domain::Invoice *> *invoices();
         void setInvoices(QList<Model::Domain::Invoice *> *invoices);
@@ -50,7 +49,6 @@ namespace View
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     private:
         QList<Model::Domain::Invoice *> *_invoices;
-        Model::Domain::InvoiceType _type;
         int _precision;
     };
 }

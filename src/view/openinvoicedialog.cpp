@@ -233,7 +233,7 @@ void View::OpenInvoiceDialog::createWidgets()
 
     _invoicesTableView = new QTableView;
     QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(_type, _companyId, Model::Management::SearchByDateRange, QDate::currentDate(), QDate::currentDate());
-    _invoicesModel = new OpenInvoiceModel(invoices, _type, Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
+    _invoicesModel = new OpenInvoiceModel(invoices, Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
     _invoicesProxyModel = new OpenInvoiceProxyModel;
     _invoicesProxyModel -> setSourceModel(_invoicesModel);
     _invoicesTableView -> setModel(_invoicesProxyModel);
