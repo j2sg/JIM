@@ -349,7 +349,7 @@ void View::MainWindow::openInvoice(Model::Domain::Invoice *invoice)
         return;
 
     if(!invoice) {
-        OpenInvoiceDialog dialog(this);
+        OpenInvoiceDialog dialog(_company -> id(), this);
 
         if(!dialog.exec())
             return;

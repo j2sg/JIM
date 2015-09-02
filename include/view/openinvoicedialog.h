@@ -27,23 +27,36 @@
 QT_BEGIN_NAMESPACE
 class QLabel;
 class QComboBox;
-class QDateEdit;
 class QTableView;
 class QLineEdit;
 class QPushButton;
 QT_END_NAMESPACE
 
+#define COLUMN_OPEN_INVOICE_ID_WIDTH 50
+#define COLUMN_OPEN_INVOICE_DATE_WIDTH 100
+#define COLUMN_OPEN_INVOICE_ENTITY_NAME_WIDTH 200
+#define COLUMN_OPEN_INVOICE_TOTAL_WIDTH 100
+
 namespace View
 {
+    class OpenInvoiceModel;
+
+    class OpenInvoiceProxyModel;
+
     class OpenInvoiceDialog : public QDialog
     {
         Q_OBJECT
     public:
-        OpenInvoiceDialog(QWidget *parent = 0);
+        OpenInvoiceDialog(int companyId, QWidget *parent = 0);
         void done(int result);
         int id() const;
         Model::Domain::InvoiceType type() const;
     private slots:
+        void currentIndexChangedOnTypeOrInvoicesComboBox();
+        void currentIndexChangedOnStatusComboBox();
+        void rowSelectionChangedOnInvoicesTableView();
+        void doubleClickedOnInvoicesTableView();
+        void currentIndexChangedOnEntityComboBox();
         void textChangedOnIdLineEdit();
     private:
         void createWidgets();
@@ -53,18 +66,19 @@ namespace View
         QComboBox *_typeComboBox;
         QLabel *_invoicesLabel;
         QComboBox *_invoicesComboBox;
-        QLabel *_beginLabel;
-        QDateEdit *_beginDateEdit;
-        QLabel *_endLabel;
-        QDateEdit *_endDateEdit;
+        QLabel *_statusLabel;
+        QComboBox *_statusComboBox;
         QTableView *_invoicesTableView;
+        OpenInvoiceModel *_invoicesModel;
+        OpenInvoiceProxyModel *_invoicesProxyModel;
         QLabel *_idLabel;
         QLineEdit *_idLineEdit;
-        QLabel *_filterLabel;
-        QComboBox *_filterComboBox;
+        QLabel *_entityLabel;
+        QComboBox *_entityComboBox;
         QPushButton *_openButton;
         QPushButton *_cancelButton;
 
+        int _companyId;
         int _id;
         Model::Domain::InvoiceType _type;
     };
