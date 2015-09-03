@@ -22,6 +22,7 @@
 #define ENTITY_H
 
 #include <QString>
+#include <QDate>
 #include <iostream>
 #include "tax.h"
 #include "types.h"
@@ -70,6 +71,8 @@ namespace Model
             const QString &web() const;
             void setNotes(const QString &notes);
             const QString &notes() const;
+            void setCreated(const QDate &created);
+            const QDate &created() const;
             virtual void setTaxOnSale(TaxFlag taxOnSale);
             virtual TaxFlag taxOnSale() const;
             virtual void setTaxOnBuy(TaxFlag taxOnBuy);
@@ -91,6 +94,7 @@ namespace Model
             QString _email;
             QString _web;
             QString _notes;
+            QDate _created;
         };
     }
 }

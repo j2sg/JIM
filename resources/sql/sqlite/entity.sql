@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS entity (
    email     TEXT,
    web       TEXT,
    notes     TEXT,
+   created   TEXT,
    taxOnSale INTEGER CONSTRAINT entity_tax_on_sale_def_ct DEFAULT 7,
    taxOnBuy  INTEGER CONSTRAINT entity_tax_on_buy_def_ct DEFAULT 7,
    CONSTRAINT entity_pk_ct  PRIMARY KEY(id, type),

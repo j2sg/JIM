@@ -25,6 +25,7 @@ Model::Domain::Entity::Entity(EntityType type, int id, const QString &vatin, con
 {
     _country = _province = _city = _address = _pc = _email = _web = _notes = QString();
     _telephone = _mobile = _fax = 0;
+    _created = QDate::currentDate();
 }
 
 bool Model::Domain::Entity::operator==(const Entity &entity) const
@@ -184,6 +185,16 @@ void Model::Domain::Entity::setNotes(const QString &notes)
 const QString &Model::Domain::Entity::notes() const
 {
     return _notes;
+}
+
+void Model::Domain::Entity::setCreated(const QDate &created)
+{
+    _created = created;
+}
+
+const QDate &Model::Domain::Entity::created() const
+{
+    return _created;
 }
 
 void Model::Domain::Entity::setTaxOnSale(TaxFlag taxOnSale)

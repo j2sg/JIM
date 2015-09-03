@@ -41,21 +41,22 @@ std::ostream &Model::Domain::operator<<(std::ostream &os, const Category &catego
 
 std::ostream &Model::Domain::operator<<(std::ostream &os, const Entity &entity)
 {
-    return os << entity._id                     << std::endl
-              << entity._type                   << std::endl
-              << entity._vatin.toStdString()    << std::endl
-              << entity._name.toStdString()     << std::endl
-              << entity._country.toStdString()  << std::endl
-              << entity._province.toStdString() << std::endl
-              << entity._city.toStdString()     << std::endl
-              << entity._address.toStdString()  << std::endl
-              << entity._pc.toStdString()       << std::endl
-              << entity._telephone              << std::endl
-              << entity._mobile                 << std::endl
-              << entity._fax                    << std::endl
-              << entity._email.toStdString()    << std::endl
-              << entity._web.toStdString()      << std::endl
-              << entity._notes.toStdString()    << std::endl;
+    return os << entity._id                                           << std::endl
+              << entity._type                                         << std::endl
+              << entity._vatin.toStdString()                          << std::endl
+              << entity._name.toStdString()                           << std::endl
+              << entity._country.toStdString()                        << std::endl
+              << entity._province.toStdString()                       << std::endl
+              << entity._city.toStdString()                           << std::endl
+              << entity._address.toStdString()                        << std::endl
+              << entity._pc.toStdString()                             << std::endl
+              << entity._telephone                                    << std::endl
+              << entity._mobile                                       << std::endl
+              << entity._fax                                          << std::endl
+              << entity._email.toStdString()                          << std::endl
+              << entity._web.toStdString()                            << std::endl
+              << entity._notes.toStdString()                          << std::endl
+              << entity._created.toString(DATE_FORMAT).toStdString();
 }
 
 
@@ -63,7 +64,7 @@ std::ostream &Model::Domain::operator<<(std::ostream &os, const Invoice &invoice
 {
     os << invoice._id                            << std::endl
        << invoice._type                          << std::endl
-       << *invoice._company                     << std::endl
+       << *invoice._company                      << std::endl
        << *invoice._entity                       << std::endl
        << invoice._date.toString().toStdString() << std::endl
        << invoice._place.toStdString()           << std::endl;

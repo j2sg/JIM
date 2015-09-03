@@ -19,6 +19,7 @@
  **/
 
 #include "entitymanager.h"
+#include "entity.h"
 #include "company.h"
 #include "sqlagent.h"
 #include "types.h"
@@ -27,7 +28,7 @@ bool Model::Management::EntityManager::create(const Model::Domain::Entity &entit
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("INSERT INTO entity VALUES(%1, %2, '%3', '%4', '%5', '%6', "
-                          "'%7', '%8', '%9', %10, %11, %12, '%13', '%14', '%15', 7, 7)")
+                          "'%7', '%8', '%9', %10, %11, %12, '%13', '%14', '%15', '%16', 7, 7)")
                       .arg(entity.id())
                       .arg(static_cast<int>(entity.type()))
                       .arg(entity.vatin())
@@ -42,7 +43,8 @@ bool Model::Management::EntityManager::create(const Model::Domain::Entity &entit
                       .arg(entity.fax())
                       .arg(entity.email())
                       .arg(entity.web())
-                      .arg(entity.notes());
+                      .arg(entity.notes())
+                      .arg(entity.created().toString(DATE_FORMAT));
 
     return agent -> insert(sql);
 }
@@ -52,7 +54,7 @@ bool Model::Management::EntityManager::modify(const Model::Domain::Entity &entit
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
     QString sql = QString("UPDATE entity SET vatin='%3', name='%4', country='%5', "
                           "province='%6', city='%7', address='%8', pc='%9', telephone=%10, "
-                          "mobile=%11, fax=%12, email='%13', web='%14', notes='%15' "
+                          "mobile=%11, fax=%12, email='%13', web='%14', notes='%15' created='%16' "
                           "WHERE id=%1 AND type=%2")
                       .arg(entity.id())
                       .arg(static_cast<int>(entity.type()))
@@ -68,7 +70,9 @@ bool Model::Management::EntityManager::modify(const Model::Domain::Entity &entit
                       .arg(entity.fax())
                       .arg(entity.email())
                       .arg(entity.web())
-                      .arg(entity.notes());
+                      .arg(entity.notes())
+                      .arg(entity.created().toString(DATE_FORMAT));
+
 
     return agent -> update(sql);
 }
@@ -106,6 +110,7 @@ Model::Domain::Entity *Model::Management::EntityManager::get(int id, Model::Doma
         QString email    = (result -> at(0)).at(12).toString();
         QString web      = (result -> at(0)).at(13).toString();
         QString notes    = (result -> at(0)).at(14).toString();
+        QDate created    = QDate::fromString((result -> at(0)).at(15).toString(), DATE_FORMAT);
 
         entity = (type == Model::Domain::CompanyEntity ?
                       new Model::Domain::Company(id, vatin, name) :
@@ -121,6 +126,7 @@ Model::Domain::Entity *Model::Management::EntityManager::get(int id, Model::Doma
         entity -> setEmail(email);
         entity -> setWeb(web);
         entity -> setNotes(notes);
+        entity -> setCreated(created);
     }
 
     delete result;
@@ -166,6 +172,7 @@ QList<Model::Domain::Entity *> *Model::Management::EntityManager::getAllByType(M
         QString email    = row.at(12).toString();
         QString web      = row.at(13).toString();
         QString notes    = row.at(14).toString();
+        QDate created    = QDate::fromString(row.at(15).toString(), DATE_FORMAT);
 
         Model::Domain::Entity *entity = (type == Model::Domain::CompanyEntity ?
                                              new Model::Domain::Company(id, vatin, name) :
@@ -181,6 +188,7 @@ QList<Model::Domain::Entity *> *Model::Management::EntityManager::getAllByType(M
         entity -> setEmail(email);
         entity -> setWeb(web);
         entity -> setNotes(notes);
+        entity -> setCreated(created);
 
         entities -> push_back(entity);
     }
