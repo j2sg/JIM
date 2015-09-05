@@ -20,6 +20,7 @@
 
 #include "entitymodel.h"
 #include "entity.h"
+#include "invoicemanager.h"
 
 View::Management::EntityModel::~EntityModel()
 {
@@ -98,7 +99,7 @@ QVariant View::Management::EntityModel::data(const QModelIndex &index, int role)
     if(index.isValid()) {
         if(role == Qt::TextAlignmentRole) {
             switch(index.column()) {
-            case ColumnEntityId:
+            case ColumnEntityId: case ColumnEntityCreated: case ColumnEntityInvoices:
                 return int(Qt::AlignCenter);
             case ColumnEntityName:
                 return int(Qt::AlignLeft | Qt::AlignVCenter);
@@ -107,9 +108,17 @@ QVariant View::Management::EntityModel::data(const QModelIndex &index, int role)
             Model::Domain::Entity *entity = _entities -> at(index.row());
             switch(index.column()) {
             case ColumnEntityId:
-                return entity -> id();
+                return QString::number(entity -> id()).rightJustified(4, '0');
             case ColumnEntityName:
                 return entity -> name();
+            case ColumnEntityCreated:
+                return entity -> created().toString(DATE_FORMAT);
+            case ColumnEntityInvoices:
+                return _type == Model::Domain::CompanyEntity ?
+                            QString("%1 (%2/%3)").arg(Model::Management::InvoiceManager::countAll(entity -> id()))
+                                                 .arg(Model::Management::InvoiceManager::countByType(Model::Domain::Buy, entity -> id()))
+                                                 .arg(Model::Management::InvoiceManager::countByType(Model::Domain::Sale, entity -> id())) :
+                            QString::number(Model::Management::InvoiceManager::countByEntity(_type, entity -> id()));
             }
         }
     }
@@ -120,14 +129,16 @@ QVariant View::Management::EntityModel::data(const QModelIndex &index, int role)
 QVariant View::Management::EntityModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(role == Qt::DisplayRole) {
-        if(orientation == Qt::Vertical)
-            return QString::number(section + 1);
-        else {
+        if(orientation == Qt::Horizontal) {
             switch(section) {
             case ColumnEntityId:
                 return QObject::tr("ID");
             case ColumnEntityName:
                 return QObject::tr("Name");
+            case ColumnEntityCreated:
+                return _type == Model::Domain::CompanyEntity ? QObject::tr("Created") : QObject::tr("Registered");
+            case ColumnEntityInvoices:
+                return _type == Model::Domain::CompanyEntity ? QObject::tr("Invoices (B/S)") : QObject::tr("Invoices");
             }
         }
     }

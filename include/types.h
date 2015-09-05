@@ -125,6 +125,8 @@ namespace View
         {
             ColumnEntityId,
             ColumnEntityName,
+            ColumnEntityCreated,
+            ColumnEntityInvoices,
             ColumnEntityCount
         } ColumnEntity;
 

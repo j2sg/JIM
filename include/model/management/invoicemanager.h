@@ -44,6 +44,9 @@ namespace Model
                                                            int entityId = NO_ID, double minTotal = 0.0, double maxTotal = 0.0, bool paid = true);
             static QList<Model::Domain::Invoice *> *unpaids(Model::Domain::InvoiceType type, int companyId);
             static int getId(Model::Domain::InvoiceType type, int companyId);
+            static int countByType(Model::Domain::InvoiceType type, int companyId);
+            static int countByEntity(Model::Domain::EntityType type, int entityId);
+            static int countAll(int companyId);
         };
     }
 }

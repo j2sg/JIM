@@ -23,6 +23,7 @@
 
 #include <QAbstractTableModel>
 #include <QList>
+#include "types.h"
 
 namespace Model
 {
@@ -39,8 +40,8 @@ namespace View
         class EntityModel : public QAbstractTableModel
         {
         public:
-            EntityModel(QList<Model::Domain::Entity *> *entities, QObject *parent = 0)
-                : QAbstractTableModel(parent), _entities(entities) {}
+            EntityModel(QList<Model::Domain::Entity *> *entities, Model::Domain::EntityType type, QObject *parent = 0)
+                : QAbstractTableModel(parent), _entities(entities), _type(type) {}
             ~EntityModel();
             QList<Model::Domain::Entity *> *entities();
             void setEntities(QList<Model::Domain::Entity *> *entities);
@@ -53,6 +54,7 @@ namespace View
             QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         private:
             QList<Model::Domain::Entity *> *_entities;
+            Model::Domain::EntityType _type;
         };
     }
 }

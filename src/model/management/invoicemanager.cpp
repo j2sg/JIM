@@ -362,3 +362,48 @@ int Model::Management::InvoiceManager::getId(Model::Domain::InvoiceType type, in
 
     return NO_ID;
 }
+
+int Model::Management::InvoiceManager::countByType(Model::Domain::InvoiceType type, int companyId)
+{
+    Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+    QString sql = QString("SELECT count(*) FROM invoice WHERE type=%1 AND companyId=%2")
+                      .arg(static_cast<int>(type))
+                      .arg(companyId);
+    QVector<QVector<QVariant> > *result = agent -> select(sql);
+
+    if(!(result -> isEmpty())) {
+        int res = (result -> at(0)).at(0).toInt();
+        delete result;
+
+        return res;
+    }
+
+    delete result;
+
+    return 0;
+}
+
+int Model::Management::InvoiceManager::countByEntity(Model::Domain::EntityType type, int entityId)
+{
+    Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+    QString sql = QString("SELECT count(*) FROM invoice WHERE entityType=%1 AND entityId=%2")
+                      .arg(static_cast<int>(type))
+                      .arg(entityId);
+    QVector<QVector<QVariant> > *result = agent -> select(sql);
+
+    if(!(result -> isEmpty())) {
+        int res = (result -> at(0)).at(0).toInt();
+        delete result;
+
+        return res;
+    }
+
+    delete result;
+
+    return 0;
+}
+
+int Model::Management::InvoiceManager::countAll(int companyId)
+{
+    return countByType(Model::Domain::Buy, companyId) + countByType(Model::Domain::Sale, companyId);
+}

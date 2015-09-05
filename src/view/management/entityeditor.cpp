@@ -114,9 +114,8 @@ void View::Management::EntityEditor::delEntity()
 void View::Management::EntityEditor::createWidgets()
 {
     _entitiesTableView = new QTableView;
-    _entityModel = new EntityModel(_type == Model::Domain::CompanyEntity ?
-                                       Model::Management::CompanyManager::getAll() :
-                                       Model::Management::EntityManager::getAllByType(_type));
+    _entityModel = new EntityModel(_type == Model::Domain::CompanyEntity ? Model::Management::CompanyManager::getAll() :
+                                                                           Model::Management::EntityManager::getAllByType(_type), _type);
     _entitiesTableView -> setModel(_entityModel);
     _entitiesTableView -> setAlternatingRowColors(true);
     _entitiesTableView -> setShowGrid(false);    
@@ -126,6 +125,8 @@ void View::Management::EntityEditor::createWidgets()
     _entitiesTableView -> setFocusPolicy(Qt::NoFocus);
     _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_ID_WIDTH);
     _entitiesTableView -> setColumnWidth(ColumnEntityName, COLUMN_ENTITY_NAME_WIDTH);
+    _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_CREATED_WIDTH);
+    _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_INVOICES_WIDTH);
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
         _entitiesTableView -> horizontalHeader()-> setResizeMode(QHeaderView::Fixed);
         _entitiesTableView -> horizontalHeader()-> setResizeMode(ColumnEntityName, QHeaderView::Stretch);

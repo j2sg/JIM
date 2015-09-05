@@ -146,7 +146,7 @@ void View::Management::EntitySelector::createWidgets()
     _lineEdit -> setEnabled(false);
 
     _entitiesTableView = new QTableView;
-    _entityModel = new EntityModel(Model::Management::EntityManager::getAllByType(_type));
+    _entityModel = new EntityModel(Model::Management::EntityManager::getAllByType(_type), _type);
     _entityProxyModel = new EntityProxyModel;
     _entityProxyModel -> setSourceModel(_entityModel);
     _entitiesTableView -> setModel(_entityProxyModel);
