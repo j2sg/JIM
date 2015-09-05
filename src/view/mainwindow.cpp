@@ -28,8 +28,8 @@
 #include "invoiceeditor.h"
 #include "invoicesearch.h"
 #include "invoicesearchresult.h"
+#include "companyeditor.h"
 #include "businesseditor.h"
-#include "entityeditor.h"
 #include "entitydialog.h"
 #include "company.h"
 #include "companymanager.h"
@@ -483,7 +483,7 @@ void View::MainWindow::closeAllExcept()
 void View::MainWindow::manageCompany()
 {
     if(!_companyEditor)
-        _companyEditor = new View::Management::EntityEditor(Model::Domain::CompanyEntity);
+        _companyEditor = new View::Management::CompanyEditor;
 
     _companyEditor -> show();
     _companyEditor -> activateWindow();

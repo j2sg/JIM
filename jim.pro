@@ -120,7 +120,8 @@ HEADERS += include/global.h \
     include/view/setuppassworddialog.h \
     include/view/openinvoicedialog.h \
     include/view/openinvoicemodel.h \
-    include/view/openinvoiceproxymodel.h
+    include/view/openinvoiceproxymodel.h \
+    include/view/management/companyeditor.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
@@ -191,7 +192,8 @@ SOURCES += src/main.cpp \
     src/view/setuppassworddialog.cpp \
     src/view/openinvoicedialog.cpp \
     src/view/openinvoicemodel.cpp \
-    src/view/openinvoiceproxymodel.cpp
+    src/view/openinvoiceproxymodel.cpp \
+    src/view/management/companyeditor.cpp
 
 RESOURCES += resources/jim.qrc
 

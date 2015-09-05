@@ -57,7 +57,7 @@ namespace View
 
     namespace Management
     {
-        class EntityEditor;
+        class CompanyEditor;
         class BusinessEditor;
     }
 
@@ -227,7 +227,7 @@ namespace View
         QLabel *_storageStateLabel;
         QPrinter *_printer;
 
-        View::Management::EntityEditor *_companyEditor;
+        View::Management::CompanyEditor *_companyEditor;
         View::Management::BusinessEditor *_businessEditor;
 
         Model::Domain::Entity *_company;
