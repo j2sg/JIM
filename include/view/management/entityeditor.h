@@ -65,6 +65,7 @@ namespace View
         private:
             void createWidgets();
             void createConnections();
+            bool verifyDelete();
 
             QTableView *_entitiesTableView;
             EntityModel *_entityModel;
