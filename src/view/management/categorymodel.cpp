@@ -108,7 +108,7 @@ QVariant View::Management::CategoryModel::data(const QModelIndex &index, int rol
             Model::Domain::Category *category = _categories -> at(index.row());
             switch(index.column()) {
             case ColumnCategoryId:
-                return category -> id();
+                return QString::number(category -> id()).rightJustified(4, '0');
             case ColumnCategoryName:
                 return category -> name();
             case ColumnCategoryVat:
@@ -139,9 +139,7 @@ QVariant View::Management::CategoryModel::data(const QModelIndex &index, int rol
 QVariant View::Management::CategoryModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(role == Qt::DisplayRole) {
-        if(orientation == Qt::Vertical)
-            return QString::number(section + 1);
-        else {
+        if(orientation == Qt::Horizontal) {
             switch(section) {
             case ColumnCategoryId:
                 return QObject::tr("ID");

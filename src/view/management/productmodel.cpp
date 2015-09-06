@@ -111,7 +111,7 @@ QVariant View::Management::ProductModel::data(const QModelIndex &index, int role
             Model::Domain::Product *product = _products -> at(index.row());
             switch(index.column()) {
             case ColumnProductId:
-                return product -> id();
+                return QString::number(product -> id()).rightJustified(4, '0');
             case ColumnProductName:
                 return product -> name();
             case ColumnProductPrice:
@@ -126,9 +126,7 @@ QVariant View::Management::ProductModel::data(const QModelIndex &index, int role
 QVariant View::Management::ProductModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(role == Qt::DisplayRole) {
-        if(orientation == Qt::Vertical)
-            return QString::number(section + 1);
-        else {
+        if(orientation == Qt::Horizontal) {
             switch(section) {
             case ColumnProductId:
                 return QObject::tr("ID");

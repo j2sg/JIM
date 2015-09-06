@@ -125,14 +125,14 @@ void View::Management::EntityEditor::createWidgets()
     _entitiesTableView -> setFocusPolicy(Qt::NoFocus);
     _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_ID_WIDTH);
     _entitiesTableView -> setColumnWidth(ColumnEntityName, COLUMN_ENTITY_NAME_WIDTH);
-    _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_CREATED_WIDTH);
-    _entitiesTableView -> setColumnWidth(ColumnEntityId, COLUMN_ENTITY_INVOICES_WIDTH);
+    _entitiesTableView -> setColumnWidth(ColumnEntityCreated, COLUMN_ENTITY_CREATED_WIDTH);
+    _entitiesTableView -> setColumnWidth(ColumnEntityInvoices, COLUMN_ENTITY_INVOICES_WIDTH);
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-        _entitiesTableView -> horizontalHeader()-> setResizeMode(QHeaderView::Fixed);
-        _entitiesTableView -> horizontalHeader()-> setResizeMode(ColumnEntityName, QHeaderView::Stretch);
+        _entitiesTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
+        _entitiesTableView -> horizontalHeader() -> setResizeMode(ColumnEntityName, QHeaderView::Stretch);
     #else
-        _entitiesTableView -> horizontalHeader()-> setSectionResizeMode(QHeaderView::Fixed);
-        _entitiesTableView -> horizontalHeader()-> setSectionResizeMode(ColumnEntityName, QHeaderView::Stretch);
+        _entitiesTableView -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Fixed);
+        _entitiesTableView -> horizontalHeader() -> setSectionResizeMode(ColumnEntityName, QHeaderView::Stretch);
     #endif
 
     _addEntityButton = new QPushButton(tr("&Add"));
@@ -150,7 +150,21 @@ void View::Management::EntityEditor::createWidgets()
     topLayout -> addWidget(_modEntityButton, 1, 4, 1, 1);
     topLayout -> addWidget(_delEntityButton, 1, 5, 1, 1);
 
-    QGroupBox *entitiesGroupBox = new QGroupBox(tr("List"));
+    QString groupBoxTittle;
+
+    switch(_type) {
+    case Model::Domain::CompanyEntity:
+        groupBoxTittle = tr("Company List");
+        break;
+    case Model::Domain::CustomerEntity:
+        groupBoxTittle = tr("Customer List");
+        break;
+    case Model::Domain::SupplierEntity:
+        groupBoxTittle = tr("Supplier List");
+        break;
+    }
+
+    QGroupBox *entitiesGroupBox = new QGroupBox(groupBoxTittle);
     entitiesGroupBox -> setLayout(topLayout);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
