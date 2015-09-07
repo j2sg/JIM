@@ -80,6 +80,7 @@ namespace View
             void stateChangedOnAutoIdCheckBox();
             void taxChangedOnTaxApplying(Model::Domain::TaxFlag taxApplying);
             void currentIndexChangedOnDiscountTypeComboBox();
+            void valueChangedOnDiscountDoubleSpinBox();
             void stateChangedOnPaidCheckBox();
             void updateId();
             void selectEntity();

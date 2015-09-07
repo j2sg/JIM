@@ -133,6 +133,13 @@ bool View::Invoicing::InvoiceEditor::print()
     return false;
 }
 
+void View::Invoicing::InvoiceEditor::valueChangedOnDiscountDoubleSpinBox()
+{
+    _invoice -> setDiscountValue(_discountDoubleSpinBox -> value());
+
+    updateTax();
+}
+
 void View::Invoicing::InvoiceEditor::stateChangedOnAutoIdCheckBox()
 {
     _idLineEdit -> setEnabled(!_autoIdCheckBox -> isChecked());
@@ -147,7 +154,20 @@ void View::Invoicing::InvoiceEditor::taxChangedOnTaxApplying(Model::Domain::TaxF
 
 void View::Invoicing::InvoiceEditor::currentIndexChangedOnDiscountTypeComboBox()
 {
+    Model::Domain::DiscountType type;
+
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> itemData(_discountTypeComboBox -> currentIndex()).toInt());
+    #else
+        type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
+    #endif
+
+    _invoice -> setDiscountType(type);
+
     updateDiscount();
+
+    if(type == Model::Domain::Amount || type == Model::Domain::Percent)
+        _discountDoubleSpinBox -> setFocus();
 }
 
 void View::Invoicing::InvoiceEditor::invoiceModified(bool modified)
@@ -211,7 +231,6 @@ void View::Invoicing::InvoiceEditor::updateTax()
                                (_invoice -> tax())[Model::Domain::PIT].value(),
                                _invoice -> deduction());
 
-    updateDiscount();
     updateTotals();
 }
 
@@ -225,7 +244,7 @@ void View::Invoicing::InvoiceEditor::updateDiscount()
         type = static_cast<Model::Domain::DiscountType>(_discountTypeComboBox -> currentData().toInt());
     #endif
 
-    _discountTypeComboBox->setEnabled(_invoice -> subtotal() != 0);
+    _discountTypeComboBox -> setEnabled(_invoice -> subtotal() != 0);
     _discountDoubleSpinBox -> setEnabled(type != Model::Domain::NoDiscount);
 
     if(type == Model::Domain::NoDiscount)
@@ -509,10 +528,18 @@ void View::Invoicing::InvoiceEditor::createConnections()
             this, SLOT(invoiceModified()));
     connect(_operationEditor, SIGNAL(dataChanged()),
             this, SLOT(updateTax()));
+    connect(_operationEditor, SIGNAL(dataChanged()),
+            this, SLOT(updateDiscount()));
     connect(_taxApplyingWidget, SIGNAL(taxApplyingChanged(Model::Domain::TaxFlag)),
             this, SLOT(taxChangedOnTaxApplying(Model::Domain::TaxFlag)));
     connect(_discountTypeComboBox, SIGNAL(currentIndexChanged(QString)),
             this, SLOT(currentIndexChangedOnDiscountTypeComboBox()));
+    connect(_discountTypeComboBox, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(invoiceModified()));
+    connect(_discountDoubleSpinBox, SIGNAL(valueChanged(double)),
+            this, SLOT(valueChangedOnDiscountDoubleSpinBox()));
+    connect(_discountDoubleSpinBox, SIGNAL(valueChanged(double)),
+            this, SLOT(invoiceModified()));
     connect(_paidCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnPaidCheckBox()));
     connect(_paidCheckBox, SIGNAL(stateChanged(int)),
