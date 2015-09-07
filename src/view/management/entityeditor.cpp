@@ -26,6 +26,7 @@
 #include "companymanager.h"
 #include "entity.h"
 #include "company.h"
+#include "persistencemanager.h"
 #include <QRadioButton>
 #include <QComboBox>
 #include <QLineEdit>
@@ -84,8 +85,25 @@ void View::Management::EntityEditor::textChangedOnLineEdit(const QString& text)
 void View::Management::EntityEditor::rowSelectionChanged()
 {
     int row = _entitiesTableView -> currentIndex().row();
+    _defaultButton -> setEnabled(row != -1);
     _modEntityButton -> setEnabled(row != -1);
     _delEntityButton -> setEnabled(row != -1);
+}
+
+void View::Management::EntityEditor::defEntity()
+{
+    int row = _entitiesTableView -> currentIndex().row();
+    Model::Domain::Entity *entity = _entityModel -> entities() -> at(row);
+    QString currDefaultCompany = Persistence::Manager::readConfig("DefaultCompany").toString();
+
+    if(currDefaultCompany == entity -> name())
+        Persistence::Manager::writeConfig("", "DefaultCompany");
+    else
+        Persistence::Manager::writeConfig(entity -> name(), "DefaultCompany");
+
+    _entityModel -> defaultEntity(row);
+
+    rowSelectionChanged();
 }
 
 void View::Management::EntityEditor::addEntity()
@@ -182,6 +200,8 @@ void View::Management::EntityEditor::createWidgets()
         _entitiesTableView -> horizontalHeader() -> setSectionResizeMode(ColumnEntityName, QHeaderView::Stretch);
     #endif
 
+    _defaultButton = new QPushButton(tr("Default"));
+    _defaultButton -> setEnabled(false);
     _addEntityButton = new QPushButton(tr("&Add"));
     _addEntityButton -> setIcon(QIcon(":/images/add.png"));
     _modEntityButton = new QPushButton(tr("&Modify"));
@@ -199,6 +219,8 @@ void View::Management::EntityEditor::createWidgets()
         topLayout -> addWidget(_lineEdit, 1, 3, 1, 3);
     }
     topLayout -> addWidget(_entitiesTableView, 2, 0, 1, 6);
+    if(_type == Model::Domain::CompanyEntity)
+        topLayout -> addWidget(_defaultButton, 3, 0, 1, 1);
     topLayout -> addWidget(_addEntityButton, 3, 3, 1, 1);
     topLayout -> addWidget(_modEntityButton, 3, 4, 1, 1);
     topLayout -> addWidget(_delEntityButton, 3, 5, 1, 1);
@@ -240,6 +262,8 @@ void View::Management::EntityEditor::createConnections()
             this, SLOT(rowSelectionChanged()));
     connect(_entitiesTableView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(modEntity()));
+    connect(_defaultButton, SIGNAL(clicked()),
+            this, SLOT(defEntity()));
     connect(_addEntityButton, SIGNAL(clicked()),
             this, SLOT(addEntity()));
     connect(_modEntityButton, SIGNAL(clicked()),

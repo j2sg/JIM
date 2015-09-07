@@ -21,6 +21,8 @@
 #include "entitymodel.h"
 #include "entity.h"
 #include "invoicemanager.h"
+#include "persistencemanager.h"
+#include <QFont>
 
 View::Management::EntityModel::~EntityModel()
 {
@@ -80,6 +82,17 @@ bool View::Management::EntityModel::removeEntity(int k)
     return true;
 }
 
+bool View::Management::EntityModel::defaultEntity(int k)
+{
+    if(k < 0  || k > _entities -> size())
+        return false;
+
+    beginResetModel();
+    endResetModel();
+
+    return true;
+}
+
 int View::Management::EntityModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -120,6 +133,15 @@ QVariant View::Management::EntityModel::data(const QModelIndex &index, int role)
                                                  .arg(Model::Management::InvoiceManager::countByType(Model::Domain::Sale, entity -> id())) :
                             QString::number(Model::Management::InvoiceManager::countByEntity(_type, entity -> id()));
             }
+        } else if(role == Qt::FontRole && _type == Model::Domain::CompanyEntity) {
+            Model::Domain::Entity *entity = _entities -> at(index.row());
+
+            if(entity->name() == Persistence::Manager::readConfig("DefaultCompany").toString()) {
+                QFont boldFont;
+                boldFont.setBold(true);
+                return boldFont;
+            }
+
         }
     }
 

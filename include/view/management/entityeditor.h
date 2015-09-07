@@ -67,6 +67,7 @@ namespace View
             void currentIndexChangedOnComboBox();
             void textChangedOnLineEdit(const QString& text);
             void rowSelectionChanged();
+            void defEntity();
             void addEntity();
             void modEntity();
             void delEntity();
@@ -82,6 +83,7 @@ namespace View
             QTableView *_entitiesTableView;
             EntityModel *_entityModel;
             EntityProxyModel *_entityProxyModel;
+            QPushButton *_defaultButton;
             QPushButton *_addEntityButton;
             QPushButton *_modEntityButton;
             QPushButton *_delEntityButton;

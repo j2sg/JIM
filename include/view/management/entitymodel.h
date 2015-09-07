@@ -48,6 +48,7 @@ namespace View
             bool insertEntity(int k, Model::Domain::Entity *entity);
             bool modifyEntity(int k);
             bool removeEntity(int k);
+            bool defaultEntity(int k);
             int rowCount(const QModelIndex &parent) const;
             int columnCount(const QModelIndex &parent) const;
             QVariant data(const QModelIndex &index, int role) const;
