@@ -21,10 +21,14 @@
 #include "entityeditor.h"
 #include "entitydialog.h"
 #include "entitymodel.h"
+#include "entityproxymodel.h"
 #include "entitymanager.h"
 #include "companymanager.h"
 #include "entity.h"
 #include "company.h"
+#include <QRadioButton>
+#include <QComboBox>
+#include <QLineEdit>
 #include <QTableView>
 #include <QPushButton>
 #include <QHeaderView>
@@ -49,6 +53,32 @@ void View::Management::EntityEditor::addEntityFromInvoice(const Model::Domain::E
 {
     int rows = _entityModel -> rowCount(QModelIndex());
     _entityModel -> insertEntity(rows, new Model::Domain::Entity(entity));
+}
+
+void View::Management::EntityEditor::toggleOnRadioButton()
+{
+    bool isChecked = _filterByRadioButton -> isChecked();
+
+    _comboBox -> setEnabled(isChecked);
+    _lineEdit -> setEnabled(isChecked);
+
+    if(isChecked)
+        _entityProxyModel -> setFilter(_lineEdit -> text(),
+                                       static_cast<Model::Management::FilterEntityMode>(_comboBox -> itemData(_comboBox -> currentIndex()).toInt()));
+    else
+        _entityProxyModel -> setFilter("");
+}
+
+void View::Management::EntityEditor::currentIndexChangedOnComboBox()
+{
+    _entityProxyModel -> setFilter(_lineEdit -> text(),
+                                   static_cast<Model::Management::FilterEntityMode>(_comboBox -> itemData(_comboBox -> currentIndex()).toInt()));
+}
+
+void View::Management::EntityEditor::textChangedOnLineEdit(const QString& text)
+{
+    _entityProxyModel -> setFilter(text,
+                                   static_cast<Model::Management::FilterEntityMode>(_comboBox -> itemData(_comboBox -> currentIndex()).toInt()));
 }
 
 void View::Management::EntityEditor::rowSelectionChanged()
@@ -116,10 +146,24 @@ void View::Management::EntityEditor::delEntity()
 
 void View::Management::EntityEditor::createWidgets()
 {
+    _allRadioButton = new QRadioButton(tr("All"));
+    _filterByRadioButton = new QRadioButton(tr("Filter by"));
+    _allRadioButton -> setChecked(true);
+
+    _comboBox = new QComboBox;
+    _comboBox -> addItem(tr("name"), Model::Management::FilterEntityByName);
+    _comboBox -> addItem(tr("VATIN"), Model::Management::FilterEntityByVATIN);
+    _comboBox -> setEnabled(false);
+
+    _lineEdit = new QLineEdit;
+    _lineEdit -> setEnabled(false);
+
     _entitiesTableView = new QTableView;
     _entityModel = new EntityModel(_type == Model::Domain::CompanyEntity ? Model::Management::CompanyManager::getAll() :
                                                                            Model::Management::EntityManager::getAllByType(_type), _type);
-    _entitiesTableView -> setModel(_entityModel);
+    _entityProxyModel = new EntityProxyModel;
+    _entityProxyModel -> setSourceModel(_entityModel);
+    _entitiesTableView -> setModel(_entityProxyModel);
     _entitiesTableView -> setAlternatingRowColors(true);
     _entitiesTableView -> setShowGrid(false);    
     _entitiesTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
@@ -148,10 +192,16 @@ void View::Management::EntityEditor::createWidgets()
     _delEntityButton -> setEnabled(false);
 
     QGridLayout *topLayout = new QGridLayout;
-    topLayout -> addWidget(_entitiesTableView, 0, 0, 1, 6);
-    topLayout -> addWidget(_addEntityButton, 1, 3, 1, 1);
-    topLayout -> addWidget(_modEntityButton, 1, 4, 1, 1);
-    topLayout -> addWidget(_delEntityButton, 1, 5, 1, 1);
+    if(_type != Model::Domain::CompanyEntity) {
+        topLayout -> addWidget(_allRadioButton, 0, 0, 1, 2);
+        topLayout -> addWidget(_filterByRadioButton, 1, 0, 1, 2);
+        topLayout -> addWidget(_comboBox, 1, 2, 1, 1);
+        topLayout -> addWidget(_lineEdit, 1, 3, 1, 3);
+    }
+    topLayout -> addWidget(_entitiesTableView, 2, 0, 1, 6);
+    topLayout -> addWidget(_addEntityButton, 3, 3, 1, 1);
+    topLayout -> addWidget(_modEntityButton, 3, 4, 1, 1);
+    topLayout -> addWidget(_delEntityButton, 3, 5, 1, 1);
 
     QString groupBoxTittle;
 
@@ -178,6 +228,14 @@ void View::Management::EntityEditor::createWidgets()
 
 void View::Management::EntityEditor::createConnections()
 {
+    connect(_allRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(toggleOnRadioButton()));
+    connect(_filterByRadioButton, SIGNAL(toggled(bool)),
+            this, SLOT(toggleOnRadioButton()));
+    connect(_comboBox, SIGNAL(currentIndexChanged(QString)),
+            this, SLOT(currentIndexChangedOnComboBox()));
+    connect(_lineEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(textChangedOnLineEdit(QString)));
     connect(_entitiesTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(rowSelectionChanged()));
     connect(_entitiesTableView, SIGNAL(doubleClicked(QModelIndex)),

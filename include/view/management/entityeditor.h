@@ -30,6 +30,9 @@
 #define COLUMN_ENTITY_INVOICES_WIDTH 100
 
 QT_BEGIN_NAMESPACE
+class QRadioButton;
+class QComboBox;
+class QLineEdit;
 class QTableView;
 class QPushButton;
 QT_END_NAMESPACE
@@ -49,6 +52,8 @@ namespace View
 
         class EntityModel;
 
+        class EntityProxyModel;
+
         class EntityEditor : public QWidget
         {
             Q_OBJECT
@@ -58,6 +63,9 @@ namespace View
         public slots:
             void addEntityFromInvoice(const Model::Domain::Entity &entity);
         private slots:
+            void toggleOnRadioButton();
+            void currentIndexChangedOnComboBox();
+            void textChangedOnLineEdit(const QString& text);
             void rowSelectionChanged();
             void addEntity();
             void modEntity();
@@ -67,8 +75,13 @@ namespace View
             void createConnections();
             bool verifyDelete();
 
+            QRadioButton *_allRadioButton;
+            QRadioButton *_filterByRadioButton;
+            QComboBox *_comboBox;
+            QLineEdit *_lineEdit;
             QTableView *_entitiesTableView;
             EntityModel *_entityModel;
+            EntityProxyModel *_entityProxyModel;
             QPushButton *_addEntityButton;
             QPushButton *_modEntityButton;
             QPushButton *_delEntityButton;
