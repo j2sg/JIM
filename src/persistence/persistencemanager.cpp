@@ -58,7 +58,10 @@ bool Persistence::Manager::createConfig(bool overwrite)
     setting.setValue("Weight",                    DEFAULT_APPLICATION_WEIGHT_PRECISION);
     setting.endGroup();
     setting.beginGroup("Appearance");
-    setting.setValue("Geometry",                  QByteArray());
+    setting.setValue("MainWindowGeometry",        QByteArray());
+    setting.setValue("CompanyEditorGeometry",     QByteArray());
+    setting.setValue("InvoiceEditorGeometry",     QByteArray());
+    setting.setValue("BusinessEditorGeometry",    QByteArray());
     setting.setValue("Fullscreen",                false);
     setting.setValue("ShowMenuBar",               true);
     setting.setValue("ShowCompaniesToolBar",      true);

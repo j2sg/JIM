@@ -482,8 +482,10 @@ void View::MainWindow::closeAllExcept()
 
 void View::MainWindow::manageCompany()
 {
-    if(!_companyEditor)
+    if(!_companyEditor) {
         _companyEditor = new View::Management::CompanyEditor;
+        _companyEditor -> restoreGeometry(Persistence::Manager::readConfig("CompanyEditorGeometry", "Application/Appearance").toByteArray());
+    }
 
     _companyEditor -> show();
     _companyEditor -> activateWindow();
@@ -496,8 +498,10 @@ void View::MainWindow::manageInvoice()
 
 void View::MainWindow::manageCustomer()
 {
-    if(!_businessEditor)
+    if(!_businessEditor) {
         _businessEditor = new View::Management::BusinessEditor;
+        _businessEditor -> restoreGeometry(Persistence::Manager::readConfig("BusinessEditorGeometry", "Application/Appearance").toByteArray());
+    }
 
     _businessEditor -> setCurrentTab(0);
     _businessEditor -> show();
@@ -506,8 +510,10 @@ void View::MainWindow::manageCustomer()
 
 void View::MainWindow::manageSupplier()
 {
-    if(!_businessEditor)
+    if(!_businessEditor) {
         _businessEditor = new View::Management::BusinessEditor;
+        _businessEditor -> restoreGeometry(Persistence::Manager::readConfig("BusinessEditorGeometry", "Application/Appearance").toByteArray());
+    }
 
     _businessEditor -> setCurrentTab(1);
     _businessEditor -> show();
@@ -516,8 +522,10 @@ void View::MainWindow::manageSupplier()
 
 void View::MainWindow::manageProduct()
 {
-    if(!_businessEditor)
+    if(!_businessEditor) {
         _businessEditor = new View::Management::BusinessEditor;
+        _businessEditor -> restoreGeometry(Persistence::Manager::readConfig("BusinessEditorGeometry", "Application/Appearance").toByteArray());
+    }
 
     _businessEditor -> setCurrentTab(2);
     _businessEditor -> show();
@@ -1224,7 +1232,7 @@ void View::MainWindow::loadSettings()
     _recentCompanies = Persistence::Manager::readConfig("RecentCompanies").toStringList();
     _recentInvoices = Persistence::Manager::readConfig("RecentInvoices").toStringList();
 
-    restoreGeometry(Persistence::Manager::readConfig("Geometry", "Application/Appearance").toByteArray());
+    restoreGeometry(Persistence::Manager::readConfig("MainWindowGeometry", "Application/Appearance").toByteArray());
     _fullScreenAction -> setChecked((Persistence::Manager::readConfig("Fullscreen", "Application/Appearance").toBool()));
     _showMenuBarAction -> setChecked((Persistence::Manager::readConfig("ShowMenuBar", "Application/Appearance").toBool()));
     _showCompaniesToolBarAction -> setChecked((Persistence::Manager::readConfig("ShowCompaniesToolBar", "Application/Appearance").toBool()));
@@ -1253,7 +1261,11 @@ void View::MainWindow::saveSettings()
 {
     Persistence::Manager::writeConfig(_recentCompanies, "RecentCompanies");
     Persistence::Manager::writeConfig(_recentInvoices, "RecentInvoices");
-    Persistence::Manager::writeConfig(saveGeometry(), "Geometry", "Application/Appearance");
+    Persistence::Manager::writeConfig(saveGeometry(), "MainWindowGeometry", "Application/Appearance");
+    if(_companyEditor)
+        Persistence::Manager::writeConfig(_companyEditor -> saveGeometry(), "CompanyEditorGeometry", "Application/Appearance");
+    if(_businessEditor)
+        Persistence::Manager::writeConfig(_businessEditor -> saveGeometry(), "BusinessEditorGeometry", "Application/Appearance");
     Persistence::Manager::writeConfig(_fullScreenAction -> isChecked(), "Fullscreen", "Application/Appearance");
     Persistence::Manager::writeConfig(_showMenuBarAction -> isChecked(), "ShowMenuBar", "Application/Appearance");
     Persistence::Manager::writeConfig(_showCompaniesToolBarAction -> isChecked(), "ShowCompaniesToolBar", "Application/Appearance");
