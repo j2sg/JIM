@@ -63,6 +63,7 @@ View::MainWindow::MainWindow()
     createConnections();
     loadSettings();
     setWindowIcon(QIcon(":/images/jim.png"));
+    setMinimumWidth(MIN_MAINWINDOW_WIDTH);
     setCompanyOpen(false);
 
     _printer = new QPrinter;

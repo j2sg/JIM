@@ -26,6 +26,7 @@
 #include <QDate>
 #include "types.h"
 
+#define MIN_MAINWINDOW_WIDTH 1024
 #define MAX_RECENT_ELEMENTS 10
 
 QT_BEGIN_NAMESPACE
