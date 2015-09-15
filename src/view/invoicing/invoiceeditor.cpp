@@ -371,7 +371,7 @@ void View::Invoicing::InvoiceEditor::createWidgets()
 
     QGroupBox *paymentGroupBox = new QGroupBox(tr("&Payment"));
     paymentGroupBox -> setLayout(paymentLayout);
-    paymentGroupBox -> setFixedSize(paymentGroupBox -> sizeHint());
+    //paymentGroupBox -> setFixedSize(paymentGroupBox -> sizeHint());
 
     QVBoxLayout *rightLayout = new QVBoxLayout;
     rightLayout -> addWidget(taxesGroupBox);
