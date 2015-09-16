@@ -53,7 +53,6 @@ namespace View
     namespace Invoicing
     {
         class InvoiceEditor;
-        class InvoiceSearchResult;
     }
 
     namespace Management
@@ -101,7 +100,6 @@ namespace View
         void saveAll();
         void closeAll();
         void closeAllExcept();
-        //void searchInvoice();
         void manageCompany();
         void manageInvoice();
         void manageCustomer();
@@ -133,11 +131,6 @@ namespace View
         void autoOpenDefaultCompany();
         View::Invoicing::InvoiceEditor *createInvoiceEditor(Model::Domain::Invoice *invoice);
         View::Invoicing::InvoiceEditor *findInvoiceEditor(Model::Domain::Invoice *invoice);
-        View::Invoicing::InvoiceSearchResult *createInvoiceSearchResult(Model::Domain::InvoiceType type,
-                                                                        Model::Management::SearchFlag mode = Model::Management::SearchByTypeOnly,
-                                                                        const QDate &beginDate = QDate::currentDate(),
-                                                                        const QDate &endDate = QDate::currentDate(), int entityId = NO_ID,
-                                                                        double minTotal = 0.0, double maxTotal = 0.0, bool paid = true);
         View::Report::VolumeReport *createVolumeReport(Model::Domain::InvoiceType type,
                                                        Model::Management::SearchFlag mode = Model::Management::SearchByTypeOnly,
                                                        const QDate &beginDate = QDate::currentDate(),

@@ -75,8 +75,6 @@ HEADERS += include/global.h \
            include/view/invoicing/invoicedelegate.h \
            include/view/invoicing/invoiceeditor.h \
            include/view/invoicing/invoicemodel.h \
-           include/view/invoicing/invoicesearch.h \
-           include/view/invoicing/invoicesearchresult.h \
            include/view/invoicing/operationeditor.h \
            include/view/invoicing/operationmodel.h \
            include/view/invoicing/operationtable.h \
@@ -149,8 +147,6 @@ SOURCES += src/main.cpp \
            src/view/invoicing/invoicedelegate.cpp \
            src/view/invoicing/invoiceeditor.cpp \
            src/view/invoicing/invoicemodel.cpp \
-           src/view/invoicing/invoicesearch.cpp \
-           src/view/invoicing/invoicesearchresult.cpp \
            src/view/invoicing/operationeditor.cpp \
            src/view/invoicing/operationmodel.cpp \
            src/view/invoicing/operationtable.cpp \

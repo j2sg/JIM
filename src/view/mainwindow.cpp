@@ -26,8 +26,6 @@
 #include "newinvoicedialog.h"
 #include "openinvoicedialog.h"
 #include "invoiceeditor.h"
-#include "invoicesearch.h"
-#include "invoicesearchresult.h"
 #include "companyeditor.h"
 #include "invoicebrowser.h"
 #include "businesseditor.h"
@@ -466,22 +464,6 @@ void View::MainWindow::closeAllExcept()
             window -> close();
     }
 }
-
-/*void View::MainWindow::searchInvoice()
-{
-    if(!_company)
-        return;
-
-    View::Invoicing::InvoiceSearch dialog(this);
-
-    if(dialog.exec()) {
-        View::Invoicing::InvoiceSearchResult *result = createInvoiceSearchResult(dialog.type(), dialog.searchMode(),
-                                                                                 dialog.beginDate(), dialog.endDate(), dialog.entityId(),
-                                                                                 dialog.minTotal(), dialog.maxTotal(), dialog.paid());
-        _mdiArea -> addSubWindow(result);
-        result -> show();
-    }
-}*/
 
 void View::MainWindow::manageCompany()
 {
@@ -1327,19 +1309,6 @@ View::Invoicing::InvoiceEditor *View::MainWindow::findInvoiceEditor(Model::Domai
     return 0;
 }
 
-View::Invoicing::InvoiceSearchResult *View::MainWindow::createInvoiceSearchResult(Model::Domain::InvoiceType type,
-                                                                Model::Management::SearchFlag mode,
-                                                                const QDate &beginDate, const QDate &endDate,
-                                                                int entityId, double minTotal, double maxTotal, bool paid)
-{
-    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(type, _company -> id(), mode, beginDate, endDate, entityId, minTotal, maxTotal, paid);
-    View::Invoicing::InvoiceSearchResult *result = new View::Invoicing::InvoiceSearchResult(invoices, type);
-
-    connect(result, SIGNAL(loaded(Model::Domain::Invoice*)), this, SLOT(openInvoice(Model::Domain::Invoice*)));
-
-    return result;
-}
-
 View::Report::VolumeReport *View::MainWindow::createVolumeReport(Model::Domain::InvoiceType type,
                                                Model::Management::SearchFlag mode,
                                                const QDate &beginDate, const QDate &endDate)
@@ -1445,7 +1414,6 @@ void View::MainWindow::setCompanyOpen(bool open)
     _openInvoiceAction -> setEnabled(open);
     for(int k = 0; k < MAX_RECENT_ELEMENTS; ++k)
         _recentInvoicesAction[k] -> setEnabled(open);
-    //_searchInvoiceAction -> setEnabled(open);
     _manageCompanyAction -> setEnabled(!open);
     _manageInvoiceAction -> setEnabled(open);
     _volumeBuyAction -> setEnabled(open);
