@@ -29,6 +29,7 @@
 #include "invoicesearch.h"
 #include "invoicesearchresult.h"
 #include "companyeditor.h"
+#include "invoicebrowser.h"
 #include "businesseditor.h"
 #include "entitydialog.h"
 #include "company.h"
@@ -64,7 +65,6 @@ View::MainWindow::MainWindow()
     loadSettings();
     setWindowIcon(QIcon(":/images/jim.png"));
     setMinimumWidth(MIN_MAINWINDOW_WIDTH);
-    setCompanyOpen(false);
 
     _printer = new QPrinter;
     
@@ -73,9 +73,11 @@ View::MainWindow::MainWindow()
     _connected = false;
 
     _companyEditor = 0;
+    _invoiceBrowser = 0;
     _businessEditor = 0;
 
     connectToDB();
+    setCompanyOpen(false);
 }
 
 View::MainWindow::~MainWindow()
@@ -494,7 +496,12 @@ void View::MainWindow::manageCompany()
 
 void View::MainWindow::manageInvoice()
 {
+    if(!_invoiceBrowser) {
+        _invoiceBrowser = new View::Management::InvoiceBrowser;
+    }
 
+    _invoiceBrowser -> show();
+    _invoiceBrowser -> activateWindow();
 }
 
 void View::MainWindow::manageCustomer()
@@ -1376,6 +1383,9 @@ void View::MainWindow::closeAllEditors()
     if(_companyEditor)
         _companyEditor -> close();
 
+    if(_invoiceBrowser)
+        _invoiceBrowser -> close();
+
     if(_businessEditor)
         _businessEditor -> close();
 }
@@ -1385,6 +1395,11 @@ void View::MainWindow::deleteAllEditors()
     if(_companyEditor) {
         delete _companyEditor;
         _companyEditor = 0;
+    }
+
+    if(_invoiceBrowser) {
+        delete _invoiceBrowser;
+        _invoiceBrowser = 0;
     }
 
     if(_businessEditor) {
@@ -1404,6 +1419,7 @@ void View::MainWindow::setStorageConnected(bool connected)
     _importDBAction -> setEnabled(!connected);
     _exportDBAction -> setEnabled(!connected);
     _manageCompanyAction -> setEnabled(connected);
+    _manageInvoiceAction -> setEnabled(connected);
     _manageCustomerAction -> setEnabled(connected);
     _manageSupplierAction -> setEnabled(connected);
     _manageProductAction -> setEnabled(connected);
@@ -1431,6 +1447,7 @@ void View::MainWindow::setCompanyOpen(bool open)
         _recentInvoicesAction[k] -> setEnabled(open);
     //_searchInvoiceAction -> setEnabled(open);
     _manageCompanyAction -> setEnabled(!open);
+    _manageInvoiceAction -> setEnabled(open);
     _volumeBuyAction -> setEnabled(open);
     _volumeSaleAction -> setEnabled(open);
     _unpaidInvoicesAction -> setEnabled(open);

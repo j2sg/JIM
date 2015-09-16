@@ -59,6 +59,7 @@ namespace View
     namespace Management
     {
         class CompanyEditor;
+        class InvoiceBrowser;
         class BusinessEditor;
     }
 
@@ -229,6 +230,7 @@ namespace View
         QPrinter *_printer;
 
         View::Management::CompanyEditor *_companyEditor;
+        View::Management::InvoiceBrowser *_invoiceBrowser;
         View::Management::BusinessEditor *_businessEditor;
 
         Model::Domain::Entity *_company;
