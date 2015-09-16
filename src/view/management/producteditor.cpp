@@ -48,6 +48,7 @@ View::Management::ProductEditor::ProductEditor(QWidget *parent)
 View::Management::ProductEditor::~ProductEditor()
 {
     delete _categoryModel;
+    delete _productProxyModel;
     delete _productModel;
 }
 

@@ -54,6 +54,7 @@ View::Management::EntitySelector::EntitySelector(Model::Domain::EntityType type,
 
 View::Management::EntitySelector::~EntitySelector()
 {
+    delete _entityProxyModel;
     delete _entityModel;
 }
 

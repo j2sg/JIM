@@ -47,6 +47,7 @@ View::Management::EntityEditor::EntityEditor(Model::Domain::EntityType type, QWi
 
 View::Management::EntityEditor::~EntityEditor()
 {
+    delete _entityProxyModel;
     delete _entityModel;
 }
 
