@@ -121,7 +121,9 @@ HEADERS += include/global.h \
     include/view/openinvoicedialog.h \
     include/view/openinvoicemodel.h \
     include/view/openinvoiceproxymodel.h \
-    include/view/management/companyeditor.h
+    include/view/management/companyeditor.h \
+    include/view/management/invoicebrowser.h \
+    include/view/management/invoicebrowsertab.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
@@ -193,7 +195,9 @@ SOURCES += src/main.cpp \
     src/view/openinvoicedialog.cpp \
     src/view/openinvoicemodel.cpp \
     src/view/openinvoiceproxymodel.cpp \
-    src/view/management/companyeditor.cpp
+    src/view/management/companyeditor.cpp \
+    src/view/management/invoicebrowser.cpp \
+    src/view/management/invoicebrowsertab.cpp
 
 RESOURCES += resources/jim.qrc
 

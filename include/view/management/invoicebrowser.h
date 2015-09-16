@@ -1,0 +1,4 @@
+#ifndef INVOICEBROWSER_H
+#define INVOICEBROWSER_H
+
+#endif // INVOICEBROWSER_H
