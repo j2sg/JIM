@@ -35,7 +35,7 @@ namespace Model
 
 namespace View
 {
-    namespace Invoicing
+    namespace Management
     {
         class InvoiceModel : public QAbstractTableModel
         {

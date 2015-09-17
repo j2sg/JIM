@@ -26,7 +26,7 @@
 
 namespace View
 {
-    namespace Invoicing
+    namespace Management
     {
         class InvoiceDelegate : public QItemDelegate
         {

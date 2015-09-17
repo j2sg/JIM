@@ -47,17 +47,16 @@ void View::Report::UnpaidsReportTab::createWidgets(Model::Domain::InvoiceType ty
                                                    Model::Report::UnpaidStatistics statistics)
 {
     _invoicesTableView = new QTableView;
-    _invoiceModel = new View::Invoicing::InvoiceModel(invoices, type,
-                                                      Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
+    _invoiceModel = new View::Management::InvoiceModel(invoices, type, Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
     _invoicesTableView -> setModel(_invoiceModel);
     _invoicesTableView -> setAlternatingRowColors(true);
     _invoicesTableView -> setShowGrid(false);
-    _invoicesTableView -> setColumnWidth(View::Invoicing::ColumnInvoiceId, COLUMN_UNPAIDS_REPORT_ID_WIDTH);
-    _invoicesTableView -> setColumnWidth(View::Invoicing::ColumnInvoiceDate, COLUMN_UNPAIDS_REPORT_DATE_WIDTH);
-    _invoicesTableView -> setColumnWidth(View::Invoicing::ColumnInvoiceEntityName, COLUMN_UNPAIDS_REPORT_ENTITY_WIDTH);
-    _invoicesTableView -> setColumnWidth(View::Invoicing::ColumnInvoiceOperations, COLUMN_UNPAIDS_REPORT_OPERATIONS_WIDTH);
-    _invoicesTableView -> setColumnWidth(View::Invoicing::ColumnInvoiceTotal, COLUMN_UNPAIDS_REPORT_TOTAL_WIDTH);
-    _invoicesTableView -> hideColumn(View::Invoicing::ColumnInvoiceState);
+    _invoicesTableView -> setColumnWidth(View::Management::ColumnInvoiceId, COLUMN_UNPAIDS_REPORT_ID_WIDTH);
+    _invoicesTableView -> setColumnWidth(View::Management::ColumnInvoiceDate, COLUMN_UNPAIDS_REPORT_DATE_WIDTH);
+    _invoicesTableView -> setColumnWidth(View::Management::ColumnInvoiceEntityName, COLUMN_UNPAIDS_REPORT_ENTITY_WIDTH);
+    _invoicesTableView -> setColumnWidth(View::Management::ColumnInvoiceOperations, COLUMN_UNPAIDS_REPORT_OPERATIONS_WIDTH);
+    _invoicesTableView -> setColumnWidth(View::Management::ColumnInvoiceTotal, COLUMN_UNPAIDS_REPORT_TOTAL_WIDTH);
+    _invoicesTableView -> hideColumn(View::Management::ColumnInvoiceState);
     _invoicesTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
     _invoicesTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _invoicesTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);

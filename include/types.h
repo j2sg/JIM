@@ -81,17 +81,6 @@ namespace View
 
     namespace Invoicing
     {
-        typedef enum ColumnInvoiceEnum
-        {
-            ColumnInvoiceId,
-            ColumnInvoiceDate,
-            ColumnInvoiceEntityName,
-            ColumnInvoiceOperations,
-            ColumnInvoiceTotal,
-            ColumnInvoiceState,
-            ColumnInvoiceCount
-        } ColumnInvoice;
-
         typedef enum ColumnOperationEnum
         {
             ColumnOperationId,
@@ -113,6 +102,17 @@ namespace View
 
     namespace Management
     {
+        typedef enum ColumnInvoiceEnum
+        {
+            ColumnInvoiceId,
+            ColumnInvoiceDate,
+            ColumnInvoiceEntityName,
+            ColumnInvoiceOperations,
+            ColumnInvoiceTotal,
+            ColumnInvoiceState,
+            ColumnInvoiceCount
+        } ColumnInvoice;
+
         typedef enum ColumnProductEnum
         {
             ColumnProductId,

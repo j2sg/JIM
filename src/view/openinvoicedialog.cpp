@@ -243,16 +243,16 @@ void View::OpenInvoiceDialog::createWidgets()
     _invoicesTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _invoicesTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
     _invoicesTableView -> setFocusPolicy(Qt::NoFocus);
-    _invoicesTableView -> setColumnWidth(View::Invoicing::ColumnInvoiceId, COLUMN_OPEN_INVOICE_ID_WIDTH);
-    _invoicesTableView -> setColumnWidth(View::Invoicing::ColumnInvoiceDate, COLUMN_OPEN_INVOICE_DATE_WIDTH);
-    _invoicesTableView -> setColumnWidth(View::Invoicing::ColumnInvoiceEntityName, COLUMN_OPEN_INVOICE_ENTITY_NAME_WIDTH);
-    _invoicesTableView -> setColumnWidth(View::Invoicing::ColumnInvoiceTotal, COLUMN_OPEN_INVOICE_TOTAL_WIDTH);
+    _invoicesTableView -> setColumnWidth(View::Management::ColumnInvoiceId, COLUMN_OPEN_INVOICE_ID_WIDTH);
+    _invoicesTableView -> setColumnWidth(View::Management::ColumnInvoiceDate, COLUMN_OPEN_INVOICE_DATE_WIDTH);
+    _invoicesTableView -> setColumnWidth(View::Management::ColumnInvoiceEntityName, COLUMN_OPEN_INVOICE_ENTITY_NAME_WIDTH);
+    _invoicesTableView -> setColumnWidth(View::Management::ColumnInvoiceTotal, COLUMN_OPEN_INVOICE_TOTAL_WIDTH);
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
         _invoicesTableView -> horizontalHeader() -> setResizeMode(QHeaderView::Fixed);
-        _invoicesTableView -> horizontalHeader() -> setResizeMode(View::Invoicing::ColumnInvoiceEntityName, QHeaderView::Stretch);
+        _invoicesTableView -> horizontalHeader() -> setResizeMode(View::Management::ColumnInvoiceEntityName, QHeaderView::Stretch);
     #else
         _invoicesTableView -> horizontalHeader() -> setSectionResizeMode(QHeaderView::Fixed);
-        _invoicesTableView -> horizontalHeader() -> setSectionResizeMode(View::Invoicing::ColumnInvoiceEntityName, QHeaderView::Stretch);
+        _invoicesTableView -> horizontalHeader() -> setSectionResizeMode(View::Management::ColumnInvoiceEntityName, QHeaderView::Stretch);
     #endif
 
     QGridLayout *topLayout = new QGridLayout;

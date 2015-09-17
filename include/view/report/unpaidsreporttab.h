@@ -47,7 +47,7 @@ namespace Model
 
 namespace View
 {
-    namespace Invoicing
+    namespace Management
     {
         class InvoiceModel;
     }
@@ -69,7 +69,7 @@ namespace View
                                Model::Report::UnpaidStatistics statistics);
 
             QTableView *_invoicesTableView;
-            View::Invoicing::InvoiceModel *_invoiceModel;
+            View::Management::InvoiceModel *_invoiceModel;
             QLabel *_invoicesLabel;
             QLabel *_invoicesLabelValue;
             QLabel *_maxDaysDebtLabel;

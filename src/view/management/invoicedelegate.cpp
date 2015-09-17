@@ -22,11 +22,11 @@
 #include "invoicemodel.h"
 #include "invoice.h"
 
-View::Invoicing::InvoiceDelegate::InvoiceDelegate(bool highlight, QColor paidColor, QColor unpaidColor, QObject *parent)
+View::Management::InvoiceDelegate::InvoiceDelegate(bool highlight, QColor paidColor, QColor unpaidColor, QObject *parent)
     : QItemDelegate(parent), _highlight(highlight), _paidColor(paidColor), _unpaidColor(unpaidColor)
 {}
 
-void View::Invoicing::InvoiceDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void View::Management::InvoiceDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     InvoiceModel *model = const_cast<InvoiceModel *>(dynamic_cast<const InvoiceModel *>(index.model()));
     QString text = model -> data(index, Qt::DisplayRole).toString();

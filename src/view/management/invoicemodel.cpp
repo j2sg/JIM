@@ -22,7 +22,7 @@
 #include "invoice.h"
 #include "entity.h"
 
-View::Invoicing::InvoiceModel::~InvoiceModel()
+View::Management::InvoiceModel::~InvoiceModel()
 {
     if(_invoices) {
         foreach(Model::Domain::Invoice *invoice, *_invoices)
@@ -32,12 +32,12 @@ View::Invoicing::InvoiceModel::~InvoiceModel()
     }
 }
 
-QList<Model::Domain::Invoice *> *View::Invoicing::InvoiceModel::invoices()
+QList<Model::Domain::Invoice *> *View::Management::InvoiceModel::invoices()
 {
     return _invoices;
 }
 
-void View::Invoicing::InvoiceModel::setInvoices(QList<Model::Domain::Invoice *> *invoices)
+void View::Management::InvoiceModel::setInvoices(QList<Model::Domain::Invoice *> *invoices)
 {
     beginResetModel();
     _invoices = invoices;
@@ -45,7 +45,7 @@ void View::Invoicing::InvoiceModel::setInvoices(QList<Model::Domain::Invoice *> 
 
 }
 
-bool View::Invoicing::InvoiceModel::insertInvoice(int k, Model::Domain::Invoice *invoice)
+bool View::Management::InvoiceModel::insertInvoice(int k, Model::Domain::Invoice *invoice)
 {
     if(k < 0  || k > _invoices -> size())
         return false;
@@ -57,7 +57,7 @@ bool View::Invoicing::InvoiceModel::insertInvoice(int k, Model::Domain::Invoice 
     return true;
 }
 
-bool View::Invoicing::InvoiceModel::modifyInvoice(int k)
+bool View::Management::InvoiceModel::modifyInvoice(int k)
 {
     if(k < 0  || k > _invoices -> size())
         return false;
@@ -68,7 +68,7 @@ bool View::Invoicing::InvoiceModel::modifyInvoice(int k)
     return true;
 }
 
-bool View::Invoicing::InvoiceModel::removeInvoice(int k)
+bool View::Management::InvoiceModel::removeInvoice(int k)
 {
     if(k < 0  || k > _invoices -> size())
         return false;
@@ -81,21 +81,21 @@ bool View::Invoicing::InvoiceModel::removeInvoice(int k)
     return true;
 }
 
-int View::Invoicing::InvoiceModel::rowCount(const QModelIndex &parent) const
+int View::Management::InvoiceModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
     return _invoices -> size();
 }
 
-int View::Invoicing::InvoiceModel::columnCount(const QModelIndex &parent) const
+int View::Management::InvoiceModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
 
     return ColumnInvoiceCount;
 }
 
-QVariant View::Invoicing::InvoiceModel::data(const QModelIndex &index, int role) const
+QVariant View::Management::InvoiceModel::data(const QModelIndex &index, int role) const
 {
     if(index.isValid()) {
         if(role == Qt::TextAlignmentRole) {
@@ -129,7 +129,7 @@ QVariant View::Invoicing::InvoiceModel::data(const QModelIndex &index, int role)
     return QVariant();
 }
 
-QVariant View::Invoicing::InvoiceModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant View::Management::InvoiceModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if(role == Qt::DisplayRole) {
         if(orientation == Qt::Vertical)

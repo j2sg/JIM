@@ -72,9 +72,7 @@ HEADERS += include/global.h \
            include/model/management/productmanager.h \
            include/model/management/taxmanager.h \
            include/model/report/reportmanager.h \
-           include/view/invoicing/invoicedelegate.h \
            include/view/invoicing/invoiceeditor.h \
-           include/view/invoicing/invoicemodel.h \
            include/view/invoicing/operationeditor.h \
            include/view/invoicing/operationmodel.h \
            include/view/invoicing/operationtable.h \
@@ -121,7 +119,9 @@ HEADERS += include/global.h \
     include/view/openinvoiceproxymodel.h \
     include/view/management/companyeditor.h \
     include/view/management/invoicebrowser.h \
-    include/view/management/invoicebrowsertab.h
+    include/view/management/invoicebrowsertab.h \
+    include/view/management/invoicedelegate.h \
+    include/view/management/invoicemodel.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
@@ -144,9 +144,7 @@ SOURCES += src/main.cpp \
            src/model/management/productmanager.cpp \
            src/model/management/taxmanager.cpp \
            src/model/report/reportmanager.cpp \
-           src/view/invoicing/invoicedelegate.cpp \
            src/view/invoicing/invoiceeditor.cpp \
-           src/view/invoicing/invoicemodel.cpp \
            src/view/invoicing/operationeditor.cpp \
            src/view/invoicing/operationmodel.cpp \
            src/view/invoicing/operationtable.cpp \
@@ -193,7 +191,9 @@ SOURCES += src/main.cpp \
     src/view/openinvoiceproxymodel.cpp \
     src/view/management/companyeditor.cpp \
     src/view/management/invoicebrowser.cpp \
-    src/view/management/invoicebrowsertab.cpp
+    src/view/management/invoicebrowsertab.cpp \
+    src/view/management/invoicedelegate.cpp \
+    src/view/management/invoicemodel.cpp
 
 RESOURCES += resources/jim.qrc
 
