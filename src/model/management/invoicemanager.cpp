@@ -249,7 +249,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
                   .arg(type)
                   .arg(companyId);
 
-    if(mode & SearchByDateRange)
+    if(mode & SearchByDate)
         sql.append(QString(" AND date>='%1' AND date<='%2'")
                    .arg(beginDate.toString(DATE_FORMAT))
                    .arg(endDate.toString(DATE_FORMAT)));
@@ -311,7 +311,7 @@ QList<Model::Domain::Invoice *> *Model::Management::InvoiceManager::search(Model
 
         bool correct = true;
 
-        if(mode & SearchByTotalRange) {
+        if(mode & SearchByTotal) {
             double total = invoice -> total();
 
             if(total < minTotal || total > maxTotal)

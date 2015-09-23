@@ -270,22 +270,36 @@ namespace Model
     {
         typedef enum FilterEntityModeEnum
         {
-            FilterEntityByName = 0x00,
+            FilterEntityByName  = 0x00,
             FilterEntityByVATIN = 0x01
         } FilterEntityMode;
 
 
         typedef enum SearchModeEnum
         {
-            SearchByTypeOnly = 0x00,
-            SearchByDateRange = 0x01,
-            SearchByEntity = 0x02,
-            SearchByTotalRange = 0x04,
-            SearchByState = 0x08,
-            SearchByAllParameters = 0x15
+            SearchByTypeOnly      = 0x00,
+            SearchByDate          = 0x01,
+            SearchByEntity        = 0x02,
+            SearchByTotal         = 0x04,
+            SearchByState         = 0x08,
+            SearchByAllParameters = 0x0F
         } SearchMode;
 
         typedef int SearchFlag;
+
+        typedef enum SearchByDateModeEnum
+        {
+            SearchBeforeDate,
+            SearchAfterDate,
+            SearchBetweenDates
+        } SearchByDateMode;
+
+        typedef enum SearchByTotalModeEnum
+        {
+            SearchMinimumTotal,
+            SearchMaximumTotal,
+            SearchBetweenTotals
+        } SearchByTotalMode;
     }
 }
 

@@ -87,7 +87,7 @@ void View::OpenInvoiceDialog::currentIndexChangedOnTypeOrInvoicesComboBox()
         invoicesByDate = static_cast<InvoicesByDate>(_invoicesComboBox -> currentData().toInt());
     #endif
 
-    Model::Management::SearchMode searchMode = Model::Management::SearchByDateRange;
+    Model::Management::SearchMode searchMode = Model::Management::SearchByDate;
     QDate beginDate;
     QDate endDate;
 
@@ -232,7 +232,7 @@ void View::OpenInvoiceDialog::createWidgets()
     _statusLabel -> setBuddy(_statusComboBox);
 
     _invoicesTableView = new QTableView;
-    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(_type, _companyId, Model::Management::SearchByDateRange, QDate::currentDate(), QDate::currentDate());
+    QList<Model::Domain::Invoice *> *invoices = Model::Management::InvoiceManager::search(_type, _companyId, Model::Management::SearchByDate, QDate::currentDate(), QDate::currentDate());
     _invoicesModel = new OpenInvoiceModel(invoices, Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
     _invoicesProxyModel = new OpenInvoiceProxyModel;
     _invoicesProxyModel -> setSourceModel(_invoicesModel);
