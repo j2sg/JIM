@@ -479,7 +479,7 @@ void View::MainWindow::manageCompany()
 void View::MainWindow::manageInvoice()
 {
     if(!_invoiceBrowser) {
-        _invoiceBrowser = new View::Management::InvoiceBrowser;
+        _invoiceBrowser = new View::Management::InvoiceBrowser(_company -> id());
     }
 
     _invoiceBrowser -> show();
@@ -532,7 +532,7 @@ void View::MainWindow::volumeBuy()
     if(dialog.exec()) {
         View::Report::VolumeReport *volumeReport = createVolumeReport(Model::Domain::Buy,
                                                                       dialog.dateRange() ?
-                                                                          Model::Management::SearchByDateRange :
+                                                                          Model::Management::SearchByDate :
                                                                           Model::Management::SearchByTypeOnly,
                                                                       dialog.beginDate(), dialog.endDate());
         _mdiArea -> addSubWindow(volumeReport);
@@ -550,7 +550,7 @@ void View::MainWindow::volumeSale()
     if(dialog.exec()) {
         View::Report::VolumeReport *volumeReport = createVolumeReport(Model::Domain::Sale,
                                                                       dialog.dateRange() ?
-                                                                          Model::Management::SearchByDateRange :
+                                                                          Model::Management::SearchByDate :
                                                                           Model::Management::SearchByTypeOnly,
                                                                       dialog.beginDate(), dialog.endDate());
         _mdiArea -> addSubWindow(volumeReport);
