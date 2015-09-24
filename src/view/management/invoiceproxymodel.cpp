@@ -56,13 +56,9 @@ Model::Management::SearchFlag View::Management::InvoiceProxyModel::filterMode() 
 
 void View::Management::InvoiceProxyModel::setFilterByDateMode(Model::Management::SearchByDateMode filterByDateMode, QDate startDate, QDate endDate)
 {
-    beginResetModel();
-
     _filterByDateMode = filterByDateMode;
     _startDate = startDate;
     _endDate = endDate;
-
-    endResetModel();
 }
 
 Model::Management::SearchByDateMode View::Management::InvoiceProxyModel::filterByDateMode() const
@@ -72,13 +68,9 @@ Model::Management::SearchByDateMode View::Management::InvoiceProxyModel::filterB
 
 void View::Management::InvoiceProxyModel::setFilterByTotalMode(Model::Management::SearchByTotalMode filterByTotalMode, double minTotal, double maxTotal)
 {
-    beginResetModel();
-
     _filterByTotalMode = filterByTotalMode;
     _minTotal = minTotal;
     _maxTotal = maxTotal;
-
-    endResetModel();
 }
 
 Model::Management::SearchByTotalMode View::Management::InvoiceProxyModel::filterByTotalMode() const
@@ -98,11 +90,7 @@ const QDate& View::Management::InvoiceProxyModel::endDate() const
 
 void View::Management::InvoiceProxyModel::setEntityId(int entityId)
 {
-    beginResetModel();
-
     _entityId = entityId;
-
-    endResetModel();
 }
 
 int View::Management::InvoiceProxyModel::entityId() const
@@ -122,11 +110,7 @@ double View::Management::InvoiceProxyModel::maxTotal() const
 
 void View::Management::InvoiceProxyModel::setPaid(bool paid)
 {
-    beginResetModel();
-
     _paid = paid;
-
-    endResetModel();
 }
 
 bool View::Management::InvoiceProxyModel::paid() const
@@ -167,13 +151,13 @@ bool View::Management::InvoiceProxyModel::filterAcceptsRow(int source_row, const
 
     bool totalOk = true;
 
-    if(_filterMode && Model::Management::SearchByTotal) {
+    if(_filterMode & Model::Management::SearchByTotal) {
         switch(_filterByTotalMode) {
         case Model::Management::SearchMinimumTotal:
             totalOk = invoiceFilter -> total() >= _minTotal;
             break;
         case Model::Management::SearchMaximumTotal:
-            totalOk = invoiceFilter -> total() <= _maxTotal;
+            totalOk = invoiceFilter -> total() <= _minTotal;
             break;
         case Model::Management::SearchBetweenTotals:
             totalOk = invoiceFilter -> total() >= _minTotal && invoiceFilter -> total() <= _maxTotal;
@@ -182,7 +166,7 @@ bool View::Management::InvoiceProxyModel::filterAcceptsRow(int source_row, const
 
     bool stateOk = true;
 
-    if(_filterMode && Model::Management::SearchByState) {
+    if(_filterMode & Model::Management::SearchByState) {
         stateOk = invoiceFilter -> paid() == _paid;
     }
 
