@@ -20,6 +20,7 @@
 
 #include "invoicebrowsertab.h"
 #include "invoicemodel.h"
+#include "invoiceproxymodel.h"
 #include "setupinvoicefiltersdialog.h"
 #include "invoicemanager.h"
 #include "persistencemanager.h"
@@ -42,6 +43,7 @@ View::Management::InvoiceBrowserTab::InvoiceBrowserTab(int companyId, Model::Dom
 View::Management::InvoiceBrowserTab::~InvoiceBrowserTab()
 {
     delete _invoiceModel;
+    delete _invoiceProxyModel;
 }
 
 void View::Management::InvoiceBrowserTab::toogleOnRadioButton()
@@ -49,13 +51,26 @@ void View::Management::InvoiceBrowserTab::toogleOnRadioButton()
     bool isAllRadioButtonSelected = _allRadioButton -> isChecked();
 
     _filterButton -> setEnabled(!isAllRadioButtonSelected);
+
+    if(isAllRadioButtonSelected)
+        _invoiceProxyModel -> setFilterMode(Model::Management::SearchByTypeOnly);
 }
 
 void View::Management::InvoiceBrowserTab::clickedOnFilterButton()
 {
     SetUpInvoiceFiltersDialog dialog(_type, this);
 
-    dialog.exec();
+    if(dialog.exec()) {
+        Model::Management::SearchFlag filterMode = dialog.filterMode();
+        Model::Management::SearchByDateMode filterByDateMode = dialog.filterByDateMode();
+        Model::Management::SearchByTotalMode filterByTotalMode = dialog.filterByTotalMode();
+
+        _invoiceProxyModel -> setFilterByDateMode(filterByDateMode, dialog.startDate(), dialog.endDate());
+        _invoiceProxyModel -> setEntityId(dialog.entityId());
+        _invoiceProxyModel -> setFilterByTotalMode(filterByTotalMode, dialog.minTotal(), dialog.maxTotal());
+        _invoiceProxyModel -> setPaid(dialog.paid());
+        _invoiceProxyModel -> setFilterMode(filterMode);
+    }
 }
 
 void View::Management::InvoiceBrowserTab::createWidgets()
@@ -70,8 +85,10 @@ void View::Management::InvoiceBrowserTab::createWidgets()
     _filterButton -> setFixedSize(_filterButton -> sizeHint());
 
     _invoicesTableView = new QTableView;
-    _invoiceModel = new View::Management::InvoiceModel(Model::Management::InvoiceManager::getAllByType(_type, _companyId), _type, Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
-    _invoicesTableView -> setModel(_invoiceModel);
+    _invoiceModel = new InvoiceModel(Model::Management::InvoiceManager::getAllByType(_type, _companyId), _type, Persistence::Manager::readConfig("Money", "Application/Precision").toInt());
+    _invoiceProxyModel = new InvoiceProxyModel(_type);
+    _invoiceProxyModel -> setSourceModel(_invoiceModel);
+    _invoicesTableView -> setModel(_invoiceProxyModel);
     _invoicesTableView -> setAlternatingRowColors(true);
     _invoicesTableView -> setShowGrid(false);
     _invoicesTableView -> setSelectionMode(QAbstractItemView::SingleSelection);

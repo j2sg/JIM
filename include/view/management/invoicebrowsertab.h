@@ -44,6 +44,8 @@ namespace View
 
         class InvoiceModel;
 
+        class InvoiceProxyModel;
+
         class InvoiceBrowserTab : public QWidget
         {
             Q_OBJECT
@@ -61,6 +63,7 @@ namespace View
             QRadioButton *_filterByRadioButton;
             QTableView *_invoicesTableView;
             InvoiceModel *_invoiceModel;
+            InvoiceProxyModel *_invoiceProxyModel;
             QPushButton *_filterButton;
             int _companyId;
             Model::Domain::InvoiceType _type;
