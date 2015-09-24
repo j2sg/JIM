@@ -202,6 +202,29 @@ void View::Management::SetUpInvoiceFiltersDialog::stateChangedOnStateCheckBox()
     _stateComboBox -> setEnabled(isChecked);
 }
 
+void View::Management::SetUpInvoiceFiltersDialog::verifyFilters()
+{
+    bool isDateChecked = _dateCheckBox -> isChecked();
+    bool isTotalChecked = _totalCheckBox -> isChecked();
+    QDate startDate = _startDateEdit -> date();
+    QDate endDate = _endDateEdit -> date();
+    double minTotal = _minTotalSpinBox -> value();
+    double maxTotal = _maxTotalSpinBox -> value();
+    Model::Management::SearchByDateMode dateMode;
+    Model::Management::SearchByTotalMode totalMode;
+
+    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        dateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemDate(_dateComboBox -> currentIndex()).toInt());
+        totalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemDate(_totalComboBox -> currentIndex()).toInt());
+    #else
+        dateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> currentData().toInt());
+        totalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> currentData().toInt());
+    #endif
+
+    _filterButton -> setEnabled(!((isDateChecked && dateMode == Model::Management::SearchBetweenDates && startDate > endDate) ||
+                                  (isTotalChecked && totalMode == Model::Management::SearchBetweenTotals && minTotal > maxTotal)));
+}
+
 void View::Management::SetUpInvoiceFiltersDialog::createWidgets()
 {
     _dateCheckBox = new QCheckBox(tr("Date"));
@@ -216,10 +239,12 @@ void View::Management::SetUpInvoiceFiltersDialog::createWidgets()
 
     _startDateEdit = new QDateEdit;
     _startDateEdit -> setCalendarPopup(true);
+    _startDateEdit -> setDate(QDate::currentDate());
     _startDateEdit -> setEnabled(false);
 
     _endDateEdit = new QDateEdit;
     _endDateEdit -> setCalendarPopup(true);
+    _endDateEdit -> setDate(QDate::currentDate());
     _endDateEdit -> setEnabled(false);
 
     _entityCheckBox = new QCheckBox(_type == Model::Domain::Buy ? tr("Supplier") : tr("Customer"));
@@ -310,14 +335,30 @@ void View::Management::SetUpInvoiceFiltersDialog::createConnections()
 {
     connect(_dateCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnDateCheckBox()));
+    connect(_dateCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(verifyFilters()));
     connect(_dateComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(currentIndexChangedOnDateComboBox()));
+    connect(_dateComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(verifyFilters()));
+    connect(_startDateEdit, SIGNAL(dateChanged(QDate)),
+            this, SLOT(verifyFilters()));
+    connect(_endDateEdit, SIGNAL(dateChanged(QDate)),
+            this, SLOT(verifyFilters()));
     connect(_entityCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnEntityCheckBox()));
     connect(_totalCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnTotalCheckBox()));
+    connect(_totalCheckBox, SIGNAL(stateChanged(int)),
+            this, SLOT(verifyFilters()));
     connect(_totalComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(currentIndexChangedOnTotalComboBox()));
+    connect(_totalComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(verifyFilters()));
+    connect(_minTotalSpinBox, SIGNAL(valueChanged(double)),
+            this, SLOT(verifyFilters()));
+    connect(_maxTotalSpinBox, SIGNAL(valueChanged(double)),
+            this, SLOT(verifyFilters()));
     connect(_stateCheckBox, SIGNAL(stateChanged(int)),
             this, SLOT(stateChangedOnStateCheckBox()));
     connect(_filterButton, SIGNAL(clicked()),

@@ -61,6 +61,7 @@ namespace View
             void stateChangedOnTotalCheckBox();
             void currentIndexChangedOnTotalComboBox();
             void stateChangedOnStateCheckBox();
+            void verifyFilters();
         private:
             void createWidgets();
             void createConnections();
