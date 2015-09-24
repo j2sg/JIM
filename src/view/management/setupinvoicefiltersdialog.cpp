@@ -48,25 +48,25 @@ void View::Management::SetUpInvoiceFiltersDialog::done(int result)
         bool isTotalChecked = _totalCheckBox -> isChecked();
         bool isStateChecked = _stateCheckBox -> isChecked();
 
-        _searchMode = Model::Management::SearchByTypeOnly;
+        _filterMode = Model::Management::SearchByTypeOnly;
 
         if(isDateChecked)
-            _searchMode |= Model::Management::SearchByDate;
+            _filterMode |= Model::Management::SearchByDate;
         if(isEntityChecked)
-            _searchMode |= Model::Management::SearchByEntity;
+            _filterMode |= Model::Management::SearchByEntity;
         if(isTotalChecked)
-            _searchMode |= Model::Management::SearchByTotal;
+            _filterMode |= Model::Management::SearchByTotal;
         if(isStateChecked)
-            _searchMode |= Model::Management::SearchByState;
+            _filterMode |= Model::Management::SearchByState;
 
         #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-            _searchByDateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemDate(_dateComboBox -> currentIndex()).toInt());
-            _searchByTotalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemDate(_totalComboBox -> currentIndex()).toInt());
+            _filterByDateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemDate(_dateComboBox -> currentIndex()).toInt());
+            _filterByTotalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemDate(_totalComboBox -> currentIndex()).toInt());
             _entityId = _entityComboBox -> itemData(_entityComboBox -> currentIndex()).toInt();
             _paid = _stateComboBox -> itemData(_stateComboBox -> currentIndex()).toBool();
         #else
-            _searchByDateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> currentData().toInt());
-            _searchByTotalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> currentData().toInt());
+            _filterByDateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> currentData().toInt());
+            _filterByTotalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> currentData().toInt());
             _entityId = _entityComboBox -> currentData().toInt();
             _paid = _stateComboBox -> currentData().toBool();
         #endif
@@ -85,19 +85,19 @@ Model::Domain::InvoiceType View::Management::SetUpInvoiceFiltersDialog::type() c
     return _type;
 }
 
-Model::Management::SearchFlag View::Management::SetUpInvoiceFiltersDialog::searchMode() const
+Model::Management::SearchFlag View::Management::SetUpInvoiceFiltersDialog::filterMode() const
 {
-    return _searchMode;
+    return _filterMode;
 }
 
-Model::Management::SearchByDateMode View::Management::SetUpInvoiceFiltersDialog::searchByDateMode() const
+Model::Management::SearchByDateMode View::Management::SetUpInvoiceFiltersDialog::filterByDateMode() const
 {
-    return _searchByDateMode;
+    return _filterByDateMode;
 }
 
-Model::Management::SearchByTotalMode View::Management::SetUpInvoiceFiltersDialog::searchByTotalMode() const
+Model::Management::SearchByTotalMode View::Management::SetUpInvoiceFiltersDialog::filterByTotalMode() const
 {
-    return _searchByTotalMode;
+    return _filterByTotalMode;
 }
 
 QDate View::Management::SetUpInvoiceFiltersDialog::startDate() const
@@ -233,7 +233,7 @@ void View::Management::SetUpInvoiceFiltersDialog::createWidgets()
 
     _dateComboBox = new QComboBox;
     _dateComboBox -> addItem(tr("Before"), Model::Management::SearchBeforeDate);
-    _dateComboBox -> addItem(tr("After"), Model::Management::SearchBeforeDate);
+    _dateComboBox -> addItem(tr("After"), Model::Management::SearchAfterDate);
     _dateComboBox -> addItem(tr("Interval"), Model::Management::SearchBetweenDates);
     _dateComboBox -> setEnabled(false);
 

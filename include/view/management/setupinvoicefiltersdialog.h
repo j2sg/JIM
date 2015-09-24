@@ -45,9 +45,9 @@ namespace View
             SetUpInvoiceFiltersDialog(Model::Domain::InvoiceType type, QWidget *parent = 0);
             void done(int result);
             Model::Domain::InvoiceType type() const;
-            Model::Management::SearchFlag searchMode() const;
-            Model::Management::SearchByDateMode searchByDateMode() const;
-            Model::Management::SearchByTotalMode searchByTotalMode() const;
+            Model::Management::SearchFlag filterMode() const;
+            Model::Management::SearchByDateMode filterByDateMode() const;
+            Model::Management::SearchByTotalMode filterByTotalMode() const;
             QDate startDate() const;
             QDate endDate() const;
             int entityId() const;
@@ -82,9 +82,9 @@ namespace View
             QPushButton *_cancelButton;
 
             Model::Domain::InvoiceType _type;
-            Model::Management::SearchFlag _searchMode;
-            Model::Management::SearchByDateMode _searchByDateMode;
-            Model::Management::SearchByTotalMode _searchByTotalMode;
+            Model::Management::SearchFlag _filterMode;
+            Model::Management::SearchByDateMode _filterByDateMode;
+            Model::Management::SearchByTotalMode _filterByTotalMode;
             QDate _startDate;
             QDate _endDate;
             int _entityId;
