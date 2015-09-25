@@ -60,7 +60,7 @@ bool Persistence::Manager::createConfig(bool overwrite)
     setting.beginGroup("Appearance");
     setting.setValue("MainWindowGeometry",        QByteArray());
     setting.setValue("CompanyEditorGeometry",     QByteArray());
-    setting.setValue("InvoiceEditorGeometry",     QByteArray());
+    setting.setValue("InvoiceBrowserGeometry",    QByteArray());
     setting.setValue("BusinessEditorGeometry",    QByteArray());
     setting.setValue("Fullscreen",                false);
     setting.setValue("ShowMenuBar",               true);

@@ -482,6 +482,8 @@ void View::MainWindow::manageInvoice()
         _invoiceBrowser = new View::Management::InvoiceBrowser(_company -> id());
 
         connect(_invoiceBrowser, SIGNAL(invoiceOpen(Model::Domain::Invoice*)), this, SLOT(openInvoice(Model::Domain::Invoice*)));
+
+        _invoiceBrowser -> restoreGeometry(Persistence::Manager::readConfig("InvoiceBrowserGeometry", "Application/Appearance").toByteArray());
     }
 
     _invoiceBrowser -> show();
@@ -1256,6 +1258,8 @@ void View::MainWindow::saveSettings()
     Persistence::Manager::writeConfig(saveGeometry(), "MainWindowGeometry", "Application/Appearance");
     if(_companyEditor)
         Persistence::Manager::writeConfig(_companyEditor -> saveGeometry(), "CompanyEditorGeometry", "Application/Appearance");
+    if(_invoiceBrowser)
+        Persistence::Manager::writeConfig(_invoiceBrowser -> saveGeometry(), "InvoiceBrowserGeometry", "Application/Appearance");
     if(_businessEditor)
         Persistence::Manager::writeConfig(_businessEditor -> saveGeometry(), "BusinessEditorGeometry", "Application/Appearance");
     Persistence::Manager::writeConfig(_fullScreenAction -> isChecked(), "Fullscreen", "Application/Appearance");
