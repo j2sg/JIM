@@ -42,7 +42,7 @@
 #define MAX_PORT 65535
 
 // Invoice Date Format
-#define DATE_FORMAT "yyyy-M-d"
+#define DATE_FORMAT "yyyy-MM-dd"
 
 // ID doesn't assigned yet.
 #define NO_ID -1
