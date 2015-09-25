@@ -62,6 +62,14 @@ void View::Management::InvoiceBrowser::createWidgets()
 
 void View::Management::InvoiceBrowser::createConnections()
 {
+    connect(_buyTab, SIGNAL(invoiceOpen(Model::Domain::Invoice*)),
+            this, SIGNAL(invoiceOpen(Model::Domain::Invoice*)));
+    connect(_buyTab, SIGNAL(invoiceDeleted(Model::Domain::Invoice*)),
+            this, SIGNAL(invoiceDeleted(Model::Domain::Invoice*)));
+    connect(_saleTab, SIGNAL(invoiceOpen(Model::Domain::Invoice*)),
+            this, SIGNAL(invoiceOpen(Model::Domain::Invoice*)));
+    connect(_saleTab, SIGNAL(invoiceDeleted(Model::Domain::Invoice*)),
+            this, SIGNAL(invoiceDeleted(Model::Domain::Invoice*)));
     connect(_closeButton, SIGNAL(clicked()),
             this, SLOT(close()));
 }

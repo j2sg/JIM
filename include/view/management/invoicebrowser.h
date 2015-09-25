@@ -30,6 +30,14 @@ class QTabWidget;
 class QPushButton;
 QT_END_NAMESPACE
 
+namespace Model
+{
+    namespace Domain
+    {
+        class Invoice;
+    }
+}
+
 namespace View
 {
     namespace Management
@@ -41,6 +49,9 @@ namespace View
             Q_OBJECT
         public:
             InvoiceBrowser(int companyId, QWidget *parent = 0);
+        signals:
+            void invoiceOpen(Model::Domain::Invoice *invoice);
+            void invoiceDeleted(Model::Domain::Invoice *invoice);
         private:
             void createWidgets();
             void createConnections();

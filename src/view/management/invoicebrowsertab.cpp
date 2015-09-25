@@ -21,9 +21,10 @@
 #include "invoicebrowsertab.h"
 #include "invoicemodel.h"
 #include "invoiceproxymodel.h"
-#include "setupinvoicefiltersdialog.h"
 #include "invoicemanager.h"
 #include "persistencemanager.h"
+#include "invoice.h"
+#include "setupinvoicefiltersdialog.h"
 #include "types.h"
 #include <QRadioButton>
 #include <QTableView>
@@ -33,6 +34,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QMessageBox>
 
 View::Management::InvoiceBrowserTab::InvoiceBrowserTab(int companyId, Model::Domain::InvoiceType type, QWidget *parent) : QWidget(parent), _companyId(companyId), _type(type)
 {
@@ -73,6 +75,35 @@ void View::Management::InvoiceBrowserTab::clickedOnFilterButton()
     }
 }
 
+void View::Management::InvoiceBrowserTab::rowSelectionChanged()
+{
+    int row = _invoicesTableView -> currentIndex().row();
+    _openButton -> setEnabled(row != -1);
+    _deleteButton -> setEnabled(row != -1);
+}
+
+void View::Management::InvoiceBrowserTab::openInvoice()
+{
+    int row = _invoicesTableView -> currentIndex().row();
+
+    emit invoiceOpen(new Model::Domain::Invoice(*(_invoiceModel -> invoices() -> at(row))));
+}
+
+void View::Management::InvoiceBrowserTab::deleteInvoice()
+{
+    if(!verifyDelete())
+        return;
+
+    int row = _invoicesTableView -> currentIndex().row();
+
+    emit invoiceDeleted(new Model::Domain::Invoice(*(_invoiceModel -> invoices() -> at(row))));
+
+    Model::Management::InvoiceManager::remove(_invoiceModel -> invoices() -> at(row) -> id(),_type, _companyId);
+    _invoiceModel -> removeInvoice(row);
+
+    rowSelectionChanged();
+}
+
 void View::Management::InvoiceBrowserTab::createWidgets()
 {
     _allRadioButton = new QRadioButton(tr("All"));
@@ -109,14 +140,28 @@ void View::Management::InvoiceBrowserTab::createWidgets()
         _invoicesTableView -> horizontalHeader() -> setSectionResizeMode(ColumnInvoiceEntityName, QHeaderView::Stretch);
     #endif
 
+    _openButton = new QPushButton(tr("Open"));
+    _openButton -> setIcon(QIcon(":images/loadinvoice.png"));
+    _openButton -> setEnabled(false);
+
+    _deleteButton = new QPushButton(tr("Delete"));
+    _deleteButton -> setIcon(QIcon(":images/delete.png"));
+    _deleteButton -> setEnabled(false);
+
     QGridLayout *topLayout = new QGridLayout;
     topLayout -> addWidget(_allRadioButton, 0, 0, 1, 1);
     topLayout -> addWidget(_filterByRadioButton, 1, 0, 1, 1);
     topLayout -> addWidget(_filterButton, 1, 1, 1, 1, Qt::AlignRight);
 
+    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    bottomLayout -> addStretch();
+    bottomLayout -> addWidget(_openButton);
+    bottomLayout -> addWidget(_deleteButton);
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addLayout(topLayout);
     mainLayout -> addWidget(_invoicesTableView);
+    mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
 }
@@ -129,4 +174,18 @@ void View::Management::InvoiceBrowserTab::createConnections()
             this, SLOT(toogleOnRadioButton()));
     connect(_filterButton, SIGNAL(clicked()),
             this, SLOT(clickedOnFilterButton()));
+    connect(_invoicesTableView -> selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(rowSelectionChanged()));
+    connect(_openButton, SIGNAL(clicked()),
+            this, SLOT(openInvoice()));
+    connect(_deleteButton, SIGNAL(clicked()),
+            this, SLOT(deleteInvoice()));
+}
+
+bool View::Management::InvoiceBrowserTab::verifyDelete()
+{
+    return QMessageBox::question(this, tr("Verify Elimination"),
+                                       tr("are you sure you want to delete the invoice?"),
+                                       QMessageBox::Yes | QMessageBox::Default |
+                                       QMessageBox::No) == QMessageBox::Yes;
 }

@@ -37,6 +37,14 @@ class QTableView;
 class QPushButton;
 QT_END_NAMESPACE
 
+namespace Model
+{
+    namespace Domain
+    {
+        class Invoice;
+    }
+}
+
 namespace View
 {
     namespace Management
@@ -52,12 +60,19 @@ namespace View
         public:
             InvoiceBrowserTab(int companyId, Model::Domain::InvoiceType type, QWidget *parent = 0);
             ~InvoiceBrowserTab();
+        signals:
+            void invoiceOpen(Model::Domain::Invoice *invoice);
+            void invoiceDeleted(Model::Domain::Invoice *invoice);
         private slots:
             void toogleOnRadioButton();
             void clickedOnFilterButton();
+            void rowSelectionChanged();
+            void openInvoice();
+            void deleteInvoice();
         private:
             void createWidgets();
             void createConnections();
+            bool verifyDelete();
 
             QRadioButton *_allRadioButton;
             QRadioButton *_filterByRadioButton;
@@ -65,6 +80,8 @@ namespace View
             InvoiceModel *_invoiceModel;
             InvoiceProxyModel *_invoiceProxyModel;
             QPushButton *_filterButton;
+            QPushButton *_openButton;
+            QPushButton *_deleteButton;
             int _companyId;
             Model::Domain::InvoiceType _type;
         };
