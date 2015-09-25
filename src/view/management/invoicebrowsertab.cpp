@@ -110,7 +110,7 @@ void View::Management::InvoiceBrowserTab::createWidgets()
     _filterByRadioButton = new QRadioButton(tr("Filter By"));
     _allRadioButton -> setChecked(true);
 
-    _filterButton = new QPushButton("Filter");
+    _filterButton = new QPushButton(tr("Filter"));
     _filterButton -> setIcon(QIcon(":images/search.png"));
     _filterButton -> setEnabled(false);
     _filterButton -> setFixedSize(_filterButton -> sizeHint());
