@@ -20,27 +20,28 @@
 
 #include "invoicebrowser.h"
 #include "invoicebrowsertab.h"
+#include "mainwindow.h"
 #include "types.h"
 #include <QTabWidget>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-View::Management::InvoiceBrowser::InvoiceBrowser(int companyId, QWidget *parent) : QWidget(parent), _companyId(companyId)
+View::Management::InvoiceBrowser::InvoiceBrowser(int companyId, View::MainWindow *mainWindow, QWidget *parent) : QWidget(parent), _companyId(companyId)
 {
-    createWidgets();
+    createWidgets(mainWindow);
     createConnections();
     setWindowTitle(tr("Invoice Browser"));
     setWindowIcon(QIcon(":/images/loadinvoice.png"));
     setMinimumWidth(INVOICE_BROWSER_MINIMUM_WIDTH);
 }
 
-void View::Management::InvoiceBrowser::createWidgets()
+void View::Management::InvoiceBrowser::createWidgets(View::MainWindow *mainWindow)
 {
     _tabWidget = new QTabWidget;
 
-    _buyTab = new InvoiceBrowserTab(_companyId, Model::Domain::Buy);
-    _saleTab = new InvoiceBrowserTab(_companyId, Model::Domain::Sale);
+    _buyTab = new InvoiceBrowserTab(_companyId, Model::Domain::Buy, mainWindow);
+    _saleTab = new InvoiceBrowserTab(_companyId, Model::Domain::Sale, mainWindow);
 
     _tabWidget -> addTab(_buyTab, tr("Buy"));
     _tabWidget -> addTab(_saleTab, tr("Sale"));

@@ -479,7 +479,7 @@ void View::MainWindow::manageCompany()
 void View::MainWindow::manageInvoice()
 {
     if(!_invoiceBrowser) {
-        _invoiceBrowser = new View::Management::InvoiceBrowser(_company -> id());
+        _invoiceBrowser = new View::Management::InvoiceBrowser(_company -> id(), this);
 
         connect(_invoiceBrowser, SIGNAL(invoiceOpen(Model::Domain::Invoice*)), this, SLOT(openInvoice(Model::Domain::Invoice*)));
 

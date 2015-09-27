@@ -47,6 +47,8 @@ namespace Model
 
 namespace View
 {
+    class MainWindow;
+
     namespace Management
     {
 
@@ -58,7 +60,7 @@ namespace View
         {
             Q_OBJECT
         public:
-            InvoiceBrowserTab(int companyId, Model::Domain::InvoiceType type, QWidget *parent = 0);
+            InvoiceBrowserTab(int companyId, Model::Domain::InvoiceType type, View::MainWindow *mainWindow, QWidget *parent = 0);
             ~InvoiceBrowserTab();
         signals:
             void invoiceOpen(Model::Domain::Invoice *invoice);
@@ -72,6 +74,7 @@ namespace View
         private:
             void createWidgets();
             void createConnections();
+            bool isInvoiceOpen(Model::Domain::Invoice *invoice);
             bool verifyDelete();
 
             QRadioButton *_allRadioButton;
@@ -84,6 +87,7 @@ namespace View
             QPushButton *_deleteButton;
             int _companyId;
             Model::Domain::InvoiceType _type;
+            View::MainWindow *_mainWindow;
         };
     }
 }

@@ -25,6 +25,7 @@
 #include "persistencemanager.h"
 #include "invoice.h"
 #include "setupinvoicefiltersdialog.h"
+#include "mainwindow.h"
 #include "types.h"
 #include <QRadioButton>
 #include <QTableView>
@@ -36,7 +37,8 @@
 #include <QGroupBox>
 #include <QMessageBox>
 
-View::Management::InvoiceBrowserTab::InvoiceBrowserTab(int companyId, Model::Domain::InvoiceType type, QWidget *parent) : QWidget(parent), _companyId(companyId), _type(type)
+View::Management::InvoiceBrowserTab::InvoiceBrowserTab(int companyId, Model::Domain::InvoiceType type, View::MainWindow *mainWindow, QWidget *parent)
+    : QWidget(parent), _companyId(companyId), _type(type), _mainWindow(mainWindow)
 {
     createWidgets();
     createConnections();
@@ -91,14 +93,20 @@ void View::Management::InvoiceBrowserTab::openInvoice()
 
 void View::Management::InvoiceBrowserTab::deleteInvoice()
 {
+    int row = _invoicesTableView -> currentIndex().row();
+    Model::Domain::Invoice *invoice = _invoiceModel -> invoices() -> at(row);
+
+    if(isInvoiceOpen(invoice)) {
+        QMessageBox::warning(this, tr("Elimination"), tr("The invoice is open. You must close it before delete."));
+        return;
+    }
+
     if(!verifyDelete())
         return;
 
-    int row = _invoicesTableView -> currentIndex().row();
+    emit invoiceDeleted(new Model::Domain::Invoice(*invoice));
 
-    emit invoiceDeleted(new Model::Domain::Invoice(*(_invoiceModel -> invoices() -> at(row))));
-
-    Model::Management::InvoiceManager::remove(_invoiceModel -> invoices() -> at(row) -> id(),_type, _companyId);
+    Model::Management::InvoiceManager::remove(invoice -> id(),_type, _companyId);
     _invoiceModel -> removeInvoice(row);
 
     rowSelectionChanged();
@@ -180,6 +188,11 @@ void View::Management::InvoiceBrowserTab::createConnections()
             this, SLOT(openInvoice()));
     connect(_deleteButton, SIGNAL(clicked()),
             this, SLOT(deleteInvoice()));
+}
+
+bool View::Management::InvoiceBrowserTab::isInvoiceOpen(Model::Domain::Invoice *invoice)
+{
+    return _mainWindow -> findInvoiceEditor(invoice) != 0;
 }
 
 bool View::Management::InvoiceBrowserTab::verifyDelete()

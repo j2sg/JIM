@@ -40,6 +40,8 @@ namespace Model
 
 namespace View
 {
+    class MainWindow;
+
     namespace Management
     {
         class InvoiceBrowserTab;
@@ -48,12 +50,12 @@ namespace View
         {
             Q_OBJECT
         public:
-            InvoiceBrowser(int companyId, QWidget *parent = 0);
+            InvoiceBrowser(int companyId, View::MainWindow *mainWindow, QWidget *parent = 0);
         signals:
             void invoiceOpen(Model::Domain::Invoice *invoice);
             void invoiceDeleted(Model::Domain::Invoice *invoice);
         private:
-            void createWidgets();
+            void createWidgets(View::MainWindow *mainWindow);
             void createConnections();
 
             QTabWidget *_tabWidget;

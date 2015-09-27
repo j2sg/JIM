@@ -59,6 +59,7 @@ namespace View
     {
         class CompanyEditor;
         class InvoiceBrowser;
+        class InvoiceBrowserTab;
         class BusinessEditor;
     }
 
@@ -71,6 +72,8 @@ namespace View
     class MainWindow : public QMainWindow
     {
         Q_OBJECT
+
+        friend class View::Management::InvoiceBrowserTab;
     public:
         MainWindow();
         ~MainWindow();
