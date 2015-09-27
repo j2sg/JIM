@@ -318,9 +318,11 @@ void View::MainWindow::closeCompany()
             return;
     }
 
-    _invoiceBrowser -> close();
-    delete _invoiceBrowser;
-    _invoiceBrowser = 0;
+    if(_invoiceBrowser) {
+        _invoiceBrowser -> close();
+        delete _invoiceBrowser;
+        _invoiceBrowser = 0;
+    }
 
     statusBar() -> showMessage(tr("Closed Company %1").arg(_company -> name()), 5000);
 
