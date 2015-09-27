@@ -260,6 +260,12 @@ void View::MainWindow::openCompany(Model::Domain::Entity *company)
     } else
         _company = company;
 
+    if(_companyEditor) {
+        _companyEditor -> close();
+        delete _companyEditor;
+        _companyEditor = 0;
+    }
+
     if(_company) {
         statusBar() -> showMessage(tr("Open Company %1").arg(_company -> name()), 5000);
         _recentCompanies.removeAll(QString("%1|%2").arg(_company -> id()).arg(_company -> name()));
