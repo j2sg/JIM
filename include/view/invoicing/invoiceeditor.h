@@ -62,7 +62,6 @@ namespace View
         public:
             InvoiceEditor(Model::Domain::Invoice *invoice, QWidget *parent = 0);
             ~InvoiceEditor();
-            int id() const;
             const Model::Domain::Invoice *invoice() const;
             void setPrinter(QPrinter *printer);
             bool isSaveable();
@@ -140,7 +139,6 @@ namespace View
             int _precisionWeight;
 
             Model::Domain::Invoice *_invoice;
-            int _id;
         };
     }
 }

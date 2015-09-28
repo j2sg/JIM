@@ -74,11 +74,6 @@ View::Invoicing::InvoiceEditor::~InvoiceEditor()
         delete _invoice;
 }
 
-int View::Invoicing::InvoiceEditor::id() const
-{
-    return _id;
-}
-
 const Model::Domain::Invoice *View::Invoicing::InvoiceEditor::invoice() const
 {
     return _invoice;
@@ -98,7 +93,7 @@ bool View::Invoicing::InvoiceEditor::isSaveable()
 
 bool View::Invoicing::InvoiceEditor::isPrintable()
 {
-    return !IS_NEW(_id) && !isWindowModified();
+    return !IS_NEW(_invoice -> id()) && !isWindowModified();
 }
 
 void View::Invoicing::InvoiceEditor::closeEvent(QCloseEvent *event)
@@ -112,7 +107,6 @@ void View::Invoicing::InvoiceEditor::closeEvent(QCloseEvent *event)
 bool View::Invoicing::InvoiceEditor::save()
 {
     if(saveInvoice()) {
-        _id = _invoice -> id();
         setTitle();
         invoiceModified(false);
 
@@ -558,8 +552,6 @@ void View::Invoicing::InvoiceEditor::setTitle()
 
 void View::Invoicing::InvoiceEditor::loadInvoice()
 {
-    _id = _invoice -> id();
-
     updateId();
     _idLineEdit -> setEnabled(IS_NEW(_invoice -> id()));
     _autoIdCheckBox -> setChecked(IS_NEW(_invoice -> id()));
@@ -583,6 +575,8 @@ void View::Invoicing::InvoiceEditor::loadInvoice()
 
 bool View::Invoicing::InvoiceEditor::saveInvoice()
 {
+    int oldId = _invoice -> id();
+
     _invoice -> setId(_idLineEdit -> text().toInt());
     _invoice -> setDate(_dateDateEdit -> date());
     _invoice -> setPlace(_placeLineEdit -> text());
@@ -597,7 +591,7 @@ bool View::Invoicing::InvoiceEditor::saveInvoice()
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    bool ok = (IS_NEW(_id) ? Model::Management::InvoiceManager::create(*_invoice) :
+    bool ok = (IS_NEW(oldId) ? Model::Management::InvoiceManager::create(*_invoice) :
                              Model::Management::InvoiceManager::modify(*_invoice));
 
     QApplication::restoreOverrideCursor();

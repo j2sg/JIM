@@ -1320,7 +1320,7 @@ View::Invoicing::InvoiceEditor *View::MainWindow::findInvoiceEditor(Model::Domai
 {
     foreach(QMdiSubWindow *subWindow, _mdiArea -> subWindowList()) {
         View::Invoicing::InvoiceEditor *editor = qobject_cast<View::Invoicing::InvoiceEditor *>(subWindow -> widget());
-        if(editor && editor -> id() == invoice -> id())
+        if(editor && editor-> invoice() -> type() == invoice -> type() && editor-> invoice() -> id() == invoice -> id())
             return editor;
     }
 
