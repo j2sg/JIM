@@ -296,25 +296,19 @@ void View::Management::SetUpInvoiceFiltersDialog::createWidgets()
     _cancelButton = new QPushButton(tr("Cancel"));
     _cancelButton -> setIcon(QIcon(":/images/cancel.png"));
 
-    QHBoxLayout *dateLayout = new QHBoxLayout;
-    dateLayout -> addWidget(_dateCheckBox);
-    dateLayout -> addWidget(_dateComboBox);
-    dateLayout -> addWidget(_startDateEdit);
-    dateLayout -> addWidget(_endDateEdit);
-
-    QHBoxLayout *entityLayout = new QHBoxLayout;
-    entityLayout -> addWidget(_entityCheckBox);
-    entityLayout -> addWidget(_entityComboBox);
-
-    QHBoxLayout *totalLayout = new QHBoxLayout;
-    totalLayout -> addWidget(_totalCheckBox);
-    totalLayout -> addWidget(_totalComboBox);
-    totalLayout -> addWidget(_minTotalSpinBox);
-    totalLayout -> addWidget(_maxTotalSpinBox);
-
-    QHBoxLayout *stateLayout = new QHBoxLayout;
-    stateLayout -> addWidget(_stateCheckBox);
-    stateLayout -> addWidget(_stateComboBox);
+    QGridLayout *topLayout = new QGridLayout;
+    topLayout -> addWidget(_dateCheckBox, 0, 0, 1, 1);
+    topLayout -> addWidget(_dateComboBox, 0, 1, 1, 1);
+    topLayout -> addWidget(_startDateEdit, 0, 2, 1, 1);
+    topLayout -> addWidget(_endDateEdit, 0, 3, 1, 1);
+    topLayout -> addWidget(_entityCheckBox, 1, 0, 1, 1);
+    topLayout -> addWidget(_entityComboBox, 1, 1, 1, 3);
+    topLayout -> addWidget(_totalCheckBox, 2, 0, 1, 1);
+    topLayout -> addWidget(_totalComboBox, 2, 1, 1, 1);
+    topLayout -> addWidget(_minTotalSpinBox, 2, 2, 1, 1);
+    topLayout -> addWidget(_maxTotalSpinBox, 2, 3, 1, 1);
+    topLayout -> addWidget(_stateCheckBox, 3, 0, 1, 1);
+    topLayout -> addWidget(_stateComboBox, 3, 1, 1, 1);
 
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     bottomLayout->addStretch();
@@ -322,10 +316,7 @@ void View::Management::SetUpInvoiceFiltersDialog::createWidgets()
     bottomLayout -> addWidget(_cancelButton);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout -> addLayout(dateLayout);
-    mainLayout -> addLayout(entityLayout);
-    mainLayout -> addLayout(totalLayout);
-    mainLayout -> addLayout(stateLayout);
+    mainLayout -> addLayout(topLayout);
     mainLayout -> addLayout(bottomLayout);
 
     setLayout(mainLayout);
