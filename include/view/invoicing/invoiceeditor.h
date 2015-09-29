@@ -40,6 +40,7 @@ namespace Model
 {
     namespace Domain
     {
+        class Entity;
         class Invoice;
     }
 }
@@ -70,7 +71,7 @@ namespace View
             void closeEvent(QCloseEvent *event);
         signals:
             void dataChanged();
-            void entityAdded(const Model::Domain::Invoice &invoice);
+            void entityAdded(const Model::Domain::Entity& entity);
         public slots:
             bool save();
             bool print();

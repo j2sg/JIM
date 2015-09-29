@@ -208,7 +208,7 @@ void View::Invoicing::InvoiceEditor::selectEntity()
         invoiceModified();
 
         if(selector.created())
-            emit entityAdded(*_invoice);
+            emit entityAdded(*entity);
     }
 }
 
