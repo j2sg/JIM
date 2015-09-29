@@ -36,6 +36,14 @@ View::Management::InvoiceBrowser::InvoiceBrowser(int companyId, View::MainWindow
     setMinimumWidth(INVOICE_BROWSER_MINIMUM_WIDTH);
 }
 
+void View::Management::InvoiceBrowser::updateInvoices(Model::Domain::InvoiceType type)
+{
+   if(type == Model::Domain::Buy)
+       _buyTab -> updateInvoices();
+   else if(type == Model::Domain::Sale)
+       _saleTab ->updateInvoices();
+}
+
 void View::Management::InvoiceBrowser::createWidgets(View::MainWindow *mainWindow)
 {
     _tabWidget = new QTabWidget;

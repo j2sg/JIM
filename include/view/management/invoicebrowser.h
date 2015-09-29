@@ -22,6 +22,7 @@
 #define INVOICEBROWSER_H
 
 #include <QWidget>
+#include "types.h"
 
 #define INVOICE_BROWSER_MINIMUM_WIDTH 600
 
@@ -54,6 +55,8 @@ namespace View
         signals:
             void invoiceOpen(Model::Domain::Invoice *invoice);
             void invoiceDeleted(Model::Domain::Invoice *invoice);
+        public slots:
+            void updateInvoices(Model::Domain::InvoiceType type);
         private:
             void createWidgets(View::MainWindow *mainWindow);
             void createConnections();

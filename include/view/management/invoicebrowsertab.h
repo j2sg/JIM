@@ -65,6 +65,8 @@ namespace View
         signals:
             void invoiceOpen(Model::Domain::Invoice *invoice);
             void invoiceDeleted(Model::Domain::Invoice *invoice);
+        public slots:
+            void updateInvoices();
         private slots:
             void toogleOnRadioButton();
             void clickedOnFilterButton();

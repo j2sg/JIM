@@ -50,6 +50,11 @@ View::Management::InvoiceBrowserTab::~InvoiceBrowserTab()
     delete _invoiceProxyModel;
 }
 
+void View::Management::InvoiceBrowserTab::updateInvoices()
+{
+    _invoiceModel -> setInvoices(Model::Management::InvoiceManager::getAllByType(_type, _companyId));
+}
+
 void View::Management::InvoiceBrowserTab::toogleOnRadioButton()
 {
     bool isAllRadioButtonSelected = _allRadioButton -> isChecked();
