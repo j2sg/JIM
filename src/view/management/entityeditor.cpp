@@ -275,22 +275,8 @@ void View::Management::EntityEditor::createConnections()
 
 bool View::Management::EntityEditor::verifyDelete()
 {
-    QString entityType;
-
-    switch(_type) {
-    case Model::Domain::CompanyEntity:
-        entityType = tr("company");
-        break;
-    case Model::Domain::CustomerEntity:
-        entityType = tr("customer");
-        break;
-    case Model::Domain::SupplierEntity:
-        entityType = tr("supplier");
-        break;
-    }
-
     return QMessageBox::question(this, tr("Verify Elimination"),
-                                       tr("are you sure you want to delete the %1?").arg(entityType),
+                                       tr("are you sure you want to delete?"),
                                        QMessageBox::Yes | QMessageBox::Default |
                                        QMessageBox::No) == QMessageBox::Yes;
 }
