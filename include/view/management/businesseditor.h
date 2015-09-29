@@ -30,6 +30,14 @@ class QTabWidget;
 class QPushButton;
 QT_END_NAMESPACE
 
+namespace Model
+{
+    namespace Domain
+    {
+        class Entity;
+    }
+}
+
 namespace View
 {
     namespace Management
@@ -43,6 +51,7 @@ namespace View
         public:
             BusinessEditor(QWidget *parent = 0);
         public slots:
+            void addEntity(const Model::Domain::Entity& entity);
             void setCurrentTab(int index);
         private:
             void createWidgets();

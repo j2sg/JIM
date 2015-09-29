@@ -660,6 +660,9 @@ void View::MainWindow::entityAdded(const Model::Domain::Entity& entity)
     statusBar() -> showMessage(tr("Added %1 %2 - %3").arg(entity.type() == Model::Domain::SupplierEntity ? tr("supplier") : tr("customer"))
                                                      .arg(QString::number(entity.id()))
                                                      .arg(entity.name()), 5000);
+
+    if(_businessEditor)
+        _businessEditor -> addEntity(entity);
 }
 
 void View::MainWindow::updateRecentCompanies()
@@ -1316,6 +1319,7 @@ View::Invoicing::InvoiceEditor *View::MainWindow::createInvoiceEditor(Model::Dom
     editor -> setPrinter(_printer);
 
     connect(editor, SIGNAL(dataChanged()), this, SLOT(updateInvoicingMenu()));
+    connect(editor, SIGNAL(entityAdded(Model::Domain::Entity)), this, SLOT(entityAdded(Model::Domain::Entity)));
 
     return editor;
 }

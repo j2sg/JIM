@@ -21,6 +21,7 @@
 #include "businesseditor.h"
 #include "entityeditor.h"
 #include "producteditor.h"
+#include "entity.h"
 #include <QTabWidget>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -33,6 +34,14 @@ View::Management::BusinessEditor::BusinessEditor(QWidget *parent) : QWidget(pare
     setWindowTitle(tr("Business Editor"));
     setWindowIcon(QIcon(":/images/manageproduct.png"));
     setMinimumWidth(BUSINESS_EDITOR_MINIMUM_WIDTH);
+}
+
+void View::Management::BusinessEditor::addEntity(const Model::Domain::Entity& entity)
+{
+    if(entity.type() == Model::Domain::CustomerEntity)
+        _customerEditor -> addEntityFromInvoice(entity);
+    else if(entity.type() == Model::Domain::SupplierEntity)
+        _supplierEditor -> addEntityFromInvoice(entity);
 }
 
 void View::Management::BusinessEditor::setCurrentTab(int index)
