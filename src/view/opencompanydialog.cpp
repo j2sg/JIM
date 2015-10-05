@@ -79,7 +79,7 @@ void View::OpenCompanyDialog::setAsDefault()
         item -> setText(itemText);
         QFont itemFont = currItem -> font();
         itemFont.setBold(item == currItem);
-        item->setFont(itemFont);
+        item -> setFont(itemFont);
     }
 
     _default = true;

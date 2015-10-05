@@ -123,7 +123,8 @@ HEADERS += include/global.h \
     include/view/management/invoicedelegate.h \
     include/view/management/invoicemodel.h \
     include/view/management/setupinvoicefiltersdialog.h \
-    include/view/management/invoiceproxymodel.h
+    include/view/management/invoiceproxymodel.h \
+    include/view/report/pricelistdialog.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
@@ -197,7 +198,8 @@ SOURCES += src/main.cpp \
     src/view/management/invoicedelegate.cpp \
     src/view/management/invoicemodel.cpp \
     src/view/management/setupinvoicefiltersdialog.cpp \
-    src/view/management/invoiceproxymodel.cpp
+    src/view/management/invoiceproxymodel.cpp \
+    src/view/report/pricelistdialog.cpp
 
 RESOURCES += resources/jim.qrc
 

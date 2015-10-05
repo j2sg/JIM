@@ -22,6 +22,7 @@
 #define PRODUCTMANAGER_H
 
 #include <QList>
+#include <QMap>
 #include "product.h"
 
 namespace Model
@@ -35,6 +36,7 @@ namespace Model
             static bool modify(const Model::Domain::Product &product);
             static bool remove(int id);
             static Model::Domain::Product *get(int id);
+            static QMap<QString, int> getAllNames();
             static QList<Model::Domain::Product *> *getAll();
             static int getId();
         };

@@ -173,6 +173,13 @@ namespace View
             ColumnVolumeReportByProductTotal,
             ColumnVolumeReportByProductCount
         } ColumnVolumeReportByProduct;
+
+        typedef enum PriceListModeEnum
+        {
+            PriceListForAllProducs,
+            PriceListForCategory,
+            PriceListForSelectedProducs
+        } PriceListMode;
     }
 }
 

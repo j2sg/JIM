@@ -36,6 +36,7 @@
 #include "volumereportdialog.h"
 #include "volumereport.h"
 #include "unpaidsreport.h"
+#include "pricelistdialog.h"
 #include "reportmanager.h"
 #include "printingmanager.h"
 #include "global.h"
@@ -590,6 +591,15 @@ void View::MainWindow::unpaidInvoices()
     unpaidsReport -> show();
 }
 
+void View::MainWindow::priceList()
+{
+    View::Report::PriceListDialog dialog(this);
+
+    if(dialog.exec()) {
+
+    }
+}
+
 void View::MainWindow::fullscreen(bool enabled)
 {
     if(enabled)
@@ -888,6 +898,10 @@ void View::MainWindow::createActions()
     _unpaidInvoicesAction -> setIcon(QIcon(":/images/unpaid.png"));
     _unpaidInvoicesAction -> setStatusTip(tr("Show all unpaid invoices"));
 
+    _priceListAction = new QAction(tr("&Price List..."), this);
+    //_priceListAction -> setIcon(QIcon(":/images/unpaid.png"));
+    _priceListAction -> setStatusTip(tr("Make a Product Price List"));
+
     _fullScreenAction = new QAction(tr("&Full Screen"), this);
     _fullScreenAction -> setCheckable(true);
     _fullScreenAction -> setChecked(false);
@@ -1034,7 +1048,10 @@ void View::MainWindow::createMenus()
     _reportMenu = menuBar() -> addMenu(tr("&Reports"));
     _reportMenu -> addAction(_volumeBuyAction);
     _reportMenu -> addAction(_volumeSaleAction);
+    _reportMenu -> addSeparator();
     _reportMenu -> addAction(_unpaidInvoicesAction);
+    _reportMenu -> addSeparator();
+    _reportMenu -> addAction(_priceListAction);
 
     _windowMenu = menuBar() -> addMenu(tr("&Window"));
     _windowMenu -> addAction(_fullScreenAction);
@@ -1110,6 +1127,7 @@ void View::MainWindow::createToolBar()
     _reportToolBar -> addAction(_volumeBuyAction);
     _reportToolBar -> addAction(_volumeSaleAction);
     _reportToolBar -> addAction(_unpaidInvoicesAction);
+    _reportToolBar -> addAction(_priceListAction);
 }
 
 void View::MainWindow::createStatusBar()
@@ -1187,6 +1205,8 @@ void View::MainWindow::createConnections()
             this, SLOT(volumeSale()));
     connect(_unpaidInvoicesAction, SIGNAL(triggered()),
             this, SLOT(unpaidInvoices()));
+    connect(_priceListAction, SIGNAL(triggered()),
+            this, SLOT(priceList()));
     connect(_fullScreenAction, SIGNAL(toggled(bool)),
             this, SLOT(fullscreen(bool)));
     connect(_showMenuBarAction, SIGNAL(toggled(bool)),

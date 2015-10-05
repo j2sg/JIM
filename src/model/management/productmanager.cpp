@@ -91,6 +91,21 @@ Model::Domain::Product *Model::Management::ProductManager::get(int id)
     return product;
 }
 
+QMap<QString, int> Model::Management::ProductManager::getAllNames()
+{
+    Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+    QString sql = QString("SELECT name, id FROM product");
+    QVector<QVector<QVariant> > *result = agent -> select(sql);
+    QMap<QString, int> names;
+
+    foreach(QVector<QVariant> row, *result)
+        names.insert(row.at(0).toString(), row.at(1).toInt());
+
+    delete result;
+
+    return names;
+}
+
 QList<Model::Domain::Product *> *Model::Management::ProductManager::getAll()
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();

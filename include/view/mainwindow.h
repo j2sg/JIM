@@ -111,6 +111,7 @@ namespace View
         void volumeBuy();
         void volumeSale();
         void unpaidInvoices();
+        void priceList();
         void fullscreen(bool enabled);
         void toolBarButtonStyle();
         void viewMode();
@@ -181,6 +182,7 @@ namespace View
         QAction *_volumeBuyAction;
         QAction *_volumeSaleAction;
         QAction *_unpaidInvoicesAction;
+        QAction *_priceListAction;
         QAction *_fullScreenAction;
         QAction *_showMenuBarAction;
         QAction *_showCompaniesToolBarAction;
