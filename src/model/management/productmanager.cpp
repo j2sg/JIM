@@ -91,6 +91,34 @@ Model::Domain::Product *Model::Management::ProductManager::get(int id)
     return product;
 }
 
+QList<Model::Domain::Product *> *Model::Management::ProductManager::getByCategory(int categoryId)
+{
+    Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();
+    QString sql = QString("SELECT * FROM product WHERE category=%1").arg(categoryId);
+    QVector<QVector<QVariant> > *result = agent -> select(sql);
+    QList<Model::Domain::Product *> *products = new QList<Model::Domain::Product *>;
+
+    foreach(QVector<QVariant> row, *result) {
+        int id                                   = row.at(0).toInt();
+        QString name                             = row.at(1).toString();
+        QString description                      = row.at(2).toString();
+        Model::Domain::Category *category        = CategoryManager::get(row.at(3).toInt());
+        double price                             = row.at(4).toDouble();
+        Model::Domain::PriceType priceType       = static_cast<Model::Domain::PriceType>(row.at(5).toInt());
+        double discount                          = row.at(6).toDouble();
+        Model::Domain::DiscountType discountType = static_cast<Model::Domain::DiscountType>(row.at(7).toInt());
+
+        Model::Domain::Product *product = new Model::Domain::Product(id, name, category, price, priceType, discount, discountType);
+        product -> setDescription(description);
+
+        products -> push_back(product);
+    }
+
+    delete result;
+
+    return products;
+}
+
 QMap<QString, int> Model::Management::ProductManager::getAllNames()
 {
     Persistence::SQLAgent *agent = Persistence::SQLAgent::instance();

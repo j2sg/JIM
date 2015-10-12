@@ -599,9 +599,9 @@ void View::MainWindow::priceList()
 
     if(dialog.exec()) {
         View::Report::PriceListMode mode = dialog.mode();
-        Model::Domain::Category *category = dialog.category();
+        int categoryId = dialog.categoryId();
         QMap<QString, int> selected = dialog.selected();
-        View::Report::PriceListReport *priceListReport = createPriceListReport(mode, category, selected);
+        View::Report::PriceListReport *priceListReport = createPriceListReport(mode, categoryId, selected);
 
         _mdiArea -> addSubWindow(priceListReport);
         priceListReport -> show();
@@ -1402,7 +1402,7 @@ View::Report::UnpaidsReport *View::MainWindow::createUnpaidsReport()
     return unpaidsReport;
 }
 
-View::Report::PriceListReport *View::MainWindow::createPriceListReport(View::Report::PriceListMode mode, Model::Domain::Category *category, const QMap<QString, int>& selected)
+View::Report::PriceListReport *View::MainWindow::createPriceListReport(View::Report::PriceListMode mode, int categoryId, const QMap<QString, int>& selected)
 {
     QList<Model::Domain::Product *> *products = 0;
 
@@ -1411,14 +1411,13 @@ View::Report::PriceListReport *View::MainWindow::createPriceListReport(View::Rep
         products = Model::Management::ProductManager::getAll();
         break;
     case View::Report::PriceListForCategory:
-        products = Model::Management::ProductManager::getAll();
+        products = Model::Management::ProductManager::getByCategory(categoryId);
         break;
     case View::Report::PriceListForSelectedProducs:
         products = new QList<Model::Domain::Product *>();
 
-        foreach(QString product, selected.keys()) {
+        foreach(QString product, selected.keys())
             products -> append(Model::Management::ProductManager::get(selected.value(product)));
-        }
     }
 
 

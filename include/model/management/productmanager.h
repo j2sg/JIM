@@ -36,6 +36,7 @@ namespace Model
             static bool modify(const Model::Domain::Product &product);
             static bool remove(int id);
             static Model::Domain::Product *get(int id);
+            static QList<Model::Domain::Product *> *getByCategory(int categoryId);
             static QMap<QString, int> getAllNames();
             static QList<Model::Domain::Product *> *getAll();
             static int getId();

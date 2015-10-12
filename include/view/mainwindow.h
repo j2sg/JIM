@@ -46,7 +46,6 @@ namespace Model
     {
         class Invoice;
         class Entity;
-        class Category;
     }
 }
 
@@ -143,7 +142,7 @@ namespace View
                                                        const QDate &beginDate = QDate::currentDate(),
                                                        const QDate &endDate = QDate::currentDate());
         View::Report::UnpaidsReport *createUnpaidsReport();
-        View::Report::PriceListReport *createPriceListReport(View::Report::PriceListMode mode, Model::Domain::Category *category, const QMap<QString, int>& selected);
+        View::Report::PriceListReport *createPriceListReport(View::Report::PriceListMode mode, int categoryId, const QMap<QString, int>& selected);
         void closeAllEditors();
         void deleteAllEditors();
         void setStorageConnected(bool connected = true);
