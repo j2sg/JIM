@@ -55,6 +55,9 @@ namespace View
         public:
             PriceListDialog(QWidget *parent = 0);
             void done(int result);
+            View::Report::PriceListMode mode() const;
+            Model::Domain::Category *category() const;
+            QMap<QString, int> selected() const;
         private slots:
             void toggleOnRadioButton();
             void clickedOnLeft();

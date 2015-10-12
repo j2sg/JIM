@@ -33,10 +33,12 @@
 #include "company.h"
 #include "companymanager.h"
 #include "invoicemanager.h"
+#include "productmanager.h"
 #include "volumereportdialog.h"
 #include "volumereport.h"
 #include "unpaidsreport.h"
 #include "pricelistdialog.h"
+#include "pricelistreport.h"
 #include "reportmanager.h"
 #include "printingmanager.h"
 #include "global.h"
@@ -596,7 +598,13 @@ void View::MainWindow::priceList()
     View::Report::PriceListDialog dialog(this);
 
     if(dialog.exec()) {
+        View::Report::PriceListMode mode = dialog.mode();
+        Model::Domain::Category *category = dialog.category();
+        QMap<QString, int> selected = dialog.selected();
+        View::Report::PriceListReport *priceListReport = createPriceListReport(mode, category, selected);
 
+        _mdiArea -> addSubWindow(priceListReport);
+        priceListReport -> show();
     }
 }
 
@@ -1392,6 +1400,31 @@ View::Report::UnpaidsReport *View::MainWindow::createUnpaidsReport()
     View::Report::UnpaidsReport *unpaidsReport = new View::Report::UnpaidsReport(buyInvoices, saleInvoices, buyStatistics, saleStatistics);
 
     return unpaidsReport;
+}
+
+View::Report::PriceListReport *View::MainWindow::createPriceListReport(View::Report::PriceListMode mode, Model::Domain::Category *category, const QMap<QString, int>& selected)
+{
+    QList<Model::Domain::Product *> *products = 0;
+
+    switch(mode) {
+    case View::Report::PriceListForAllProducs:
+        products = Model::Management::ProductManager::getAll();
+        break;
+    case View::Report::PriceListForCategory:
+        products = Model::Management::ProductManager::getAll();
+        break;
+    case View::Report::PriceListForSelectedProducs:
+        products = new QList<Model::Domain::Product *>();
+
+        foreach(QString product, selected.keys()) {
+            products -> append(Model::Management::ProductManager::get(selected.value(product)));
+        }
+    }
+
+
+    View::Report::PriceListReport *priceListReport = new View::Report::PriceListReport(products);
+
+    return priceListReport;
 }
 
 void View::MainWindow::closeAllEditors()

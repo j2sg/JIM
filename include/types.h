@@ -147,6 +147,15 @@ namespace View
 
     namespace Report
     {
+        typedef enum ColumnPriceListReportEnum
+        {
+            ColumnPriceListReportId,
+            ColumnPriceListReportProduct,
+            ColumnPriceListReportDiscount,
+            ColumnPriceListReportPrice,
+            ColumnPriceListReportCount
+        } ColumnPriceListReport;
+
         typedef enum ColumnVolumeReportByDateEnum
         {
             ColumnVolumeReportByDateDate,

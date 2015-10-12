@@ -72,6 +72,21 @@ void View::Report::PriceListDialog::done(int result)
     QDialog::done(result);
 }
 
+View::Report::PriceListMode View::Report::PriceListDialog::mode() const
+{
+    return _mode;
+}
+
+Model::Domain::Category *View::Report::PriceListDialog::category() const
+{
+    return _category;
+}
+
+QMap<QString, int> View::Report::PriceListDialog::selected() const
+{
+    return _selected;
+}
+
 void View::Report::PriceListDialog::toggleOnRadioButton()
 {
     bool byCategoryIsChecked = _byCategoryRadioButton -> isChecked();

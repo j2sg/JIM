@@ -24,6 +24,7 @@
 #include <QMainWindow>
 #include <QStringList>
 #include <QDate>
+#include <QMap>
 #include "types.h"
 
 #define MIN_MAINWINDOW_WIDTH 1024
@@ -45,6 +46,7 @@ namespace Model
     {
         class Invoice;
         class Entity;
+        class Category;
     }
 }
 
@@ -67,6 +69,7 @@ namespace View
     {
         class VolumeReport;
         class UnpaidsReport;
+        class PriceListReport;
     }
 
     class MainWindow : public QMainWindow
@@ -140,6 +143,7 @@ namespace View
                                                        const QDate &beginDate = QDate::currentDate(),
                                                        const QDate &endDate = QDate::currentDate());
         View::Report::UnpaidsReport *createUnpaidsReport();
+        View::Report::PriceListReport *createPriceListReport(View::Report::PriceListMode mode, Model::Domain::Category *category, const QMap<QString, int>& selected);
         void closeAllEditors();
         void deleteAllEditors();
         void setStorageConnected(bool connected = true);
