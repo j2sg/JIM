@@ -37,14 +37,6 @@ class QToolButton;
 class QPushButton;
 QT_END_NAMESPACE
 
-namespace Model
-{
-    namespace Domain
-    {
-        class Category;
-    }
-}
-
 namespace View
 {
     namespace Report
@@ -56,7 +48,7 @@ namespace View
             PriceListDialog(QWidget *parent = 0);
             void done(int result);
             View::Report::PriceListMode mode() const;
-            Model::Domain::Category *category() const;
+            int categoryId() const;
             QMap<QString, int> selected() const;
         private slots:
             void toggleOnRadioButton();
@@ -79,7 +71,7 @@ namespace View
             QPushButton *_cancelButton;
 
             View::Report::PriceListMode _mode;
-            Model::Domain::Category *_category;
+            int _categoryId;
             QMap<QString, int> _selected;
         };
     }

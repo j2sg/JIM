@@ -21,7 +21,6 @@
 #include "pricelistdialog.h"
 #include "categorymanager.h"
 #include "productmanager.h"
-#include "category.h"
 #include <QRadioButton>
 #include <QComboBox>
 #include <QListWidget>
@@ -33,7 +32,7 @@
 
 View::Report::PriceListDialog::PriceListDialog(QWidget *parent) : QDialog(parent)
 {
-    _category = 0;
+    _categoryId = NO_ID;
 
     createWidgets();
     createConnections();
@@ -57,9 +56,9 @@ void View::Report::PriceListDialog::done(int result)
 
         if(_mode == View::Report::PriceListForCategory) {
             #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-                _category = Model::Management::CategoryManager::get(_categoryComboBox -> itemData(_categoryComboBox -> currentIndex()).toInt());
+                _categoryId = _categoryComboBox -> itemData(_categoryComboBox -> currentIndex()).toInt();
             #else
-                _category = Model::Management::CategoryManager::get(_categoryComboBox -> currentData().toInt());
+                _categoryId = _categoryComboBox -> currentData().toInt();
             #endif
         } else if(_mode == View::Report::PriceListForSelectedProducs) {
             for(int row = 0; row < _selectedListWidget -> count(); ++row) {
@@ -77,9 +76,9 @@ View::Report::PriceListMode View::Report::PriceListDialog::mode() const
     return _mode;
 }
 
-Model::Domain::Category *View::Report::PriceListDialog::category() const
+int View::Report::PriceListDialog::categoryId() const
 {
-    return _category;
+    return _categoryId;
 }
 
 QMap<QString, int> View::Report::PriceListDialog::selected() const
@@ -143,8 +142,12 @@ void View::Report::PriceListDialog::createWidgets()
     _allRadioButton -> setChecked(true);
 
     _categoryComboBox = new QComboBox;
-    _categoryComboBox -> addItems(Model::Management::CategoryManager::getAllNames().keys());
     _categoryComboBox -> setEnabled(false);
+
+    QMap<QString, int> categoryNames = Model::Management::CategoryManager::getAllNames();
+
+    foreach(QString category, categoryNames.keys())
+        _categoryComboBox->addItem(category, categoryNames.value(category));
 
     _productsListWidget = new QListWidget;
     _productsListWidget -> setFixedSize(PRODUCTS_LIST_WIDTH, PRODUCTS_LIST_HEIGHT);
