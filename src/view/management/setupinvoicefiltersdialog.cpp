@@ -60,8 +60,8 @@ void View::Management::SetUpInvoiceFiltersDialog::done(int result)
             _filterMode |= Model::Management::SearchByState;
 
         #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-            _filterByDateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemDate(_dateComboBox -> currentIndex()).toInt());
-            _filterByTotalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemDate(_totalComboBox -> currentIndex()).toInt());
+            _filterByDateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemData(_dateComboBox -> currentIndex()).toInt());
+            _filterByTotalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemData(_totalComboBox -> currentIndex()).toInt());
             _entityId = _entityComboBox -> itemData(_entityComboBox -> currentIndex()).toInt();
             _paid = _stateComboBox -> itemData(_stateComboBox -> currentIndex()).toBool();
         #else
@@ -136,7 +136,7 @@ void View::Management::SetUpInvoiceFiltersDialog::stateChangedOnDateCheckBox()
     Model::Management::SearchByDateMode mode;
 
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-        mode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemDate(_dateComboBox -> currentIndex()).toInt());
+        mode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemData(_dateComboBox -> currentIndex()).toInt());
     #else
         mode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> currentData().toInt());
     #endif
@@ -151,7 +151,7 @@ void View::Management::SetUpInvoiceFiltersDialog::currentIndexChangedOnDateCombo
     Model::Management::SearchByDateMode mode;
 
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-        mode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemDate(_dateComboBox -> currentIndex()).toInt());
+        mode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemData(_dateComboBox -> currentIndex()).toInt());
     #else
         mode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> currentData().toInt());
     #endif
@@ -172,7 +172,7 @@ void View::Management::SetUpInvoiceFiltersDialog::stateChangedOnTotalCheckBox()
     Model::Management::SearchByTotalMode mode;
 
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-        mode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemDate(_totalComboBox -> currentIndex()).toInt());
+        mode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemData(_totalComboBox -> currentIndex()).toInt());
     #else
         mode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> currentData().toInt());
     #endif
@@ -187,7 +187,7 @@ void View::Management::SetUpInvoiceFiltersDialog::currentIndexChangedOnTotalComb
     Model::Management::SearchByTotalMode mode;
 
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-        mode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemDate(_totalComboBox -> currentIndex()).toInt());
+        mode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemData(_totalComboBox -> currentIndex()).toInt());
     #else
         mode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> currentData().toInt());
     #endif
@@ -214,8 +214,8 @@ void View::Management::SetUpInvoiceFiltersDialog::verifyFilters()
     Model::Management::SearchByTotalMode totalMode;
 
     #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-        dateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemDate(_dateComboBox -> currentIndex()).toInt());
-        totalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemDate(_totalComboBox -> currentIndex()).toInt());
+        dateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> itemData(_dateComboBox -> currentIndex()).toInt());
+        totalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> itemData(_totalComboBox -> currentIndex()).toInt());
     #else
         dateMode = static_cast<Model::Management::SearchByDateMode>(_dateComboBox -> currentData().toInt());
         totalMode = static_cast<Model::Management::SearchByTotalMode>(_totalComboBox -> currentData().toInt());
