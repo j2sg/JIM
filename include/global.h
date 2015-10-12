@@ -35,7 +35,7 @@
 #define AUTHOR_EMAIL          "jjslzgc@gmail.com"
 #define APPLICATION_NAME      "JIM"
 #define APPLICATION_NAME_LONG "JIM Invoice Manager"
-#define APPLICATION_VERSION   "0.2.0"
+#define APPLICATION_VERSION   "0.2.0 Beta"
 #define APPLICATION_YEARS     "2011-2015"
 #define APPLICATION_WEB       "http://j2sg.wordpress.com/proyectos/jim"
 

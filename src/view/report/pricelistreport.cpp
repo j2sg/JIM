@@ -21,7 +21,7 @@ void View::Report::PriceListReport::createWidgets(QList<Model::Domain::Product *
     _productsTableView -> setModel(_productsModel);
     _productsTableView -> setAlternatingRowColors(true);
     _productsTableView -> setShowGrid(false);
-    _productsTableView -> setSelectionMode(QAbstractItemView::SingleSelection);
+    _productsTableView -> setSelectionMode(QAbstractItemView::NoSelection);
     _productsTableView -> setSelectionBehavior(QAbstractItemView::SelectRows);
     _productsTableView -> setEditTriggers(QAbstractItemView::NoEditTriggers);
     _productsTableView -> setFocusPolicy(Qt::NoFocus);
