@@ -30,7 +30,7 @@
 #include "taxviewerwidget.h"
 #include "notesdialog.h"
 #include "persistencemanager.h"
-#include "printingmanager.h"
+#include "invoiceprinter.h"
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -122,7 +122,7 @@ bool View::Invoicing::InvoiceEditor::save()
 bool View::Invoicing::InvoiceEditor::print()
 {
     if(_printer)
-        return Printing::Manager::print(*_invoice, _printer);
+        return Printing::InvoicePrinter::print(*_invoice, _printer);
 
     return false;
 }

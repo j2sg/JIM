@@ -18,8 +18,8 @@
  *
  **/
 
-#ifndef PRINTINGMANAGER_H
-#define PRINTINGMANAGER_H
+#ifndef INVOICEPRINTER_H
+#define INVOICEPRINTER_H
 
 #include <QString>
 #include <QStringList>
@@ -33,7 +33,7 @@ QT_END_NAMESPACE
 
 namespace Printing
 {
-    class Manager
+    class InvoicePrinter
     {
     public:
         static bool print(const Model::Domain::Invoice &invoice, QPrinter *printer = 0);
@@ -48,4 +48,4 @@ namespace Printing
     };
 }
 
-#endif // PRINTINGMANAGER_H
+#endif // INVOICEPRINTER_H

@@ -54,7 +54,6 @@ HEADERS += include/global.h \
            include/types.h \
            include/persistence/persistencemanager.h \
            include/persistence/sqlagent.h \
-           include/printing/printingmanager.h \
            include/view/authdialog.h \
            include/view/mainwindow.h \
            include/view/optionsdialog.h \
@@ -126,12 +125,12 @@ HEADERS += include/global.h \
     include/view/management/invoiceproxymodel.h \
     include/view/report/pricelistdialog.h \
     include/view/report/pricelistreport.h \
-    include/view/report/pricelistreportmodel.h
+    include/view/report/pricelistreportmodel.h \
+    include/printing/invoiceprinter.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
            src/persistence/sqlagent.cpp \
-           src/printing/printingmanager.cpp \
            src/view/authdialog.cpp \
            src/view/mainwindow.cpp \
            src/view/optionsdialog.cpp \
@@ -203,7 +202,8 @@ SOURCES += src/main.cpp \
     src/view/management/invoiceproxymodel.cpp \
     src/view/report/pricelistdialog.cpp \
     src/view/report/pricelistreport.cpp \
-    src/view/report/pricelistreportmodel.cpp
+    src/view/report/pricelistreportmodel.cpp \
+    src/printing/invoiceprinter.cpp
 
 RESOURCES += resources/jim.qrc
 

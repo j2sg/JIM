@@ -18,7 +18,7 @@
  *
  **/
 
-#include "printingmanager.h"
+#include "invoiceprinter.h"
 #include "persistencemanager.h"
 #include "entity.h"
 #include "product.h"
@@ -27,7 +27,7 @@
 #include <QTextDocument>
 #include <qmath.h>
 
-bool Printing::Manager::print(const Model::Domain::Invoice &invoice, QPrinter *printer)
+bool Printing::InvoicePrinter::print(const Model::Domain::Invoice &invoice, QPrinter *printer)
 {
     if(!printer)
         return false;
@@ -47,7 +47,7 @@ bool Printing::Manager::print(const Model::Domain::Invoice &invoice, QPrinter *p
     return true;
 }
 
-QStringList Printing::Manager::makePages(const Model::Domain::Invoice &invoice)
+QStringList Printing::InvoicePrinter::makePages(const Model::Domain::Invoice &invoice)
 {
     QStringList pages;
     QString header = makeHeader(invoice);
@@ -64,7 +64,7 @@ QStringList Printing::Manager::makePages(const Model::Domain::Invoice &invoice)
     return pages;
 }
 
-QString Printing::Manager::makeHeader(const Model::Domain::Invoice &invoice)
+QString Printing::InvoicePrinter::makeHeader(const Model::Domain::Invoice &invoice)
 {
     return QString("<table id=\"company_table\" width=\"70%\">\n"
                    "   <tr><td id=\"company_name\">%1</td></tr>\n"
@@ -117,7 +117,7 @@ QString Printing::Manager::makeHeader(const Model::Domain::Invoice &invoice)
                    .arg(invoice.entity() -> vatin());
 }
 
-QStringList Printing::Manager::makeOperationTables(const Model::Domain::Invoice &invoice)
+QStringList Printing::InvoicePrinter::makeOperationTables(const Model::Domain::Invoice &invoice)
 {
     QStringList tables;
     int precisionWeight = Persistence::Manager::readConfig("Weight", "Application/Precision").toInt();
@@ -172,7 +172,7 @@ QStringList Printing::Manager::makeOperationTables(const Model::Domain::Invoice 
     return tables;
 }
 
-QString Printing::Manager::makePaymentTables(const Model::Domain::Invoice &invoice)
+QString Printing::InvoicePrinter::makePaymentTables(const Model::Domain::Invoice &invoice)
 {
     int precisionMoney = Persistence::Manager::readConfig("Money", "Application/Precision").toInt();
     int precisionTax = Persistence::Manager::readConfig("Tax", "Application/Precision").toInt();
@@ -246,7 +246,7 @@ QString Printing::Manager::makePaymentTables(const Model::Domain::Invoice &invoi
     return table;
 }
 
-QString Printing::Manager::makeNotesTable(const Model::Domain::Invoice &invoice)
+QString Printing::InvoicePrinter::makeNotesTable(const Model::Domain::Invoice &invoice)
 {
     return QString("<table id=\"notes_table\" width=\"40%\">\n"
                    "<tr><th>%1</th></tr>\n"
@@ -256,13 +256,13 @@ QString Printing::Manager::makeNotesTable(const Model::Domain::Invoice &invoice)
                    .arg(invoice.notes());
 }
 
-const QString Printing::Manager::_css = "body { color: black; background-color: white; }\n"
-                                        "#company_table { float: left; background-color: white; font-size: 7px; }\n"
-                                        "#company_name { font-size: 30px; font-style: italic; font-weight: bold; }\n"
-                                        "#details_table { float: right; background-color: #EAEAEA; color: black; font-size: 9px; }\n"
-                                        ".operations_table { float: left; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"
-                                        "#breakdown_table { float: left; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"
-                                        "#deduction_table { float: right; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"
-                                        "#totals_table { float: right; background-color: #EAEAEA; color: black; font-size: 9px; }\n"
-                                        "#notes_table { float: left; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"
-                                        "th { background-color: #000080; color: white; }\n";
+const QString Printing::InvoicePrinter::_css = "body { color: black; background-color: white; }\n"
+                                               "#company_table { float: left; background-color: white; font-size: 7px; }\n"
+                                               "#company_name { font-size: 30px; font-style: italic; font-weight: bold; }\n"
+                                               "#details_table { float: right; background-color: #EAEAEA; color: black; font-size: 9px; }\n"
+                                               ".operations_table { float: left; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"
+                                               "#breakdown_table { float: left; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"
+                                               "#deduction_table { float: right; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"
+                                               "#totals_table { float: right; background-color: #EAEAEA; color: black; font-size: 9px; }\n"
+                                               "#notes_table { float: left; margin-top: 10px; background-color: #EAEAEA; color: black; font-size: 8px; }\n"
+                                               "th { background-color: #000080; color: white; }\n";
