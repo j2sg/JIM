@@ -126,7 +126,8 @@ HEADERS += include/global.h \
     include/view/report/pricelistdialog.h \
     include/view/report/pricelistreport.h \
     include/view/report/pricelistreportmodel.h \
-    include/printing/invoiceprinter.h
+    include/printing/invoiceprinter.h \
+    include/printing/pricelistprinter.h
 
 SOURCES += src/main.cpp \
            src/persistence/persistencemanager.cpp \
@@ -203,7 +204,8 @@ SOURCES += src/main.cpp \
     src/view/report/pricelistdialog.cpp \
     src/view/report/pricelistreport.cpp \
     src/view/report/pricelistreportmodel.cpp \
-    src/printing/invoiceprinter.cpp
+    src/printing/invoiceprinter.cpp \
+    src/printing/pricelistprinter.cpp
 
 RESOURCES += resources/jim.qrc
 
