@@ -1,17 +1,32 @@
 #include "pricelistreport.h"
 #include "pricelistreportmodel.h"
 #include "persistencemanager.h"
+#include "pricelistprinter.h"
+#include "companymanager.h"
 #include <QTableView>
 #include <QHeaderView>
+#include <QPushButton>
+#include <QPrinter>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "types.h"
 
-View::Report::PriceListReport::PriceListReport(QList<Model::Domain::Product *> *products, QWidget *parent) : QWidget(parent)
+View::Report::PriceListReport::PriceListReport(int companyId, QList<Model::Domain::Product *> *products, QWidget *parent) : QWidget(parent), _companyId(companyId)
 {
     createWidgets(products);
     createConnections();
     setWindowTitle(tr("Price List Report"));
     setAttribute(Qt::WA_DeleteOnClose);
+}
+
+void View::Report::PriceListReport::setPrinter(QPrinter *printer)
+{
+    _printer = printer;
+}
+
+void View::Report::PriceListReport::print()
+{
+    Printing::PriceListPrinter::print(*Model::Management::CompanyManager::get(_companyId), *(_productsModel -> products()), _printer);
 }
 
 void View::Report::PriceListReport::createWidgets(QList<Model::Domain::Product *> *products)
@@ -37,13 +52,23 @@ void View::Report::PriceListReport::createWidgets(QList<Model::Domain::Product *
         _productsTableView -> horizontalHeader() -> setSectionResizeMode(ColumnPriceListReportProduct, QHeaderView::Stretch);
     #endif
 
+    _printButton = new QPushButton(tr("Print"));
+    _printButton -> setIcon(QIcon(":/images/printing.png"));
+
+    QHBoxLayout *bottomLayout = new QHBoxLayout;
+    bottomLayout -> addStretch();
+    bottomLayout -> addWidget(_printButton);
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout -> addWidget(_productsTableView);
+    mainLayout -> addLayout(bottomLayout);
+
 
     setLayout(mainLayout);
 }
 
 void View::Report::PriceListReport::createConnections()
 {
-
+    connect(_printButton, SIGNAL(clicked()),
+            this, SLOT(print()));
 }

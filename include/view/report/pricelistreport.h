@@ -31,6 +31,8 @@
 
 QT_BEGIN_NAMESPACE
 class QTableView;
+class QPushButton;
+class QPrinter;
 QT_END_NAMESPACE
 
 namespace Model
@@ -51,13 +53,19 @@ namespace View
         {
             Q_OBJECT
         public:
-            PriceListReport(QList<Model::Domain::Product *> *products, QWidget *parent = 0);
+            PriceListReport(int companyId, QList<Model::Domain::Product *> *products, QWidget *parent = 0);
+            void setPrinter(QPrinter *printer);
+        private slots:
+            void print();
         private:
             void createWidgets(QList<Model::Domain::Product *> *products);
             void createConnections();
 
+            int _companyId;
             QTableView *_productsTableView;
             PriceListReportModel *_productsModel;
+            QPushButton *_printButton;
+            QPrinter *_printer;
         };
     }
 }

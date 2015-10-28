@@ -40,7 +40,6 @@
 #include "pricelistdialog.h"
 #include "pricelistreport.h"
 #include "reportmanager.h"
-#include "printingmanager.h"
 #include "global.h"
 #include <QMdiArea>
 #include <QMdiSubWindow>
@@ -1352,7 +1351,6 @@ View::Invoicing::InvoiceEditor *View::MainWindow::createInvoiceEditor(Model::Dom
     return editor;
 }
 
-
 View::Invoicing::InvoiceEditor *View::MainWindow::findInvoiceEditor(Model::Domain::Invoice *invoice)
 {
     foreach(QMdiSubWindow *subWindow, _mdiArea -> subWindowList()) {
@@ -1421,7 +1419,8 @@ View::Report::PriceListReport *View::MainWindow::createPriceListReport(View::Rep
     }
 
 
-    View::Report::PriceListReport *priceListReport = new View::Report::PriceListReport(products);
+    View::Report::PriceListReport *priceListReport = new View::Report::PriceListReport(_company -> id(), products);
+    priceListReport -> setPrinter(_printer);
 
     return priceListReport;
 }
@@ -1498,6 +1497,7 @@ void View::MainWindow::setCompanyOpen(bool open)
     _volumeBuyAction -> setEnabled(open);
     _volumeSaleAction -> setEnabled(open);
     _unpaidInvoicesAction -> setEnabled(open);
+    _priceListAction -> setEnabled(open);
 
     _invoicingMenu -> setEnabled(open);
     _reportMenu -> setEnabled(open);
