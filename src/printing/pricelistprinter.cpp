@@ -26,7 +26,7 @@
 #include <QLocale>
 #include <qmath.h>
 
-bool Printing::PriceListPrinter::print(const Model::Domain::Company& company, const QList<Model::Domain::Product *>& products, QPrinter *printer)
+bool Printing::PriceListPrinter::print(const Model::Domain::Entity& company, const QList<Model::Domain::Product *>& products, QPrinter *printer)
 {
     if(!printer)
         return false;
@@ -46,7 +46,7 @@ bool Printing::PriceListPrinter::print(const Model::Domain::Company& company, co
     return true;
 }
 
-QStringList Printing::PriceListPrinter::makePages(const Model::Domain::Company& company, const QList<Model::Domain::Product *>& products)
+QStringList Printing::PriceListPrinter::makePages(const Model::Domain::Entity& company, const QList<Model::Domain::Product *>& products)
 {
     QStringList pages;
     QString header = makeHeader(company);
@@ -62,7 +62,7 @@ QStringList Printing::PriceListPrinter::makePages(const Model::Domain::Company& 
     return pages;
 }
 
-QString Printing::PriceListPrinter::makeHeader(const Model::Domain::Company& company)
+QString Printing::PriceListPrinter::makeHeader(const Model::Domain::Entity& company)
 {
     return QString("<table id=\"company_table\" width=\"70%\">\n"
                    "   <tr><td id=\"company_name\">%1</td></tr>\n"

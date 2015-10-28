@@ -45,10 +45,10 @@ namespace Printing
     class PriceListPrinter
     {
     public:
-        static bool print(const Model::Domain::Company& company, const QList<Model::Domain::Product *>& products, QPrinter *printer = 0);
+        static bool print(const Model::Domain::Entity &company, const QList<Model::Domain::Product *>& products, QPrinter *printer = 0);
     private:
-        static QStringList makePages(const Model::Domain::Company& company, const QList<Model::Domain::Product *>& products);
-        static QString makeHeader(const Model::Domain::Company& company);
+        static QStringList makePages(const Model::Domain::Entity& company, const QList<Model::Domain::Product *>& products);
+        static QString makeHeader(const Model::Domain::Entity& company);
         static QStringList makeProductTables(const QList<Model::Domain::Product *>& products);
 
         static const QString _css;
